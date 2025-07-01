@@ -9,6 +9,9 @@ import FolderGrid from '@/components/folder-grid';
 import DashboardMockups from '@/components/dashboard-mockups';
 import TechTicker from '@/components/tech-ticker';
 import AIChatModal from '@/components/ai-chat-modal';
+import XeroIntegration from '@/components/xero-integration';
+import SharePointAnalytics from '@/components/sharepoint-analytics';
+import IntegrationOverview from '@/components/integration-overview';
 import { isInIframe, isSharePointEnvironment, getContainerClasses, getSectionHeight } from '@/lib/utils';
 
 export default function HomePage() {
@@ -272,6 +275,98 @@ export default function HomePage() {
               ))}
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Xero Financial Integration Section */}
+      <section className={`bg-muted/30 relative overflow-hidden sharepoint-section ${getSectionHeight(isEmbedded)}`}>
+        {!isEmbedded && <div className="absolute inset-0 diamond-dust opacity-50"></div>}
+        <div className={`${getContainerClasses(isEmbedded)} relative z-10`}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className={`font-orbitron font-bold mb-4 neon-text ${
+              isEmbedded ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'
+            }`}>
+              {isEmbedded ? 'Xero Integration' : 'Comprehensive Xero Financial Integration'}
+            </h2>
+            <p className={`text-muted-foreground mx-auto ${
+              isEmbedded 
+                ? 'text-lg max-w-2xl' 
+                : 'text-xl max-w-3xl'
+            }`}>
+              {isEmbedded 
+                ? 'Real-time financial analytics with automated invoice generation and cash flow tracking.'
+                : 'Real-time financial analytics, automated invoice generation, cash flow forecasting, and comprehensive profitability analysis powered by Xero integration.'
+              }
+            </p>
+          </motion.div>
+
+          <XeroIntegration compact={isEmbedded} />
+        </div>
+      </section>
+
+      {/* SharePoint Analytics Section */}
+      <section className={`relative sharepoint-section ${getSectionHeight(isEmbedded)}`}>
+        <div className={getContainerClasses(isEmbedded)}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className={`font-orbitron font-bold mb-4 neon-text ${
+              isEmbedded ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'
+            }`}>
+              {isEmbedded ? 'SharePoint Analytics' : 'Advanced SharePoint Analytics'}
+            </h2>
+            <p className={`text-muted-foreground mx-auto ${
+              isEmbedded 
+                ? 'text-lg max-w-2xl' 
+                : 'text-xl max-w-3xl'
+            }`}>
+              {isEmbedded 
+                ? 'Real-time document analytics and enhanced collaboration insights.'
+                : 'Real-time document analytics, user activity tracking, and enhanced collaboration insights with comprehensive library management.'
+              }
+            </p>
+          </motion.div>
+
+          <SharePointAnalytics compact={isEmbedded} />
+        </div>
+      </section>
+
+      {/* Integration Overview Section */}
+      <section className={`bg-muted/30 relative overflow-hidden sharepoint-section ${getSectionHeight(isEmbedded)}`}>
+        {!isEmbedded && <div className="absolute inset-0 diamond-dust opacity-50"></div>}
+        <div className={`${getContainerClasses(isEmbedded)} relative z-10`}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className={`font-orbitron font-bold mb-4 neon-text ${
+              isEmbedded ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'
+            }`}>
+              {isEmbedded ? 'System Integration' : 'Comprehensive System Integration Hub'}
+            </h2>
+            <p className={`text-muted-foreground mx-auto ${
+              isEmbedded 
+                ? 'text-lg max-w-2xl' 
+                : 'text-xl max-w-3xl'
+            }`}>
+              {isEmbedded 
+                ? 'Complete overview of all connected services with health monitoring and status indicators.'
+                : 'Complete overview of all connected services including Xero, SharePoint, Teams, and Abacus.AI with real-time health monitoring and status indicators. £135,000 investment delivering 300% ROI.'
+              }
+            </p>
+          </motion.div>
+
+          <IntegrationOverview compact={isEmbedded} />
         </div>
       </section>
 

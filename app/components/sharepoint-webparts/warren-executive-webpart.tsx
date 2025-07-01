@@ -172,7 +172,7 @@ export default function WarrenExecutiveWebPart({
                     <div className="mb-2">
                       <div className="text-2xl font-bold text-yellow-400">
                         {section.unit === 'M' 
-                          ? `$${section.value.toFixed(1)}${section.unit}`
+                          ? `£${section.value.toFixed(1)}${section.unit}`
                           : Math.round(section.value)
                         }
                       </div>
