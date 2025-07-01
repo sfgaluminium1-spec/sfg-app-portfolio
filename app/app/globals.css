@@ -1,0 +1,335 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 13% 9%;
+    --foreground: 220 13% 91%;
+    --card: 220 13% 12%;
+    --card-foreground: 220 13% 91%;
+    --popover: 220 13% 9%;
+    --popover-foreground: 220 13% 91%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 220 13% 91%;
+    --secondary: 220 13% 15%;
+    --secondary-foreground: 220 13% 91%;
+    --muted: 220 13% 15%;
+    --muted-foreground: 220 13% 63%;
+    --accent: 220 13% 15%;
+    --accent-foreground: 220 13% 91%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 13% 91%;
+    --border: 220 13% 15%;
+    --input: 220 13% 15%;
+    --ring: 199 89% 48%;
+    --radius: 0.5rem;
+    
+    /* Custom Diamond Theme Variables */
+    --diamond-primary: 199 89% 48%;
+    --diamond-secondary: 220 13% 15%;
+    --diamond-accent: 51 100% 50%;
+    --diamond-glass: 220 13% 9% / 0.8;
+    --diamond-shimmer: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    
+    /* Warren's Executive Theme */
+    --warren-bg: 0 0% 4%;
+    --warren-card: 0 0% 6%;
+    --warren-accent: 45 100% 51%;
+    --warren-platinum: 0 0% 90%;
+    --warren-diamond: 210 40% 98%;
+    
+    /* Yanika's Wellness Theme */
+    --yanika-bg: 0 0% 96%;
+    --yanika-card: 0 0% 100%;
+    --yanika-accent: 340 65% 75%;
+    --yanika-gold: 45 100% 51%;
+    --yanika-pastel: 270 100% 87%;
+  }
+
+  .dark {
+    --background: 220 13% 9%;
+    --foreground: 220 13% 91%;
+    --card: 220 13% 12%;
+    --card-foreground: 220 13% 91%;
+    --popover: 220 13% 9%;
+    --popover-foreground: 220 13% 91%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 220 13% 91%;
+    --secondary: 220 13% 15%;
+    --secondary-foreground: 220 13% 91%;
+    --muted: 220 13% 15%;
+    --muted-foreground: 220 13% 63%;
+    --accent: 220 13% 15%;
+    --accent-foreground: 220 13% 91%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 13% 91%;
+    --border: 220 13% 15%;
+    --input: 220 13% 15%;
+    --ring: 199 89% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+  }
+}
+
+@layer components {
+  /* Diamond Shimmer Animation */
+  .diamond-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .diamond-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--diamond-shimmer);
+    animation: shimmer 3s infinite;
+    z-index: 1;
+  }
+  
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  /* Diamond Dust Particles */
+  .diamond-dust {
+    position: relative;
+  }
+  
+  .diamond-dust::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                radial-gradient(circle at 60% 40%, rgba(0,191,255,0.1) 1px, transparent 1px),
+                radial-gradient(circle at 80% 70%, rgba(255,215,0,0.1) 1px, transparent 1px);
+    background-size: 20px 20px, 30px 30px, 25px 25px;
+    animation: dust-float 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  
+  @keyframes dust-float {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(1px, -1px); }
+    50% { transform: translate(-1px, 1px); }
+    75% { transform: translate(1px, 1px); }
+  }
+  
+  /* Glass Effect */
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Warren's Executive Theme */
+  .warren-theme {
+    background: hsl(var(--warren-bg));
+    color: hsl(var(--warren-platinum));
+  }
+  
+  .warren-card {
+    background: hsl(var(--warren-card));
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Yanika's Wellness Theme */
+  .yanika-theme {
+    background: hsl(var(--yanika-bg));
+    color: hsl(var(--foreground));
+  }
+  
+  .yanika-card {
+    background: hsl(var(--yanika-card));
+    border: 1px solid hsl(var(--yanika-accent) / 0.2);
+    box-shadow: 0 8px 32px rgba(183, 110, 121, 0.1);
+  }
+  
+  /* 3D Transform Effects */
+  .transform-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  
+  .folder-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .folder-hover:hover {
+    transform: translateY(-8px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Scrolling Ticker */
+  .ticker-scroll {
+    animation: scroll-left 60s linear infinite;
+  }
+  
+  @keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  
+  /* Futuristic Glow */
+  .neon-glow {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.8);
+  }
+  
+  /* Power BI Dashboard Mockup */
+  .dashboard-mockup {
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--muted)) 100%
+    );
+    border: 2px solid hsl(var(--primary) / 0.3);
+  }
+}
+
+/* SharePoint iframe optimizations */
+.sharepoint-compatible {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.iframe-embedded {
+  /* Remove fixed positioning and adjust for iframe constraints */
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.iframe-embedded .sharepoint-container {
+  min-height: auto !important;
+  height: auto;
+}
+
+.iframe-embedded .sharepoint-main {
+  padding-top: 0;
+}
+
+/* Responsive SharePoint sections */
+.sharepoint-section {
+  padding: 1rem 0;
+}
+
+.sharepoint-section.hero {
+  padding: 3rem 0;
+  min-height: auto !important;
+}
+
+/* SharePoint-specific responsive breakpoints */
+@media (max-width: 768px) {
+  .iframe-embedded {
+    font-size: 14px;
+  }
+  
+  .iframe-embedded .sharepoint-section {
+    padding: 0.75rem 0;
+  }
+  
+  .iframe-embedded .sharepoint-section.hero {
+    padding: 2rem 0;
+  }
+}
+
+/* SharePoint web part container compatibility */
+.sharepoint-webpart {
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.sharepoint-webpart .neon-glow {
+  box-shadow: 0 0 10px hsl(var(--primary) / 0.3) !important;
+}
+
+/* Adaptive spacing for SharePoint environment */
+.sharepoint-environment .max-w-7xl {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.sharepoint-environment .min-h-screen {
+  min-height: auto !important;
+  padding: 2rem 0 !important;
+}
+
+/* SharePoint theme adaptations */
+.sharepoint-theme-light {
+  --background: 255 255 255;
+  --foreground: 0 0 0;
+  --card: 255 255 255;
+  --card-foreground: 0 0 0;
+}
+
+.sharepoint-theme-dark {
+  --background: 0 0 0;
+  --foreground: 255 255 255;
+  --card: 15 15 15;
+  --card-foreground: 255 255 255;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
+
+/* Loading Animation */
+.loading-spinner {
+  border: 2px solid hsl(var(--muted));
+  border-top: 2px solid hsl(var(--primary));
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
