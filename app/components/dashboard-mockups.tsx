@@ -48,6 +48,10 @@ const DashboardMockups = () => {
             transition={{ delay: index * 0.2, duration: 0.6 }}
             className="dashboard-mockup rounded-xl p-6 h-64 relative overflow-hidden group cursor-pointer"
             whileHover={{ scale: 1.02, y: -5 }}
+            onClick={() => {
+              // Open dashboard in new window/tab
+              window.open(`/dashboard/${dashboard.id}`, '_blank');
+            }}
           >
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">

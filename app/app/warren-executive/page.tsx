@@ -110,6 +110,9 @@ export default function WarrenExecutivePage() {
             <Button
               size="lg"
               className="bg-yellow-500 hover:bg-yellow-400 text-black px-8 py-4 text-lg font-bold"
+              onClick={() => {
+                window.open('/warren-executive/dashboard', '_blank');
+              }}
             >
               <Briefcase className="mr-2 h-5 w-5" />
               Access Executive Dashboard
@@ -188,6 +191,9 @@ export default function WarrenExecutivePage() {
                   <div className="relative z-10">
                     <Button
                       className="w-full bg-transparent border border-yellow-500/50 hover:bg-yellow-500/10 text-yellow-400"
+                      onClick={() => {
+                        window.open(`/warren-executive/analytics/${section.id}`, '_blank');
+                      }}
                     >
                       <BarChart3 className="mr-2 h-4 w-4" />
                       View Detailed Analytics

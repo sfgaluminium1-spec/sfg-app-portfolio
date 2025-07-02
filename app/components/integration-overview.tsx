@@ -148,8 +148,39 @@ export default function IntegrationOverview({
 
   const handleRefreshAll = () => {
     setLastUpdate(new Date());
-    // Simulate health check updates
+    
+    // Simulate comprehensive system refresh
     setSystemHealth(Math.random() * 2 + 97);
+    
+    // Show loading state briefly
+    setTimeout(() => {
+      alert('All integrations refreshed successfully! System health updated.');
+    }, 1500);
+  };
+
+  const handleIntegrationClick = (integration: typeof integrations[0]) => {
+    switch (integration.id) {
+      case 'sharepoint':
+        window.open('/sharepoint-admin', '_blank');
+        break;
+      case 'xero':
+        window.open('/xero/dashboard', '_blank');
+        break;
+      case 'teams':
+        window.open('/teams/collaboration', '_blank');
+        break;
+      case 'abacus-ai':
+        window.open('/ai/models', '_blank');
+        break;
+      case 'power-platform':
+        window.open('/power-platform/apps', '_blank');
+        break;
+      case 'azure-ad':
+        window.open('/azure/identity', '_blank');
+        break;
+      default:
+        alert(`Opening ${integration.name} management interface...`);
+    }
   };
 
   useEffect(() => {
@@ -257,7 +288,10 @@ export default function IntegrationOverview({
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              <Card className="integration-card bg-black/40 border-blue-500/20 hover:border-blue-500/40 transition-all duration-200 group cursor-pointer">
+              <Card 
+                className="integration-card bg-black/40 border-blue-500/20 hover:border-blue-500/40 transition-all duration-200 group cursor-pointer"
+                onClick={() => handleIntegrationClick(integration)}
+              >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center">

@@ -40,8 +40,60 @@ const FolderGrid = () => {
     if (folder.url) {
       window.open(folder.url, '_blank');
     } else {
-      // For demo purposes, show a message
-      alert(`Opening ${folder.name} - This would connect to your SharePoint library in production.`);
+      // Enhanced functionality for different folder types
+      switch (folder.id) {
+        case 'innovation-portal':
+          window.open('/sharepoint/innovation-portal', '_blank');
+          break;
+        case 'executive-dashboard':
+          window.open('/warren-executive', '_blank');
+          break;
+        case 'r-and-d':
+          window.open('/sharepoint/research-development', '_blank');
+          break;
+        case 'ai-models':
+          window.open('/sharepoint/ai-models', '_blank');
+          break;
+        case 'financial-hub':
+          window.open('/sharepoint/financial-records', '_blank');
+          break;
+        case 'business-intelligence':
+          window.open('/sharepoint/business-intelligence', '_blank');
+          break;
+        case 'project-docs':
+          window.open('/sharepoint/project-documents', '_blank');
+          break;
+        case 'client-relations':
+          window.open('/sharepoint/client-relations', '_blank');
+          break;
+        case 'hr-docs':
+          window.open('/sharepoint/hr-documents', '_blank');
+          break;
+        case 'knowledge-base':
+          window.open('/sharepoint/knowledge-base', '_blank');
+          break;
+        case 'compliance':
+          window.open('/sharepoint/compliance', '_blank');
+          break;
+        case 'archives':
+          window.open('/sharepoint/archives', '_blank');
+          break;
+        case 'api-docs':
+          window.open('/sharepoint/api-documentation', '_blank');
+          break;
+        case 'dev-tools':
+          window.open('/sharepoint/dev-tools', '_blank');
+          break;
+        case 'premium-assets':
+          window.open('/sharepoint/premium-assets', '_blank');
+          break;
+        case 'creative-studio':
+          window.open('/sharepoint/creative-studio', '_blank');
+          break;
+        default:
+          // Fallback with enhanced message
+          alert(`Opening ${folder.name} SharePoint library. This will connect to your document management system in production.`);
+      }
     }
   };
 
@@ -125,6 +177,10 @@ const FolderGrid = () => {
                   variant="ghost"
                   size="sm"
                   className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleFolderClick(folder);
+                  }}
                 >
                   <ExternalLink className="w-4 h-4" />
                 </Button>

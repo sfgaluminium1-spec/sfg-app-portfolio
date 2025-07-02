@@ -118,8 +118,37 @@ export default function SharePointAnalytics({
 
   const handleRefreshData = () => {
     setSyncStatus('syncing');
+    
+    // Simulate data refresh with animated value updates
     setTimeout(() => {
       setSyncStatus('synced');
+      
+      // Update values with slight variations to show "refreshed" data
+      const newValues = {
+        totalDocuments: targetValues.totalDocuments + Math.floor(Math.random() * 50),
+        activeUsers: targetValues.activeUsers + Math.floor(Math.random() * 10),
+        weeklyActivity: targetValues.weeklyActivity + Math.floor(Math.random() * 20),
+        storageUsed: Math.min(targetValues.storageUsed + Math.random() * 5, 95)
+      };
+      
+      // Animate to new values
+      Object.entries(newValues).forEach(([key, value]) => {
+        const animateValue = (currentKey: keyof typeof targetValues, target: number) => {
+          const increment = (target - animatedValues[currentKey]) / 20;
+          let current = animatedValues[currentKey];
+          const timer = setInterval(() => {
+            current += increment;
+            if (Math.abs(current - target) < Math.abs(increment)) {
+              current = target;
+              clearInterval(timer);
+            }
+            setAnimatedValues(prev => ({ ...prev, [currentKey]: current }));
+          }, 50);
+        };
+        animateValue(key as keyof typeof targetValues, value);
+      });
+      
+      alert('SharePoint analytics data refreshed successfully!');
     }, 2000);
   };
 

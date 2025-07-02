@@ -186,7 +186,15 @@ export default function SharePointDemoPage() {
                             <CardTitle className="text-lg">{webPart.title}</CardTitle>
                             <p className="text-sm text-muted-foreground">{webPart.description}</p>
                           </div>
-                          <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedWebPart(webPart.id);
+                            }}
+                          >
                             <Maximize className="h-4 w-4" />
                           </Button>
                         </div>
@@ -200,9 +208,14 @@ export default function SharePointDemoPage() {
 
           {/* Individual Web Part Tabs */}
           <TabsList className="grid grid-cols-4 lg:grid-cols-7 w-full mb-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="overview" onClick={() => setSelectedWebPart('overview')}>Overview</TabsTrigger>
             {webParts.map(webPart => (
-              <TabsTrigger key={webPart.id} value={webPart.id} className="text-xs">
+              <TabsTrigger 
+                key={webPart.id} 
+                value={webPart.id} 
+                className="text-xs"
+                onClick={() => setSelectedWebPart(webPart.id)}
+              >
                 {webPart.title.split(' ')[0]}
               </TabsTrigger>
             ))}
