@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AIChatModal from '@/components/ai-chat-modal';
+import SimpleAuth from '@/components/simple-auth';
 
 export default function WarrenExecutivePage() {
   const sections = [
@@ -62,8 +63,9 @@ export default function WarrenExecutivePage() {
   ];
 
   return (
-    <div className="min-h-screen warren-theme">
-      <AIChatModal />
+    <SimpleAuth>
+      <div className="min-h-screen warren-theme">
+        <AIChatModal />
       
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
@@ -251,6 +253,7 @@ export default function WarrenExecutivePage() {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </SimpleAuth>
   );
 }

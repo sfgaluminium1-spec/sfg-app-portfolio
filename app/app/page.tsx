@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Sparkles, Rocket, Target } from 'lucide-react';
+import { ChevronDown, Sparkles, Rocket, Target, Crown, Car, Gem, Bitcoin, Heart, Plane, Palette, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FolderGrid from '@/components/folder-grid';
 import DashboardMockups from '@/components/dashboard-mockups';
@@ -86,8 +86,8 @@ export default function HomePage() {
               transition={{ delay: 0.5, duration: 1 }}
             >
               {isEmbedded 
-                ? 'Warren Heathcote\'s premium AI & aluminium innovation center - Executive excellence redefined.'
-                : 'Welcome to Warren Heathcote\'s AI & Aluminium Innovation Hub - Where strategic leadership meets cutting-edge technology in the future of materials science and executive excellence.'
+                ? 'Warren Heathcote\'s executive command center - Strategic leadership, innovation excellence, and premium lifestyle management.'
+                : 'Welcome to Warren Heathcote\'s Executive Innovation Hub - Your premier destination for strategic leadership, AI-driven business intelligence, and access to both executive operations and creative wellness initiatives.'
               }
             </motion.p>
 
@@ -160,6 +160,143 @@ export default function HomePage() {
             ))}
           </div>
         )}
+      </section>
+
+      {/* Executive Access Section */}
+      <section className={`bg-muted/30 relative overflow-hidden sharepoint-section ${getSectionHeight(isEmbedded)}`}>
+        {!isEmbedded && <div className="absolute inset-0 diamond-dust opacity-50"></div>}
+        <div className={`${getContainerClasses(isEmbedded)} relative z-10`}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className={`font-orbitron font-bold mb-4 neon-text ${
+              isEmbedded ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'
+            }`}>
+              Executive Access Centers
+            </h2>
+            <p className={`text-muted-foreground mx-auto ${
+              isEmbedded 
+                ? 'text-lg max-w-2xl' 
+                : 'text-xl max-w-3xl'
+            }`}>
+              Choose your workspace: Executive command center for strategic operations or creative wellness oasis for inspiration and balance.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Warren's Executive Suite */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="warren-card rounded-2xl p-8 relative overflow-hidden group cursor-pointer"
+              whileHover={{ scale: 1.02, y: -5 }}
+              onClick={() => window.open('/warren-executive', '_blank')}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-orange-500/10"></div>
+              <div className="relative z-10">
+                <div className="flex items-center mb-6">
+                  <div className="w-16 h-16 rounded-xl bg-yellow-500/20 border border-yellow-400 flex items-center justify-center mr-4 neon-glow">
+                    <Crown className="w-8 h-8 text-yellow-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-orbitron text-2xl font-bold text-yellow-400 mb-2 neon-text">
+                      Warren's Executive Suite
+                    </h3>
+                    <p className="text-gray-300">Strategic command & premium operations</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  {[
+                    { label: 'Strategy & Innovation', icon: Target },
+                    { label: 'Luxury Lifestyle', icon: Gem },
+                    { label: 'Motorsport Excellence', icon: Car },
+                    { label: 'Investment Portfolio', icon: Bitcoin }
+                  ].map((item, i) => {
+                    const IconComponent = item.icon;
+                    return (
+                      <div key={item.label} className="text-center p-3 bg-black/30 rounded-lg border border-yellow-500/20">
+                        <IconComponent className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
+                        <div className="text-xs text-gray-400">{item.label}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <Button
+                  className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open('/warren-executive', '_blank');
+                  }}
+                >
+                  <Crown className="mr-2 h-4 w-4" />
+                  Access Executive Suite
+                </Button>
+              </div>
+              <div className="absolute inset-0 diamond-shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+            </motion.div>
+
+            {/* Yanika's Creative Wellness Oasis */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="yanika-card rounded-2xl p-8 relative overflow-hidden group cursor-pointer"
+              whileHover={{ scale: 1.02, y: -5 }}
+              onClick={() => window.open('/yanika-oasis', '_blank')}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-purple-500/10"></div>
+              <div className="relative z-10">
+                <div className="flex items-center mb-6">
+                  <div className="w-16 h-16 rounded-xl bg-pink-500/20 border border-pink-400 flex items-center justify-center mr-4 neon-glow">
+                    <Sparkles className="w-8 h-8 text-pink-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-orbitron text-2xl font-bold text-pink-400 mb-2 neon-text">
+                      Yanika's Creative Oasis
+                    </h3>
+                    <p className="text-gray-300">Wellness, creativity & inspiration</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  {[
+                    { label: 'Art & Design', icon: Palette },
+                    { label: 'Wellness Journey', icon: Heart },
+                    { label: 'Family Moments', icon: Users },
+                    { label: 'Travel Dreams', icon: Plane }
+                  ].map((item, i) => {
+                    const IconComponent = item.icon;
+                    return (
+                      <div key={item.label} className="text-center p-3 bg-white/10 rounded-lg border border-pink-200/20">
+                        <IconComponent className="w-6 h-6 text-pink-400 mx-auto mb-2" />
+                        <div className="text-xs text-gray-400">{item.label}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <Button
+                  variant="outline"
+                  className="w-full border-pink-400 text-pink-400 hover:bg-pink-500/10 font-bold"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open('/yanika-oasis', '_blank');
+                  }}
+                >
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Explore Creative Oasis
+                </Button>
+              </div>
+              <div className="absolute inset-0 diamond-shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* SharePoint Libraries Section */}
