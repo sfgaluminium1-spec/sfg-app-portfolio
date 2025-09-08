@@ -75,7 +75,10 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; {new Date().getFullYear()} SFG Aluminium Ltd. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} SFG Aluminium Ltd. All rights reserved. | v1.0.0 - Foundation Complete</p>
+          <p className="text-xs text-gray-400 mt-1">
+            🎯 180+ Page Website Specification | Warren Executive Theme | Lead Generation Ready
+          </p>
         </div>
       </div>
     </footer>
