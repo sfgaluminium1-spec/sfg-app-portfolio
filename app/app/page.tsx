@@ -9,6 +9,7 @@ import Footer from '@/components/footer'
 import HeroSection from '@/components/hero-section'
 import ProductsSection from '@/components/products-section'
 import StatsSection from '@/components/stats-section'
+import VersionBadge from '@/components/version-badge'
 
 const features = [
   {
@@ -97,6 +98,7 @@ export default function HomePage() {
       </section>
 
       <Footer />
+      <VersionBadge position="fixed" variant="default" />
     </div>
   )
 }

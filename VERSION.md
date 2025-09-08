@@ -1,11 +1,20 @@
 
 # SFG Aluminium Ltd Website Version Log
 
-## Current Version: 1.0.0
+## Current Version: 1.1.0
 **Release Date:** September 8, 2025  
-**Status:** Active Development - Design Brief Implementation  
+**Status:** Active Development - Service Content Update  
 
 ### Version History
+
+#### v1.1.0 (September 8, 2025)
+- **SERVICE CONTENT UPDATE** - Replaced emergency services with PPM focus
+- **CHANGE:** Updated "24/7 Emergency Service Available" to "Pre-Planned Maintenance (PPM) Services"
+- **ENHANCEMENT:** Added prominent version display system with floating badge
+- **FOOTER UPDATE:** Enhanced footer with dynamic version information
+- **FEATURES:** Version badge component with multiple display variants
+- **ALIGNMENT:** Content now accurately reflects PPM-only service model
+- **STATUS:** ✅ Content Aligned with Business Model
 
 #### v1.0.0 (September 8, 2025)
 - **INITIAL BUILD** - Base Next.js structure created

@@ -1,6 +1,7 @@
 
 import Link from 'next/link'
 import { Mail, Phone, MapPin, Wrench } from 'lucide-react'
+import { VERSION_INFO, getVersionDisplay } from '@/lib/version'
 
 export default function Footer() {
   return (
@@ -74,11 +75,25 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; {new Date().getFullYear()} SFG Aluminium Ltd. All rights reserved. | v1.0.0 - Foundation Complete</p>
-          <p className="text-xs text-gray-400 mt-1">
-            🎯 180+ Page Website Specification | Warren Executive Theme | Lead Generation Ready
-          </p>
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-gray-300">
+            <div className="text-center md:text-left">
+              <p>&copy; {new Date().getFullYear()} SFG Aluminium Ltd. All rights reserved.</p>
+              <p className="text-xs text-gray-400 mt-1">
+                🎯 {VERSION_INFO.scope} | Warren Executive Theme | PPM Services Ready
+              </p>
+            </div>
+            <div className="mt-4 md:mt-0 text-center md:text-right">
+              <div className="flex items-center justify-center md:justify-end space-x-2 mb-1">
+                <div className="px-3 py-1 bg-blue-600 rounded-full text-xs font-semibold text-white">
+                  {getVersionDisplay()}
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">
+                Build: {VERSION_INFO.buildDate} | Features: {VERSION_INFO.features.length} Active
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

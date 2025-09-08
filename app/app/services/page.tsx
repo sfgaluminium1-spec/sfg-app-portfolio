@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+import VersionBadge from '@/components/version-badge'
 import { 
   Wrench, 
   Truck, 
@@ -243,28 +244,29 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Emergency Services */}
-      <section className="py-16 bg-red-600">
+      {/* PPM Services */}
+      <section className="py-16 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            24/7 Emergency Service Available
+            Pre-Planned Maintenance (PPM) Services
           </h2>
-          <p className="text-xl text-red-100 mb-8">
-            Urgent repairs? We're here to help with fast response times and expert emergency services.
+          <p className="text-xl text-blue-100 mb-8">
+            Scheduled maintenance programs to keep your aluminium systems performing optimally. Professional planned maintenance services designed to prevent issues before they occur.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-red-600 hover:bg-gray-100">
+            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
               <Phone className="mr-2 h-5 w-5" />
-              Call Emergency Line
+              Schedule PPM Service
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-red-600">
-              Request Callback
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+              Get PPM Quote
             </Button>
           </div>
         </div>
       </section>
 
       <Footer />
+      <VersionBadge position="fixed" variant="default" />
     </div>
   )
 }

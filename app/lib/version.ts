@@ -1,12 +1,13 @@
 
 export const VERSION_INFO = {
-  version: '1.0.0',
+  version: '1.1.0',
   buildDate: '2025-09-08',
-  status: 'Development',
+  status: 'Active Development',
   scope: '180+ Page Website with Microfrontends Host',
   features: [
     'Warren Executive Theme Integration',
     'Lead Generation System',
+    'PPM (Pre-Planned Maintenance) Services',
     'Microsoft 365 SharePoint Integration',
     'UK Building Regulations Compliance',
     'GDPR Compliant',
