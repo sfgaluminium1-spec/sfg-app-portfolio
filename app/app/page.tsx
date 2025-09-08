@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import HeroSection from '@/components/hero-section'
+import AdvancedHeroVideo from '@/components/advanced-hero-video'
 import ProductsSection from '@/components/products-section'
 import StatsSection from '@/components/stats-section'
 import VersionBadge from '@/components/version-badge'
@@ -39,7 +39,7 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Header />
       
-      <HeroSection />
+      <AdvancedHeroVideo />
       
       <StatsSection />
       

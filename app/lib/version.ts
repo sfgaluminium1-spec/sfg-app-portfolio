@@ -1,14 +1,18 @@
 
 export const VERSION_INFO = {
-  version: '1.1.0',
+  version: '1.2.0',
   buildDate: '2025-09-08',
-  status: 'Active Development',
+  status: 'Advanced Video Hero',
   scope: '180+ Page Website with Microfrontends Host',
   features: [
+    'Advanced Video Hero Background',
     'Warren Executive Theme Integration',
-    'Lead Generation System',
+    'Scroll-Triggered Animations',
     'PPM (Pre-Planned Maintenance) Services',
+    'Interactive Micro-Animations',
+    'Accessibility Compliant Video',
     'Microsoft 365 SharePoint Integration',
+    'Progressive Enhancement',
     'UK Building Regulations Compliance',
     'GDPR Compliant',
     'SEO Optimized'

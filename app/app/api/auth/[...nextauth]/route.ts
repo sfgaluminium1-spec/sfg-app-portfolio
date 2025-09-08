@@ -34,12 +34,18 @@ export async function GET(
       })
 
     case 'signin':
-      // Return a redirect for signin page
-      return NextResponse.redirect(new URL('/auth/signin', request.url), 302)
+      // Return signin page URL
+      return NextResponse.json({
+        url: `/auth/signin`,
+        status: "development"
+      })
 
-    case 'signup':
-      // Return a redirect for signup page
-      return NextResponse.redirect(new URL('/auth/signup', request.url), 302)
+    case 'signup':  
+      // Return signup page URL
+      return NextResponse.json({
+        url: `/auth/signup`,
+        status: "development"
+      })
 
     case 'signout':
       return NextResponse.redirect(new URL('/', request.url), 302)
@@ -73,7 +79,16 @@ export async function POST(
         
         // For development, accept any credentials
         if (body.email && body.password) {
-          return NextResponse.redirect(new URL('/', request.url), 302)
+          return NextResponse.json({
+            user: {
+              email: body.email,
+              id: `user-${Date.now()}`,
+              name: body.email.split('@')[0]
+            },
+            url: '/',
+            status: "success",
+            message: "Development signin successful"
+          })
         } else {
           return NextResponse.json({ error: 'Invalid credentials' }, { status: 400 })
         }
@@ -87,7 +102,16 @@ export async function POST(
         
         // For development, accept any valid signup data
         if (body.email && body.password) {
-          return NextResponse.redirect(new URL('/', request.url), 302)
+          return NextResponse.json({
+            user: {
+              email: body.email,
+              id: `user-${Date.now()}`,
+              name: body.email.split('@')[0]
+            },
+            url: '/',
+            status: "success",
+            message: "Development signup successful"
+          })
         } else {
           return NextResponse.json({ error: 'Invalid signup data' }, { status: 400 })
         }

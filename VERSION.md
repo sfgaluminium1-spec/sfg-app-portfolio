@@ -1,11 +1,24 @@
 
 # SFG Aluminium Ltd Website Version Log
 
-## Current Version: 1.1.0
+## Current Version: 1.2.0
 **Release Date:** September 8, 2025  
-**Status:** Active Development - Service Content Update  
+**Status:** Advanced Video Hero - Interactive Experience  
 
 ### Version History
+
+#### v1.2.0 (September 8, 2025)
+- **MAJOR FEATURE** - Advanced video hero background system implementation
+- **VIDEO SYSTEM:** Multi-device responsive video (Desktop/Tablet/Mobile formats)
+- **ANIMATIONS:** Scroll-triggered animations with intersection observers
+- **MICRO-INTERACTIONS:** Button hover effects, scale transforms, shimmer animations
+- **ACCESSIBILITY:** Full compliance with reduced-motion support and screen readers
+- **PERFORMANCE:** Progressive enhancement with intelligent fallbacks
+- **THEME INTEGRATION:** Warren Executive Theme colors and metallic effects
+- **CTA ENHANCEMENT:** Animated "Get Free Quote" and "Book Survey" buttons
+- **STATISTICS:** Dynamic counting animations for trust indicators
+- **CONTROLS:** Video play/pause, mute/unmute, progress tracking
+- **STATUS:** ✅ Advanced Interactive Hero Experience Complete
 
 #### v1.1.0 (September 8, 2025)
 - **SERVICE CONTENT UPDATE** - Replaced emergency services with PPM focus

@@ -1,6 +1,14 @@
 
 import { NextResponse } from 'next/server'
 
+export async function GET() {
+  return NextResponse.json({
+    message: "Signin endpoint available",
+    methods: ["POST"],
+    status: "development"
+  })
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
