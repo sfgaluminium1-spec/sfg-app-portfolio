@@ -166,38 +166,38 @@ export const POWER_BI_DASHBOARDS: PowerBIDashboard[] = [
 export const TECH_TICKER_ITEMS: TechTicker[] = [
   {
     id: '1',
-    text: 'AI-Powered Aluminium Recycling Breakthrough: 99.7% Material Recovery Rate Achieved',
+    text: 'SFG Best Practices: Abacus.ai Integration Delivers 300% ROI with AI-Optimized Operations',
     category: 'ai',
     priority: 1
   },
   {
     id: '2',
-    text: 'Quantum Computing Integration in Material Science: Revolutionary Alloy Discoveries',
+    text: 'Next.js 15 TypeScript Migration: Microfrontends Architecture Enables Scalable AI Development',
     category: 'innovation',
     priority: 2
   },
   {
     id: '3',
-    text: 'Sustainable Aluminium Production: Carbon-Negative Manufacturing Process Deployed',
-    category: 'aluminium',
+    text: 'Microsoft 365 SSO Integration: Enterprise-Grade Security with 99.9% Uptime Achievement',
+    category: 'security',
     priority: 1
   },
   {
     id: '4',
-    text: 'Neural Network Predictive Maintenance: 95% Reduction in Equipment Downtime',
+    text: 'AI Cost Optimization: £3,500/mo Model Training Budget with 40% Compression Savings',
     category: 'ai',
     priority: 2
   },
   {
     id: '5',
-    text: 'Smart Factory 5.0: Fully Autonomous Production Lines Now Operational',
-    category: 'future',
+    text: 'Warren Executive Theme: Premium UI/UX Standards Drive 250% User Engagement',
+    category: 'design',
     priority: 1
   },
   {
     id: '6',
-    text: 'Blockchain Supply Chain Transparency: End-to-End Material Traceability Achieved',
-    category: 'innovation',
+    text: 'Auto-Scale AI Models: 15-Minute Idle Shutdown Reduces Infrastructure Costs by 60%',
+    category: 'efficiency',
     priority: 2
   }
 ];
