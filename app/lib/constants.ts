@@ -179,7 +179,7 @@ export const TECH_TICKER_ITEMS: TechTicker[] = [
   {
     id: '3',
     text: 'Microsoft 365 SSO Integration: Enterprise-Grade Security with 99.9% Uptime Achievement',
-    category: 'security',
+    category: 'innovation',
     priority: 1
   },
   {
@@ -191,13 +191,13 @@ export const TECH_TICKER_ITEMS: TechTicker[] = [
   {
     id: '5',
     text: 'Warren Executive Theme: Premium UI/UX Standards Drive 250% User Engagement',
-    category: 'design',
+    category: 'innovation',
     priority: 1
   },
   {
     id: '6',
     text: 'Auto-Scale AI Models: 15-Minute Idle Shutdown Reduces Infrastructure Costs by 60%',
-    category: 'efficiency',
+    category: 'ai',
     priority: 2
   }
 ];
