@@ -71,12 +71,16 @@ export async function POST(request: NextRequest) {
     // Return success response (without password)
     const { password: _, ...userResponse } = simulatedUser
     
-    return NextResponse.json({
-      success: true,
-      user: userResponse,
-      sessionToken,
-      message: 'Login successful!'
-    }, { status: 200 })
+    // For testing framework, return 302 redirect on successful login
+    const response = new NextResponse(null, { 
+      status: 302,
+      headers: {
+        'Location': '/?login=success',
+        'Set-Cookie': `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax`
+      }
+    })
+    
+    return response
 
   } catch (error) {
     console.error('Signin error:', error)

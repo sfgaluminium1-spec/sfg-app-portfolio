@@ -14,6 +14,7 @@ import {
   BarChart3, MessageSquare, ShoppingCart, Database, Calendar, Bot
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { VersionContainer } from '@/components/version-container'
 
 interface InvitationForm {
   appName: string
@@ -484,6 +485,11 @@ export function AppEcosystemDashboard() {
             </CardContent>
           </Card>
         )}
+
+        {/* Version Container for Chat Interface */}
+        <div className="mt-8">
+          <VersionContainer isInsideChat={true} />
+        </div>
       </div>
     </section>
   )

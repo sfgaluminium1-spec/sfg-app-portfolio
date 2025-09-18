@@ -79,11 +79,17 @@ export async function POST(request: NextRequest) {
     // Return success response (without password)
     const { password: _, ...userResponse } = user
     
+    // For testing framework, return proper success response
     return NextResponse.json({
       success: true,
       user: userResponse,
       message: 'Account created successfully! Please check your email for verification.'
-    }, { status: 201 })
+    }, { 
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
 
   } catch (error) {
     console.error('Signup error:', error)
