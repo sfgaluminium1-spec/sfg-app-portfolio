@@ -16,18 +16,18 @@ export function MobileSection() {
   const mobileFeatures = [
     {
       icon: RefreshCw,
-      title: 'Real-time Sync',
-      description: 'Instant synchronization between your Chrome extension and mobile devices.'
+      title: 'iPhone Notes Sync',
+      description: 'Import and organize your iPhone Notes with AI-powered categorization and smart search capabilities.'
     },
     {
       icon: Cloud,
-      title: 'Cloud Integration',
-      description: 'Seamless cloud backup and access across all your connected devices.'
+      title: 'Android Notes Integration',
+      description: 'Seamlessly sync with Google Keep, Samsung Notes, and other Android note apps with cloud backup.'
     },
     {
       icon: Bell,
-      title: 'Smart Notifications',
-      description: 'Intelligent alerts and reminders based on your browsing patterns.'
+      title: 'Cross-Platform Notifications',
+      description: 'Smart reminders and alerts that work across your iPhone, Android, and desktop browsers.'
     }
   ]
 
@@ -54,7 +54,7 @@ export function MobileSection() {
             </h2>
           </div>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Perfect harmony between your Chrome extension and mobile experience with intelligent note organization.
+            Transform your iPhone and Android notes into an organized, searchable knowledge base. Import, categorize, and sync seamlessly across all devices.
           </p>
         </motion.div>
 
@@ -114,10 +114,10 @@ export function MobileSection() {
           >
             <div className="mb-8">
               <h3 className="text-3xl font-bold text-white mb-4">
-                Seamless Cross-Platform Experience
+                iPhone & Android Notes Organization
               </h3>
               <p className="text-gray-300 text-lg">
-                Your productivity never stops. Access your AI-enhanced notes, bookmarks, and automations on iOS and Android devices with perfect synchronization.
+                Upload your iPhone Notes exports (.txt files) or Android backup files and watch our AI transform them into a perfectly organized, searchable system. Supports contacts integration, file upload processing, and intelligent categorization across unlimited custom profiles.
               </p>
             </div>
 
