@@ -1,0 +1,10 @@
+﻿{
+    "private":  true,
+    "name":  "app-001",
+    "version":  "0.1.0",
+    "scripts":  {
+                    "build":  "npm run build",
+                    "dev":  "npm run dev",
+                    "start":  "npm start"
+                }
+}
