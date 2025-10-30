@@ -1,11 +1,24 @@
 
 # SFG Aluminium Ltd Website Version Log
 
-## Current Version: 1.2.0
+## Current Version: 1.3.0
 **Release Date:** September 8, 2025  
-**Status:** Advanced Video Hero - Interactive Experience  
+**Status:** Unified Application Inventory & Extraction Framework  
 
 ### Version History
+
+#### v1.3.0 (September 8, 2025)
+- **MAJOR DOCUMENTATION** - Unified Application Inventory framework created
+- **EXTRACTION PLAN:** Comprehensive legacy content extraction strategy
+- **PROCEDURE TEMPLATES:** Standardized documentation for business procedures
+- **WORKFLOW TEMPLATES:** Standardized documentation for workflows
+- **INTEGRATION FRAMEWORK:** Complete API endpoint specifications
+- **DATA MODELS:** Core entity schemas (Customer, Staff, Document, BaseNumber)
+- **MCP CONFIGURATION:** AgentPass server orchestration documented
+- **THEME TOKENS:** Warren Executive Theme complete specification
+- **EXTRACTION TOOLS:** Python script for automated content extraction
+- **BUSINESS LOGIC:** Framework for capturing procedures and workflows
+- **STATUS:** ✅ Ready for Legacy Content Extraction Phase
 
 #### v1.2.0 (September 8, 2025)
 - **MAJOR FEATURE** - Advanced video hero background system implementation
