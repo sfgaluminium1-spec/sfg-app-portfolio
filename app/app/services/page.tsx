@@ -254,12 +254,16 @@ export default function ServicesPage() {
             Scheduled maintenance programs to keep your aluminium systems performing optimally. Professional planned maintenance services designed to prevent issues before they occur.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
-              <Phone className="mr-2 h-5 w-5" />
-              Schedule PPM Service
+            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100" asChild>
+              <Link href="/contact">
+                <Phone className="mr-2 h-5 w-5" />
+                Schedule PPM Service
+              </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-              Get PPM Quote
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600" asChild>
+              <Link href="/contact">
+                Get PPM Quote
+              </Link>
             </Button>
           </div>
         </div>

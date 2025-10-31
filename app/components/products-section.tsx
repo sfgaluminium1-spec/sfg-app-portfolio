@@ -83,9 +83,11 @@ export default function ProductsSection() {
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" size="sm" className="w-full group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
-                  Learn More
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="w-full group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all" asChild>
+                  <Link href="/products">
+                    Learn More
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </Button>
               </CardContent>
             </Card>

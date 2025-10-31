@@ -1,5 +1,6 @@
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Header from '@/components/header'
@@ -156,9 +157,11 @@ export default function ProductsPage() {
                     </div>
                   </div>
 
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    Request Quote
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button className="bg-blue-600 hover:bg-blue-700" asChild>
+                    <Link href="/contact">
+                      Request Quote
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
                   </Button>
                 </div>
 
@@ -188,11 +191,15 @@ export default function ProductsPage() {
             Our expert team can design and manufacture bespoke aluminium products to meet your specific requirements.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              Get Custom Quote
+            <Button size="lg" asChild>
+              <Link href="/contact">
+                Get Custom Quote
+              </Link>
             </Button>
-            <Button size="lg" variant="outline">
-              Speak to Expert
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/contact">
+                Speak to Expert
+              </Link>
             </Button>
           </div>
         </div>
