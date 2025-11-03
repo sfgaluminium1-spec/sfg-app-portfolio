@@ -1,0 +1,255 @@
+{
+  "appName": "SFG-ESP",
+  "version": "2.0.0",
+  "registrationDate": "2025-11-03T16:11:59.679Z",
+  "sourceDirectory": "/home/ubuntu/sfg_enquiry_system_enhanced/app",
+  "coreModules": {
+    "enquiryManagement": {
+      "description": "Customer enquiry capture, tracking, and workflow management",
+      "routes": [
+        "/enquiries",
+        "/enquiries/new",
+        "/intelligent-enquiry"
+      ],
+      "apiEndpoints": [
+        "/api/enquiries"
+      ],
+      "features": [
+        "Enquiry creation with customer details",
+        "Product requirement capture",
+        "Status tracking and workflow management",
+        "AI-powered intelligent enquiry processing",
+        "Regulatory compliance checking",
+        "Credit assessment integration"
+      ]
+    },
+    "customerManagement": {
+      "description": "Customer database and relationship management",
+      "routes": [
+        "/customers"
+      ],
+      "apiEndpoints": [
+        "/api/customers"
+      ],
+      "features": [
+        "Customer profile management",
+        "Company information tracking",
+        "Contact details management",
+        "Customer tier classification",
+        "Credit limit tracking",
+        "Historical enquiry access"
+      ]
+    },
+    "quotationManagement": {
+      "description": "Quote generation and pricing management",
+      "routes": [
+        "/quotations"
+      ],
+      "apiEndpoints": [
+        "/api/quotations"
+      ],
+      "features": [
+        "Automated quote generation",
+        "Pricing calculations",
+        "Multi-product quotations",
+        "Quote versioning",
+        "Approval workflows",
+        "PDF quote generation"
+      ]
+    },
+    "regulatoryIntelligence": {
+      "description": "Building regulations and compliance checking",
+      "routes": [
+        "/regulations"
+      ],
+      "apiEndpoints": [
+        "/api/regulations"
+      ],
+      "features": [
+        "Product compliance verification",
+        "Building height threshold checks",
+        "Approval pathway determination",
+        "Local authority variation handling",
+        "Regulatory document management",
+        "Fire safety compliance"
+      ],
+      "dataSources": [
+        "Building Regulations 2010",
+        "Approved Document B (Fire Safety)",
+        "BS 8200 standards",
+        "Local authority requirements"
+      ]
+    },
+    "creditChecking": {
+      "description": "Customer credit assessment and risk management",
+      "routes": [
+        "/credit"
+      ],
+      "apiEndpoints": [
+        "/api/credit-checks"
+      ],
+      "features": [
+        "Automated credit checks",
+        "Companies House integration",
+        "Credit limit recommendations",
+        "Risk assessment scoring",
+        "Payment terms determination",
+        "Credit history tracking"
+      ],
+      "integrations": [
+        "Companies House API"
+      ]
+    },
+    "xeroIntegration": {
+      "description": "Accounting system integration with Xero",
+      "apiEndpoints": [
+        "/api/xero"
+      ],
+      "features": [
+        "Customer synchronization",
+        "Invoice creation",
+        "Payment tracking",
+        "Quote to invoice conversion",
+        "Real-time pricing updates",
+        "Financial reporting"
+      ],
+      "webhooks": [
+        "/api/xero/webhooks/contacts",
+        "/api/xero/webhooks/invoices"
+      ]
+    },
+    "whatsappIntegration": {
+      "description": "WhatsApp Business API integration for customer communication",
+      "routes": [
+        "/whatsapp-integration"
+      ],
+      "apiEndpoints": [
+        "/api/whatsapp"
+      ],
+      "features": [
+        "Automated customer notifications",
+        "Enquiry status updates",
+        "Quote delivery via WhatsApp",
+        "Two-way messaging",
+        "Template message management",
+        "Message logging and tracking"
+      ],
+      "integrations": [
+        "Twilio WhatsApp API"
+      ]
+    },
+    "analyticsAndReporting": {
+      "description": "Business intelligence and data analytics",
+      "routes": [
+        "/analytics"
+      ],
+      "apiEndpoints": [
+        "/api/analytics"
+      ],
+      "features": [
+        "Enquiry conversion tracking",
+        "Customer acquisition metrics",
+        "Product demand analysis",
+        "Revenue forecasting",
+        "Sales pipeline visualization",
+        "Performance dashboards"
+      ]
+    },
+    "aiAssistant": {
+      "description": "AI-powered intelligent features and automation",
+      "routes": [
+        "/ai"
+      ],
+      "features": [
+        "Intelligent enquiry processing",
+        "Automated product recommendations",
+        "Regulatory compliance assistance",
+        "Natural language query processing",
+        "Document analysis",
+        "Predictive analytics"
+      ],
+      "integrations": [
+        "Abacus.AI API"
+      ]
+    }
+  },
+  "databaseSchema": {
+    "tables": [
+      "User",
+      "Customer",
+      "Enquiry",
+      "EnquiryProduct",
+      "Quotation",
+      "QuotationItem",
+      "CreditCheck",
+      "RegulatoryCheck",
+      "Product",
+      "BuildingRegulation",
+      "XeroCustomer",
+      "WhatsAppMessage",
+      "AnalyticsEvent"
+    ],
+    "orm": "Prisma",
+    "database": "PostgreSQL"
+  },
+  "externalIntegrations": [
+    {
+      "name": "Xero",
+      "purpose": "Accounting and invoicing",
+      "authentication": "OAuth 2.0 with PKCE",
+      "endpoints": [
+        "https://api.xero.com/api.xro/2.0/"
+      ]
+    },
+    {
+      "name": "Companies House",
+      "purpose": "Credit checking and company verification",
+      "authentication": "API Key",
+      "endpoints": [
+        "https://api.company-information.service.gov.uk/"
+      ]
+    },
+    {
+      "name": "Twilio WhatsApp",
+      "purpose": "Customer communication",
+      "authentication": "Account SID + Auth Token",
+      "endpoints": [
+        "https://api.twilio.com/2010-04-01/"
+      ]
+    },
+    {
+      "name": "Abacus.AI",
+      "purpose": "AI-powered features",
+      "authentication": "API Key",
+      "endpoints": [
+        "https://api.abacus.ai/"
+      ]
+    }
+  ],
+  "deploymentInfo": {
+    "platform": "Abacus.AI DeepAgent",
+    "hostname": "sfg-esp.abacusai.app",
+    "framework": "Next.js 14",
+    "runtime": "Node.js",
+    "buildTool": "yarn"
+  },
+  "businessRules": {
+    "enquiryWorkflow": [
+      "New enquiry → Customer verification → Product specification",
+      "Regulatory compliance check → Credit assessment",
+      "Quote generation → Approval → Customer delivery",
+      "Follow-up → Conversion tracking"
+    ],
+    "creditAssessment": [
+      "Tier 1 (£0-£2,500): Basic verification",
+      "Tier 2 (£2,501-£10,000): Companies House check",
+      "Tier 3 (£10,000+): Full credit bureau check"
+    ],
+    "regulatoryCompliance": [
+      "Height check: <18m (domestic) vs ≥18m (commercial)",
+      "Fire safety classification based on building type",
+      "Local authority approval pathway determination",
+      "Product specification compliance verification"
+    ]
+  }
+}
