@@ -1,0 +1,579 @@
+
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  console.log('Starting database seeding for SFG Aluminium Wiki...')
+
+  // Create SFG Aluminium users
+  const hashedPassword = await bcrypt.hash('sfg2025', 12)
+  
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'yanika@sfg-aluminium.co.uk' },
+    update: {},
+    create: {
+      email: 'yanika@sfg-aluminium.co.uk',
+      password: hashedPassword,
+      firstName: 'Yanika',
+      lastName: 'Heathcote',
+      role: 'SUPER_ADMIN',
+      tierLevel: 'director',
+      department: 'management',
+    },
+  })
+
+  const opsUser = await prisma.user.upsert({
+    where: { email: 'pawel@sfg-aluminium.co.uk' },
+    update: {},
+    create: {
+      email: 'pawel@sfg-aluminium.co.uk',
+      password: hashedPassword,
+      firstName: 'Pawel',
+      lastName: 'Marzec',
+      role: 'ADMIN',
+      tierLevel: 'manager',
+      department: 'management',
+    },
+  })
+
+  const estimatorUser = await prisma.user.upsert({
+    where: { email: 'mohammed@sfg-aluminium.co.uk' },
+    update: {},
+    create: {
+      email: 'mohammed@sfg-aluminium.co.uk',
+      password: hashedPassword,
+      firstName: 'Mohammed',
+      lastName: 'Khan',
+      role: 'USER',
+      tierLevel: 'senior',
+      department: 'estimating',
+    },
+  })
+
+  console.log('SFG Users created:', adminUser.email, opsUser.email, estimatorUser.email)
+
+  // Create categories based on audit questionnaire structure
+  const categories = [
+    {
+      name: 'Staff Tier Levels',
+      code: 'STAFF_TIERS',
+      description: 'Organizational hierarchy and staff tier definitions',
+      icon: 'Users',
+      color: '#3b82f6',
+      sortOrder: 1,
+    },
+    {
+      name: 'Customer Tier Levels',
+      code: 'CUSTOMER_TIERS',
+      description: 'Customer classification and tier benefits',
+      icon: 'CreditCard',
+      color: '#10b981',
+      sortOrder: 2,
+    },
+    {
+      name: 'Credit Check Protocols',
+      code: 'CREDIT_CHECKS',
+      description: 'Credit evaluation and approval procedures',
+      icon: 'Shield',
+      color: '#f59e0b',
+      sortOrder: 3,
+    },
+    {
+      name: 'Pricing Structure',
+      code: 'PRICING',
+      description: 'Pricing models and discount structures',
+      icon: 'DollarSign',
+      color: '#8b5cf6',
+      sortOrder: 4,
+    },
+    {
+      name: 'Margin Calculations',
+      code: 'MARGINS',
+      description: 'Profit margin formulas and targets',
+      icon: 'TrendingUp',
+      color: '#ef4444',
+      sortOrder: 5,
+    },
+    {
+      name: 'Payroll Formulas',
+      code: 'PAYROLL',
+      description: 'Compensation and payroll calculations',
+      icon: 'Calculator',
+      color: '#06b6d4',
+      sortOrder: 6,
+    },
+    {
+      name: 'Project Numbering',
+      code: 'PROJECT_NUM',
+      description: 'Project identification and numbering systems',
+      icon: 'Hash',
+      color: '#84cc16',
+      sortOrder: 7,
+    },
+    {
+      name: 'Accountant Procedures',
+      code: 'ACCOUNTING',
+      description: 'Financial and accounting procedures',
+      icon: 'BookOpen',
+      color: '#ec4899',
+      sortOrder: 8,
+    },
+    {
+      name: 'Company Protocols',
+      code: 'PROTOCOLS',
+      description: 'General company policies and protocols',
+      icon: 'FileText',
+      color: '#64748b',
+      sortOrder: 9,
+    },
+    {
+      name: 'Raising Processes',
+      code: 'RAISING',
+      description: 'Fundraising and capital raising procedures',
+      icon: 'ArrowUp',
+      color: '#f97316',
+      sortOrder: 10,
+    },
+  ]
+
+  for (const categoryData of categories) {
+    await prisma.category.upsert({
+      where: { code: categoryData.code },
+      update: {},
+      create: categoryData,
+    })
+  }
+
+  console.log('Categories created')
+
+  // Create sample procedures for each category
+  const sampleProcedures = [
+    {
+      title: 'SFG Aluminium Insurance Policy Overview',
+      content: `# Insurance Policy Overview - SFG Aluminium Ltd
+
+**Policy Period:** 26/06/2024 → 25/06/2025  
+**Insured:** SFG Aluminium Ltd, 39 Clayton Lane South, Manchester, M12 5PG  
+**Broker:** Reich Insurance Brokers Ltd (Manchester)
+
+## Policy Details
+
+### Tradesman & Professionals Package
+- **Policy No:** TP1030218
+- **Underwriter:** AXA Insurance UK plc
+- **Premium:** £8,295.94 (inc. IPT & fees)
+
+**Coverage:**
+- Employers' Liability: £10,000,000 per occurrence
+- Public Liability: £5,000,000 per occurrence
+- Products Liability: £5,000,000 aggregate
+- Business Equipment: £10,000 all risks
+
+### Excess Liability Combined
+- **Policy No:** XL/1006147TUW
+- **Underwriter:** Zurich Insurance Company Ltd
+- **Premium:** £530.12 (inc. IPT & fees)
+
+## ⚠️ CRITICAL EXCLUSIONS & LIMITATIONS
+
+### Height & Depth Restrictions
+- **Maximum Height:** 15 metres (Endorsement 25)
+- **Maximum Depth:** 2 metres (Endorsement 12)
+- **Groundwork:** EXCLUDED (Endorsement 60)
+
+### Hazardous Works Exclusion (593)
+The following works are EXCLUDED:
+- Demolition or pile driving
+- Work on railways or airside
+- Work at power stations
+- Offshore work
+- Nuclear facilities
+
+### Third Party Property Damage
+- **Excess:** £500 per claim
+- **Tools & Transit Excess:** £100 (£250 for theft from vehicle)
+
+### Subcontractor Requirements
+All subcontractors MUST hold Public Liability insurance of at least £5,000,000.
+
+### Use of Heat Condition
+Hot works away from premises require:
+- Fire watcher present
+- Fire extinguishers on site
+- 60-minute post-work checks
+
+### Efficacy Exclusion (XOL0032)
+Failure of product/work to perform its intended function is EXCLUDED.
+
+## ⚡ IMMEDIATE ACTION REQUIRED
+
+1. **Pre-Screen All Jobs**
+   - Check height: Work above 15m? → Refer to insurers
+   - Check depth: Excavation below 2m? → Refer to insurers
+   - Groundwork involved? → CANNOT ACCEPT
+
+2. **Subcontractor Verification**
+   - Obtain PL certificate (min £5M)
+   - Store centrally in SharePoint
+   - Review annually
+
+3. **Hot Works Protocol**
+   - Issue Hot Works Permit
+   - Ensure fire watcher & extinguishers
+   - Document 60-min checks
+
+4. **Pre-Quote Checklist**
+   - Review site survey for exclusions
+   - Flag any hazardous works
+   - Confirm subcontractor insurance
+
+## Claims Contacts
+
+**Tradesman/AXA Claims:**
+- Phone: 0345 900 4185 (Option 3)
+- Email: LiabilityClaims.ins@axa-insurance.co.uk
+
+**Excess/Zurich Claims:**
+- Online: www.zurich.co.uk/business/claims
+- Phone: 0800 302 9055
+
+**Complaints:**
+- Email: complaints@qunderwriting.com
+
+## Risk Register
+
+| Risk | Impact | Mitigation | Owner |
+|------|--------|-----------|--------|
+| Work above 15m | Policy void | Pre-screen, refer to insurers | Estimating |
+| Excavation >2m | Policy void | Refuse or get special cover | Operations |
+| Uninsured subcontractor | £5M exposure | Verify before engagement | Procurement |
+| Hot works incident | Fire/injury claim | Hot Works Permit mandatory | Site Manager |
+| Product failure | Efficacy exclusion | Strengthen warranties & QA | Contracts |
+
+## Document Storage
+
+All insurance documents stored at:
+- SharePoint: /Insurance/2024-2025/
+- Certificates issued to: yanika@sfg-aluminium.co.uk
+- Renewal date: **25 June 2025** (add calendar reminder 90 days prior)`,
+      summary: 'Complete insurance coverage, exclusions, and operational risk mitigation for SFG Aluminium',
+      categoryName: 'Company Protocols',
+      tags: ['insurance', 'risk', 'compliance', 'critical'],
+      priority: 'CRITICAL' as const,
+      formulas: [],
+    },
+    {
+      title: 'Staff Tier Level Definitions',
+      content: `# Staff Tier Level Structure - SFG Aluminium
+
+## Tier 1: Director
+- Yanika Heathcote (Managing Director)
+- Reports to: Board/Ownership
+- Budget Authority: Unlimited
+- Credit Approval: Unlimited
+- System Access: Full admin
+
+## Tier 2: Manager
+- Pawel Marzec (Operations Manager)
+- Mike Deon Viljoen (Installations Manager)
+- Reports to: Director
+- Budget Authority: £50,000
+- Credit Approval: £50,000
+- System Access: Team management, reports, override pricing
+
+## Tier 3: Senior Estimator
+- Mohammed Khan (Estimator/Margin Watcher)
+- Reports to: Manager
+- Budget Authority: £15,000
+- Credit Approval: £15,000
+- System Access: Approve quotes, manage customers, credit checks
+
+## Tier 4: Estimator/Specialist
+- Rafal Zwarycz (AutoCAD Designer)
+- Darren Newbury (Site Surveyor)
+- Chris Bulmer (Direct Sales)
+- Reports to: Senior/Manager
+- Budget Authority: £5,000
+- Credit Approval: £5,000
+- System Access: Create quotes, edit quotes, view customers
+
+## Tier 5: Junior/Technician
+- Site fitters, fabricators, admin
+- Reports to: Estimator/Specialist
+- Budget Authority: £1,000
+- Credit Approval: £1,000
+- System Access: View enquiries, create basic quotes
+
+## Permissions Matrix
+
+| Permission | Junior | Estimator | Senior | Manager | Director |
+|------------|--------|-----------|--------|---------|----------|
+| View enquiries | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Create enquiries | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Create quotes | Basic | ✅ | ✅ | ✅ | ✅ |
+| Edit quotes | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Approve quotes | ❌ | ❌ | Up to £15k | Up to £50k | Unlimited |
+| Manage customers | ❌ | View only | ✅ | ✅ | ✅ |
+| Credit checks | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Override pricing | ❌ | ❌ | ❌ | ✅ | ✅ |
+| View reports | ❌ | Basic | ✅ | ✅ | ✅ |
+| Manage team | ❌ | ❌ | ❌ | ✅ | ✅ |
+| System config | ❌ | ❌ | ❌ | ❌ | ✅ |`,
+      summary: 'Complete hierarchy of SFG Aluminium staff tiers and authorities',
+      categoryName: 'Staff Tier Levels',
+      tags: ['hierarchy', 'management', 'authority', 'permissions'],
+      priority: 'HIGH' as const,
+      formulas: [],
+    },
+    {
+    {
+      title: 'Customer Tier Classification System',
+      content: `# Customer Tier System - SFG Aluminium
+
+## Economy Tier
+- Annual Revenue: £0 - £2,500
+- Discount: 0%
+- Payment Terms: Cash on Delivery (COD)
+- Credit Limit: £2,500
+- Benefits: Basic support
+
+## Standard Tier
+- Annual Revenue: £2,501 - £10,000
+- Discount: 5%
+- Payment Terms: Net 14 days
+- Credit Limit: £10,000
+- Benefits: Standard support
+
+## Premium Tier
+- Annual Revenue: £10,001 - £50,000
+- Discount: 8%
+- Payment Terms: Net 30 days
+- Credit Limit: £50,000
+- Benefits: Priority support, standard design assistance
+
+## Unlimited Tier
+- Annual Revenue: £50,001+
+- Discount: 12%
+- Payment Terms: Net 60 days
+- Credit Limit: Negotiable (typically £100k+)
+- Benefits: Dedicated account manager, priority support, custom design`,
+      summary: 'SFG customer classification tiers with benefits and requirements',
+      categoryName: 'Customer Tier Levels',
+      tags: ['customers', 'pricing', 'benefits'],
+      priority: 'HIGH' as const,
+      formulas: ['Discount% = BaseTier% + VolumeBonus%'],
+    },
+    {
+      title: 'Credit Check Standard Operating Procedure',
+      content: `# Credit Check Protocol - SFG Aluminium
+
+## When Credit Checks Are Required
+- All new customers requesting credit terms (Net 14/30/60)
+- Existing customers requesting credit limit increases above £10,000
+- Annual reviews for customers with £25,000+ credit limits
+- Any customer with payment history red flags
+
+## Credit Check Process
+
+### Step 1: Customer Information Gathering
+Customer submits:
+- Company name and number (if Limited)
+- 2 years trading history minimum
+- 2 trade references
+- Bank details for verification
+- VAT number
+
+### Step 2: Companies House Check
+For Limited companies:
+- Verify company status (active/dissolved)
+- Check incorporation date
+- Review directors
+- Check last filed accounts
+- Look for County Court Judgements (CCJs)
+
+### Step 3: Credit Scoring
+Credit score formula (0-999 scale):
+
+**Score = (CompanyStatus × 0.3) + (TradingHistory × 0.25) + (References × 0.25) + (FinancialHealth × 0.20)**
+
+Components:
+- Company Status: Active & good standing (300 points), Issues (150 points), Dissolved (0 points)
+- Trading History: 5+ years (250), 2-5 years (150), <2 years (50)
+- References: 2 positive (250), 1 positive (125), None/negative (0)
+- Financial Health: Profitable & liquid (200), Break-even (100), Losses (0)
+
+## Approval Matrix
+
+| Score Range | Action | Credit Limit | Approval Required |
+|-------------|--------|--------------|-------------------|
+| 750-999 | Auto-approve | Up to £50,000 | None |
+| 650-749 | Manager approval | Up to £25,000 | Operations Manager |
+| 550-649 | Director approval | Up to £10,000 | Managing Director |
+| < 550 | Requires prepayment or security | £0 | COD only |
+
+## Red Flags (Immediate Escalation)
+
+- Active CCJs or legal action
+- Company dissolved or in liquidation
+- No trading history (<1 year)
+- Negative trade references
+- Previous bad debt with SFG
+
+## Implementation
+
+System: Credit check automated via Companies House API
+Location: \`/api/credit-check\`
+Storage: Results stored in CreditCheck model`,
+      summary: 'Complete credit evaluation and approval process for SFG Aluminium',
+      categoryName: 'Credit Check Protocols',
+      tags: ['credit', 'approval', 'risk', 'companies-house'],
+      priority: 'CRITICAL' as const,
+      formulas: [
+        'CreditScore = (CompanyStatus × 0.3) + (TradingHistory × 0.25) + (References × 0.25) + (FinancialHealth × 0.20)',
+      ],
+    },
+  ]
+
+  for (const procData of sampleProcedures) {
+    const category = await prisma.category.findFirst({
+      where: { name: procData.categoryName },
+    })
+
+    if (category) {
+      await prisma.procedure.create({
+        data: {
+          title: procData.title,
+          content: procData.content,
+          summary: procData.summary,
+          categoryId: category.id,
+          tags: procData.tags,
+          priority: procData.priority,
+          formulas: procData.formulas,
+          createdById: adminUser.id,
+        },
+      })
+    }
+  }
+
+  console.log('SFG procedures created')
+
+  // Create SFG company-specific data
+  await prisma.staffTier.createMany({
+    data: [
+      {
+        name: 'Director',
+        level: 1,
+        description: 'Managing Director and Board members',
+        salaryMin: 60000,
+        salaryMax: 150000,
+        budgetAuthority: 999999999,
+        approvalLimits: { contracts: 'unlimited', expenses: 'unlimited', hiring: 'yes' },
+        systemPermissions: { all: 'admin' },
+      },
+      {
+        name: 'Manager',
+        level: 2,
+        description: 'Operations Manager, Installations Manager',
+        salaryMin: 40000,
+        salaryMax: 70000,
+        reportsTo: 'Director',
+        budgetAuthority: 50000,
+        approvalLimits: { contracts: 50000, expenses: 10000, hiring: 'with approval' },
+      },
+      {
+        name: 'Senior Estimator',
+        level: 3,
+        description: 'Senior estimators and margin watchers',
+        salaryMin: 30000,
+        salaryMax: 50000,
+        reportsTo: 'Manager',
+        budgetAuthority: 15000,
+        approvalLimits: { contracts: 15000, expenses: 2000, hiring: 'no' },
+      },
+      {
+        name: 'Estimator',
+        level: 4,
+        description: 'Estimators, designers, surveyors, sales',
+        salaryMin: 24000,
+        salaryMax: 40000,
+        reportsTo: 'Senior Estimator',
+        budgetAuthority: 5000,
+        approvalLimits: { contracts: 5000, expenses: 500, hiring: 'no' },
+      },
+      {
+        name: 'Junior',
+        level: 5,
+        description: 'Site fitters, fabricators, admin staff',
+        salaryMin: 20000,
+        salaryMax: 30000,
+        reportsTo: 'Estimator',
+        budgetAuthority: 1000,
+        approvalLimits: { contracts: 1000, expenses: 100, hiring: 'no' },
+      },
+    ],
+    skipDuplicates: true,
+  })
+
+  await prisma.customerTier.createMany({
+    data: [
+      {
+        name: 'Unlimited',
+        code: 'UNLTD',
+        priority: 1,
+        revenueMin: 50001,
+        discountPercentage: 12,
+        paymentTerms: 'Net 60',
+        creditLimit: 999999,
+        benefits: { accountManager: true, prioritySupport: true, customDesign: true },
+      },
+      {
+        name: 'Premium',
+        code: 'PREM',
+        priority: 2,
+        revenueMin: 10001,
+        revenueMax: 50000,
+        discountPercentage: 8,
+        paymentTerms: 'Net 30',
+        creditLimit: 50000,
+        benefits: { prioritySupport: true, standardDesign: true },
+      },
+      {
+        name: 'Standard',
+        code: 'STD',
+        priority: 3,
+        revenueMin: 2501,
+        revenueMax: 10000,
+        discountPercentage: 5,
+        paymentTerms: 'Net 14',
+        creditLimit: 10000,
+        benefits: { standardSupport: true },
+      },
+      {
+        name: 'Economy',
+        code: 'ECON',
+        priority: 4,
+        revenueMin: 0,
+        revenueMax: 2500,
+        discountPercentage: 0,
+        paymentTerms: 'COD',
+        creditLimit: 2500,
+        benefits: { basicSupport: true },
+      },
+    ],
+    skipDuplicates: true,
+  })
+
+  console.log('SFG company-specific data created')
+  console.log('✅ Database seeding completed successfully!')
+}
+
+main()
+  .catch((e) => {
+    console.error('Error during seeding:', e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
