@@ -187,3 +187,87 @@ The SFG Aluminium Ecosystem is a zero-drift orchestration system connecting 51+ 
 4. Deploy orchestration workflows
 5. Monitor and optimize
 
+
+---
+
+## Persistent Memory System (Implemented)
+
+### Overview
+The Persistent Memory System is the core intelligence layer of SFG NEXUS, enabling zero-drift orchestration by maintaining context, decisions, and knowledge across all interactions.
+
+### Database Models
+
+#### 1. Conversation
+Tracks orchestration conversations with full context and metadata.
+- Fields: id, title, startedAt, lastActivityAt, status, metadata, tags
+- Relations: Messages (one-to-many)
+
+#### 2. Message
+Stores individual messages within conversations.
+- Fields: id, conversationId, role, content, timestamp, metadata
+- Roles: USER, ASSISTANT, SYSTEM, TOOL
+
+#### 3. Plan
+Manages multi-step execution plans with status tracking.
+- Fields: id, conversationId, title, description, status, steps, priority, dueDate
+- Status: PENDING, IN_PROGRESS, COMPLETED, FAILED, CANCELLED
+
+#### 4. Decision
+Records critical decisions with reasoning and outcomes.
+- Fields: id, conversationId, planId, title, description, reasoning, outcome, impact
+- Impact: LOW, MEDIUM, HIGH, CRITICAL
+
+#### 5. AppRegistry
+Catalogs all satellite applications in the ecosystem.
+- Fields: id, appName, appType, description, baseUrl, capabilities, status, metadata
+- Types: SATELLITE, NEXUS, EXTERNAL, INTEGRATION
+
+#### 6. Instruction
+Stores reusable instructions and procedures.
+- Fields: id, title, content, category, priority, tags, usageCount
+- Categories: SYSTEM, USER, WORKFLOW, INTEGRATION, TROUBLESHOOTING
+
+#### 7. Context
+Maintains key-value context data across sessions.
+- Fields: id, key, value, category, expiresAt
+- Categories: SESSION, USER, SYSTEM, APP, WORKFLOW
+
+#### 8. KnowledgeBase
+Builds organizational knowledge repository.
+- Fields: id, topic, content, source, category, tags, verified
+- Categories: TECHNICAL, BUSINESS, PROCESS, POLICY, TROUBLESHOOTING
+
+### API Endpoints
+
+All endpoints follow REST conventions with full CRUD support:
+- `GET /api/memory/{resource}` - List all
+- `POST /api/memory/{resource}` - Create new
+- `GET /api/memory/{resource}/{id}` - Get by ID
+- `PUT /api/memory/{resource}/{id}` - Update
+- `DELETE /api/memory/{resource}/{id}` - Delete
+- `POST /api/memory/search` - Unified search
+
+### User Interface
+
+- **Memory Dashboard** (`/memory`) - Central management hub
+- **Conversations** (`/memory/conversations`) - Conversation history
+- **Plans** (`/memory/plans`) - Execution plan tracking
+- **Apps** (`/memory/apps`) - Application registry
+- **Navigation** - Integrated into main navigation with "SFG MEMORY" section
+
+### Implementation Details
+
+**Location:** `/app/`
+- API Routes: `/app/api/memory/`
+- UI Pages: `/app/memory/`
+- Components: `/app/components/memory/`
+- Types: `/app/types/memory.ts`
+- Database: `/prisma/schema.prisma`
+
+**Documentation:** `/docs/PERSISTENT_MEMORY_IMPLEMENTATION.md`
+
+**Testing:** All endpoints tested and verified working
+
+---
+
+*Last Updated: November 3, 2025*

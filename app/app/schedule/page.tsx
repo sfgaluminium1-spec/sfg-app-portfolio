@@ -1,0 +1,1 @@
+ import AdvancedScheduleManagement from '@/components/advanced-schedule-management'; export default function SchedulePage() { return <AdvancedScheduleManagement />; } 

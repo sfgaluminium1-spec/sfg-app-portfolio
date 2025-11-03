@@ -1,0 +1,1 @@
+ import SharePointSimulation from '@/components/sharepoint-simulation'; export default function SharePointPage() { return <SharePointSimulation />; } 

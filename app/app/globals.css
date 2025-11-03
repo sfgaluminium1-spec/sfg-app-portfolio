@@ -1,0 +1,265 @@
+
+/* Warren Executive Theme - Complete Implementation */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warren Executive Theme - Core Color System (HSL Format) */
+    --background: 218 47% 5%; /* Deep navy base for professional executive interfaces */
+    --foreground: 210 40% 98%; /* Near-white text for high contrast readability */
+    --card: 222 84% 4.9%; /* Very dark blue background for contained UI surfaces */
+    --card-foreground: 210 40% 98%; /* High-contrast text for card content */
+    --popover: 222 84% 4.9%; /* Same as card for floating elements */
+    --popover-foreground: 210 40% 98%; /* Consistent text color for popovers */
+    --primary: 217 91% 60%; /* Vibrant blue for buttons, links, active states */
+    --primary-foreground: 222 84% 4.9%; /* High-contrast text on primary backgrounds */
+    --secondary: 217 32% 17%; /* Muted dark blue for secondary interactions */
+    --secondary-foreground: 210 40% 98%; /* Light text on secondary backgrounds */
+    --muted: 215 32% 17%; /* Ancillary or de-emphasized elements */
+    --muted-foreground: 217 19% 55%; /* Subtle gray-blue for muted text */
+    --accent: 215 32% 17%; /* Hover states and subtle highlights */
+    --accent-foreground: 210 40% 98%; /* Light text on accent backgrounds */
+    --destructive: 0 62% 30%; /* Deep red for warnings and error states */
+    --destructive-foreground: 210 40% 98%; /* Light text on destructive backgrounds */
+    --border: 215 32% 17%; /* Dark blue-gray for subtle separation */
+    --input: 215 32% 17%; /* Input field borders */
+    --ring: 217 91% 60%; /* Primary blue for focus rings */
+    --radius: 0.5rem; /* Standard border-radius for consistent curvature */
+
+    /* SFG Special-Purpose Colors for Event Styling */
+    --fabrication: #0EA5E9; /* Sky blue for fabrication events */
+    --installation: #10B981; /* Emerald green for installation events */
+    --conflict: #EF4444; /* Red for conflict indicators */
+
+    /* Chart Colors (Placeholders for future data visualization) */
+    --chart-1: 217 91% 60%; /* Primary blue */
+    --chart-2: 142 76% 36%; /* Success green */
+    --chart-3: 0 62% 30%; /* Error red */
+    --chart-4: 43 96% 56%; /* Warning yellow */
+    --chart-5: 262 83% 58%; /* Purple accent */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  }
+
+  /* Warren Executive Typography */
+  h1 {
+    @apply text-4xl font-extrabold tracking-tight;
+  }
+  
+  h2 {
+    @apply text-3xl font-bold tracking-tight;
+  }
+  
+  h3 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+  
+  h4 {
+    @apply text-xl font-semibold;
+  }
+  
+  h5 {
+    @apply text-lg font-medium;
+  }
+  
+  h6 {
+    @apply text-base font-medium;
+  }
+
+  /* Warren Executive Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-white/5;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/20;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/30;
+  }
+
+  ::-webkit-scrollbar-corner {
+    @apply bg-white/5;
+  }
+}
+
+@layer components {
+  /* Warren Executive Button Components */
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-primary-foreground rounded-md font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-secondary text-secondary-foreground border border-border rounded-md font-semibold transition-all duration-300 hover:shadow-md;
+  }
+
+  /* Warren Executive Glass Effects */
+  .glass {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-lg;
+  }
+
+  /* Warren Executive Gradients */
+  .gradient-bg {
+    background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Warren Executive Sidebar Navigation */
+  .sidebar-item {
+    @apply px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors;
+  }
+
+  .sidebar-item.active {
+    @apply bg-primary text-primary-foreground;
+  }
+}
+
+@layer utilities {
+  /* Warren Executive Animation Classes */
+  .conflict-glow {
+    animation: pulse-glow 2s infinite;
+  }
+
+  .count-up {
+    animation: count-up 0.6s ease-out;
+  }
+
+  /* Warren Executive Keyframes */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(239, 68, 68, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+    }
+  }
+
+  @keyframes count-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* React Big Calendar Custom Styling - Warren Executive Theme */
+.rbc-calendar {
+  @apply bg-background text-foreground;
+}
+
+.rbc-toolbar {
+  @apply bg-card/50 border-border;
+  backdrop-filter: blur(12px);
+}
+
+.rbc-header {
+  @apply bg-muted/30 text-foreground border-border;
+}
+
+.rbc-date-cell {
+  @apply text-muted-foreground;
+}
+
+.rbc-today {
+  @apply bg-primary/10;
+}
+
+.rbc-event {
+  @apply rounded-md border-0;
+}
+
+.rbc-event.fabrication {
+  background-color: var(--fabrication);
+  @apply text-white;
+}
+
+.rbc-event.installation {
+  background-color: var(--installation);
+  @apply text-white;
+}
+
+.rbc-event.conflict {
+  background-color: var(--conflict);
+  @apply text-white;
+}
+
+/* High Contrast Support */
+@media (prefers-contrast: high) {
+  .glass, .glass-card {
+    @apply bg-card border-2;
+  }
+  
+  .btn-primary, .btn-secondary {
+    @apply border-2;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .conflict-glow {
+    animation: none;
+  }
+  
+  .count-up {
+    animation: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .glass, .glass-card {
+    @apply bg-white border border-gray-300;
+    backdrop-filter: none;
+  }
+}
