@@ -1,0 +1,51 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "Staff tier definitions for SFG Aluminium system with 5 complete authorization levels",
+    "source": "SFGCompleteSystem React Component"
+  },
+  "staffTiers": [
+    {
+      "id": 1,
+      "name": "Operations Managers & Directors",
+      "primary": "#991b1b",
+      "limit": "Unlimited",
+      "dept": "Executive",
+      "staff": ["Warren", "Pawel", "Yanika"]
+    },
+    {
+      "id": 2,
+      "name": "Senior Estimator & Accounts",
+      "primary": "#7c3aed",
+      "limit": "£50,000",
+      "dept": "Finance",
+      "staff": ["Mohamad", "Mikenzie"]
+    },
+    {
+      "id": 3,
+      "name": "Design & Management",
+      "primary": "#1e40af",
+      "limit": "£15,000",
+      "dept": "Design",
+      "staff": ["Matt", "Mike", "Rafal Z", "Norman"]
+    },
+    {
+      "id": 4,
+      "name": "Production & Fabrication",
+      "primary": "#ea580c",
+      "limit": "£5,000",
+      "dept": "Production",
+      "staff": ["Lukasz T"]
+    },
+    {
+      "id": 5,
+      "name": "New Starters / Juniors",
+      "primary": "#065f46",
+      "limit": "£1,000",
+      "dept": "Entry",
+      "staff": []
+    }
+  ]
+}

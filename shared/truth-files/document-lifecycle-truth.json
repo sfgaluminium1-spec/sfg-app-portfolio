@@ -1,0 +1,41 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "Document lifecycle stages for tracking project progression from enquiry to payment",
+    "source": "SFGCompleteSystem React Component"
+  },
+  "documentLifecycle": [
+    {
+      "stage": "ENQ",
+      "name": "Enquiry",
+      "color": "#475569"
+    },
+    {
+      "stage": "QUO",
+      "name": "Quotation",
+      "color": "#3b82f6"
+    },
+    {
+      "stage": "INV",
+      "name": "Invoice",
+      "color": "#10b981"
+    },
+    {
+      "stage": "PO",
+      "name": "PO",
+      "color": "#f59e0b"
+    },
+    {
+      "stage": "DEL",
+      "name": "Delivery",
+      "color": "#8b5cf6"
+    },
+    {
+      "stage": "PAID",
+      "name": "Paid",
+      "color": "#059669"
+    }
+  ]
+}

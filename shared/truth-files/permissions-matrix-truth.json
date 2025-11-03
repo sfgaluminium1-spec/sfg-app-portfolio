@@ -1,0 +1,181 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "Permissions matrix showing which actions are allowed for each staff tier (1-5)",
+    "source": "SFGCompleteSystem React Component"
+  },
+  "permissionsMatrix": [
+    {
+      "action": "Create Enquiry",
+      "description": "Create new customer enquiry",
+      "permissions": {
+        "tier1": true,
+        "tier2": true,
+        "tier3": true,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "View Customers",
+      "description": "View customer database",
+      "permissions": {
+        "tier1": true,
+        "tier2": true,
+        "tier3": true,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Quote £1k",
+      "description": "Create quotes up to £1,000",
+      "permissions": {
+        "tier1": true,
+        "tier2": true,
+        "tier3": true,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Quote £5k",
+      "description": "Create quotes up to £5,000",
+      "permissions": {
+        "tier1": false,
+        "tier2": true,
+        "tier3": true,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Quote £15k",
+      "description": "Create quotes up to £15,000",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": true,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Quote £50k",
+      "description": "Create quotes up to £50,000",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": false,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Unlimited Quote",
+      "description": "Create quotes with no limit",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": false,
+        "tier4": false,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Credit Checks",
+      "description": "Run credit checks on customers",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": true,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Payment Terms",
+      "description": "Set customer payment terms",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": false,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Override Pricing",
+      "description": "Override standard pricing",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": false,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Finance Reports",
+      "description": "Access financial reports",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": false,
+        "tier4": true,
+        "tier5": true
+      }
+    },
+    {
+      "action": "Team Management",
+      "description": "Manage team members and assignments",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": false,
+        "tier4": false,
+        "tier5": true
+      }
+    },
+    {
+      "action": "System Config",
+      "description": "Configure system settings",
+      "permissions": {
+        "tier1": false,
+        "tier2": false,
+        "tier3": false,
+        "tier4": false,
+        "tier5": true
+      }
+    }
+  ],
+  "tierSummary": {
+    "tier5": {
+      "name": "New Starters / Juniors",
+      "totalPermissions": 13,
+      "description": "Full access to all system features"
+    },
+    "tier4": {
+      "name": "Production & Fabrication",
+      "totalPermissions": 9,
+      "description": "Access up to £50k quotes and financial operations"
+    },
+    "tier3": {
+      "name": "Design & Management",
+      "totalPermissions": 6,
+      "description": "Access up to £15k quotes and credit checks"
+    },
+    "tier2": {
+      "name": "Senior Estimator & Accounts",
+      "totalPermissions": 4,
+      "description": "Access up to £5k quotes"
+    },
+    "tier1": {
+      "name": "Operations Managers & Directors",
+      "totalPermissions": 3,
+      "description": "Basic enquiry and customer view access"
+    }
+  }
+}

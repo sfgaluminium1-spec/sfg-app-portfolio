@@ -1,0 +1,41 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "Customer tier classifications preserved from original SFG system with 5 complete tiers",
+    "source": "SFGCompleteSystem React Component"
+  },
+  "customerTiers": [
+    {
+      "id": 1,
+      "name": "Premier (Platinum)",
+      "primary": "#1e40af",
+      "spend": "£50k+/mo, 95%+ on-time"
+    },
+    {
+      "id": 2,
+      "name": "Preferred (Sapphire)",
+      "primary": "#334155",
+      "spend": "£15k+/mo, 90%+ on-time"
+    },
+    {
+      "id": 3,
+      "name": "Standard (Steel)",
+      "primary": "#475569",
+      "spend": "Default tier"
+    },
+    {
+      "id": 4,
+      "name": "Proforma (Green)",
+      "primary": "#065f46",
+      "spend": "<80% on-time"
+    },
+    {
+      "id": 5,
+      "name": "Risk (Crimson)",
+      "primary": "#7f1d1d",
+      "spend": ">60 days overdue"
+    }
+  ]
+}

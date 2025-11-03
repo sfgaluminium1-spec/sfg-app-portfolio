@@ -1,0 +1,41 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "Credit tier logic with triggers and payment terms for customer credit management",
+    "source": "SFGCompleteSystem React Component"
+  },
+  "creditLogic": [
+    {
+      "tier": "Crimson",
+      "color": "#7f1d1d",
+      "trigger": "Credit stop OR >60 days",
+      "terms": "COD"
+    },
+    {
+      "tier": "Green",
+      "color": "#065f46",
+      "trigger": "<80% on-time",
+      "terms": "COD/7 Days"
+    },
+    {
+      "tier": "Platinum",
+      "color": "#1e40af",
+      "trigger": "£50k+/mo, 95%+",
+      "terms": "60-90 Days"
+    },
+    {
+      "tier": "Sapphire",
+      "color": "#334155",
+      "trigger": "£15k+/mo, 90%+",
+      "terms": "30-60 Days"
+    },
+    {
+      "tier": "Steel",
+      "color": "#475569",
+      "trigger": "Default",
+      "terms": "7-30 Days"
+    }
+  ]
+}

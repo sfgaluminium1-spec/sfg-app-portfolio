@@ -1,0 +1,170 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "Credit limit calculation algorithm with all multiplier factors",
+    "source": "SFGCompleteSystem React Component - calculateCreditLimit function"
+  },
+  "creditCalculationAlgorithm": {
+    "baseAmount": 1000,
+    "description": "Starting base for all credit calculations",
+    "companyAgeMultipliers": {
+      "description": "Multipliers based on years in business",
+      "rules": [
+        {
+          "condition": "companyAge >= 10",
+          "multiplier": 5.0,
+          "label": "10+ years"
+        },
+        {
+          "condition": "companyAge >= 5",
+          "multiplier": 3.0,
+          "label": "5-9 years"
+        },
+        {
+          "condition": "companyAge >= 2",
+          "multiplier": 2.0,
+          "label": "2-4 years"
+        },
+        {
+          "condition": "companyAge >= 1",
+          "multiplier": 1.5,
+          "label": "1 year"
+        }
+      ]
+    },
+    "companyTypeMultipliers": {
+      "description": "Multipliers based on company legal structure",
+      "types": {
+        "plc": {
+          "multiplier": 3.0,
+          "label": "Public Limited Company"
+        },
+        "ltd": {
+          "multiplier": 2.0,
+          "label": "Private Limited Company"
+        },
+        "llp": {
+          "multiplier": 1.5,
+          "label": "Limited Liability Partnership"
+        },
+        "sole_trader": {
+          "multiplier": 1.0,
+          "label": "Sole Trader"
+        }
+      }
+    },
+    "accountsFilingMultipliers": {
+      "description": "Multipliers based on Companies House filing status",
+      "rules": [
+        {
+          "condition": "accountsAvailable && filingStatus === 'current'",
+          "multiplier": 2.0,
+          "label": "Accounts available and current"
+        },
+        {
+          "condition": "filingStatus === 'late'",
+          "multiplier": 0.7,
+          "label": "Late filing"
+        },
+        {
+          "condition": "filingStatus === 'overdue'",
+          "multiplier": 0.4,
+          "label": "Overdue filing"
+        }
+      ]
+    },
+    "paymentHistoryMultipliers": {
+      "description": "Multipliers based on past payment behavior",
+      "levels": {
+        "excellent": {
+          "multiplier": 1.5,
+          "label": "Excellent payment history"
+        },
+        "good": {
+          "multiplier": 1.2,
+          "label": "Good payment history"
+        },
+        "fair": {
+          "multiplier": 1.0,
+          "label": "Fair payment history"
+        },
+        "poor": {
+          "multiplier": 0.6,
+          "label": "Poor payment history"
+        }
+      }
+    },
+    "referencesMultipliers": {
+      "description": "Multipliers based on total bank and trade references (combined)",
+      "rules": [
+        {
+          "condition": "totalRefs >= 4",
+          "multiplier": 1.3,
+          "label": "4+ references"
+        },
+        {
+          "condition": "totalRefs >= 2",
+          "multiplier": 1.1,
+          "label": "2-3 references"
+        }
+      ],
+      "note": "totalRefs = bankRefs + tradeRefs"
+    },
+    "finalRounding": {
+      "description": "Final credit limit is rounded to nearest £100",
+      "formula": "Math.round(calculatedAmount / 100) * 100"
+    }
+  },
+  "exampleCalculation": {
+    "description": "Example calculation for a typical Ltd company",
+    "inputs": {
+      "companyAge": 3,
+      "companyType": "ltd",
+      "accountsAvailable": true,
+      "filingStatus": "current",
+      "paymentHistory": "good",
+      "bankRefs": 2,
+      "tradeRefs": 2
+    },
+    "steps": [
+      {
+        "step": 1,
+        "description": "Start with base",
+        "amount": 1000
+      },
+      {
+        "step": 2,
+        "description": "Apply company age multiplier (3 years = 2.0x)",
+        "amount": 2000
+      },
+      {
+        "step": 3,
+        "description": "Apply company type multiplier (ltd = 2.0x)",
+        "amount": 4000
+      },
+      {
+        "step": 4,
+        "description": "Apply accounts/filing multiplier (current = 2.0x)",
+        "amount": 8000
+      },
+      {
+        "step": 5,
+        "description": "Apply payment history multiplier (good = 1.2x)",
+        "amount": 9600
+      },
+      {
+        "step": 6,
+        "description": "Apply references multiplier (4 refs = 1.3x)",
+        "amount": 12480
+      },
+      {
+        "step": 7,
+        "description": "Round to nearest £100",
+        "amount": 12500
+      }
+    ],
+    "finalCreditLimit": "£12,500"
+  }
+}

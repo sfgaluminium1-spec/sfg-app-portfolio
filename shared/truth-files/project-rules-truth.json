@@ -1,0 +1,36 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "Core project management rules enforced throughout the SFG system",
+    "source": "SFGCompleteSystem React Component"
+  },
+  "projectRules": [
+    {
+      "id": 1,
+      "title": "BaseNumber Immutable",
+      "detail": "Always first in subject, filename, folder path"
+    },
+    {
+      "id": 2,
+      "title": "Required Fields",
+      "detail": "BaseNumber, Prefix, Customer, Project, Location, ProductType"
+    },
+    {
+      "id": 3,
+      "title": "Path Structure",
+      "detail": "Active and Completed are canonical roots"
+    },
+    {
+      "id": 4,
+      "title": "Lifecycle",
+      "detail": "ENQ → QUO → ORD → INV → DEL → PAID audit trail"
+    },
+    {
+      "id": 5,
+      "title": "Drawing Workflow",
+      "detail": "05a→05b→05c→05d→05e locked sequence"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+
+{
+  "metadata": {
+    "version": "2.1.0",
+    "lastUpdated": "2025-11-03",
+    "description": "UK Building Regulations compliance requirements for commercial aluminium installations",
+    "source": "SFGCompleteSystem React Component"
+  },
+  "buildingRegulations": [
+    {
+      "code": "DOC_B",
+      "title": "📋 Doc B: Fire Safety",
+      "color": "#dc2626",
+      "items": [
+        "Fire-rated glazing specs",
+        "Escape route requirements",
+        "Smoke control provisions",
+        "External fire spread"
+      ]
+    },
+    {
+      "code": "DOC_L",
+      "title": "⚡ Doc L: Fuel & Power",
+      "color": "#059669",
+      "items": [
+        "U-value max 1.6 W/m²K",
+        "Thermal bridging minimization",
+        "Air permeability standards",
+        "Energy performance certs"
+      ]
+    },
+    {
+      "code": "DOC_N",
+      "title": "🛡️ Doc N: Glazing Safety",
+      "color": "#f59e0b",
+      "items": [
+        "BS 6206 Class A/B/C",
+        "Critical location glazing",
+        "Manifestation requirements",
+        "Impact resistance standards"
+      ]
+    },
+    {
+      "code": "DOC_Q",
+      "title": "🔐 Doc Q: Security",
+      "color": "#6366f1",
+      "items": [
+        "PAS 24:2016 compliance",
+        "Secured by Design cert",
+        "Locking mechanism standards",
+        "Ground floor requirements"
+      ]
+    }
+  ],
+  "complianceChecks": {
+    "commercialBuildings": ["DOC_B", "DOC_L", "DOC_N"],
+    "newDwellings": ["DOC_L", "DOC_N", "DOC_Q"],
+    "extensionsOver25sqm": ["DOC_L"],
+    "windowReplacementOver50percent": ["DOC_L", "DOC_N"]
+  }
+}
