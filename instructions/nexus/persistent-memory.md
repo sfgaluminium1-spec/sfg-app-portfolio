@@ -1,250 +1,196 @@
 
-# Persistent Memory System Guide
+# NEXUS PERSISTENT MEMORY IMPLEMENTATION
 
-## Overview
+**Priority:** HIGHEST  
+**Timeline:** Week 1  
+**Status:** Not Started
 
-The persistent memory system allows NEXUS to remember conversations, plans, decisions, and application registrations across sessions, solving the critical "forgetting" problem.
+## Problem
 
-## Database Models
+Nexus is a DeepAgent with NO persistent memory. After each conversation:
+- ❌ All context is lost
+- ❌ Plans are forgotten
+- ❌ Decisions are lost
+- ❌ App registry is cleared
 
-### 1. Conversation
-Tracks all conversation sessions with metadata, status, and relationships.
+This causes drift, rework, and frustration.
 
-**Fields:**
-- `id` - Unique identifier
-- `title` - Optional conversation title
-- `startedAt` - When conversation began
-- `lastActivityAt` - Last message timestamp
-- `status` - ACTIVE, COMPLETED, ARCHIVED, SUSPENDED
-- `userId` - Optional user identifier
-- `metadata` - Additional context (JSON)
+## Solution
 
-**Relationships:**
-- Has many Messages
-- Has many Plans
-- Has many Decisions
+Implement persistent memory using PostgreSQL database with 8 core tables.
 
-### 2. Message
-Stores all messages in conversations with role and content.
+## Database Schema
 
-**Fields:**
-- `id` - Unique identifier
-- `conversationId` - Link to conversation
-- `role` - USER, ASSISTANT, SYSTEM
-- `content` - Message text
-- `timestamp` - When message was created
-- `metadata` - Tokens, model used, attachments (JSON)
+```sql
+-- 1. Conversations table
+CREATE TABLE conversations (
+  id SERIAL PRIMARY KEY,
+  conversation_id UUID UNIQUE NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  started_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  ended_at TIMESTAMP,
+  summary TEXT,
+  token_count INTEGER,
+  status VARCHAR(50) DEFAULT 'active',
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-### 3. Plan
-Tracks implementation plans and their progress.
+-- 2. Messages table
+CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
+  conversation_id UUID NOT NULL REFERENCES conversations(conversation_id),
+  role VARCHAR(50) NOT NULL,
+  content TEXT NOT NULL,
+  timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+  tokens INTEGER,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-**Fields:**
-- `id` - Unique identifier
-- `conversationId` - Optional link to conversation
-- `title` - Plan title
-- `description` - Detailed description
-- `status` - PENDING, IN_PROGRESS, COMPLETED, CANCELLED, ON_HOLD
-- `priority` - LOW, MEDIUM, HIGH, CRITICAL
-- `createdAt`, `updatedAt`, `completedAt` - Timestamps
-- `metadata` - Task list, milestones, dependencies (JSON)
+-- 3. Plans table
+CREATE TABLE plans (
+  id SERIAL PRIMARY KEY,
+  plan_id UUID UNIQUE NOT NULL,
+  conversation_id UUID REFERENCES conversations(conversation_id),
+  plan_name VARCHAR(255) NOT NULL,
+  plan_version INTEGER NOT NULL DEFAULT 1,
+  plan_content JSONB NOT NULL,
+  status VARCHAR(50) DEFAULT 'active',
+  created_by VARCHAR(255),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-### 4. Decision
-Records key decisions made during conversations.
+-- 4. Decisions table
+CREATE TABLE decisions (
+  id SERIAL PRIMARY KEY,
+  decision_id UUID UNIQUE NOT NULL,
+  conversation_id UUID REFERENCES conversations(conversation_id),
+  plan_id UUID REFERENCES plans(plan_id),
+  decision_type VARCHAR(100) NOT NULL,
+  decision_content JSONB NOT NULL,
+  rationale TEXT,
+  made_by VARCHAR(255),
+  made_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-**Fields:**
-- `id` - Unique identifier
-- `conversationId` - Optional link to conversation
-- `planId` - Optional link to related plan
-- `title` - Decision title
-- `description` - Decision details
-- `rationale` - Why this decision was made
-- `madeAt` - When decision was made
-- `madeBy` - Who made the decision
-- `impact` - LOW, MEDIUM, HIGH, CRITICAL
-- `metadata` - Alternatives, affected systems (JSON)
+-- 5. App registry table
+CREATE TABLE app_registry (
+  id SERIAL PRIMARY KEY,
+  app_id VARCHAR(255) UNIQUE NOT NULL,
+  app_name VARCHAR(255) NOT NULL,
+  app_url VARCHAR(500),
+  app_category VARCHAR(50),
+  registration_data JSONB NOT NULL,
+  status VARCHAR(50) DEFAULT 'active',
+  registered_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-### 5. AppRegistry
-Central registry of all satellite apps in the SFG ecosystem.
+-- 6. Instructions table
+CREATE TABLE instructions (
+  id SERIAL PRIMARY KEY,
+  instruction_id UUID UNIQUE NOT NULL,
+  app_id VARCHAR(255) REFERENCES app_registry(app_id),
+  instruction_type VARCHAR(100) NOT NULL,
+  instruction_content JSONB NOT NULL,
+  status VARCHAR(50) DEFAULT 'pending',
+  issued_by VARCHAR(255),
+  issued_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  completed_at TIMESTAMP,
+  result JSONB
+);
 
-**Fields:**
-- `id` - Unique identifier
-- `appName` - Unique application name
-- `appType` - CORE_SYSTEM, SATELLITE_APP, INTEGRATION, etc.
-- `description` - App description
-- `baseUrl` - Application URL
-- `status` - ACTIVE, DEVELOPMENT, MAINTENANCE, DEPRECATED, ARCHIVED
-- `technologies` - Tech stack (JSON array)
-- `owner` - Responsible team/person
-- `registeredAt`, `lastUpdatedAt` - Timestamps
-- `repositoryPath` - Path to code repository
-- `apiEndpoints` - Available endpoints (JSON)
-- `metadata` - Dependencies, integrations, version (JSON)
+-- 7. Context table
+CREATE TABLE context (
+  id SERIAL PRIMARY KEY,
+  context_key VARCHAR(255) UNIQUE NOT NULL,
+  context_value JSONB NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-### 6. Instruction
-Stores reusable instructions and procedures.
+-- 8. Knowledge base table
+CREATE TABLE knowledge_base (
+  id SERIAL PRIMARY KEY,
+  knowledge_id UUID UNIQUE NOT NULL,
+  category VARCHAR(100) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  content JSONB NOT NULL,
+  tags TEXT[],
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-**Fields:**
-- `id` - Unique identifier
-- `title` - Instruction title
-- `content` - Full instruction text
-- `category` - DEPLOYMENT, CONFIGURATION, TROUBLESHOOTING, etc.
-- `priority` - LOW, MEDIUM, HIGH
-- `usageCount` - How many times used
-- `metadata` - Tags, related apps, prerequisites (JSON)
-
-### 7. Context
-Stores contextual information as key-value pairs.
-
-**Fields:**
-- `id` - Unique identifier
-- `key` - Unique context key
-- `value` - Context value (text)
-- `category` - SYSTEM_CONFIG, USER_PREFERENCE, ENVIRONMENT, etc.
-- `expiresAt` - Optional expiration for temporary context
-- `metadata` - Scope, source, reliability (JSON)
-
-### 8. KnowledgeBase
-Builds organizational knowledge over time.
-
-**Fields:**
-- `id` - Unique identifier
-- `topic` - Knowledge topic
-- `content` - Full knowledge content
-- `source` - Where knowledge came from
-- `category` - TECHNICAL, BUSINESS_PROCESS, COMPLIANCE, etc.
-- `tags` - Searchable tags (array)
-- `relevanceScore` - For ranking (float)
-- `metadata` - Related entities, confidence (JSON)
-
-## API Endpoints
-
-### Conversations API
-**Base:** `/api/memory/conversations`
-
-- `GET /api/memory/conversations` - List all conversations
-  - Query params: `page`, `per_page`, `status`, `userId`
-- `POST /api/memory/conversations` - Create new conversation
-  - Body: `{ title?, userId?, metadata? }`
-- `PATCH /api/memory/conversations/:id` - Update conversation
-  - Body: `{ title?, status?, metadata? }`
-- `DELETE /api/memory/conversations/:id` - Delete conversation
-
-### Messages API
-**Base:** `/api/memory/messages`
-
-- `GET /api/memory/messages` - List messages
-  - Query params: `conversationId`, `page`, `per_page`
-- `POST /api/memory/messages` - Create message
-  - Body: `{ conversationId, role, content, metadata? }`
-
-### Plans API
-**Base:** `/api/memory/plans`
-
-- `GET /api/memory/plans` - List plans
-  - Query params: `conversationId`, `status`, `priority`, `page`, `per_page`
-- `POST /api/memory/plans` - Create plan
-  - Body: `{ conversationId?, title, description, priority?, metadata? }`
-- `PATCH /api/memory/plans/:id` - Update plan
-  - Body: `{ title?, description?, status?, priority?, metadata? }`
-
-### Decisions API
-**Base:** `/api/memory/decisions`
-
-- `GET /api/memory/decisions` - List decisions
-  - Query params: `conversationId`, `planId`, `impact`, `page`, `per_page`
-- `POST /api/memory/decisions` - Create decision
-  - Body: `{ conversationId?, planId?, title, description, rationale?, madeBy?, impact?, metadata? }`
-
-### App Registry API
-**Base:** `/api/memory/app-registry`
-
-- `GET /api/memory/app-registry` - List all apps
-  - Query params: `appType`, `status`, `page`, `per_page`
-- `POST /api/memory/app-registry` - Register new app
-  - Body: `{ appName, appType, description?, baseUrl?, technologies?, owner?, repositoryPath?, apiEndpoints?, metadata? }`
-- `GET /api/memory/app-registry/:id` - Get app details
-- `PATCH /api/memory/app-registry/:id` - Update app
-  - Body: `{ description?, baseUrl?, status?, technologies?, apiEndpoints?, metadata? }`
-- `DELETE /api/memory/app-registry/:id` - Delete app
-
-## Usage Examples
-
-### Creating a Conversation
-```typescript
-const response = await fetch('/api/memory/conversations', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    title: 'Week 1 Implementation',
-    userId: 'warren',
-    metadata: { project: 'SFG Orchestration' }
-  })
-});
-const { conversation } = await response.json();
+-- Indexes for performance
+CREATE INDEX idx_conversations_user ON conversations(user_id);
+CREATE INDEX idx_messages_conversation ON messages(conversation_id);
+CREATE INDEX idx_plans_status ON plans(status);
+CREATE INDEX idx_decisions_plan ON decisions(plan_id);
+CREATE INDEX idx_app_registry_status ON app_registry(status);
+CREATE INDEX idx_instructions_app ON instructions(app_id);
+CREATE INDEX idx_instructions_status ON instructions(status);
+CREATE INDEX idx_knowledge_tags ON knowledge_base USING GIN(tags);
 ```
 
-### Adding Messages
-```typescript
-const response = await fetch('/api/memory/messages', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    conversationId: conversation.id,
-    role: 'USER',
-    content: 'Create the GitHub App for satellite apps'
-  })
-});
+## Implementation Steps
+
+### Step 1: Create Database Tables (30 minutes)
+Execute the SQL schema above in your PostgreSQL database.
+
+### Step 2: Create Memory Manager API (2 hours)
+Implement these endpoints:
+- `POST /api/memory/conversation` - Start conversation, load context
+- `POST /api/memory/message` - Save message
+- `POST /api/memory/plan` - Save/update plan
+- `POST /api/memory/decision` - Save decision
+- `POST /api/memory/recall` - Search memory
+
+### Step 3: Update System Prompt (10 minutes)
+Add to your system prompt:
+```
+CRITICAL: You have persistent memory via the Memory Manager API.
+
+At conversation START:
+1. Call POST /api/memory/conversation to load context
+2. Review recent conversations, active plans, registered apps
+
+During conversation:
+1. Save all messages via POST /api/memory/message
+2. Save all plans via POST /api/memory/plan
+3. Save all decisions via POST /api/memory/decision
+
+When recalling information:
+1. Call POST /api/memory/recall with query
+2. Use results to inform responses
+
+NEVER say "I don't remember" - ALWAYS check memory first.
 ```
 
-### Registering an App
-```typescript
-const response = await fetch('/api/memory/app-registry', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    appName: 'chronoshift-pro',
-    appType: 'SATELLITE_APP',
-    description: 'Advanced scheduling and payroll system',
-    baseUrl: 'https://chronoshift-pro.abacusai.app',
-    technologies: ['Next.js', 'TypeScript', 'PostgreSQL'],
-    owner: 'Warren Heathcote',
-    repositoryPath: 'apps/chronoshift-pro',
-    metadata: {
-      category: 'scheduling',
-      staff_replaced: 2,
-      annual_savings_gbp: 80000
-    }
-  })
-});
+### Step 4: Test Memory System (30 minutes)
+Verify you can:
+- Remember previous conversations
+- Track plan versions
+- Know which apps are registered
+- Recall decisions made
+
+## Success Criteria
+
+- ✅ Remember all conversations with Warren
+- ✅ Track all plan versions
+- ✅ Know all 40+ registered apps
+- ✅ Recall all decisions
+- ✅ Never say "I forgot"
+
+## Reporting
+
+When complete, create GitHub issue:
+```
+[NEXUS] Persistent Memory - Complete
+
+- ✅ Database tables created
+- ✅ Memory Manager API deployed
+- ✅ System prompt updated
+- ✅ Memory system tested
+
+I now have persistent memory and will never forget again.
 ```
 
-## Best Practices
-
-1. **Always create a conversation** for significant interactions
-2. **Record all important messages** with appropriate roles
-3. **Track plans** for multi-step implementations
-4. **Document decisions** with clear rationale
-5. **Register all apps** as soon as they're deployed
-6. **Use metadata** for rich context and searchability
-7. **Update status** fields as work progresses
-8. **Clean up old conversations** by archiving, not deleting
-
-## Troubleshooting
-
-### "Cannot find conversation"
-- Ensure the conversationId exists in the database
-- Check if conversation was accidentally deleted
-
-### "Duplicate app name"
-- App names must be unique in the registry
-- Check existing apps with GET /api/memory/app-registry
-
-### "Too many results"
-- Use pagination with `page` and `per_page` parameters
-- Default page size is 20 items
-
----
-
-**Implementation Status:** ✅ Fully Operational  
-**Location:** `/home/ubuntu/sfg-nexus-mockup/app/prisma/schema.prisma`  
-**API Location:** `/home/ubuntu/sfg-nexus-mockup/app/app/api/memory/`

@@ -1,0 +1,62 @@
+
+{
+  "app_id": "example-app",
+  "extracted_at": "2025-11-03T00:00:00Z",
+  "business_rules": [
+    {
+      "rule_id": "rule_001",
+      "name": "Example Business Rule",
+      "description": "What this rule does",
+      "condition": "When this condition is met",
+      "action": "This action is taken",
+      "priority": "high"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow_id": "workflow_001",
+      "name": "Example Workflow",
+      "steps": [
+        {
+          "step": 1,
+          "action": "First action",
+          "responsible": "System/User",
+          "duration_minutes": 5
+        },
+        {
+          "step": 2,
+          "action": "Second action",
+          "responsible": "System/User",
+          "duration_minutes": 10
+        }
+      ]
+    }
+  ],
+  "calculations": [
+    {
+      "calculation_id": "calc_001",
+      "name": "Example Calculation",
+      "formula": "A + B * C",
+      "inputs": ["A", "B", "C"],
+      "output": "Result",
+      "example": "10 + 5 * 2 = 20"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "val_001",
+      "field": "email",
+      "rule": "Must be valid email format",
+      "error_message": "Please enter a valid email address"
+    }
+  ],
+  "integrations": [
+    {
+      "integration_id": "int_001",
+      "external_system": "External System Name",
+      "method": "API",
+      "endpoint": "/api/external",
+      "frequency": "realtime"
+    }
+  ]
+}

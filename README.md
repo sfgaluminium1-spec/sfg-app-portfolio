@@ -1,146 +1,193 @@
-# SFG Aluminium Application Portfolio
 
-**Centralized repository for the SFG Aluminium Limited AI-powered business ecosystem**
+# SFG Aluminium Ecosystem - Application Portfolio
+
+**Central repository for the SFG Aluminium 51-app orchestration system**
 
 ## Overview
 
-This repository serves as the central hub for managing 51+ applications in the SFG Aluminium ecosystem, orchestrated by SFG NEXUS (the conductor application).
+This repository serves as the central source of truth for the SFG Aluminium Ecosystem, connecting 51+ applications through a zero-drift orchestration architecture.
 
 ## Repository Structure
 
 ```
 sfg-app-portfolio/
-├── instructions/          # Instructions for NEXUS and satellite apps
-│   ├── nexus/            # NEXUS conductor instructions
-│   └── satellites/       # Satellite app instructions
-├── docs/                 # Architecture and technical documentation
-├── analysis/             # App inventory and gap analysis
-├── .github/              # Workflows and issue templates
-├── templates/            # Registration and configuration templates
-├── app-registry/         # JSON files for each registered app
-├── app-backups/          # Source code backups of all apps
-├── apps/                 # (Legacy) App directories
-├── sfg-nexus/           # NEXUS conductor application
-└── shared/              # Shared libraries and utilities
+├── apps/                    # All 51 application slots
+│   ├── app-001/            # Placeholder apps (pending registration)
+│   ├── ...
+│   ├── app-050/
+│   └── chronoshift-pro/    # Registered app (time tracking)
+│
+├── instructions/           # Instructions for Nexus and satellites
+│   ├── nexus/             # Instructions for central conductor
+│   │   ├── persistent-memory.md
+│   │   ├── app-registry.md
+│   │   └── mcp-client.md
+│   └── satellites/        # Instructions for satellite apps
+│       ├── self-register.md
+│       └── webhook-setup.md
+│
+├── docs/                  # Architecture and specifications
+│   ├── ARCHITECTURE.md    # System architecture
+│   ├── CONDUCTOR_SPEC.md  # Nexus specifications
+│   └── SATELLITE_SPEC.md  # Satellite app specifications
+│
+├── analysis/              # Ecosystem analysis
+│   ├── APP_INVENTORY.md   # All apps cataloged
+│   ├── GAP_ANALYSIS.md    # Missing capabilities
+│   └── ROI_TRACKING.md    # Cost savings tracking
+│
+├── templates/             # Templates for registration
+│   ├── app-registration.json
+│   └── business-logic.json
+│
+└── .github/               # GitHub automation
+    ├── workflows/         # CI/CD workflows
+    └── ISSUE_TEMPLATE/    # Issue templates
 ```
 
 ## Quick Start
 
-### For Warren (Administrator)
+### For Nexus (Central Conductor)
 
-1. **Week 1 Setup** (November 3-10, 2025)
-   - [x] Persistent memory implemented
-   - [ ] Create GitHub App for satellite authentication
-   - [ ] Share GitHub App credentials with NEXUS
-   - [ ] Verify repository structure
-   - [ ] Make repository private
+1. Read `/instructions/nexus/README.md`
+2. Implement persistent memory (HIGHEST PRIORITY)
+3. Set up app registry
+4. Implement MCP client
+5. Begin orchestration
 
-2. **Week 2 - First 10 Apps** (November 11-17, 2025)
-   - [ ] Register 10 priority satellite apps
-   - [ ] Implement MCP integration
-   - [ ] Test orchestration workflows
+### For Satellite Apps
 
-3. **Week 3-4 - Full Rollout** (November 18 - December 1, 2025)
-   - [ ] Register remaining 40 apps
-   - [ ] Deploy Warren's Brain
-   - [ ] Achieve zero-drift architecture
+1. Read `/instructions/satellites/self-register.md`
+2. Clone this repository
+3. Create registration JSON
+4. Backup your code
+5. Extract business logic
+6. Push to GitHub
+7. Create notification issue
 
-### For NEXUS (Conductor)
+## Current Status
 
-See instructions in [`instructions/nexus/`](./instructions/nexus/)
+### Registered Apps
+- **1 app registered:** Chronoshift-Pro (time tracking)
+- **50 apps pending:** Awaiting registration
 
-- [Persistent Memory Guide](./instructions/nexus/persistent-memory.md)
-- [App Registry Management](./instructions/nexus/app-registry.md)
-- [MCP Client Implementation](./instructions/nexus/mcp-client.md)
-
-### For Satellite Applications
-
-See instructions in [`instructions/satellites/`](./instructions/satellites/)
-
-- [Self-Registration Guide](./instructions/satellites/self-register.md)
-- [MCP Server Template](./instructions/satellites/mcp-server-template.md)
-
-## Application Portfolio
-
-### Core Systems (12 apps)
-Mission-critical applications the business depends on
-
-- **SFG NEXUS** - Central orchestration platform
-- **SFG Vertex** - Manufacturing intelligence
-- **SFG ESP** - ESP integration
-- **SFG Sync** - Data synchronization
-- [View full list →](./analysis/APP_INVENTORY.md)
-
-### Satellite Applications (28 apps)
-Specialized applications for specific business functions
-
-- **ChronoShift Pro** - Scheduling and payroll
-- **SFG Axis** - Analytics and reporting
-- **Heathcote Hub** - Internal employee portal
-- [View full list →](./analysis/APP_INVENTORY.md)
-
-### Total Portfolio Value
-- **£5.17M+** in application value
-- **£2.1M+** annual cost savings
-- **18 FTE** positions replaced
-- **300%+ ROI** over 3 years
-
-## Documentation
-
-- [Architecture Overview](./docs/ARCHITECTURE.md)
-- [Conductor Specification](./docs/CONDUCTOR_SPEC.md) (coming soon)
-- [Satellite Specification](./docs/SATELLITE_SPEC.md) (coming soon)
-- [MCP Integration Guide](./docs/MCP_INTEGRATION.md) (coming soon)
-
-## Status
-
-**Current Phase:** Week 1 - Foundation (30% complete)  
-**Last Updated:** November 3, 2025  
-**Next Milestone:** Week 1 completion by November 10, 2025
-
-### Week 1 Progress
-- [x] Persistent memory system implemented
+### Implementation Progress
 - [x] Repository structure created
-- [x] Documentation written
-- [ ] GitHub App created
-- [ ] Repository made private
+- [x] Documentation complete
+- [x] Templates ready
+- [ ] Nexus persistent memory (Week 1)
+- [ ] First 10 apps registered (Week 2)
+- [ ] MCP protocol implemented (Week 2-3)
+- [ ] Full orchestration deployed (Week 4)
 
-## Contributing
+## Key Documents
 
-### Satellite App Registration
-1. Follow the [self-registration guide](./instructions/satellites/self-register.md)
-2. Create registration JSON in `app-registry/`
-3. Backup source code to `app-backups/`
-4. Create GitHub issue with label "registration"
+### Architecture
+- [System Architecture](docs/ARCHITECTURE.md) - Complete system design
+- [Conductor Specification](docs/CONDUCTOR_SPEC.md) - Nexus specifications
+- [Satellite Specification](docs/SATELLITE_SPEC.md) - Satellite app requirements
 
-### Bug Reports
-Create an issue with label "bug" and include:
-- Application name
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots if applicable
+### Instructions
+- [Nexus Instructions](instructions/nexus/README.md) - For central conductor
+- [Satellite Instructions](instructions/satellites/README.md) - For satellite apps
 
-### Feature Requests
-Create an issue with label "enhancement" and describe:
-- Use case
-- Proposed solution
-- Business value
+### Analysis
+- [App Inventory](analysis/APP_INVENTORY.md) - All 51 apps cataloged
+- [Gap Analysis](analysis/GAP_ANALYSIS.md) - Missing capabilities
+- [ROI Tracking](analysis/ROI_TRACKING.md) - Cost savings per app
+
+## Communication Protocols
+
+### MCP (Model Context Protocol)
+Bidirectional communication between Nexus and satellites for orchestration.
+
+### GitHub Webhooks
+Automatic notification of satellites when new instructions are pushed.
+
+### REST APIs
+Direct app-to-app communication for data synchronization.
+
+## Security
+
+### Repository Access
+- **Visibility:** Private
+- **Owner:** sfgaluminium1-spec (Warren)
+- **Access:** Via Personal Access Tokens (PAT)
+
+### Authentication
+- GitHub: PAT tokens
+- MCP: Token-based auth
+- APIs: API keys + JWT
 
 ## Support
 
-- **Primary Contact:** Warren Heathcote
-- **Documentation:** [`/docs`](./docs/)
-- **Issues:** [GitHub Issues](https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues)
-- **Slack:** #all-sfg-aluminium-limited
+### Questions
+Create a GitHub issue with label "question"
+
+### Bugs
+Create a GitHub issue with label "bug"
+
+### Registration
+Use the app registration issue template
+
+## Timeline
+
+### Week 1: Foundation
+- Implement Nexus persistent memory
+- Create app registry
+- Set up GitHub automation
+
+### Week 2: First Wave
+- Register 10 priority apps
+- Implement MCP protocol
+- Test orchestration workflows
+
+### Week 3-4: Full Rollout
+- Register remaining 40 apps
+- Deploy full orchestration
+- Monitor and optimize
+
+## Success Metrics
+
+### Memory
+- ✅ 100% conversation retention
+- ✅ 0 "I forgot" responses
+
+### Registry
+- ✅ All 51 apps registered
+- ✅ Real-time status tracking
+
+### Orchestration
+- ✅ 95%+ instruction completion rate
+- ✅ <1 hour average completion time
+- ✅ 0 drift from decisions
+
+## Contributing
+
+### For Satellite Apps
+1. Follow self-registration instructions
+2. Use provided templates
+3. Create notification issue
+4. Wait for approval
+
+### For Nexus
+1. Read instructions in `/instructions/nexus/`
+2. Implement in priority order
+3. Report completion via GitHub issues
+4. Monitor satellite registrations
 
 ## License
 
-Proprietary - SFG Aluminium Limited © 2025
+Proprietary - SFG Aluminium Ltd.
 
-All rights reserved. Unauthorized copying, modification, distribution, or use of this software, via any medium, is strictly prohibited.
+## Contact
+
+**Owner:** Warren (sfgaluminium1-spec)  
+**Repository:** https://github.com/sfgaluminium1-spec/sfg-app-portfolio  
+**Support:** Create a GitHub issue
 
 ---
 
-**Managed by:** SFG NEXUS  
-**Orchestration Platform:** Abacus.AI  
-**Technology Stack:** Next.js, TypeScript, PostgreSQL, AWS
+**Last Updated:** November 3, 2025  
+**Version:** 1.0  
+**Status:** In Development

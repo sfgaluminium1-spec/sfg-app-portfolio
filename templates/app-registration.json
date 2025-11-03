@@ -1,0 +1,47 @@
+
+{
+  "app_id": "example-app",
+  "app_name": "Example Application",
+  "app_url": "https://example-app.abacusai.app",
+  "app_category": "core",
+  "version": "1.0.0",
+  "registered_at": "2025-11-03T00:00:00Z",
+  "technical": {
+    "technology_stack": "Next.js 14, TypeScript, PostgreSQL, Prisma",
+    "database": "PostgreSQL 15",
+    "hosting": "Abacus.AI",
+    "mcp_enabled": false,
+    "mcp_endpoint": null,
+    "api_endpoints": [
+      "/api/health",
+      "/api/data"
+    ]
+  },
+  "business": {
+    "primary_function": "Description of what this app does",
+    "target_users": "Who uses this app",
+    "key_features": [
+      "Feature 1",
+      "Feature 2",
+      "Feature 3"
+    ],
+    "staff_replaced": 2,
+    "annual_savings_gbp": 50000
+  },
+  "integration": {
+    "integrates_with": [
+      "app-001",
+      "app-002"
+    ],
+    "data_sources": [
+      "PostgreSQL database",
+      "External API"
+    ],
+    "data_outputs": [
+      "Reports",
+      "Notifications"
+    ]
+  },
+  "status": "registered",
+  "health": "healthy"
+}

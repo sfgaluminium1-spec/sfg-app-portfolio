@@ -1,29 +1,29 @@
 
-# NEXUS Instructions
+# Nexus Instructions
 
-This directory contains instructions and documentation for SFG NEXUS (the conductor application).
+These instructions are for **Nexus** - the central conductor of the SFG Aluminium Ecosystem.
 
-## Contents
+## Priority Order
 
-- **persistent-memory.md** - Guide to the persistent memory system
-- **app-registry.md** - How to manage the application registry
-- **mcp-client.md** - MCP client implementation guide
+Execute these instructions in order:
 
-## Overview
+1. **persistent-memory.md** (HIGHEST PRIORITY) - Fix forgetting problem
+2. **app-registry.md** - Implement app registration system
+3. **mcp-client.md** - Connect to satellite apps via MCP
+4. **gap-analysis.md** - Identify capability gaps
 
-SFG NEXUS is the central orchestration platform that:
-- Manages all satellite applications
-- Coordinates workflows across the ecosystem
-- Maintains persistent memory of conversations and decisions
-- Provides AI-powered business intelligence
+## Current Status
 
-## Quick Links
+- [ ] Persistent memory implemented
+- [ ] App registry operational
+- [ ] MCP client integrated
+- [ ] Gap analysis running
 
-- [Architecture Documentation](../../docs/ARCHITECTURE.md)
-- [Conductor Specification](../../docs/CONDUCTOR_SPEC.md)
-- [MCP Integration Guide](../../docs/MCP_INTEGRATION.md)
+## Reporting
 
----
+Create GitHub issues to report progress:
+- `[NEXUS] Persistent Memory - Complete`
+- `[NEXUS] App Registry - Complete`
+- `[NEXUS] MCP Client - Complete`
+- `[NEXUS] Gap Analysis - Complete`
 
-**Last Updated:** November 3, 2025  
-**Maintainer:** Warren Heathcote

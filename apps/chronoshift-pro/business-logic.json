@@ -1,0 +1,174 @@
+
+{
+  "app_id": "chronoshift-pro",
+  "extracted_at": "2025-11-03T16:00:00Z",
+  "business_rules": [
+    {
+      "rule_id": "rule_001",
+      "name": "Overtime Calculation",
+      "description": "Calculate overtime pay for hours worked beyond standard shift",
+      "condition": "Hours worked > 8 hours per day OR > 40 hours per week",
+      "action": "Apply 1.5x pay rate for overtime hours",
+      "priority": "high"
+    },
+    {
+      "rule_id": "rule_002",
+      "name": "Break Time Deduction",
+      "description": "Automatically deduct unpaid break time from total hours",
+      "condition": "Shift duration > 6 hours",
+      "action": "Deduct 30 minutes unpaid break time",
+      "priority": "high"
+    },
+    {
+      "rule_id": "rule_003",
+      "name": "Late Arrival Alert",
+      "description": "Alert manager when employee arrives late",
+      "condition": "Clock-in time > scheduled start time + 15 minutes",
+      "action": "Send notification to manager and HR",
+      "priority": "medium"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow_id": "workflow_001",
+      "name": "Daily Time Entry",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Employee clocks in at start of shift",
+          "responsible": "Employee",
+          "duration_minutes": 1
+        },
+        {
+          "step": 2,
+          "action": "System records clock-in time and location",
+          "responsible": "System",
+          "duration_minutes": 0
+        },
+        {
+          "step": 3,
+          "action": "Employee clocks out at end of shift",
+          "responsible": "Employee",
+          "duration_minutes": 1
+        },
+        {
+          "step": 4,
+          "action": "System calculates total hours and applies rules",
+          "responsible": "System",
+          "duration_minutes": 0
+        },
+        {
+          "step": 5,
+          "action": "Manager reviews and approves timesheet",
+          "responsible": "Manager",
+          "duration_minutes": 5
+        }
+      ]
+    },
+    {
+      "workflow_id": "workflow_002",
+      "name": "Weekly Schedule Creation",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Manager creates draft schedule for next week",
+          "responsible": "Manager",
+          "duration_minutes": 30
+        },
+        {
+          "step": 2,
+          "action": "System checks for conflicts and availability",
+          "responsible": "System",
+          "duration_minutes": 1
+        },
+        {
+          "step": 3,
+          "action": "System notifies employees of their shifts",
+          "responsible": "System",
+          "duration_minutes": 0
+        },
+        {
+          "step": 4,
+          "action": "Employees confirm or request changes",
+          "responsible": "Employee",
+          "duration_minutes": 5
+        },
+        {
+          "step": 5,
+          "action": "Manager finalizes and publishes schedule",
+          "responsible": "Manager",
+          "duration_minutes": 10
+        }
+      ]
+    }
+  ],
+  "calculations": [
+    {
+      "calculation_id": "calc_001",
+      "name": "Regular Hours",
+      "formula": "MIN(hours_worked, 8) per day OR MIN(hours_worked, 40) per week",
+      "inputs": ["clock_in_time", "clock_out_time", "break_duration"],
+      "output": "regular_hours",
+      "example": "8:00 AM to 5:00 PM with 30 min break = 8.5 hours worked, 8 regular hours"
+    },
+    {
+      "calculation_id": "calc_002",
+      "name": "Overtime Hours",
+      "formula": "MAX(0, hours_worked - 8) per day OR MAX(0, hours_worked - 40) per week",
+      "inputs": ["total_hours_worked", "regular_hours"],
+      "output": "overtime_hours",
+      "example": "10 hours worked - 8 regular = 2 overtime hours"
+    },
+    {
+      "calculation_id": "calc_003",
+      "name": "Total Pay",
+      "formula": "(regular_hours * hourly_rate) + (overtime_hours * hourly_rate * 1.5)",
+      "inputs": ["regular_hours", "overtime_hours", "hourly_rate"],
+      "output": "total_pay",
+      "example": "(8 * £15) + (2 * £15 * 1.5) = £120 + £45 = £165"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "val_001",
+      "field": "clock_in_time",
+      "rule": "Must be within scheduled shift window (±2 hours)",
+      "error_message": "Clock-in time is outside scheduled shift window"
+    },
+    {
+      "validation_id": "val_002",
+      "field": "total_hours",
+      "rule": "Must not exceed 12 hours per day",
+      "error_message": "Total hours exceed maximum allowed (12 hours)"
+    },
+    {
+      "validation_id": "val_003",
+      "field": "weekly_hours",
+      "rule": "Must not exceed 60 hours per week",
+      "error_message": "Weekly hours exceed maximum allowed (60 hours)"
+    }
+  ],
+  "integrations": [
+    {
+      "integration_id": "int_001",
+      "external_system": "Payroll System",
+      "method": "API",
+      "endpoint": "/api/payroll/timesheets",
+      "frequency": "weekly"
+    },
+    {
+      "integration_id": "int_002",
+      "external_system": "HR Management",
+      "method": "database",
+      "endpoint": "employee_records table",
+      "frequency": "realtime"
+    },
+    {
+      "integration_id": "int_003",
+      "external_system": "Manufacturing Operations",
+      "method": "webhook",
+      "endpoint": "/api/webhooks/shift-updates",
+      "frequency": "realtime"
+    }
+  ]
+}
