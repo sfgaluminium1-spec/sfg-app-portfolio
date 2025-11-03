@@ -1,0 +1,31 @@
+{
+  "registrationId": "sfg-aluminium-pms-1762191856018",
+  "timestamp": "2025-11-03T17:44:16.018Z",
+  "appMetadata": {
+    "name": "sfg-aluminium-pms",
+    "displayName": "SFG Aluminium PMS",
+    "version": "1.0.0",
+    "category": "PROJECT_MANAGEMENT",
+    "description": "SFG Aluminium Project Management System - Comprehensive ERP system with project tracking, financial management, cost control, resource allocation, and workflows",
+    "author": "SFG Aluminium",
+    "license": "Proprietary",
+    "homepage": "https://sfg-project-plus.abacusai.app",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio"
+    }
+  },
+  "registrationMethod": "automated",
+  "githubApp": {
+    "owner": "sfgaluminium1-spec",
+    "repository": "sfg-app-portfolio"
+  },
+  "files": {
+    "sourceCodeBackup": "source-backup.zip",
+    "businessLogic": "business-logic.json",
+    "registrationManifest": "app-registration.json"
+  },
+  "status": "pending_review",
+  "registeredBy": "DeepAgent Autonomous System",
+  "notes": "Fully automated registration process with comprehensive documentation"
+}
