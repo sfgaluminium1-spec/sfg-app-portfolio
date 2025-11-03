@@ -1,0 +1,99 @@
+
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please provide as much detail as possible.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: Describe the feature...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem it Solves
+      description: What problem does this feature solve? Is it related to a frustration?
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+  
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How should this feature work? Describe the desired behavior.
+      placeholder: Describe your proposed solution...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative solutions or features?
+      placeholder: Describe alternatives you've considered...
+    validations:
+      required: false
+  
+  - type: dropdown
+    id: app
+    attributes:
+      label: Application
+      description: Which application should this feature be added to?
+      options:
+        - Marketing Website
+        - Chrome Extension
+        - Mobile App
+        - All Applications
+        - Other (specify in description)
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Critical - Blocking my work
+        - High - Would significantly improve my workflow
+        - Medium - Nice to have
+        - Low - Minor enhancement
+    validations:
+      required: true
+  
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups/Screenshots
+      description: If applicable, add mockups, wireframes, or screenshots
+    validations:
+      required: false
+  
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context, examples, or references
+    validations:
+      required: false
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Acknowledgements
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I am willing to help implement or test this feature
+          required: false
