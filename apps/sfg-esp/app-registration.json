@@ -1,0 +1,47 @@
+{
+  "registrationId": "SFG-ESP-1762186319679",
+  "registrationDate": "2025-11-03T16:11:59.679Z",
+  "appMetadata": {
+    "name": "SFG-ESP",
+    "version": "2.0.0",
+    "description": "Advanced enquiry management system for SFG Innovations with regulatory intelligence, credit checking, and multi-platform integrations",
+    "category": "Business Management",
+    "tags": [
+      "CRM",
+      "Enquiry Management",
+      "Regulatory Compliance",
+      "Credit Assessment",
+      "Accounting Integration"
+    ]
+  },
+  "technicalStack": {
+    "frontend": "Next.js 14 (App Router), React 18, TypeScript",
+    "backend": "Next.js API Routes, Prisma ORM",
+    "database": "PostgreSQL",
+    "styling": "TailwindCSS, shadcn/ui",
+    "authentication": "NextAuth.js",
+    "deployment": "Abacus.AI Platform"
+  },
+  "capabilities": [
+    "Customer relationship management",
+    "Intelligent enquiry processing with AI",
+    "Regulatory compliance automation",
+    "Credit risk assessment",
+    "Automated quotation generation",
+    "Xero accounting integration",
+    "WhatsApp customer communication",
+    "Advanced analytics and reporting"
+  ],
+  "apiEndpoints": 24,
+  "uiRoutes": 15,
+  "databaseTables": 13,
+  "externalIntegrations": 4,
+  "repository": {
+    "owner": "sfgaluminium1-spec",
+    "repo": "sfg-app-portfolio",
+    "branch": "main",
+    "appDirectory": "apps/sfg-esp"
+  },
+  "status": "production-ready",
+  "completionPercentage": 95
+}
