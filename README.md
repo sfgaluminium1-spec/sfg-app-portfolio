@@ -1,429 +1,193 @@
 
-# SFG App Portfolio - Comprehensive Documentation
+# SFG Aluminium Ecosystem - Application Portfolio
 
-**Last Updated**: November 3, 2025  
-**Repository**: https://github.com/sfgaluminium1-spec/sfg-app-portfolio  
-**Maintainer**: SFG Innovations Team
+**Central repository for the SFG Aluminium 51-app orchestration system**
 
----
+## Overview
 
-## 📋 Table of Contents
+This repository serves as the central source of truth for the SFG Aluminium Ecosystem, connecting 51+ applications through a zero-drift orchestration architecture.
 
-1. [Overview](#overview)
-2. [Repository Structure](#repository-structure)
-3. [Key Applications](#key-applications)
-4. [Marketing Website](#marketing-website)
-5. [Chrome Extension](#chrome-extension)
-6. [Application Inventory](#application-inventory)
-7. [AI-AutoStack Integration](#ai-autostack-integration)
-8. [Development Standards](#development-standards)
-9. [Deployment](#deployment)
-10. [Contributing](#contributing)
-
----
-
-## 🎯 Overview
-
-The SFG App Portfolio is a comprehensive monorepo containing all SFG Aluminium applications, tools, and integrations. This repository serves as the central hub for the SFG ecosystem, including web applications, Chrome extensions, mobile apps, and enterprise integrations.
-
-### Key Components
-
-- **SFG Marketing Website**: Next.js 14 marketing site with AI-AutoStack partnership showcase
-- **SFG Chrome Extension**: AI-powered browser extension for productivity and document management
-- **50+ Specialized Applications**: From app-001 to app-050, each serving specific business functions
-- **Enterprise Integrations**: Microsoft 365, Xero, Logikal, and more
-- **AI Infrastructure**: Powered by Abacus.AI with advanced AI/ML capabilities
-
-### Technology Stack
-
-- **Frontend**: Next.js 14, React 18, TypeScript
-- **Backend**: Node.js, Prisma ORM, PostgreSQL
-- **Authentication**: NextAuth, Microsoft 365 SSO
-- **AI/ML**: Abacus.AI, OpenAI integration
-- **Styling**: Tailwind CSS, Warren Executive Theme
-- **Deployment**: Vercel, Abacus.AI hosting
-
----
-
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 sfg-app-portfolio/
-├── apps/
-│   ├── app-001/                # Specialized application 1
-│   ├── app-002/                # Specialized application 2
+├── apps/                    # All 51 application slots
+│   ├── app-001/            # Placeholder apps (pending registration)
 │   ├── ...
-│   ├── app-050/                # Specialized application 50
-│   ├── chronoshift-pro/        # Time management application
-│   ├── sfg-company-wiki/       # Internal documentation system
-│   ├── sfg-esp/                # ESP integration
-│   └── sfg-marketing-website/  # Marketing website (NEW)
-├── packages/
-│   ├── shared-ui/              # Shared UI components (Warren Executive Theme)
-│   ├── shared-utils/           # Shared utility functions
-│   └── shared-config/          # Shared configuration files
-├── docs/
-│   ├── integration-guides/     # Integration documentation
-│   ├── api-reference/          # API documentation
-│   └── deployment/             # Deployment guides
-├── .github/
-│   └── workflows/              # GitHub Actions CI/CD
-├── package.json                # Root package.json
-├── turbo.json                  # Turborepo configuration
-└── README.md                   # This file
+│   ├── app-050/
+│   └── chronoshift-pro/    # Registered app (time tracking)
+│
+├── instructions/           # Instructions for Nexus and satellites
+│   ├── nexus/             # Instructions for central conductor
+│   │   ├── persistent-memory.md
+│   │   ├── app-registry.md
+│   │   └── mcp-client.md
+│   └── satellites/        # Instructions for satellite apps
+│       ├── self-register.md
+│       └── webhook-setup.md
+│
+├── docs/                  # Architecture and specifications
+│   ├── ARCHITECTURE.md    # System architecture
+│   ├── CONDUCTOR_SPEC.md  # Nexus specifications
+│   └── SATELLITE_SPEC.md  # Satellite app specifications
+│
+├── analysis/              # Ecosystem analysis
+│   ├── APP_INVENTORY.md   # All apps cataloged
+│   ├── GAP_ANALYSIS.md    # Missing capabilities
+│   └── ROI_TRACKING.md    # Cost savings tracking
+│
+├── templates/             # Templates for registration
+│   ├── app-registration.json
+│   └── business-logic.json
+│
+└── .github/               # GitHub automation
+    ├── workflows/         # CI/CD workflows
+    └── ISSUE_TEMPLATE/    # Issue templates
 ```
+
+## Quick Start
+
+### For Nexus (Central Conductor)
+
+1. Read `/instructions/nexus/README.md`
+2. Implement persistent memory (HIGHEST PRIORITY)
+3. Set up app registry
+4. Implement MCP client
+5. Begin orchestration
+
+### For Satellite Apps
+
+1. Read `/instructions/satellites/self-register.md`
+2. Clone this repository
+3. Create registration JSON
+4. Backup your code
+5. Extract business logic
+6. Push to GitHub
+7. Create notification issue
+
+## Current Status
+
+### Registered Apps
+- **1 app registered:** Chronoshift-Pro (time tracking)
+- **50 apps pending:** Awaiting registration
+
+### Implementation Progress
+- [x] Repository structure created
+- [x] Documentation complete
+- [x] Templates ready
+- [ ] Nexus persistent memory (Week 1)
+- [ ] First 10 apps registered (Week 2)
+- [ ] MCP protocol implemented (Week 2-3)
+- [ ] Full orchestration deployed (Week 4)
+
+## Key Documents
+
+### Architecture
+- [System Architecture](docs/ARCHITECTURE.md) - Complete system design
+- [Conductor Specification](docs/CONDUCTOR_SPEC.md) - Nexus specifications
+- [Satellite Specification](docs/SATELLITE_SPEC.md) - Satellite app requirements
+
+### Instructions
+- [Nexus Instructions](instructions/nexus/README.md) - For central conductor
+- [Satellite Instructions](instructions/satellites/README.md) - For satellite apps
+
+### Analysis
+- [App Inventory](analysis/APP_INVENTORY.md) - All 51 apps cataloged
+- [Gap Analysis](analysis/GAP_ANALYSIS.md) - Missing capabilities
+- [ROI Tracking](analysis/ROI_TRACKING.md) - Cost savings per app
+
+## Communication Protocols
+
+### MCP (Model Context Protocol)
+Bidirectional communication between Nexus and satellites for orchestration.
+
+### GitHub Webhooks
+Automatic notification of satellites when new instructions are pushed.
+
+### REST APIs
+Direct app-to-app communication for data synchronization.
+
+## Security
+
+### Repository Access
+- **Visibility:** Private
+- **Owner:** sfgaluminium1-spec (Warren)
+- **Access:** Via Personal Access Tokens (PAT)
+
+### Authentication
+- GitHub: PAT tokens
+- MCP: Token-based auth
+- APIs: API keys + JWT
+
+## Support
+
+### Questions
+Create a GitHub issue with label "question"
+
+### Bugs
+Create a GitHub issue with label "bug"
+
+### Registration
+Use the app registration issue template
+
+## Timeline
+
+### Week 1: Foundation
+- Implement Nexus persistent memory
+- Create app registry
+- Set up GitHub automation
+
+### Week 2: First Wave
+- Register 10 priority apps
+- Implement MCP protocol
+- Test orchestration workflows
+
+### Week 3-4: Full Rollout
+- Register remaining 40 apps
+- Deploy full orchestration
+- Monitor and optimize
+
+## Success Metrics
+
+### Memory
+- ✅ 100% conversation retention
+- ✅ 0 "I forgot" responses
+
+### Registry
+- ✅ All 51 apps registered
+- ✅ Real-time status tracking
+
+### Orchestration
+- ✅ 95%+ instruction completion rate
+- ✅ <1 hour average completion time
+- ✅ 0 drift from decisions
+
+## Contributing
+
+### For Satellite Apps
+1. Follow self-registration instructions
+2. Use provided templates
+3. Create notification issue
+4. Wait for approval
+
+### For Nexus
+1. Read instructions in `/instructions/nexus/`
+2. Implement in priority order
+3. Report completion via GitHub issues
+4. Monitor satellite registrations
+
+## License
+
+Proprietary - SFG Aluminium Ltd.
+
+## Contact
+
+**Owner:** Warren (sfgaluminium1-spec)  
+**Repository:** https://github.com/sfgaluminium1-spec/sfg-app-portfolio  
+**Support:** Create a GitHub issue
 
 ---
 
-## 🌐 Key Applications
-
-### SFG Marketing Website
-
-**Status**: ✅ Production  
-**Deployment**: https://sfg-chrome.abacusai.app  
-**Technology**: Next.js 14, TypeScript, Tailwind CSS
-
-The SFG Marketing Website is a professional, modern marketing site promoting the SFG Chrome Extension, AI-AutoStack partnership, mobile notes, and app ecosystem.
-
-#### Features
-
-- **Hero Section**: Compelling introduction with CTA buttons
-- **Chrome Extension Showcase**: Feature highlights and download links
-- **AI-AutoStack Partnership**: Cross-promotion and integration benefits
-- **Mobile Notes**: iPhone and Android app information
-- **App Ecosystem**: Generic third-party app integration showcase
-- **Pricing**: Transparent pricing tiers (Free, Professional, Enterprise)
-- **Contact Form**: Lead generation and inquiry management
-
-#### Tech Stack
-
-- **Framework**: Next.js 14 with App Router
-- **Authentication**: NextAuth with email/password
-- **Database**: PostgreSQL with Prisma ORM
-- **Styling**: Tailwind CSS with Warren Executive Theme
-- **UI Components**: Radix UI, Shadcn UI
-- **Forms**: React Hook Form with Zod validation
-
-#### Environment Variables
-
-```bash
-# Database
-DATABASE_URL="postgresql://..."
-DIRECT_URL="postgresql://..."
-
-# Authentication
-NEXTAUTH_SECRET="..."
-NEXTAUTH_URL="https://sfg-chrome.abacusai.app"
-
-# App Version
-APP_VERSION="2.0.0"
-
-# AWS S3 (Optional)
-AWS_BUCKET_NAME=""
-AWS_FOLDER_PREFIX=""
-
-# Stripe (Optional)
-STRIPE_PUBLIC_KEY=""
-STRIPE_SECRET_KEY=""
-STRIPE_WEBHOOK_SECRET=""
-
-# Analytics (Optional)
-NEXT_PUBLIC_GA_MEASUREMENT_ID=""
-```
-
-#### Local Development
-
-```bash
-cd apps/sfg-marketing-website/app
-yarn install
-yarn dev
-```
-
-#### Deployment
-
-The marketing website is deployed on Abacus.AI hosting with the following configuration:
-
-- **Hostname**: sfg-chrome.abacusai.app
-- **Branch**: main
-- **Build Command**: `yarn build`
-- **Start Command**: `yarn start`
-- **Node Version**: 18.x
-
----
-
-### SFG Chrome Extension
-
-**Status**: ✅ Production  
-**Versions**: Multiple fixed versions available  
-**Technology**: JavaScript, Chrome Extension API
-
-The SFG Chrome Extension is an AI-powered productivity tool that enhances web browsing with features like:
-
-- **AI Text Processing**: Grammar check, rewriting, summarization
-- **Bookmark Management**: Smart organization and duplicate detection
-- **Password Tools**: Secure password generation and storage
-- **Quick Actions**: Dashboard, analytics, and templates
-- **Context Menu Integration**: Right-click access to all features
-
-#### Installation
-
-See `/chrome_enhancement/INSTALLATION_GUIDE.md` for detailed installation instructions.
-
----
-
-## 📊 Application Inventory
-
-The SFG ecosystem includes extensive integrations with enterprise systems:
-
-### Core Business Systems
-
-| Application | Status | Authentication | Purpose |
-|------------|--------|----------------|---------|
-| Microsoft 365 | ✅ Production | OAuth 2.0 | Email, SharePoint, Teams |
-| Xero Accounting | ✅ Production | OAuth 2.0 | Financial management |
-| Logikal (BM Aluminium) | ✅ Production | API Key | Pricing and drawings |
-| Companies House | ✅ Configured | API Key | Company verification |
-| Twilio | ✅ Configured | Account SID | SMS notifications |
-
-### Base Number System
-
-SFG uses a unique Base Number system for document lifecycle management:
-
-**Format**: `BASE-YYYY-NNNNN`  
-**Example**: `BASE-2025-00001`
-
-**Document Prefixes**:
-- **ENQ** → Enquiry Received
-- **QUO** → Quote Prepared & Sent
-- **PO** → Purchase Order Confirmed
-- **PROD** → In Production
-- **DEL** → Delivered
-- **INV** → Invoice Generated
-- **PAID** → Payment Received
-
-### Customer Tier System
-
-| Tier | Name | Payment Terms | Credit Check |
-|------|------|---------------|--------------|
-| Tier 1 | VIP | Net 7 days | Excellent |
-| Tier 2 | Preferred | Net 14 days | Good |
-| Tier 3 | Standard | Net 30 days | Satisfactory |
-| Tier 4 | New | Payment Upfront/COD | Unknown |
-| Tier 5 | Watch List | Payment Upfront Only | Poor |
-
-For complete application inventory details, see:
-- `/docs/SFG_Complete_Application_Inventory.md`
-- `/docs/SFG_Application_Inventory_Summary.md`
-
----
-
-## 🤝 AI-AutoStack Integration
-
-**Partnership Status**: ✅ Active  
-**Platform**: https://Ai-AutoStack.abacusai.app
-
-The AI-AutoStack integration provides:
-
-### Integration Points
-
-1. **Workflow Automation**: Browser actions trigger AI-AutoStack workflows
-2. **Data Processing**: Extension collects data → AI-AutoStack analyzes
-3. **Cross-Platform Sync**: Real-time synchronization across devices
-4. **AI-Powered Insights**: Advanced analytics and recommendations
-
-### Technical Architecture
-
-```
-SFG Chrome Extension → Cloud Storage/API → AI-AutoStack
-                    ↑                    ↓
-                WebSocket Server ← → AI Workflows
-```
-
-### Implementation
-
-- **API Integration**: RESTful APIs for data exchange
-- **WebSocket**: Real-time communication
-- **Webhook Integration**: Automated workflow triggers
-- **DeepAgent Integration**: Advanced AI processing
-
-For complete integration analysis, see:
-- `/docs/AI_AutoStack_Integration_Analysis_Report.md`
-
----
-
-## 🛠️ Development Standards
-
-### Warren Executive Theme
-
-All SFG applications must follow the Warren Executive Theme design system:
-
-**Core Principles**:
-- Professional, modern aesthetic
-- Consistent color palette and typography
-- Responsive design for all devices
-- Accessibility-first approach
-
-**Theme Files**:
-- `/docs/warren_executive_theme_complete.pdf`
-- `/chrome_enhancement/warren-executive-theme.css`
-
-### Code Standards
-
-```typescript
-// TypeScript strict mode
-"strict": true,
-"strictNullChecks": true,
-"noImplicitAny": true
-
-// ESLint configuration
-"extends": [
-  "next/core-web-vitals",
-  "plugin:@typescript-eslint/recommended"
-]
-
-// Prettier formatting
-"semi": true,
-"trailingComma": "es5",
-"singleQuote": false,
-"tabWidth": 2
-```
-
-### Microfrontends & Module Federation
-
-- **Standard**: Use Microfrontends/Module Federation for all internal integrations
-- **NO iframes**: Except for untrusted 3rd-party content
-- **Benefits**: Unified UX, shared dependencies, independent deployments
-
-### Security Requirements
-
-- **Authentication**: Microsoft 365 SSO for all user-facing apps
-- **API Keys**: Rotated every 90 days, never exposed client-side
-- **Data Encryption**: AES-256 at rest
-- **GDPR Compliance**: Via M365 privacy controls
-
----
-
-## 🚀 Deployment
-
-### Marketing Website Deployment
-
-**Current Deployment**:
-```bash
-# Abacus.AI hosting
-Hostname: sfg-chrome.abacusai.app
-Branch: main
-Build: Automatic on push
-```
-
-**Manual Deployment**:
-```bash
-cd apps/sfg-marketing-website
-yarn build
-yarn deploy
-```
-
-### Chrome Extension Deployment
-
-```bash
-# Package extension
-cd chrome_enhancement/sfg_chrome_extension
-zip -r sfg-chrome-extension.zip .
-
-# Upload to Chrome Web Store
-# Follow: /chrome_enhancement/INSTALLATION_GUIDE.md
-```
-
-### CI/CD Pipeline
-
-GitHub Actions workflows are configured for:
-- Automated testing on PR
-- Automated deployment on merge to main
-- Version management and release tagging
-
----
-
-## 👥 Contributing
-
-### Getting Started
-
-1. Clone the repository:
-```bash
-git clone https://github.com/sfgaluminium1-spec/sfg-app-portfolio.git
-cd sfg-app-portfolio
-```
-
-2. Install dependencies:
-```bash
-yarn install
-```
-
-3. Set up environment variables:
-```bash
-cp apps/sfg-marketing-website/.env.example apps/sfg-marketing-website/.env
-# Edit .env with your values
-```
-
-4. Start development server:
-```bash
-yarn dev
-```
-
-### Branching Strategy
-
-- **main**: Production-ready code
-- **develop**: Integration branch for features
-- **feature/\***: New features
-- **bugfix/\***: Bug fixes
-- **hotfix/\***: Critical production fixes
-
-### Pull Request Process
-
-1. Create feature branch from `develop`
-2. Make your changes with clear commit messages
-3. Run tests: `yarn test`
-4. Push and create PR to `develop`
-5. Wait for CI checks and review
-6. Merge after approval
-
----
-
-## 📚 Additional Documentation
-
-### Key Documents
-
-- **Application Inventory**: `/docs/SFG_Complete_Application_Inventory.md`
-- **Integration Analysis**: `/docs/AI_AutoStack_Integration_Analysis_Report.md`
-- **Setup Log**: `/docs/setup_log.md`
-- **Extension Guide**: `/chrome_enhancement/EXTENSION_SETUP_GUIDE.md`
-- **Warren Theme**: `/docs/warren_executive_theme_complete.pdf`
-- **Core Directive**: `/docs/DeepAgent_ChatLLM_Core_Directive.txt`
-
-### API Documentation
-
-- Base Number API: `/docs/api-reference/base-numbers.md`
-- Customer Management API: `/docs/api-reference/customers.md`
-- Document Lifecycle API: `/docs/api-reference/documents.md`
-- Workflow API: `/docs/api-reference/workflows.md`
-
----
-
-## 📞 Support
-
-For questions, issues, or contributions:
-
-- **Email**: support@sfginnovations.com
-- **GitHub Issues**: https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues
-- **Teams Channel**: #sfg-development
-- **Documentation**: https://docs.sfginnovations.com
-
----
-
-## 📄 License
-
-Proprietary - SFG Innovations © 2025. All rights reserved.
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: November 3, 2025  
-**Next Review**: December 1, 2025
+**Last Updated:** November 3, 2025  
+**Version:** 1.0  
+**Status:** In Development
