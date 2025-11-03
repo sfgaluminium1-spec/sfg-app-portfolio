@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    /* SFG Aluminium Base Theme - Deep Dark Navy Background */
+    --background: 217 67% 4%;  /* #070C14 */
+    --foreground: 210 40% 98%;  /* #F9FBFD */
+
+    --card: 217 48% 6%;  /* #060A12 */
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 217 48% 6%;
+    --popover-foreground: 210 40% 98%;
+ 
+    /* Tier 1 (CEO/Exec) - Deep Blue */
+    --primary: 217 91% 52%;  /* #2563EB */
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 217 48% 16%;  /* #1D2633 */
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 215 23% 26%;  /* #7B8AA6 */
+    --muted-foreground: 215 23% 60%;
+ 
+    --accent: 217 91% 52%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 72% 51%;  /* #EF4444 */
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 35% 18%;  /* #202938 */
+    --input: 217 35% 18%;
+    --ring: 217 91% 52%;
+ 
+    --radius: 0.5rem;
+
+    /* SFG Status Colors */
+    --fabrication: 199 89% 48%;  /* #0EA5E9 */
+    --installation: 142 71% 45%;  /* #10B981 */
+    --conflict: 0 72% 51%;  /* #EF4444 */
+    --warning: 38 92% 50%;  /* #F59E0B */
+    
+    /* Surface and Border Colors */
+    --surface-primary: 217 44% 18%;  /* #263247 */
+    --surface-secondary: 217 35% 18%;  /* #202938 */
+    --surface-glass: rgba(255, 255, 255, 0.07);
+    
+    /* Tier-specific colors */
+    --tier-1-primary: 217 91% 52%;  /* #2563EB - CEO/Exec Deep */
+    --tier-2-primary: 217 91% 60%;  /* #3B82F6 - Finance Medium */
+    --tier-3-primary: 217 91% 68%;  /* #60A5FA - Sales/Design Light */
+  }
+}
+
+/* Tier-specific styling */
+[data-tier="ceo"] {
+  --primary: 217 91% 52%;  /* #2563EB */
+  --ring: 217 91% 52%;
+  --card: 217 48% 6%;  /* Opaque */
+  --border: 217 44% 18%;  /* #263247 */
+}
+
+[data-tier="finance"] {
+  --primary: 217 91% 60%;  /* #3B82F6 */
+  --ring: 217 91% 60%;
+  --card: rgba(255, 255, 255, 0.07);  /* Semi-opaque glass */
+  --border: 217 35% 18%;  /* #202938 */
+}
+
+[data-tier="sales"] {
+  --primary: 217 91% 68%;  /* #60A5FA */
+  --ring: 217 91% 68%;
+  --card: rgba(255, 255, 255, 0.10);  /* Light glass */
+  --border: 217 38% 23%;  /* #2B3950 */
+}
+
+/* Glass card effects */
+.glass-card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card-tier-2 {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-card-tier-3 {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* 3D file/folder animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(37, 99, 235, 0.5); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Gradient backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Aluminium texture effect */
+.aluminium-texture {
+  background: linear-gradient(
+    135deg,
+    #d0d5db 0%,
+    #e5e7eb 25%,
+    #d0d5db 50%,
+    #e5e7eb 75%,
+    #d0d5db 100%
+  );
+  background-size: 200% 200%;
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.7);
+}

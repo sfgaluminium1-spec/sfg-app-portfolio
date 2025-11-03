@@ -1,0 +1,467 @@
+{
+  "appName": "sfg-company-wiki",
+  "purpose": "Company-wide knowledge management system for SFG Aluminium, managing procedures, compliance, project workflows, and financial operations",
+  "capabilities": [
+    "Knowledge Management (procedures, categories, hierarchies)",
+    "Project Management (ENQ→QUO→ORD→INV→DEL→PAID workflow)",
+    "Financial Compliance (margin validation, pricing rules, credit checks)",
+    "Azure Entra SSO Authentication",
+    "Xero Accounting Integration",
+    "Companies House API Integration",
+    "Conflict Detection & Resolution",
+    "Audit Logging & Compliance Tracking",
+    "RAG-powered AI Chat Assistant",
+    "Multi-tier Authorization (staff & customer tiers)",
+    "Knowledge Smelter System (243 GB SharePoint data processing)",
+    "Insurance Compliance Validation"
+  ],
+  "workflows": [
+    {
+      "name": "Project Lifecycle Management",
+      "description": "Six-stage project progression from enquiry to paid",
+      "steps": [
+        "ENQ (Enquiry): Capture initial customer request",
+        "QUO (Quote): Generate and send quotation",
+        "ORD (Order): Process customer order",
+        "INV (Invoice): Create and send invoice (Xero sync)",
+        "DEL (Delivered): Track delivery/collection",
+        "PAID (Paid): Confirm payment received (Xero sync)"
+      ],
+      "triggers": [
+        "User creates project",
+        "Status progression button",
+        "Xero webhook"
+      ],
+      "outputs": [
+        "Project record",
+        "Audit log",
+        "Xero contact/invoice",
+        "SharePoint folder structure"
+      ]
+    },
+    {
+      "name": "Drawing Approval Workflow",
+      "description": "Sequential drawing progression (05a→05b→05c→05d→05e→05f→05g)",
+      "steps": [
+        "05a: Incoming Requests - Customer submits drawing",
+        "05b: SFG Issue - SFG creates/modifies drawing",
+        "05c: Change Requests - Customer requests changes",
+        "05d: Confirmations - SFG confirms changes",
+        "05e: Approval - Customer approves drawing",
+        "05f: Live Drawings - Drawing locked and live",
+        "05g: Rejected Designs - Archive rejected designs"
+      ],
+      "triggers": [
+        "User uploads drawing to workflow stage",
+        "Approval button click"
+      ],
+      "outputs": [
+        "Drawing files moved to next stage",
+        "Approval timestamp",
+        "Lock status changed"
+      ]
+    },
+    {
+      "name": "Margin Validation & Pricing Approval",
+      "description": "Enforce margin rules and escalate pricing approvals",
+      "steps": [
+        "User enters cost and price for project",
+        "System calculates margin percentage",
+        "System validates against job-type-specific minimum (28-45%)",
+        "If below minimum: BLOCK and require director override",
+        "If below target: WARN and suggest repricing",
+        "If approved: Route to appropriate staff tier for approval"
+      ],
+      "triggers": [
+        "Price/cost change",
+        "Quote creation",
+        "Status progression to ORD"
+      ],
+      "outputs": [
+        "Validation result",
+        "Approval routing",
+        "Audit log entry"
+      ]
+    },
+    {
+      "name": "Credit Check Protocol",
+      "description": "Automated credit checking for new customers",
+      "steps": [
+        "User enters customer name",
+        "System searches Companies House API",
+        "Extract company number, officers, credit risk",
+        "Determine customer tier based on credit rating",
+        "Set credit limit and payment terms",
+        "Route to senior estimator if tier > Standard"
+      ],
+      "triggers": [
+        "New customer creation",
+        "Customer tier upgrade request"
+      ],
+      "outputs": [
+        "Customer tier assignment",
+        "Credit limit",
+        "Payment terms",
+        "Approval routing"
+      ]
+    },
+    {
+      "name": "Knowledge Smelter Processing",
+      "description": "Automated classification and organization of 243 GB SharePoint data",
+      "steps": [
+        "Scan SharePoint libraries for unprocessed files",
+        "Extract metadata (file name, size, date, path)",
+        "AI classification into 12 types (invoice, quote, drawing, etc.)",
+        "Extract job numbers, customer names, dates from content",
+        "Auto-tag with extracted metadata",
+        "Upload to organized SharePoint structure",
+        "Log processing result and confidence score"
+      ],
+      "triggers": [
+        "Batch processing schedule",
+        "Manual trigger",
+        "New file upload to SharePoint"
+      ],
+      "outputs": [
+        "ArchivedFile records",
+        "Classification confidence score",
+        "Organized SharePoint structure"
+      ]
+    }
+  ],
+  "businessRules": [
+    {
+      "name": "Margin Enforcement (Non-Negotiable)",
+      "description": "All jobs must meet minimum margin thresholds by job type",
+      "condition": "IF margin < minimumMargin (28-45% depending on job type)",
+      "action": "THEN block progression and require director override",
+      "priority": "high"
+    },
+    {
+      "name": "Required Fields Validation",
+      "description": "Projects must have all required fields before status progression",
+      "condition": "IF any field in [baseNumber, customer, project, location, productType, deliveryType, enquiryInitialCount] is empty",
+      "action": "THEN block status progression and display MISSING badge",
+      "priority": "high"
+    },
+    {
+      "name": "Insurance Compliance (Non-Negotiable)",
+      "description": "Work must comply with insurance policy limits",
+      "condition": "IF workHeight > 15m OR workDepth > 2m OR includesGroundwork = true OR workType in PROHIBITED_WORK",
+      "action": "THEN block project and require special insurance approval",
+      "priority": "high"
+    }
+  ],
+  "calculations": [
+    {
+      "name": "Margin Calculation",
+      "description": "Calculate profit margin percentage from cost and price",
+      "formula": "margin = ((price - cost) / price) * 100",
+      "inputs": [
+        {
+          "name": "cost",
+          "type": "number",
+          "description": "Total cost of job (materials + labour)"
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "description": "Quoted/selling price"
+        }
+      ],
+      "output": {
+        "name": "margin",
+        "type": "number",
+        "description": "Profit margin as percentage (0-100)"
+      },
+      "example": {
+        "cost": 10000,
+        "price": 18000,
+        "margin": 44.44
+      }
+    },
+    {
+      "name": "Daily Turnover Target",
+      "description": "Calculate daily target of £8,929 based on 22 working days/month",
+      "formula": "dailyTarget = monthlyTarget / workingDaysPerMonth",
+      "inputs": [
+        {
+          "name": "monthlyTarget",
+          "type": "number",
+          "description": "Monthly turnover target (£178,571)"
+        },
+        {
+          "name": "workingDaysPerMonth",
+          "type": "number",
+          "description": "Average working days (22)"
+        }
+      ],
+      "output": {
+        "name": "dailyTarget",
+        "type": "number",
+        "description": "Daily turnover target in GBP"
+      },
+      "example": {
+        "monthlyTarget": 178571,
+        "workingDaysPerMonth": 22,
+        "dailyTarget": 8929
+      }
+    }
+  ],
+  "integrations": [
+    {
+      "name": "Azure Entra ID (Microsoft Entra)",
+      "type": "api",
+      "description": "Single Sign-On authentication for all users",
+      "endpoint": "https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0"
+    },
+    {
+      "name": "Xero Accounting API",
+      "type": "api",
+      "description": "Two-way sync for contacts, invoices, and payments",
+      "endpoint": "https://api.xero.com/api.xro/2.0"
+    },
+    {
+      "name": "Companies House API",
+      "type": "api",
+      "description": "Company lookup, credit risk assessment, and officer information",
+      "endpoint": "https://api.company-information.service.gov.uk"
+    },
+    {
+      "name": "SharePoint API (Microsoft Graph)",
+      "type": "api",
+      "description": "Read/write access to SharePoint document libraries for Knowledge Smelter",
+      "endpoint": "https://graph.microsoft.com/v1.0"
+    },
+    {
+      "name": "Twilio SMS API",
+      "type": "api",
+      "description": "Send SMS notifications for critical alerts",
+      "endpoint": "https://api.twilio.com/2010-04-01"
+    },
+    {
+      "name": "PostgreSQL Database",
+      "type": "database",
+      "description": "Primary data store for all application data"
+    },
+    {
+      "name": "Abacus.AI LLM APIs",
+      "type": "api",
+      "description": "RAG-powered chat assistant for querying procedures and knowledge base"
+    }
+  ],
+  "dataModels": [
+    {
+      "name": "Project",
+      "description": "Core project entity tracking ENQ→PAID lifecycle",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Unique project ID (cuid)"
+        },
+        {
+          "name": "baseNumber",
+          "type": "string",
+          "required": true,
+          "description": "Immutable project number (e.g., \"10001\")"
+        },
+        {
+          "name": "prefix",
+          "type": "enum",
+          "required": true,
+          "description": "Current status prefix (ENQ|QUO|ORD|INV|DEL|PAID)"
+        },
+        {
+          "name": "customer",
+          "type": "string",
+          "required": false,
+          "description": "Customer name"
+        },
+        {
+          "name": "project",
+          "type": "string",
+          "required": false,
+          "description": "Project name/description"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "required": true,
+          "description": "Current project status"
+        },
+        {
+          "name": "xeroContactId",
+          "type": "string",
+          "required": false,
+          "description": "Xero contact ID for invoicing"
+        }
+      ]
+    },
+    {
+      "name": "Procedure",
+      "description": "Company knowledge base procedures with versioning",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Unique procedure ID"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "Procedure title"
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "required": true,
+          "description": "Procedure content (markdown)"
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "required": true,
+          "description": "Version number"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "required": true,
+          "description": "DRAFT | ACTIVE | ARCHIVED"
+        }
+      ]
+    },
+    {
+      "name": "ArchivedFile",
+      "description": "Knowledge Smelter file classification and metadata",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Unique file ID"
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "required": true,
+          "description": "File name"
+        },
+        {
+          "name": "fileType",
+          "type": "enum",
+          "required": true,
+          "description": "Classified type (INVOICE | QUOTE | DRAWING | etc.)"
+        },
+        {
+          "name": "confidence",
+          "type": "float",
+          "required": true,
+          "description": "AI classification confidence (0-100)"
+        },
+        {
+          "name": "cloudStoragePath",
+          "type": "string",
+          "required": true,
+          "description": "S3/cloud storage key"
+        },
+        {
+          "name": "sharePointUrl",
+          "type": "string",
+          "required": false,
+          "description": "Organized SharePoint URL"
+        }
+      ]
+    },
+    {
+      "name": "AuditLog",
+      "description": "Comprehensive audit trail for all system operations",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Unique log ID"
+        },
+        {
+          "name": "action",
+          "type": "enum",
+          "required": true,
+          "description": "CREATE | UPDATE | DELETE | APPROVE"
+        },
+        {
+          "name": "entityType",
+          "type": "string",
+          "required": true,
+          "description": "Type of entity affected"
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "required": true,
+          "description": "User who performed action"
+        }
+      ]
+    }
+  ],
+  "apiEndpoints": [
+    {
+      "method": "POST",
+      "path": "/api/auth/[...nextauth]",
+      "description": "NextAuth.js authentication endpoints",
+      "authentication": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/signup",
+      "description": "User registration",
+      "authentication": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/procedures",
+      "description": "List all procedures",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/procedures",
+      "description": "Create new procedure",
+      "authentication": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects",
+      "description": "List all projects",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects",
+      "description": "Create new project",
+      "authentication": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/companies-house/search",
+      "description": "Search Companies House",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/xero/contacts",
+      "description": "Create Xero contact",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/chat",
+      "description": "RAG chat assistant",
+      "authentication": true
+    }
+  ]
+}

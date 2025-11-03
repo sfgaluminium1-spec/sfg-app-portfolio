@@ -1,0 +1,39 @@
+{
+  "appName": "sfg-company-wiki",
+  "registrationDate": "2025-11-03T16:13:33.438Z",
+  "status": "pending-approval",
+  "version": "1.0.0",
+  "deployment": {
+    "url": "https://company-wiki-5g0kyk.abacusai.app",
+    "environment": "production"
+  },
+  "techStack": {
+    "framework": "Next.js 14",
+    "language": "TypeScript",
+    "database": "PostgreSQL (Prisma ORM)",
+    "platform": "Abacus.AI"
+  },
+  "contact": {
+    "maintainer": "Warren Heathcote",
+    "email": "warren@sfgaluminium.com"
+  },
+  "capabilities": [
+    "Knowledge Management",
+    "Project Management (ENQ→PAID)",
+    "Financial Compliance",
+    "Azure Entra SSO",
+    "Xero Integration",
+    "Companies House Integration",
+    "Knowledge Smelter (243 GB data processing)",
+    "AI Chat Assistant",
+    "Multi-tier Authorization"
+  ],
+  "dependencies": [
+    "sfg-nexus",
+    "Azure Entra ID",
+    "Xero API",
+    "SharePoint/Microsoft Graph",
+    "Companies House API",
+    "Twilio"
+  ]
+}
