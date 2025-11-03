@@ -1,0 +1,1 @@
+ import EnquiryManagement from '@/components/enquiry-management'; export default function EnquiriesPage() { return <EnquiryManagement />; } 

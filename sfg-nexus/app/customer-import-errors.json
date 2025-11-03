@@ -1,0 +1,6 @@
+[
+  {
+    "customer": "Clad-It Ltd",
+    "error": "\nInvalid `prisma.customer.create()` invocation in\n/home/ubuntu/sfg-nexus-mockup/app/seed-customer-import.js:155:50\n\n  152 };\n  153 \n  154 // Create customer\n→ 155 const customer = await prisma.customer.create(\nUnique constraint failed on the fields: (`accountNumber`)"
+  }
+]

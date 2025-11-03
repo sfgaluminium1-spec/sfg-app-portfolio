@@ -1,0 +1,1 @@
+ import TeamsChat from '@/components/teams-chat'; export default function ChatPage() { return <TeamsChat />; } 

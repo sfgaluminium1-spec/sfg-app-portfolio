@@ -1,0 +1,3570 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Team {
+  id          String           @id @default(cuid())
+  teamName    String           @unique
+  teamLeader  String
+  members     String[]
+  skills      String[]
+  isActive    Boolean          @default(true)
+  vanId       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  schedules   JobSchedule[]
+  van         Van?             @relation(fields: [vanId], references: [id])
+  assignments TeamAssignment[]
+}
+
+model Van {
+  id                    String                 @id @default(cuid())
+  vanNumber             String                 @unique
+  registration          String
+  model                 String?
+  capacity              String?
+  equipment             String[]
+  vehicleType           VehicleType            @default(INSTALLATION_VAN)
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  installationSchedules InstallationSchedule[]
+  schedules             JobSchedule[]
+  teams                 Team[]
+}
+
+model JobSchedule {
+  id            String         @id @default(cuid())
+  scheduledDate DateTime
+  scheduledTime String?
+  status        ScheduleStatus @default(SCHEDULED)
+  notes         String?
+  jobId         String
+  teamId        String
+  vanId         String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  job           Job            @relation(fields: [jobId], references: [id])
+  team          Team           @relation(fields: [teamId], references: [id])
+  van           Van            @relation(fields: [vanId], references: [id])
+}
+
+model QuoteItem {
+  id          String   @id @default(cuid())
+  lineNumber  Int
+  product     String
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Float
+  totalPrice  Float
+  quoteId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  quote       Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@unique([quoteId, lineNumber])
+}
+
+model Order {
+  id          String     @id @default(cuid())
+  orderNumber String     @unique
+  date        DateTime   @default(now())
+  supplier    String
+  description String
+  price       Float?
+  orderedBy   String?
+  jobId       String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  documents   Document[]
+  job         Job        @relation(fields: [jobId], references: [id])
+}
+
+model Document {
+  id           String       @id @default(cuid())
+  filename     String
+  originalName String
+  fileType     String
+  fileSize     Int
+  uploadPath   String
+  documentType DocumentType @default(OTHER)
+  enquiryId    String?
+  jobId        String?
+  quoteId      String?
+  orderId      String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  enquiry      Enquiry?     @relation(fields: [enquiryId], references: [id])
+  job          Job?         @relation(fields: [jobId], references: [id])
+  order        Order?       @relation(fields: [orderId], references: [id])
+  quote        Quote?       @relation(fields: [quoteId], references: [id])
+}
+
+model Activity {
+  id          String       @id @default(cuid())
+  type        ActivityType
+  description String
+  user        String
+  metadata    Json?
+  enquiryId   String?
+  jobId       String?
+  quoteId     String?
+  createdAt   DateTime     @default(now())
+  enquiry     Enquiry?     @relation(fields: [enquiryId], references: [id])
+  job         Job?         @relation(fields: [jobId], references: [id])
+  quote       Quote?       @relation(fields: [quoteId], references: [id])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  message   String
+  response  String?
+  user      String   @default("User")
+  processed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  id                     String                   @id @default(cuid())
+  email                  String?                  @unique
+  password               String?
+  firstName              String
+  lastName               String?
+  contactName            String?
+  company                String?
+  phone                  String?
+  address                String?
+  website                String?
+  isActive               Boolean                  @default(true)
+  customerType           CustomerType             @default(PROSPECT)
+  customerStatus         CustomerStatus           @default(ACTIVE)
+  source                 String                   @default("DIRECT")
+  accountNumber          String?                  @unique
+  companyRegNumber       String?
+  vatNumber              String?
+  creditLimit            Float?                   @default(0)
+  creditTerms            Int?                     @default(30)
+  creditStatus           CreditStatus             @default(GOOD)
+  emailNotifications     Boolean                  @default(true)
+  smsNotifications       Boolean                  @default(false)
+  portalAccess           Boolean                  @default(false)
+  emailValidated         Boolean                  @default(false)
+  phoneValidated         Boolean                  @default(false)
+  addressValidated       Boolean                  @default(false)
+  dataCompleteness       Float                    @default(0.0)
+  importSource           String?
+  importDate             DateTime?
+  additionalEmails       String[]
+  alternativePhone       String?
+  emergencyContact       String?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  creditChecks           CreditCheck[]
+  activities             CustomerActivity[]
+  behaviors              CustomerBehavior[]
+  customerCommunications CustomerCommunication[]
+  customerContacts       CustomerContact[]
+  formSubmissions        CustomerFormSubmission[]
+  interactions           CustomerInteraction[]
+  customerPortalAccess   CustomerPortalAccess?
+  sessions               CustomerSession[]
+  customerSpecs          CustomerSpecification[]
+  validation             CustomerValidation?
+  deliveryTemplates      DeliveryTemplate[]
+  enquiries              Enquiry[]
+  specifications         GlassSpecification[]
+  invoices               Invoice[]
+  jobs                   Job[]
+  projectVariations      ProjectVariation[]
+  quotes                 Quote[]
+  teamsMessages          TeamsMessage[]
+  whatsappMessages       WhatsAppMessage[]
+}
+
+model CustomerSession {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  expiresAt  DateTime
+  customerId String
+  createdAt  DateTime @default(now())
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model CustomerActivity {
+  id           String               @id @default(cuid())
+  activityType CustomerActivityType
+  description  String
+  details      Json?
+  performedBy  String?
+  source       String?
+  customerId   String
+  enquiryId    String?
+  quoteId      String?
+  jobId        String?
+  createdAt    DateTime             @default(now())
+  customer     Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model CustomerInteraction {
+  id               String               @id @default(cuid())
+  interactionType  InteractionType
+  subject          String?
+  description      String?
+  outcome          String?
+  method           ContactMethod
+  direction        InteractionDirection
+  duration         Int?
+  requiresFollowUp Boolean              @default(false)
+  followUpDate     DateTime?
+  followUpNotes    String?
+  handledBy        String
+  customerId       String
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  customer         Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model CustomerValidation {
+  id                      String           @id @default(cuid())
+  emailValidation         ValidationStatus @default(PENDING)
+  phoneValidation         ValidationStatus @default(PENDING)
+  addressValidation       ValidationStatus @default(PENDING)
+  businessValidation      ValidationStatus @default(PENDING)
+  emailValidatedAt        DateTime?
+  phoneValidatedAt        DateTime?
+  addressValidatedAt      DateTime?
+  businessValidatedAt     DateTime?
+  emailValidationNotes    String?
+  phoneValidationNotes    String?
+  addressValidationNotes  String?
+  businessValidationNotes String?
+  overallStatus           ValidationStatus @default(PENDING)
+  validatedBy             String?
+  validatedAt             DateTime?
+  customerId              String           @unique
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  customer                Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model NewCustomerRequest {
+  id                String            @id @default(cuid())
+  customerName      String
+  contactEmail      String?
+  contactPhone      String?
+  company           String?
+  projectDetails    String?
+  status            NewCustomerStatus @default(PENDING)
+  priority          Priority          @default(MEDIUM)
+  emailSent         Boolean           @default(false)
+  emailSentAt       DateTime?
+  emailTemplate     String?
+  remindersSent     Int               @default(0)
+  lastReminderAt    DateTime?
+  customerResponded Boolean           @default(false)
+  responseDate      DateTime?
+  responseMethod    ContactMethod?
+  assignedTo        String?
+  assignedAt        DateTime?
+  customerCreated   Boolean           @default(false)
+  customerId        String?
+  completedAt       DateTime?
+  completedBy       String?
+  requestNotes      String?
+  internalNotes     String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model SystemSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PricingModel {
+  id          String              @id @default(cuid())
+  name        String
+  description String?
+  modelType   PricingModelType
+  category    String
+  basePrice   Float
+  formula     String
+  factors     Json
+  isActive    Boolean             @default(true)
+  confidence  Float               @default(0.8)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  analytics   PricingAnalytics[]
+  predictions PricingPrediction[]
+}
+
+model MarketData {
+  id           String         @id @default(cuid())
+  dataType     MarketDataType
+  source       String
+  category     String
+  product      String?
+  region       String?
+  averagePrice Float?
+  minPrice     Float?
+  maxPrice     Float?
+  marketTrend  String?
+  confidence   Float          @default(0.7)
+  metadata     Json?
+  validFrom    DateTime       @default(now())
+  validTo      DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model CustomerBehavior {
+  id              String               @id @default(cuid())
+  customerId      String?
+  customerName    String
+  behaviorType    CustomerBehaviorType
+  category        String
+  averageValue    Float?
+  priceAcceptance Float?
+  negotiationRate Float?
+  seasonality     Json?
+  preferences     Json?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  customer        Customer?            @relation(fields: [customerId], references: [id])
+}
+
+model PricingPrediction {
+  id              String         @id @default(cuid())
+  predictionType  PredictionType
+  targetId        String
+  targetType      String
+  product         String
+  category        String
+  quantity        Int?
+  specifications  Json?
+  customerName    String?
+  predictedPrice  Float
+  confidence      Float
+  priceRange      Json
+  factors         Json
+  recommendations Json
+  modelId         String
+  actualPrice     Float?
+  accuracy        Float?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  pricingModel    PricingModel   @relation(fields: [modelId], references: [id])
+}
+
+model PricingAnalytics {
+  id             String        @id @default(cuid())
+  analyticsType  AnalyticsType
+  period         String
+  startDate      DateTime
+  endDate        DateTime
+  totalQuotes    Int?
+  totalValue     Float?
+  averageValue   Float?
+  winRate        Float?
+  marginAnalysis Json?
+  trendData      Json?
+  category       String?
+  product        String?
+  modelId        String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  pricingModel   PricingModel? @relation(fields: [modelId], references: [id])
+}
+
+model CompetitorPricing {
+  id             String    @id @default(cuid())
+  competitor     String
+  product        String
+  category       String
+  price          Float
+  source         String
+  region         String?
+  specifications Json?
+  confidence     Float     @default(0.6)
+  validFrom      DateTime  @default(now())
+  validTo        DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model PricingRule {
+  id          String          @id @default(cuid())
+  name        String
+  description String?
+  ruleType    PricingRuleType
+  category    String?
+  conditions  Json
+  actions     Json
+  priority    Int             @default(1)
+  isActive    Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model ApprovalWorkflow {
+  id           String       @id @default(cuid())
+  workflowName String
+  description  String?
+  workflowType WorkflowType
+  isActive     Boolean      @default(true)
+  stages       Json
+  rules        Json
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  approvals    Approval[]
+}
+
+model Approval {
+  id                     String           @id @default(cuid())
+  approvalType           ApprovalType
+  entityType             String
+  entityId               String
+  stage                  String
+  status                 ApprovalStatus   @default(PENDING)
+  priority               Priority         @default(MEDIUM)
+  requiresSecondApproval Boolean          @default(false)
+  canSelfApprove         Boolean          @default(true)
+  mandatoryApproval      Boolean          @default(false)
+  requestedBy            String
+  requestedAt            DateTime         @default(now())
+  approvedBy             String?
+  approvedAt             DateTime?
+  rejectedBy             String?
+  rejectedAt             DateTime?
+  requestNotes           String?
+  approvalNotes          String?
+  rejectionReason        String?
+  validationItems        Json?
+  workflowId             String
+  quoteId                String?
+  jobId                  String?
+  enquiryId              String?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+  enquiry                Enquiry?         @relation(fields: [enquiryId], references: [id])
+  job                    Job?             @relation(fields: [jobId], references: [id])
+  quote                  Quote?           @relation(fields: [quoteId], references: [id])
+  workflow               ApprovalWorkflow @relation(fields: [workflowId], references: [id])
+}
+
+model QuoteValidation {
+  id                      String    @id @default(cuid())
+  productCountCheck       Boolean   @default(false)
+  productCountValid       Boolean   @default(false)
+  productCountNotes       String?
+  priceValidationCheck    Boolean   @default(false)
+  priceValidationValid    Boolean   @default(false)
+  priceValidationNotes    String?
+  installationPriceCheck  Boolean   @default(false)
+  installationPriceValid  Boolean   @default(false)
+  installationPriceNotes  String?
+  quoteTypeValidation     Boolean   @default(false)
+  quoteTypeValid          Boolean   @default(false)
+  quoteTypeNotes          String?
+  markupValidation        Boolean   @default(false)
+  markupValid             Boolean   @default(false)
+  markupNotes             String?
+  productTypeValidation   Boolean   @default(false)
+  productTypeValid        Boolean   @default(false)
+  productTypeNotes        String?
+  designRequirementsCheck Boolean   @default(false)
+  designRequirementsValid Boolean   @default(false)
+  designRequirementsNotes String?
+  supplierValidationCheck Boolean   @default(false)
+  supplierValidationValid Boolean   @default(false)
+  supplierValidationNotes String?
+  leadTimeValidation      Boolean   @default(false)
+  leadTimeValid           Boolean   @default(false)
+  leadTimeNotes           String?
+  allChecksComplete       Boolean   @default(false)
+  validationPassed        Boolean   @default(false)
+  validatedBy             String?
+  validatedAt             DateTime?
+  quoteId                 String    @unique
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  quote                   Quote     @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}
+
+model QuoteTypeRule {
+  id                          String        @id @default(cuid())
+  quoteType                   QuoteTypeEnum
+  baseMarkup                  Float         @default(0.0)
+  riskMarkup                  Float         @default(0.0)
+  minimumMarkup               Float         @default(0.0)
+  allowConversion             Boolean       @default(false)
+  requiresNewQuoteNumber      Boolean       @default(true)
+  requiresInstallationPricing Boolean       @default(false)
+  requiresWarrantyAssessment  Boolean       @default(false)
+  requiresMandatoryApproval   Boolean       @default(false)
+  riskLevel                   RiskLevel     @default(MEDIUM)
+  warrantyRisk                Boolean       @default(false)
+  callbackRisk                Boolean       @default(false)
+  description                 String?
+  isActive                    Boolean       @default(true)
+  createdAt                   DateTime      @default(now())
+  updatedAt                   DateTime      @updatedAt
+}
+
+model ProductTypeRule {
+  id                             String      @id @default(cuid())
+  productType                    ProductType @unique
+  basePriceMultiplier            Float       @default(1.0)
+  complexityMarkup               Float       @default(0.0)
+  minimumLeadTimeWeeks           Int         @default(2)
+  maximumLeadTimeWeeks           Int         @default(12)
+  requiresDesignApproval         Boolean     @default(false)
+  requiresSupplierConfirmation   Boolean     @default(false)
+  requiresFabricationApproval    Boolean     @default(false)
+  allowsRushOrders               Boolean     @default(true)
+  requiresDetailedSpecifications Boolean     @default(false)
+  requiresDrawings               Boolean     @default(false)
+  requiresSupplierQuote          Boolean     @default(false)
+  requiresQualityAssurance       Boolean     @default(false)
+  riskLevel                      RiskLevel   @default(MEDIUM)
+  designRisk                     Boolean     @default(false)
+  supplierRisk                   Boolean     @default(false)
+  qualityRisk                    Boolean     @default(false)
+  timelineRisk                   Boolean     @default(false)
+  approvalStages                 Json?
+  escalationRules                Json?
+  description                    String?
+  isActive                       Boolean     @default(true)
+  createdAt                      DateTime    @default(now())
+  updatedAt                      DateTime    @updatedAt
+}
+
+model TeamMember {
+  id                   String   @id @default(cuid())
+  name                 String
+  email                String   @unique
+  role                 String
+  department           String?
+  canApproveQuotes     Boolean  @default(false)
+  canApproveJobs       Boolean  @default(false)
+  canOverrideApprovals Boolean  @default(false)
+  maxApprovalValue     Float?
+  emailNotifications   Boolean  @default(true)
+  smsNotifications     Boolean  @default(false)
+  isActive             Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Quote {
+  id                       String                   @id @default(cuid())
+  quoteNumber              String                   @unique
+  
+  // SFG Truth File v1.2.3 - Required Fields
+  baseNumber               String?                  // YYYY-NNNN (immutable, inherited from Enquiry)
+  prefix                   String                   @default("QUO") // ENQ|QUO|ORD|INV|DEL|PAID
+  sfgCustomer              String?                  // Customer name (required)
+  sfgProject               String?                  // Project name (required)
+  sfgLocation              String?                  // Location (required)
+  quoteProductType         String?                  // Product type (required)
+  sfgDeliveryType          String?                  // SupplyOnly|Collected|Supply&Install
+  
+  // Product Count Tracking (Truth File v1.2.3)
+  enqInitialCount          Int?                     // Inherited from enquiry
+  quoteRevCounts           Json?                    // Array of {rev, count, ts}
+  currentProductCount      Int?                     // Current product count for this quote
+  preparedCount            Int                      @default(0) // Prepared for delivery
+  deliveredCount           Int                      @default(0) // Actually delivered
+  collectedCount           Int                      @default(0) // Collected by customer
+  productCountLog          Json?                    // Array of ProductCountLogEntry
+  
+  // Folder Structure (Truth File v1.2.3)
+  canonicalPath            String?                  // Full canonical SharePoint path
+  monthShortcutPath        String?                  // Month shortcut path
+  
+  // Approved Documents Status (Truth File v1.2.3)
+  quotationApproved        Boolean                  @default(false) // 10a
+  purchaseOrderReceived    Boolean                  @default(false) // 10b
+  drawingApproved          Boolean                  @default(false) // 10c
+  approvedDocsComplete     Boolean                  @default(false) // All three present
+  
+  // Field Validation
+  missingFields            String[]                 @default([]) // List of MISSING required fields
+  dataCompleteness         Float                    @default(0.0) // Percentage 0-100
+  canConvertToOrder        Boolean                  @default(false) // Blocked if required fields MISSING
+  
+  revision                 Int                      @default(0)
+  customerName             String
+  projectName              String?
+  contactName              String?
+  productType              String?
+  quotedBy                 String?
+  quoteDate                DateTime                 @default(now())
+  dueDate                  DateTime?
+  value                    Float
+  revisedPrice             Float?
+  status                   QuoteStatus              @default(PENDING)
+  quoteType                String                   @default("Supply & Fit")
+  quoteTypeEnum            QuoteTypeEnum            @default(SUPPLY_AND_INSTALL)
+  baseValue                Float?
+  markup                   Float?
+  markupAmount             Float?
+  riskAssessment           Json?
+  grossValue               Float?
+  netValue                 Float?
+  vatRate                  Float                    @default(20.0)
+  vatAmount                Float?
+  isNetPricing             Boolean                  @default(true)
+  priceDisplayMode         PriceDisplayMode         @default(NET_ONLY)
+  quotedDate               DateTime?
+  aiGeneratedDescription   String?
+  projectComplexity        ProjectComplexity        @default(MODERATE)
+  estimatedTimelineWeeks   Int?
+  hasVariations            Boolean                  @default(false)
+  variationsValue          Float?
+  originalQuoteId          String?
+  quoteApprovalStatus      ApprovalStatusType       @default(PENDING_APPROVAL)
+  drawingApprovalStatus    ApprovalStatusType       @default(NOT_REQUIRED)
+  variationApprovalStatus  ApprovalStatusType       @default(NOT_REQUIRED)
+  extraItemsApprovalStatus ApprovalStatusType       @default(NOT_REQUIRED)
+  expiryDate               DateTime?
+  isExpired                Boolean                  @default(false)
+  autoExpired              Boolean                  @default(false)
+  onHoldDate               DateTime?
+  onHoldExpiry             DateTime?
+  lastStatusChange         DateTime?
+  buildingType             BuildingType?
+  l2bComplianceRequired    Boolean                  @default(false)
+  l2bComplianceStatus      L2BComplianceStatus      @default(NOT_ASSESSED)
+  buildingDescription      String?
+  buildingUsage            String?
+  floorArea                Float?
+  buildingAge              String?
+  conservationArea         Boolean                  @default(false)
+  listedBuilding           Boolean                  @default(false)
+  l2bExemptionReason       String?
+  l2bAssessmentNotes       String?
+  l2bComplianceDocuments   String[]
+  systemSupplier           SystemSupplier?
+  supplierSpecific         Boolean                  @default(false)
+  supplierPricing          Json?
+  supplierNotes            String?
+  supplierMarkup           Float?
+  hasRollerShutters        Boolean                  @default(false)
+  rollerShutterType        String?
+  hasPowderCoating         Boolean                  @default(false)
+  powderCoatingCost        Float?
+  hasBuyInItems            Boolean                  @default(false)
+  buyInItemsMarkup         Float?
+  buyInDeliveryCost        Float?
+  glassTypeSeparate        Boolean                  @default(false)
+  productTypeEnum          ProductType              @default(STANDARD_FABRICATION)
+  designComplexity         String?
+  leadTimeWeeks            Int?
+  designRequirements       Json?
+  supplierInfo             Json?
+  fabricationNotes         String?
+  approvalStatus           ApprovalStatus           @default(PENDING)
+  requiresApproval         Boolean                  @default(true)
+  canSelfApprove           Boolean                  @default(true)
+  sentToCustomer           Boolean                  @default(false)
+  hasLineItems             Boolean                  @default(false)
+  requiresSurvey           Boolean                  @default(false)
+  surveyRequested          Boolean                  @default(false)
+  surveyScheduled          Boolean                  @default(false)
+  surveyDate               DateTime?
+  surveyTime               String?
+  surveyNotes              String?
+  surveyStatus             SurveyStatus             @default(NOT_REQUIRED)
+  installationAddress      String?
+  distanceFromBase         Float?
+  surveyTravelCost         Float?
+  surveyIsFree             Boolean                  @default(false)
+  surveyTotalCost          Float?
+  assignedSurveyor         String?
+  surveyorNotes            String?
+  surveyCompleted          Boolean                  @default(false)
+  surveyCompletedDate      DateTime?
+  hasGlassProducts         Boolean                  @default(false)
+  totalGlassWeight         Float?
+  totalGlassArea           Float?
+  maxPanelWeight           Float?
+  glassWeightNotes         String?
+  recommendedStaff         Int?
+  recommendedVehicles      Int?
+  requiresMechanicalAid    Boolean                  @default(false)
+  mechanicalAidType        String?
+  liftingMethod            String?
+  laborComplexity          String?
+  safetyAlerts             String[]
+  accessRequirements       String?
+  installationTime         Int?
+  enquiryId                String?
+  customerId               String?
+  createdAt                DateTime                 @default(now())
+  updatedAt                DateTime                 @updatedAt
+  aiProjectDescription     AIProjectDescription?
+  activities               Activity[]
+  approvals                Approval[]
+  creditChecks             CreditCheck[]
+  customerCommunications   CustomerCommunication[]
+  documents                Document[]
+  specifications           GlassSpecification[]
+  invoices                 Invoice[]
+  jobs                     Job[]
+  projectVariations        ProjectVariation[]
+  customer                 Customer?                @relation(fields: [customerId], references: [id])
+  enquiry                  Enquiry?                 @relation(fields: [enquiryId], references: [id])
+  parentQuote              Quote?                   @relation("QuoteRevisions", fields: [originalQuoteId], references: [id])
+  revisions                Quote[]                  @relation("QuoteRevisions")
+  expirationTracking       QuoteExpirationTracking?
+  glassWeightCalculations  QuoteGlassCalculation[]
+  lineItems                QuoteItem[]
+  validation               QuoteValidation?
+  surveyBooking            SurveyBooking?
+  teamsMessages            TeamsMessage[]
+  whatsappMessages         WhatsAppMessage[]
+}
+
+model Job {
+  id                     String                  @id @default(cuid())
+  jobNumber              String                  @unique
+  
+  // SFG Truth File v1.2.3 - Required Fields
+  baseNumber             String?                 // YYYY-NNNN (immutable, inherited from Quote)
+  prefix                 String                  @default("ORD") // ENQ|QUO|ORD|INV|DEL|PAID
+  sfgCustomer            String?                 // Customer name (required)
+  sfgProject             String?                 // Project name (required)
+  sfgLocation            String?                 // Location (required)
+  jobProductType         String?                 // Product type (required)
+  sfgDeliveryType        String?                 // SupplyOnly|Collected|Supply&Install
+  
+  // Product Count Tracking (Truth File v1.2.3)
+  enqInitialCount        Int?                    // Inherited from enquiry
+  currentProductCount    Int?                    // Current product count
+  preparedCount          Int                     @default(0) // Prepared for delivery
+  deliveredCount         Int                     @default(0) // Actually delivered
+  collectedCount         Int                     @default(0) // Collected by customer
+  productCountLog        Json?                   // Array of ProductCountLogEntry
+  
+  // Folder Structure (Truth File v1.2.3)
+  canonicalPath          String?                 // Full canonical SharePoint path
+  monthShortcutPath      String?                 // Month shortcut path
+  folderMovedToCompleted Boolean                 @default(false) // Moved to Completed root
+  completedMoveDate      DateTime?               // When moved to Completed
+  
+  // Approved Documents Status (Truth File v1.2.3)
+  quotationApproved      Boolean                 @default(false) // 10a
+  purchaseOrderReceived  Boolean                 @default(false) // 10b
+  drawingApproved        Boolean                 @default(false) // 10c
+  approvedDocsComplete   Boolean                 @default(false) // All three present
+  approvedDocsLocked     Boolean                 @default(false) // Locked once populated
+  
+  // Drawing Workflow Stage (Truth File v1.2.3)
+  drawingWorkflowStage   String?                 // 05a|05b|05c|05d|05e|05f|05g|10c
+  
+  // Field Validation
+  missingFields          String[]                @default([]) // List of MISSING required fields
+  dataCompleteness       Float                   @default(0.0) // Percentage 0-100
+  
+  orderNumber            String?
+  poReceivedDate         DateTime?
+  client                 String
+  site                   String?
+  description            String
+  value                  Float?
+  status                 JobStatus               @default(APPROVED)
+  priority               Priority                @default(MEDIUM)
+  approvalStatus         ApprovalStatus          @default(PENDING)
+  quoteId                String?
+  customerId             String?
+  drawingStatus          String                  @default("PENDING")
+  glassOrderStatus       String                  @default("PENDING")
+  cutStatus              String                  @default("PENDING")
+  preparedStatus         String                  @default("PENDING")
+  coatingStatus          String                  @default("PENDING")
+  assemblyStatus         String                  @default("PENDING")
+  installStatus          String                  @default("PENDING")
+  fabricationDate        DateTime?
+  installationDate       DateTime?
+  completionDate         DateTime?
+  teamRequirement        Int                     @default(1)
+  vanRequirement         Int                     @default(1)
+  estimatedDays          Int                     @default(1)
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  aiProjectDescription   AIProjectDescription?
+  activities             Activity[]
+  approvals              Approval[]
+  customerCommunications CustomerCommunication[]
+  deliveryTemplates      DeliveryTemplate[]
+  documents              Document[]
+  drawingApprovals       DrawingApproval[]
+  fabricationWorkflow    FabricationWorkflow?
+  specifications         GlassSpecification[]
+  installationSchedule   InstallationSchedule?
+  invoices               Invoice[]
+  customer               Customer?               @relation(fields: [customerId], references: [id])
+  quote                  Quote?                  @relation(fields: [quoteId], references: [id])
+  communications         JobCommunication[]
+  schedules              JobSchedule[]
+  workflowSteps          JobWorkflowStep[]
+  materialsAnalysis      MaterialsAnalysis[]
+  orders                 Order[]
+  orderItems             OrderItem[]
+  projectVariations      ProjectVariation[]
+  qualityChecks          QualityCheck[]
+  supplierOrders         SupplierOrder[]
+  teamsMessages          TeamsMessage[]
+  whatsappMessages       WhatsAppMessage[]
+  workflowNavigations    WorkflowNavigation[]
+}
+
+model JobCommunication {
+  id                String                 @id @default(cuid())
+  communicationType CommunicationType
+  direction         CommunicationDirection
+  subject           String?
+  message           String
+  method            ContactMethod
+  fromUser          String?
+  toCustomer        String?
+  ccUsers           String[]
+  status            CommunicationStatus    @default(SENT)
+  readAt            DateTime?
+  respondedAt       DateTime?
+  attachments       String[]
+  documentIds       String[]
+  requiresFollowUp  Boolean                @default(false)
+  followUpDate      DateTime?
+  followUpNotes     String?
+  templateUsed      String?
+  isAutomated       Boolean                @default(false)
+  jobId             String
+  workflowStepId    String?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  job               Job                    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  workflowStep      JobWorkflowStep?       @relation(fields: [workflowStepId], references: [id])
+}
+
+model DrawingApproval {
+  id                    String                @id @default(cuid())
+  drawingName           String
+  drawingVersion        String                @default("1.0")
+  drawingType           DrawingType
+  fileUrl               String?
+  fileSize              Int?
+  status                DrawingApprovalStatus @default(UPLOADED)
+  currentStage          DrawingApprovalStage  @default(CUSTOMER_UPLOAD)
+  customerApproved      Boolean               @default(false)
+  customerApprovedAt    DateTime?
+  customerApprovedBy    String?
+  customerNotes         String?
+  technicalReviewed     Boolean               @default(false)
+  technicalReviewedAt   DateTime?
+  technicalReviewedBy   String?
+  technicalNotes        String?
+  productionReviewed    Boolean               @default(false)
+  productionReviewedAt  DateTime?
+  productionReviewedBy  String?
+  productionNotes       String?
+  cuttingListVerified   Boolean               @default(false)
+  cuttingListVerifiedAt DateTime?
+  cuttingListVerifiedBy String?
+  cuttingListNotes      String?
+  glassSizesVerified    Boolean               @default(false)
+  glassSizesVerifiedAt  DateTime?
+  glassSizesVerifiedBy  String?
+  glassSizesNotes       String?
+  finalApproved         Boolean               @default(false)
+  finalApprovedAt       DateTime?
+  finalApprovedBy       String?
+  finalNotes            String?
+  previousVersionId     String?
+  isLatestVersion       Boolean               @default(true)
+  rejectionReason       String?
+  rejectedAt            DateTime?
+  rejectedBy            String?
+  jobId                 String
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  job                   Job                   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  materialsAnalysis     MaterialsAnalysis[]
+}
+
+model MaterialsAnalysis {
+  id                      String                  @id @default(cuid())
+  analysisType            MaterialsAnalysisType   @default(DRAWING_BASED)
+  status                  MaterialsAnalysisStatus @default(PENDING)
+  drawingAnalyzed         Boolean                 @default(false)
+  drawingAnalyzedAt       DateTime?
+  drawingAnalyzedBy       String?
+  materialsExtracted      Boolean                 @default(false)
+  materialsExtractedAt    DateTime?
+  materialsData           Json?
+  costAnalyzed            Boolean                 @default(false)
+  costAnalyzedAt          DateTime?
+  totalMaterialsCost      Float?
+  costBreakdown           Json?
+  suppliersMatched        Boolean                 @default(false)
+  suppliersMatchedAt      DateTime?
+  supplierRecommendations Json?
+  stockChecked            Boolean                 @default(false)
+  stockCheckedAt          DateTime?
+  stockAvailability       Json?
+  leadTimesCalculated     Boolean                 @default(false)
+  leadTimesCalculatedAt   DateTime?
+  estimatedLeadTime       Int?
+  leadTimeBreakdown       Json?
+  approved                Boolean                 @default(false)
+  approvedAt              DateTime?
+  approvedBy              String?
+  approvalNotes           String?
+  jobId                   String
+  drawingApprovalId       String?
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
+  drawingApproval         DrawingApproval?        @relation(fields: [drawingApprovalId], references: [id])
+  job                     Job                     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  orderItems              OrderItem[]
+}
+
+model OrderItem {
+  id                    String             @id @default(cuid())
+  itemName              String
+  itemDescription       String?
+  itemCode              String?
+  category              String?
+  specifications        Json
+  quantity              Float
+  unit                  String             @default("PCS")
+  unitPrice             Float?
+  totalPrice            Float?
+  currency              String             @default("GBP")
+  preferredSupplier     String?
+  supplierItemCode      String?
+  supplierLeadTime      Int?
+  status                OrderItemStatus    @default(PENDING)
+  ordered               Boolean            @default(false)
+  orderedAt             DateTime?
+  delivered             Boolean            @default(false)
+  deliveredAt           DateTime?
+  qualityGrade          String?
+  complianceNotes       String?
+  certificationRequired Boolean            @default(false)
+  jobId                 String
+  materialsAnalysisId   String?
+  supplierOrderId       String?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  job                   Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  materialsAnalysis     MaterialsAnalysis? @relation(fields: [materialsAnalysisId], references: [id])
+  supplierOrder         SupplierOrder?     @relation(fields: [supplierOrderId], references: [id])
+}
+
+model Supplier {
+  id                String          @id @default(cuid())
+  name              String
+  companyName       String?
+  contactPerson     String?
+  email             String?
+  phone             String?
+  website           String?
+  address           String?
+  city              String?
+  postcode          String?
+  country           String          @default("UK")
+  vatNumber         String?
+  companyNumber     String?
+  categories        String[]
+  specializations   String[]
+  certifications    String[]
+  performanceRating Float?
+  deliveryRating    Float?
+  qualityRating     Float?
+  priceRating       Float?
+  paymentTerms      String?
+  deliveryTerms     String?
+  minimumOrder      Float?
+  isActive          Boolean         @default(true)
+  isPreferred       Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  supplierOrders    SupplierOrder[]
+}
+
+model SupplierOrder {
+  id                   String              @id @default(cuid())
+  orderNumber          String              @unique
+  orderDate            DateTime            @default(now())
+  requiredDate         DateTime?
+  supplierId           String
+  status               SupplierOrderStatus @default(DRAFT)
+  subtotal             Float?
+  vatAmount            Float?
+  totalAmount          Float?
+  currency             String              @default("GBP")
+  deliveryAddress      String?
+  deliveryInstructions String?
+  estimatedDelivery    DateTime?
+  actualDelivery       DateTime?
+  paymentTerms         String?
+  deliveryTerms        String?
+  specialInstructions  String?
+  emailSent            Boolean             @default(false)
+  emailSentAt          DateTime?
+  emailTemplate        String?
+  requiresApproval     Boolean             @default(true)
+  approved             Boolean             @default(false)
+  approvedAt           DateTime?
+  approvedBy           String?
+  firstApproval        Boolean             @default(false)
+  firstApprovedAt      DateTime?
+  firstApprovedBy      String?
+  secondApproval       Boolean             @default(false)
+  secondApprovedAt     DateTime?
+  secondApprovedBy     String?
+  orderValue           Float?
+  requiresTwoApprovals Boolean             @default(false)
+  canAutoApprove       Boolean             @default(false)
+  jobId                String
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  orderItems           OrderItem[]
+  job                  Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  supplier             Supplier            @relation(fields: [supplierId], references: [id])
+}
+
+model JobWorkflowStep {
+  id                   String             @id @default(cuid())
+  stepName             String
+  stepType             WorkflowStepType
+  stepOrder            Int
+  status               WorkflowStepStatus @default(PENDING)
+  startedAt            DateTime?
+  completedAt          DateTime?
+  dueDate              DateTime?
+  assignedTo           String?
+  assignedTeam         String?
+  progressPercent      Int                @default(0)
+  notes                String?
+  dependsOn            String[]
+  blockedBy            String[]
+  requiresApproval     Boolean            @default(false)
+  approved             Boolean            @default(false)
+  approvedBy           String?
+  approvedAt           DateTime?
+  requiresQualityCheck Boolean            @default(false)
+  qualityCheckPassed   Boolean            @default(false)
+  jobId                String
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  communications       JobCommunication[]
+  job                  Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  qualityChecks        QualityCheck[]
+}
+
+model QualityCheck {
+  id                   String             @id @default(cuid())
+  checkType            QualityCheckType
+  checkName            String
+  description          String?
+  status               QualityCheckStatus @default(PENDING)
+  primaryCheckerId     String?
+  secondaryCheckerId   String?
+  primaryCheckPassed   Boolean            @default(false)
+  primaryCheckAt       DateTime?
+  primaryCheckNotes    String?
+  secondaryCheckPassed Boolean            @default(false)
+  secondaryCheckAt     DateTime?
+  secondaryCheckNotes  String?
+  overallPassed        Boolean            @default(false)
+  completedAt          DateTime?
+  errorsFound          Json?
+  correctiveActions    Json?
+  jobId                String
+  workflowStepId       String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  job                  Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  primaryChecker       Employee?          @relation("PrimaryChecker", fields: [primaryCheckerId], references: [id])
+  secondaryChecker     Employee?          @relation("SecondaryChecker", fields: [secondaryCheckerId], references: [id])
+  workflowStep         JobWorkflowStep?   @relation(fields: [workflowStepId], references: [id])
+}
+
+model Enquiry {
+  id                     String                  @id @default(cuid())
+  enquiryNumber          String                  @unique
+  
+  // SFG Truth File v1.2.3 - Required Fields
+  baseNumber             String?                 // YYYY-NNNN (immutable)
+  prefix                 String                  @default("ENQ") // ENQ|QUO|ORD|INV|DEL|PAID
+  sfgCustomer            String?                 // Customer name (required)
+  sfgProject             String?                 // Project name (required)
+  sfgLocation            String?                 // Location (required)
+  sfgProductType         String?                 // Product type (required)
+  sfgDeliveryType        String?                 // SupplyOnly|Collected|Supply&Install
+  
+  // Product Count Tracking (Truth File v1.2.3)
+  enqInitialCount        Int?                    // Initial product count at enquiry
+  currentProductCount    Int?                    // Current product count
+  productCountLog        Json?                   // Array of ProductCountLogEntry
+  
+  // Folder Structure (Truth File v1.2.3)
+  canonicalPath          String?                 // Full canonical SharePoint path
+  monthShortcutPath      String?                 // Month shortcut path
+  
+  // Field Validation
+  missingFields          String[]                @default([]) // List of MISSING required fields
+  dataCompleteness       Float                   @default(0.0) // Percentage 0-100
+  
+  customerName           String
+  contactName            String?
+  email                  String?
+  phone                  String?
+  company                String?
+  projectName            String?
+  description            String?
+  source                 String                  @default("Direct")
+  status                 EnquiryStatus           @default(NEW)
+  priority               Priority                @default(MEDIUM)
+  requiresSurvey         Boolean                 @default(false)
+  surveyRequested        Boolean                 @default(false)
+  surveyScheduled        Boolean                 @default(false)
+  surveyDate             DateTime?
+  surveyNotes            String?
+  buildingType           BuildingType?
+  l2bComplianceRequired  Boolean                 @default(false)
+  l2bComplianceStatus    L2BComplianceStatus     @default(NOT_ASSESSED)
+  buildingDescription    String?
+  buildingUsage          String?
+  floorArea              Float?
+  buildingAge            String?
+  conservationArea       Boolean                 @default(false)
+  listedBuilding         Boolean                 @default(false)
+  l2bExemptionReason     String?
+  l2bAssessmentNotes     String?
+  systemSupplier         SystemSupplier?
+  supplierSpecific       Boolean                 @default(false)
+  supplierNotes          String?
+  customerId             String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  aiProjectDescription   AIProjectDescription?
+  activities             Activity[]
+  approvals              Approval[]
+  customerCommunications CustomerCommunication[]
+  documents              Document[]
+  customer               Customer?               @relation(fields: [customerId], references: [id])
+  specifications         GlassSpecification[]
+  quotes                 Quote[]
+}
+
+model GlassType {
+  id                String               @id @default(cuid())
+  name              String               @unique
+  category          GlassCategory
+  description       String?
+  thickness         Float[]
+  uValue            Float?
+  gValue            Float?
+  lightTransmission Float?
+  soundReduction    Float?
+  isLaminated       Boolean              @default(false)
+  isToughened       Boolean              @default(false)
+  isFireRated       Boolean              @default(false)
+  isSecurityGlass   Boolean              @default(false)
+  isLowE            Boolean              @default(false)
+  securityRating    SecurityRating?
+  fireRating        String?
+  standards         String[]
+  basePrice         Float?
+  pricePerSqm       Float?
+  leadTimeWeeks     Int                  @default(2)
+  isActive          Boolean              @default(true)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  finishOptions     GlassFinishOption[]
+  specifications    GlassSpecification[]
+}
+
+model SecurityStandard {
+  id                String               @id @default(cuid())
+  standardCode      String               @unique
+  name              String
+  description       String?
+  category          SecurityCategory
+  requirements      Json
+  testMethods       String[]
+  certificationBody String?
+  securityLevels    Json
+  minimumRating     SecurityRating
+  version           String?
+  effectiveDate     DateTime?
+  expiryDate        DateTime?
+  isActive          Boolean              @default(true)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  complianceRecords SecurityCompliance[]
+  specifications    GlassSpecification[] @relation("GlassSpecificationToSecurityStandard")
+}
+
+model FinishOption {
+  id                String               @id @default(cuid())
+  name              String
+  category          FinishCategory
+  material          MaterialType
+  description       String?
+  colorCode         String?
+  texture           String?
+  finish            String?
+  durability        String?
+  weatherResistance String?
+  uvResistance      String?
+  maintenanceReq    String?
+  basePrice         Float?
+  priceMultiplier   Float                @default(1.0)
+  leadTimeWeeks     Int                  @default(1)
+  isStandard        Boolean              @default(true)
+  isActive          Boolean              @default(true)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  glassFinishes     GlassFinishOption[]
+  specifications    GlassSpecification[]
+}
+
+model GlassFinishOption {
+  id              String       @id @default(cuid())
+  glassTypeId     String
+  finishOptionId  String
+  isCompatible    Boolean      @default(true)
+  priceAdjustment Float        @default(0.0)
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  finishOption    FinishOption @relation(fields: [finishOptionId], references: [id])
+  glassType       GlassType    @relation(fields: [glassTypeId], references: [id])
+
+  @@unique([glassTypeId, finishOptionId])
+}
+
+model SpecificationTemplate {
+  id                   String               @id @default(cuid())
+  name                 String
+  category             String
+  description          String?
+  defaultGlassType     String?
+  defaultFinish        String?
+  securityRequirements Json?
+  performanceTargets   Json?
+  validationRules      Json
+  requiredFields       String[]
+  usageCount           Int                  @default(0)
+  isActive             Boolean              @default(true)
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  specifications       GlassSpecification[]
+}
+
+model GlassSpecification {
+  id                  String                 @id @default(cuid())
+  specificationNumber String                 @unique
+  name                String?
+  description         String?
+  glassTypeId         String
+  thickness           Float
+  finishOptionId      String?
+  width               Float?
+  height              Float?
+  area                Float?
+  quantity            Int                    @default(1)
+  targetUValue        Float?
+  targetGValue        Float?
+  acousticRequirement Float?
+  securityRating      SecurityRating?
+  specialRequirements String?
+  complianceStatus    SpecComplianceStatus   @default(PENDING)
+  validationNotes     String?
+  templateId          String?
+  unitPrice           Float?
+  totalPrice          Float?
+  priceValidUntil     DateTime?
+  isValidated         Boolean                @default(false)
+  validatedBy         String?
+  validatedAt         DateTime?
+  enquiryId           String?
+  quoteId             String?
+  jobId               String?
+  customerId          String?
+  customerSpecId      String?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  customer            Customer?              @relation(fields: [customerId], references: [id])
+  customerSpec        CustomerSpecification? @relation(fields: [customerSpecId], references: [id])
+  enquiry             Enquiry?               @relation(fields: [enquiryId], references: [id])
+  finishOption        FinishOption?          @relation(fields: [finishOptionId], references: [id])
+  glassType           GlassType              @relation(fields: [glassTypeId], references: [id])
+  job                 Job?                   @relation(fields: [jobId], references: [id])
+  quote               Quote?                 @relation(fields: [quoteId], references: [id])
+  template            SpecificationTemplate? @relation(fields: [templateId], references: [id])
+  complianceRecords   SecurityCompliance[]
+  securityStandards   SecurityStandard[]     @relation("GlassSpecificationToSecurityStandard")
+}
+
+model SecurityCompliance {
+  id                String               @id @default(cuid())
+  standardId        String
+  specificationId   String
+  status            SpecComplianceStatus @default(PENDING)
+  rating            SecurityRating?
+  checkedBy         String?
+  checkedAt         DateTime?
+  validUntil        DateTime?
+  requirements      Json?
+  testResults       Json?
+  notes             String?
+  certificateNumber String?
+  certificateIssued DateTime?
+  certificateExpiry DateTime?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  specification     GlassSpecification   @relation(fields: [specificationId], references: [id])
+  standard          SecurityStandard     @relation(fields: [standardId], references: [id])
+
+  @@unique([standardId, specificationId])
+}
+
+model CustomerSpecification {
+  id               String               @id @default(cuid())
+  customerId       String
+  projectName      String?
+  projectType      String?
+  requirements     Json
+  preferences      Json?
+  constraints      Json?
+  status           SpecificationStatus  @default(DRAFT)
+  priority         Priority             @default(MEDIUM)
+  requiresApproval Boolean              @default(false)
+  approvedBy       String?
+  approvedAt       DateTime?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  customer         Customer             @relation(fields: [customerId], references: [id])
+  specifications   GlassSpecification[]
+}
+
+model SecurityTier {
+  id                      String     @id @default(cuid())
+  tierId                  Int        @unique
+  tierName                String     @unique
+  description             String
+  hasFullSystemAccess     Boolean    @default(false)
+  hasFinancialAccess      Boolean    @default(false)
+  hasDepartmentAccess     Boolean    @default(false)
+  hasTeamManagementAccess Boolean    @default(false)
+  hasBasicAccess          Boolean    @default(true)
+  canApproveQuotes        Boolean    @default(false)
+  canApproveJobs          Boolean    @default(false)
+  canManageSchedule       Boolean    @default(false)
+  canViewReports          Boolean    @default(false)
+  canManageUsers          Boolean    @default(false)
+  maxApprovalValue        Float?
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt
+  employees               Employee[]
+}
+
+model Employee {
+  id                       String                     @id @default(cuid())
+  employeeNumber           String?                    @unique
+  firstName                String
+  lastName                 String
+  fullName                 String
+  email                    String                     @unique
+  phone                    String?
+  role                     String
+  department               String?
+  managerId                String?
+  securityTierId           String
+  scheduleColorCode        String?
+  scheduleNickname         String?
+  accessDetails            String?
+  canLoginToSystem         Boolean                    @default(true)
+  passwordHash             String?
+  lastLoginAt              DateTime?
+  preferredContactMethod   ContactMethod              @default(EMAIL)
+  emailNotifications       Boolean                    @default(true)
+  smsNotifications         Boolean                    @default(false)
+  skills                   String[]
+  certifications           String[]
+  isTeamLeader             Boolean                    @default(false)
+  canManageTeam            Boolean                    @default(false)
+  isActive                 Boolean                    @default(true)
+  startDate                DateTime?
+  endDate                  DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  manager                  Employee?                  @relation("EmployeeHierarchy", fields: [managerId], references: [id])
+  directReports            Employee[]                 @relation("EmployeeHierarchy")
+  securityTier             SecurityTier               @relation(fields: [securityTierId], references: [id])
+  fabricationAssignments   FabricationAssignment[]
+  stepExecutions           FabricationStepExecution[] @relation("AssignedEmployee")
+  helperStepExecutions     FabricationStepExecution[] @relation("HelperAssignment")
+  leadFabricationWorkflows FabricationWorkflow[]      @relation("LeadFabricator")
+  helperAssignments        HelperAssignment[]
+  installationAssignments  InstallationAssignment[]
+  teamLeaderInstallations  InstallationSchedule[]     @relation("TeamLeader")
+  qualityChecksPerformed   QualityCheck[]             @relation("PrimaryChecker")
+  qualityChecksVerified    QualityCheck[]             @relation("SecondaryChecker")
+  resourceAllocations      ResourceAllocation[]
+  scheduleBlocks           ScheduleBlock[]
+  scheduleColor            ScheduleColor?             @relation("ScheduleColorAssignment")
+  teamAssignments          TeamAssignment[]
+}
+
+model ScheduleColor {
+  id                String    @id @default(cuid())
+  colorName         String    @unique
+  colorCode         String    @unique
+  staffNickname     String    @unique
+  employeeId        String?   @unique
+  canAssignJobs     Boolean   @default(true)
+  canAssignVans     Boolean   @default(true)
+  priorityLevel     Int       @default(1)
+  activeAssignments Int       @default(0)
+  totalAssignments  Int       @default(0)
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  assignedEmployee  Employee? @relation("ScheduleColorAssignment", fields: [employeeId], references: [id])
+}
+
+model TeamAssignment {
+  id              String    @id @default(cuid())
+  employeeId      String
+  teamId          String
+  role            TeamRole  @default(MEMBER)
+  isPrimary       Boolean   @default(false)
+  startDate       DateTime  @default(now())
+  endDate         DateTime?
+  canScheduleJobs Boolean   @default(false)
+  canAssignTasks  Boolean   @default(false)
+  canApproveWork  Boolean   @default(false)
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  employee        Employee  @relation(fields: [employeeId], references: [id])
+  team            Team      @relation(fields: [teamId], references: [id])
+
+  @@unique([employeeId, teamId])
+}
+
+model FabricationWorkflowTemplate {
+  id                                 String                @id @default(cuid())
+  templateName                       String                @unique
+  description                        String?
+  isDefault                          Boolean               @default(false)
+  totalSteps                         Int                   @default(14)
+  estimatedHours                     Float                 @default(8.58)
+  estimatedHoursWithHelper           Float                 @default(6.86)
+  helperTimeReduction                Float                 @default(20.0)
+  helperCostIncrease                 Float                 @default(33.0)
+  powderCoatingRequiresTwoOperatives Boolean               @default(true)
+  isActive                           Boolean               @default(true)
+  createdAt                          DateTime              @default(now())
+  updatedAt                          DateTime              @updatedAt
+  steps                              FabricationStep[]
+  workflows                          FabricationWorkflow[]
+}
+
+model FabricationStep {
+  id                    String                      @id @default(cuid())
+  templateId            String
+  stepOrder             Int
+  stepName              String
+  description           String?
+  standardTimeHours     Float
+  timeWithHelperHours   Float?
+  canUseHelper          Boolean                     @default(true)
+  primaryRole           String
+  requiresTwoOperatives Boolean                     @default(false)
+  dependsOnSteps        String[]
+  requiresQualityCheck  Boolean                     @default(false)
+  qualityCheckType      String?
+  notes                 String?
+  instructions          String?
+  createdAt             DateTime                    @default(now())
+  updatedAt             DateTime                    @updatedAt
+  template              FabricationWorkflowTemplate @relation(fields: [templateId], references: [id])
+
+  @@unique([templateId, stepOrder])
+}
+
+model FabricationWorkflow {
+  id                    String                      @id @default(cuid())
+  jobId                 String                      @unique
+  templateId            String
+  status                FabricationWorkflowStatus   @default(NOT_STARTED)
+  currentStep           Int                         @default(1)
+  startedAt             DateTime?
+  estimatedCompletionAt DateTime?
+  actualCompletionAt    DateTime?
+  totalHoursPlanned     Float?
+  totalHoursActual      Float?
+  helperAssigned        Boolean                     @default(false)
+  helperHours           Float                       @default(0)
+  helperCostImpact      Float                       @default(0)
+  isOverflow            Boolean                     @default(false)
+  overflowReason        String?
+  overflowPlannedDate   DateTime?
+  weekendWorkRequired   Boolean                     @default(false)
+  tempStaffRequired     Boolean                     @default(false)
+  leadFabricatorId      String?
+  createdAt             DateTime                    @default(now())
+  updatedAt             DateTime                    @updatedAt
+  assignments           FabricationAssignment[]
+  stepExecutions        FabricationStepExecution[]
+  job                   Job                         @relation(fields: [jobId], references: [id])
+  leadFabricator        Employee?                   @relation("LeadFabricator", fields: [leadFabricatorId], references: [id])
+  template              FabricationWorkflowTemplate @relation(fields: [templateId], references: [id])
+}
+
+model FabricationStepExecution {
+  id                   String              @id @default(cuid())
+  workflowId           String
+  stepOrder            Int
+  stepName             String
+  status               WorkflowStepStatus  @default(PENDING)
+  scheduledStartAt     DateTime?
+  actualStartAt        DateTime?
+  scheduledEndAt       DateTime?
+  actualEndAt          DateTime?
+  plannedHours         Float
+  actualHours          Float?
+  assignedEmployeeId   String?
+  helperAssigned       Boolean             @default(false)
+  helperEmployeeId     String?
+  qualityCheckRequired Boolean             @default(false)
+  qualityCheckPassed   Boolean             @default(false)
+  qualityNotes         String?
+  progressPercent      Int                 @default(0)
+  notes                String?
+  issues               String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  assignedEmployee     Employee?           @relation("AssignedEmployee", fields: [assignedEmployeeId], references: [id])
+  helperEmployee       Employee?           @relation("HelperAssignment", fields: [helperEmployeeId], references: [id])
+  workflow             FabricationWorkflow @relation(fields: [workflowId], references: [id])
+
+  @@unique([workflowId, stepOrder])
+}
+
+model FabricationAssignment {
+  id             String              @id @default(cuid())
+  workflowId     String
+  employeeId     String
+  assignmentType FabricationRole     @default(PRIMARY_FABRICATOR)
+  startDate      DateTime            @default(now())
+  endDate        DateTime?
+  plannedHours   Float
+  actualHours    Float               @default(0)
+  isHelper       Boolean             @default(false)
+  helperFor      String?
+  isActive       Boolean             @default(true)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  employee       Employee            @relation(fields: [employeeId], references: [id])
+  workflow       FabricationWorkflow @relation(fields: [workflowId], references: [id])
+}
+
+model InstallationSchedule {
+  id                    String                   @id @default(cuid())
+  jobId                 String                   @unique
+  scheduledDate         DateTime
+  scheduledTime         String?
+  estimatedDuration     Int                      @default(8)
+  totalGlassWeight      Float?
+  glassDetails          Json
+  requiredStaff         Int                      @default(1)
+  actualStaff           Int                      @default(1)
+  staffingNotes         String?
+  liftingMethod         String?
+  teamLeaderId          String?
+  vanId                 String?
+  routeGroup            String?
+  routeOrder            Int?
+  status                InstallationStatus       @default(SCHEDULED)
+  completedAt           DateTime?
+  safetyCheckCompleted  Boolean                  @default(false)
+  safetyNotes           String?
+  mechanicalAidRequired Boolean                  @default(false)
+  mechanicalAidType     String?
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+  glassCalculations     GlassWeightCalculation[]
+  assignments           InstallationAssignment[]
+  job                   Job                      @relation(fields: [jobId], references: [id])
+  teamLeader            Employee?                @relation("TeamLeader", fields: [teamLeaderId], references: [id])
+  van                   Van?                     @relation(fields: [vanId], references: [id])
+}
+
+model GlassWeightCalculation {
+  id                   String               @id @default(cuid())
+  scheduleId           String
+  panelName            String
+  length               Float
+  width                Float
+  thickness            Float
+  calculatedWeight     Float
+  staffRequired        Int
+  liftingMethod        String
+  safetyNotes          String?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  installationSchedule InstallationSchedule @relation(fields: [scheduleId], references: [id])
+}
+
+model InstallationAssignment {
+  id                   String               @id @default(cuid())
+  scheduleId           String
+  employeeId           String
+  assignmentType       InstallationRole     @default(INSTALLER)
+  isTeamLeader         Boolean              @default(false)
+  scheduledHours       Float                @default(8)
+  actualHours          Float                @default(0)
+  isActive             Boolean              @default(true)
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  employee             Employee             @relation(fields: [employeeId], references: [id])
+  installationSchedule InstallationSchedule @relation(fields: [scheduleId], references: [id])
+}
+
+model ResourceAllocation {
+  id                 String       @id @default(cuid())
+  employeeId         String
+  allocationType     ResourceType
+  allocationDate     DateTime
+  startTime          DateTime
+  endTime            DateTime
+  totalHours         Float
+  jobId              String?
+  projectName        String?
+  description        String?
+  isHelper           Boolean      @default(false)
+  primaryEmployeeId  String?
+  isOverflow         Boolean      @default(false)
+  isWeekendWork      Boolean      @default(false)
+  isTempStaff        Boolean      @default(false)
+  standardRate       Float?
+  helperRate         Float?
+  totalCost          Float?
+  plannedAdvanceDays Int          @default(5)
+  isActive           Boolean      @default(true)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  employee           Employee     @relation(fields: [employeeId], references: [id])
+}
+
+model HelperAssignment {
+  id                String       @id @default(cuid())
+  helperEmployeeId  String
+  primaryEmployeeId String
+  assignmentDate    DateTime
+  jobId             String?
+  workType          String
+  originalHours     Float
+  reducedHours      Float
+  timeSaved         Float
+  originalCost      Float
+  helperCost        Float
+  totalCostImpact   Float
+  reason            String
+  approvedBy        String
+  approvedAt        DateTime     @default(now())
+  status            HelperStatus @default(ASSIGNED)
+  completedAt       DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  helperEmployee    Employee     @relation(fields: [helperEmployeeId], references: [id])
+}
+
+model ScheduleBlock {
+  id              String              @id @default(cuid())
+  employeeId      String
+  blockDate       DateTime
+  startTime       String
+  endTime         String
+  blockType       ScheduleBlockType
+  colorCode       String
+  displayText     String
+  jobId           String?
+  taskDescription String?
+  priority        Priority            @default(MEDIUM)
+  status          ScheduleBlockStatus @default(SCHEDULED)
+  completedAt     DateTime?
+  notes           String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  employee        Employee            @relation(fields: [employeeId], references: [id])
+}
+
+model ProductionPipelineSnapshot {
+  id                     String          @id @default(cuid())
+  snapshotDate           DateTime        @default(now())
+  periodType             AnalyticsPeriod @default(DAILY)
+  enquiriesCount         Int             @default(0)
+  quotesCount            Int             @default(0)
+  approvedJobsCount      Int             @default(0)
+  fabricationCount       Int             @default(0)
+  installationCount      Int             @default(0)
+  completedCount         Int             @default(0)
+  enquiriesValue         Float           @default(0)
+  quotesValue            Float           @default(0)
+  approvedJobsValue      Float           @default(0)
+  fabricationValue       Float           @default(0)
+  installationValue      Float           @default(0)
+  completedValue         Float           @default(0)
+  enquiryToQuoteRate     Float           @default(0)
+  quoteToJobRate         Float           @default(0)
+  jobCompletionRate      Float           @default(0)
+  totalRevenue           Float           @default(0)
+  totalCosts             Float           @default(0)
+  grossProfit            Float           @default(0)
+  profitMargin           Float           @default(0)
+  laborCosts             Float           @default(0)
+  materialCosts          Float           @default(0)
+  overheadCosts          Float           @default(0)
+  laborHours             Float           @default(0)
+  fabricationHours       Float           @default(0)
+  installationHours      Float           @default(0)
+  laborCostPerHour       Float           @default(0)
+  fabricationEfficiency  Float           @default(0)
+  installationEfficiency Float           @default(0)
+  createdAt              DateTime        @default(now())
+}
+
+model QuoteExpirationTracking {
+  id                     String      @id @default(cuid())
+  quoteId                String      @unique
+  originalStatus         QuoteStatus
+  expirationDate         DateTime
+  wasAutoExpired         Boolean     @default(false)
+  expiredAt              DateTime?
+  wasOnHold              Boolean     @default(false)
+  onHoldStartDate        DateTime?
+  onHoldEndDate          DateTime?
+  autoRevertDate         DateTime?
+  wasAutoReverted        Boolean     @default(false)
+  expirationWarningsSent Int         @default(0)
+  lastWarningDate        DateTime?
+  finalNotificationSent  Boolean     @default(false)
+  statusChanges          Json
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  quote                  Quote       @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}
+
+model DashboardMetrics {
+  id                  String              @id @default(cuid())
+  metricDate          DateTime            @default(now())
+  metricType          DashboardMetricType
+  dailyValue          Float?
+  weeklyValue         Float?
+  monthlyValue        Float?
+  quarterlyValue      Float?
+  yearlyValue         Float?
+  targetValue         Float?
+  previousPeriodValue Float?
+  changePercent       Float?
+  trendDirection      TrendDirection      @default(STABLE)
+  breakdownData       Json?
+  isActive            Boolean             @default(true)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+}
+
+model PriceIntelligenceAlert {
+  id                String         @id @default(cuid())
+  alertType         PriceAlertType
+  severity          AlertSeverity  @default(MEDIUM)
+  title             String
+  message           String
+  actionRequired    Boolean        @default(false)
+  recommendedAction String?
+  quoteId           String?
+  jobId             String?
+  customerId        String?
+  productCategory   String?
+  currentPrice      Float?
+  recommendedPrice  Float?
+  priceVariance     Float?
+  marketPrice       Float?
+  status            AlertStatus    @default(ACTIVE)
+  acknowledgedBy    String?
+  acknowledgedAt    DateTime?
+  resolvedAt        DateTime?
+  isAutomated       Boolean        @default(true)
+  triggerCondition  String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+}
+
+model AIDescriptionSuggestion {
+  id                  String            @id @default(cuid())
+  originalDescription String
+  improvedDescription String
+  improvementType     AIImprovementType @default(GENERAL_ENHANCEMENT)
+  aiModel             String            @default("gpt-4")
+  processingTime      Float?
+  confidenceScore     Float?
+  entityType          String
+  entityId            String
+  productCategory     String?
+  customerType        String?
+  wasApplied          Boolean           @default(false)
+  appliedBy           String?
+  appliedAt           DateTime?
+  userRating          Int?
+  userFeedback        String?
+  hasResearchData     Boolean           @default(false)
+  researchSources     Json?
+  costSpecAccuracy    Float?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+}
+
+model GlassTypeConfiguration {
+  id                  String    @id @default(cuid())
+  configName          String
+  isDefault           Boolean   @default(false)
+  isActive            Boolean   @default(true)
+  matchingRules       Json
+  compatibilityMatrix Json
+  pricingRules        Json
+  markupRules         Json
+  usageCount          Int       @default(0)
+  lastUsed            DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model Invoice {
+  id                     String              @id @default(cuid())
+  invoiceNumber          String              @unique
+  invoiceDate            DateTime            @default(now())
+  dueDate                DateTime
+  customerId             String
+  customerType           CustomerFinanceType @default(TYPE_1)
+  subtotal               Float
+  vatAmount              Float               @default(0)
+  cisDeduction           Float               @default(0)
+  totalAmount            Float
+  invoiceFinanceEligible Boolean             @default(false)
+  drawdownAmount         Float?
+  financeFeesRate        Float               @default(3.967)
+  financeFeesAmount      Float?
+  paymentStatus          PaymentStatus       @default(PENDING)
+  paidAmount             Float               @default(0)
+  paymentDate            DateTime?
+  paymentMethod          String?
+  vatStatus              VATStatus           @default(STANDARD_RATE)
+  cisStatus              CISStatus           @default(NOT_APPLICABLE)
+  reverseCharge          Boolean             @default(false)
+  jobId                  String?
+  quoteId                String?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  complianceRecords      ComplianceRecord[]
+  deliveryTemplate       DeliveryTemplate?
+  financeDrawdown        FinanceDrawdown?
+  customer               Customer            @relation(fields: [customerId], references: [id])
+  job                    Job?                @relation(fields: [jobId], references: [id])
+  quote                  Quote?              @relation(fields: [quoteId], references: [id])
+  paymentReminders       PaymentReminder[]
+}
+
+model DeliveryTemplate {
+  id                   String         @id @default(cuid())
+  templateNumber       String         @unique
+  customerId           String
+  jobId                String?
+  invoiceId            String         @unique
+  deliveryDate         DateTime
+  deliveryAddress      String
+  installationTeam     String
+  teamLeader           String
+  productDetails       Json
+  glassDetails         Json
+  hardwareDetails      Json
+  extrasDetails        Json
+  installationNotes    String?
+  specialRequirements  String?
+  accessRequirements   String?
+  workCompleted        Boolean        @default(false)
+  qualityChecked       Boolean        @default(false)
+  customerSatisfied    Boolean        @default(false)
+  customerSignature    String?
+  customerName         String?
+  signatureDate        DateTime?
+  beforePhotos         String[]
+  afterPhotos          String[]
+  installationPhotos   String[]
+  certificateGenerated Boolean        @default(false)
+  certificateUrl       String?
+  certificateData      Json?
+  status               DeliveryStatus @default(SCHEDULED)
+  completedAt          DateTime?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  customer             Customer       @relation(fields: [customerId], references: [id])
+  invoice              Invoice        @relation(fields: [invoiceId], references: [id])
+  job                  Job?           @relation(fields: [jobId], references: [id])
+}
+
+model FinanceDrawdown {
+  id                     String         @id @default(cuid())
+  invoiceId              String         @unique
+  eligibleAmount         Float
+  drawdownPercentage     Float          @default(80.0)
+  drawdownAmount         Float
+  feesRate               Float          @default(3.967)
+  feesAmount             Float
+  netDrawdown            Float
+  status                 DrawdownStatus @default(PENDING)
+  requestedDate          DateTime       @default(now())
+  approvedDate           DateTime?
+  processedDate          DateTime?
+  paidDate               DateTime?
+  documentsSubmitted     Boolean        @default(false)
+  invoiceCopySubmitted   Boolean        @default(false)
+  deliveryProofSubmitted Boolean        @default(false)
+  processingNotes        String?
+  rejectionReason        String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  invoice                Invoice        @relation(fields: [invoiceId], references: [id])
+}
+
+model PaymentReminder {
+  id           String        @id @default(cuid())
+  invoiceId    String
+  reminderType ReminderType
+  reminderDate DateTime
+  daysOverdue  Int
+  subject      String
+  message      String
+  method       ContactMethod @default(EMAIL)
+  sent         Boolean       @default(false)
+  sentAt       DateTime?
+  opened       Boolean       @default(false)
+  openedAt     DateTime?
+  responded    Boolean       @default(false)
+  respondedAt  DateTime?
+  automated    Boolean       @default(true)
+  scheduledFor DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  invoice      Invoice       @relation(fields: [invoiceId], references: [id])
+}
+
+model ComplianceRecord {
+  id                 String           @id @default(cuid())
+  invoiceId          String
+  complianceType     ComplianceType
+  period             String
+  vatReturn          Boolean          @default(false)
+  vatSubmitted       Boolean          @default(false)
+  vatSubmissionDate  DateTime?
+  vatAmount          Float?
+  cisReturn          Boolean          @default(false)
+  cisSubmitted       Boolean          @default(false)
+  cisSubmissionDate  DateTime?
+  cisDeduction       Float?
+  submissionDeadline DateTime
+  submitted          Boolean          @default(false)
+  submittedDate      DateTime?
+  status             ComplianceStatus @default(PENDING)
+  notes              String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  invoice            Invoice          @relation(fields: [invoiceId], references: [id])
+}
+
+model FinanceSettings {
+  id                      String   @id @default(cuid())
+  defaultDrawdownRate     Float    @default(80.0)
+  financeFeesRate         Float    @default(3.967)
+  minimumInvoiceAmount    Float    @default(500.0)
+  type1Eligible           Boolean  @default(true)
+  type2Eligible           Boolean  @default(true)
+  type3Eligible           Boolean  @default(false)
+  type4Eligible           Boolean  @default(false)
+  firstReminderDays       Int      @default(60)
+  secondReminderDays      Int      @default(90)
+  finalReminderDays       Int      @default(120)
+  vatSubmissionDay        Int      @default(7)
+  cisSubmissionDay        Int      @default(19)
+  quarterlyDeadlineDay    Int      @default(31)
+  reminderEmailTemplate   String?
+  complianceEmailTemplate String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model FinanceReport {
+  id                String            @id @default(cuid())
+  reportType        FinanceReportType
+  period            String
+  generatedDate     DateTime          @default(now())
+  reportData        Json
+  summary           Json
+  totalInvoices     Int?
+  totalValue        Float?
+  totalDrawdowns    Float?
+  totalFees         Float?
+  outstandingAmount Float?
+  vatCompliance     Float?
+  cisCompliance     Float?
+  onTimeSubmissions Int?
+  lateSubmissions   Int?
+  exportUrl         String?
+  exportFormat      String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model SurveyBooking {
+  id                    String       @id @default(cuid())
+  quoteId               String       @unique
+  customerName          String
+  contactName           String?
+  contactPhone          String?
+  contactEmail          String?
+  projectName           String?
+  surveyAddress         String
+  postcode              String?
+  distanceInMiles       Float
+  travelTime            Int?
+  baseTravelCost        Float
+  minimumCharge         Float        @default(50.0)
+  isManchesterFree      Boolean      @default(false)
+  finalSurveyCost       Float
+  scheduledDate         DateTime?
+  scheduledTime         String?
+  estimatedDuration     Int          @default(120)
+  assignedSurveyor      String       @default("Darren Newbury")
+  surveyorEmployeeId    String?
+  status                SurveyStatus @default(REQUESTED)
+  priority              Priority     @default(MEDIUM)
+  surveyType            SurveyType   @default(STANDARD_SURVEY)
+  accessRequirements    String?
+  specialInstructions   String?
+  surveyCompleted       Boolean      @default(false)
+  completedDate         DateTime?
+  surveyFindings        String?
+  surveyPhotos          String[]
+  measurementsTaken     Json?
+  requiresFollowUp      Boolean      @default(false)
+  followUpNotes         String?
+  followUpDate          DateTime?
+  surveyInfluencedQuote Boolean      @default(false)
+  quoteAdjustments      String?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  quote                 Quote        @relation(fields: [quoteId], references: [id])
+}
+
+model QuoteGlassCalculation {
+  id                       String   @id @default(cuid())
+  quoteId                  String
+  panelId                  String
+  panelName                String
+  description              String?
+  length                   Float
+  width                    Float
+  thickness                Float
+  glassType                String?
+  glassCategory            String?
+  calculatedWeight         Float
+  area                     Float
+  staffRequired            Int
+  liftingMethod            String
+  isSafetyRisk             Boolean  @default(false)
+  safetyNotes              String?
+  requiresSpecialEquipment Boolean  @default(false)
+  equipmentNeeded          String?
+  installationTime         Int?
+  accessRequirements       String?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  quote                    Quote    @relation(fields: [quoteId], references: [id])
+}
+
+model SurveyorSchedule {
+  id                  String   @id @default(cuid())
+  surveyorName        String   @default("Darren Newbury")
+  employeeId          String?
+  scheduleDate        DateTime
+  timeSlot            String
+  isAvailable         Boolean  @default(true)
+  isBooked            Boolean  @default(false)
+  bookedForQuoteId    String?
+  customerName        String?
+  surveyAddress       String?
+  estimatedTravelTime Int?
+  travelCost          Float?
+  notes               String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model DistanceCalculation {
+  id                  String    @id @default(cuid())
+  fromAddress         String    @default("Manchester M12 5PG")
+  toAddress           String
+  toPostcode          String?
+  distanceInMiles     Float
+  distanceInKm        Float
+  estimatedTravelTime Int
+  routeData           Json?
+  costPerMile         Float     @default(1.0)
+  baseCost            Float
+  minimumCharge       Float     @default(50.0)
+  finalCost           Float
+  isManchesterArea    Boolean   @default(false)
+  qualifiesForFree    Boolean   @default(false)
+  calculatedFor       String?
+  entityId            String?
+  calculatedAt        DateTime  @default(now())
+  expiresAt           DateTime?
+  isValid             Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model GlassWeightSafetyRule {
+  id               String   @id @default(cuid())
+  minWeight        Float
+  maxWeight        Float?
+  minimumStaff     Int
+  recommendedStaff Int
+  maximumStaff     Int?
+  liftingMethod    String
+  equipmentNeeded  String[]
+  safetyCategory   String
+  riskLevel        String
+  safetyNotes      String?
+  vehiclesNeeded   Int      @default(1)
+  vehicleType      String?
+  baseInstallTime  Int
+  timeMultiplier   Float    @default(1.0)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model CustomerContact {
+  id                     String                  @id @default(cuid())
+  contactName            String
+  role                   ContactRole
+  email                  String?
+  phone                  String?
+  mobile                 String?
+  officePhone            String?
+  preferredContactMethod CommunicationPlatform   @default(EMAIL)
+  whatsappEnabled        Boolean                 @default(false)
+  whatsappNumber         String?
+  emailNotifications     Boolean                 @default(true)
+  smsNotifications       Boolean                 @default(false)
+  department             String?
+  jobTitle               String?
+  authority              String?
+  availability           String?
+  dataSource             ContactDataSource       @default(MANUAL_ENTRY)
+  isValidated            Boolean                 @default(false)
+  validatedAt            DateTime?
+  lastContactedAt        DateTime?
+  customerId             String
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  sentCommunications     CustomerCommunication[] @relation("SentCommunications")
+  receivedCommunications CustomerCommunication[] @relation("ReceivedCommunications")
+  customer               Customer                @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  teamsMessages          TeamsMessage[]
+  whatsappMessages       WhatsAppMessage[]
+}
+
+model WhatsAppIntegration {
+  id                      String            @id @default(cuid())
+  businessAccountId       String            @unique
+  phoneNumberId           String
+  phoneNumber             String
+  verificationStatus      String            @default("PENDING")
+  accessToken             String
+  webhookUrl              String?
+  webhookSecret           String?
+  isActive                Boolean           @default(true)
+  dailyRemindersEnabled   Boolean           @default(true)
+  drawingApprovalsEnabled Boolean           @default(true)
+  portalPromotionEnabled  Boolean           @default(true)
+  messageTemplates        Json
+  messagesCount           Int               @default(0)
+  lastMessageSent         DateTime?
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+  whatsappMessages        WhatsAppMessage[]
+}
+
+model WhatsAppMessage {
+  id                  String              @id @default(cuid())
+  messageType         WhatsAppMessageType
+  messageContent      String
+  templateName        String?
+  recipientPhone      String
+  recipientName       String?
+  status              String              @default("PENDING")
+  whatsappMessageId   String?
+  sentAt              DateTime?
+  deliveredAt         DateTime?
+  readAt              DateTime?
+  failedAt            DateTime?
+  failureReason       String?
+  projectContext      Json?
+  attachments         String[]
+  customerId          String?
+  customerContactId   String?
+  jobId               String?
+  quoteId             String?
+  integrationId       String
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  customerContact     CustomerContact?    @relation(fields: [customerContactId], references: [id])
+  customer            Customer?           @relation(fields: [customerId], references: [id])
+  whatsappIntegration WhatsAppIntegration @relation(fields: [integrationId], references: [id])
+  job                 Job?                @relation(fields: [jobId], references: [id])
+  quote               Quote?              @relation(fields: [quoteId], references: [id])
+}
+
+model TeamsIntegration {
+  id                            String           @id @default(cuid())
+  teamId                        String
+  channelId                     String
+  channelName                   String
+  channelType                   TeamsChannelType
+  webhookUrl                    String
+  webhookSecret                 String?
+  isActive                      Boolean          @default(true)
+  workflowUpdatesEnabled        Boolean          @default(true)
+  variationNotificationsEnabled Boolean          @default(true)
+  communicationSyncEnabled      Boolean          @default(true)
+  messageTemplates              Json
+  mentionSettings               Json
+  messagesCount                 Int              @default(0)
+  lastMessageSent               DateTime?
+  createdAt                     DateTime         @default(now())
+  updatedAt                     DateTime         @updatedAt
+  teamsMessages                 TeamsMessage[]
+}
+
+model TeamsMessage {
+  id                String           @id @default(cuid())
+  messageContent    String
+  messageType       String
+  priority          Priority         @default(MEDIUM)
+  teamsMessageId    String?
+  threadId          String?
+  mentions          String[]
+  status            String           @default("PENDING")
+  sentAt            DateTime?
+  failedAt          DateTime?
+  failureReason     String?
+  workflowContext   Json?
+  attachments       String[]
+  customerId        String?
+  customerContactId String?
+  jobId             String?
+  quoteId           String?
+  integrationId     String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  customerContact   CustomerContact? @relation(fields: [customerContactId], references: [id])
+  customer          Customer?        @relation(fields: [customerId], references: [id])
+  teamsIntegration  TeamsIntegration @relation(fields: [integrationId], references: [id])
+  job               Job?             @relation(fields: [jobId], references: [id])
+  quote             Quote?           @relation(fields: [quoteId], references: [id])
+}
+
+model ProjectVariation {
+  id                       String                   @id @default(cuid())
+  variationNumber          String                   @unique
+  variationType            VariationType
+  description              String
+  reason                   RevisionReason
+  originalValue            Float
+  variationValue           Float
+  totalNewValue            Float
+  approvalStatus           ApprovalStatusType       @default(PENDING_APPROVAL)
+  requiresCustomerApproval Boolean                  @default(true)
+  requiresInternalApproval Boolean                  @default(true)
+  customerApproved         Boolean                  @default(false)
+  customerApprovedAt       DateTime?
+  customerApprovedBy       String?
+  customerNotes            String?
+  internalApproved         Boolean                  @default(false)
+  internalApprovedAt       DateTime?
+  internalApprovedBy       String?
+  internalNotes            String?
+  implemented              Boolean                  @default(false)
+  implementedAt            DateTime?
+  implementedBy            String?
+  initialNotes             String
+  revisedQuoteGenerated    Boolean                  @default(false)
+  quoteId                  String
+  jobId                    String?
+  customerId               String
+  createdAt                DateTime                 @default(now())
+  updatedAt                DateTime                 @updatedAt
+  customer                 Customer                 @relation(fields: [customerId], references: [id])
+  job                      Job?                     @relation(fields: [jobId], references: [id])
+  quote                    Quote                    @relation(fields: [quoteId], references: [id])
+  communications           VariationCommunication[]
+}
+
+model VariationCommunication {
+  id                String                @id @default(cuid())
+  communicationType CommunicationType
+  platform          CommunicationPlatform
+  subject           String?
+  message           String
+  status            CommunicationStatus   @default(SENT)
+  sentAt            DateTime              @default(now())
+  readAt            DateTime?
+  respondedAt       DateTime?
+  variationId       String
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  variation         ProjectVariation      @relation(fields: [variationId], references: [id], onDelete: Cascade)
+}
+
+model AIProjectDescription {
+  id                   String            @id @default(cuid())
+  originalDescription  String?
+  generatedDescription String
+  projectItemCount     Int?
+  projectScope         String?
+  complexityAssessment ProjectComplexity @default(MODERATE)
+  timelineEstimate     Int?
+  aiModel              String            @default("gpt-4")
+  confidence           Float?
+  generationDate       DateTime          @default(now())
+  revisionCount        Int               @default(0)
+  lastRevised          DateTime?
+  revisedBy            String?
+  userApproved         Boolean           @default(false)
+  userFeedback         String?
+  userModifications    String?
+  quoteId              String?           @unique
+  jobId                String?           @unique
+  enquiryId            String?           @unique
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  enquiry              Enquiry?          @relation(fields: [enquiryId], references: [id])
+  job                  Job?              @relation(fields: [jobId], references: [id])
+  quote                Quote?            @relation(fields: [quoteId], references: [id])
+}
+
+model WorkflowNavigation {
+  id                   String              @id @default(cuid())
+  fromStage            String
+  toStage              String
+  direction            WorkflowDirection
+  action               WorkflowStageAction
+  isAllowed            Boolean             @default(true)
+  requiresApproval     Boolean             @default(false)
+  requiresConfirmation Boolean             @default(true)
+  performedBy          String
+  performedAt          DateTime            @default(now())
+  reason               String?
+  notes                String?
+  affectedProcesses    String[]
+  rollbackRequired     Boolean             @default(false)
+  dataChanges          Json?
+  jobId                String
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  job                  Job                 @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+model CustomerCommunication {
+  id                String                 @id @default(cuid())
+  subject           String?
+  message           String
+  communicationType CommunicationType
+  platform          CommunicationPlatform
+  direction         CommunicationDirection
+  status            CommunicationStatus    @default(SENT)
+  priority          Priority               @default(MEDIUM)
+  scheduledFor      DateTime?
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  readAt            DateTime?
+  respondedAt       DateTime?
+  fromContactId     String?
+  toContactId       String?
+  fromUser          String?
+  attachments       String[]
+  tags              String[]
+  requiresFollowUp  Boolean                @default(false)
+  followUpDate      DateTime?
+  isAutomated       Boolean                @default(false)
+  templateUsed      String?
+  platformMessageId String?
+  threadId          String?
+  customerId        String
+  jobId             String?
+  quoteId           String?
+  enquiryId         String?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  customer          Customer               @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  enquiry           Enquiry?               @relation(fields: [enquiryId], references: [id])
+  fromContact       CustomerContact?       @relation("SentCommunications", fields: [fromContactId], references: [id])
+  job               Job?                   @relation(fields: [jobId], references: [id])
+  quote             Quote?                 @relation(fields: [quoteId], references: [id])
+  toContact         CustomerContact?       @relation("ReceivedCommunications", fields: [toContactId], references: [id])
+}
+
+model CustomerPortalAccess {
+  id               String                   @id @default(cuid())
+  accessType       String
+  features         CustomerPortalFeature[]
+  accessToken      String                   @unique
+  isDemoAccess     Boolean                  @default(false)
+  demoExpiresAt    DateTime?
+  demoActivated    Boolean                  @default(false)
+  demoActivatedAt  DateTime?
+  loginCount       Int                      @default(0)
+  lastLoginAt      DateTime?
+  featuresUsed     String[]
+  timeSpent        Int                      @default(0)
+  convertedToFull  Boolean                  @default(false)
+  convertedAt      DateTime?
+  conversionSource String?
+  customerId       String                   @unique
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  customer         Customer                 @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  portalActivities CustomerPortalActivity[]
+}
+
+model CustomerPortalActivity {
+  id             String                 @id @default(cuid())
+  activityType   String
+  feature        CustomerPortalFeature?
+  description    String?
+  sessionId      String?
+  ipAddress      String?
+  userAgent      String?
+  activityData   Json?
+  portalAccessId String
+  createdAt      DateTime               @default(now())
+  portalAccess   CustomerPortalAccess   @relation(fields: [portalAccessId], references: [id], onDelete: Cascade)
+}
+
+model CreditCheck {
+  id                   String            @id @default(cuid())
+  checkType            String
+  status               CreditCheckStatus @default(PENDING)
+  requestedCreditLimit Float?
+  paymentTerms         Int?
+  orderValue           Float?
+  creditScore          Int?
+  creditRating         String?
+  recommendedLimit     Float?
+  recommendedTerms     Int?
+  approved             Boolean           @default(false)
+  approvedAt           DateTime?
+  approvedBy           String?
+  declineReason        String?
+  manualOverride       Boolean           @default(false)
+  overrideReason       String?
+  overrideBy           String?
+  overrideAt           DateTime?
+  externalReference    String?
+  externalData         Json?
+  customerId           String
+  quoteId              String?
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  customer             Customer          @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  quote                Quote?            @relation(fields: [quoteId], references: [id])
+}
+
+model CustomerForm {
+  id               String                   @id @default(cuid())
+  formName         String
+  formType         String
+  description      String?
+  fields           Json
+  validationRules  Json?
+  submitButtonText String                   @default("Submit")
+  collectionMethod FormCollectionMethod[]
+  formUrl          String                   @unique
+  qrCodeUrl        String?
+  emailTemplate    String?
+  isActive         Boolean                  @default(true)
+  expiresAt        DateTime?
+  viewCount        Int                      @default(0)
+  submissionCount  Int                      @default(0)
+  conversionRate   Float?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  submissions      CustomerFormSubmission[]
+}
+
+model CustomerFormSubmission {
+  id               String       @id @default(cuid())
+  formData         Json
+  submitterEmail   String?
+  submitterPhone   String?
+  submitterName    String?
+  status           String       @default("PENDING")
+  processedAt      DateTime?
+  processedBy      String?
+  customerCreated  Boolean      @default(false)
+  enquiryCreated   Boolean      @default(false)
+  enquiryId        String?
+  followUpRequired Boolean      @default(false)
+  followUpDate     DateTime?
+  followUpNotes    String?
+  contactAttempts  Int          @default(0)
+  dataCompleteness Float?
+  validationErrors Json?
+  duplicateCheck   Boolean      @default(false)
+  formId           String
+  customerId       String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  customer         Customer?    @relation(fields: [customerId], references: [id])
+  form             CustomerForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  WON
+  LOST
+  ON_HOLD
+}
+
+enum JobStatus {
+  APPROVED
+  IN_PRODUCTION
+  FABRICATION
+  ASSEMBLY
+  READY_FOR_INSTALL
+  INSTALLING
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}
+
+enum QuoteStatus {
+  PENDING
+  SENT
+  WON
+  LOST
+  EXPIRED
+  REVISED
+}
+
+enum ScheduleStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum DocumentType {
+  DRAWING
+  SPECIFICATION
+  QUOTE
+  ORDER
+  INVOICE
+  PHOTO
+  OTHER
+}
+
+enum VehicleType {
+  INSTALLATION_VAN
+  SURVEYOR_VEHICLE
+}
+
+enum ActivityType {
+  ENQUIRY_CREATED
+  ENQUIRY_UPDATED
+  JOB_CREATED
+  JOB_UPDATED
+  STATUS_CHANGED
+  QUOTE_GENERATED
+  PO_RECEIVED
+  ORDER_PLACED
+  DOCUMENT_UPLOADED
+  COMMENT_ADDED
+  CHAT_COMMAND
+  SCHEDULE_CREATED
+  SCHEDULE_UPDATED
+  SURVEY_REQUESTED
+  SURVEY_SCHEDULED
+  SURVEY_COMPLETED
+  PRICING_PREDICTION
+  PRICING_ANALYSIS
+  MARKET_DATA_UPDATE
+  CUSTOMER_CONTACT_CREATED
+  CUSTOMER_CONTACT_UPDATED
+  PORTAL_DEMO_CREATED
+  APPROVAL_DECISION
+  DRAWING_APPROVAL
+  WORKFLOW_NAVIGATION
+  VARIATION_CREATED
+  VARIATION_APPROVED
+  VARIATION_REJECTED
+  VARIATION_IMPLEMENTED
+  QUOTE_REVISED
+  PORTAL_CONVERSION
+}
+
+enum PricingModelType {
+  AI_MACHINE_LEARNING
+  RULE_BASED
+  HYBRID
+  MARKET_BASED
+  COST_PLUS
+  COMPETITIVE
+}
+
+enum MarketDataType {
+  COMPETITOR_PRICING
+  INDUSTRY_BENCHMARK
+  MATERIAL_COSTS
+  LABOR_RATES
+  MARKET_TRENDS
+  ECONOMIC_INDICATORS
+}
+
+enum CustomerBehaviorType {
+  PRICE_SENSITIVITY
+  BUYING_PATTERNS
+  NEGOTIATION_STYLE
+  SEASONAL_TRENDS
+  PRODUCT_PREFERENCES
+  PAYMENT_BEHAVIOR
+}
+
+enum PredictionType {
+  QUOTE_PRICING
+  WIN_PROBABILITY
+  MARGIN_OPTIMIZATION
+  COMPETITIVE_POSITIONING
+  MARKET_OPPORTUNITY
+  RISK_ASSESSMENT
+}
+
+enum AnalyticsType {
+  PRICING_PERFORMANCE
+  MARKET_ANALYSIS
+  CUSTOMER_INSIGHTS
+  COMPETITIVE_INTELLIGENCE
+  MARGIN_ANALYSIS
+  TREND_FORECASTING
+  MODEL_ACCURACY
+}
+
+enum PricingRuleType {
+  DISCOUNT_RULE
+  MARKUP_RULE
+  MINIMUM_PRICE
+  MAXIMUM_PRICE
+  VOLUME_PRICING
+  SEASONAL_ADJUSTMENT
+  CUSTOMER_SPECIFIC
+  COMPETITIVE_RESPONSE
+}
+
+enum CommunicationType {
+  CUSTOMER_UPDATE
+  APPROVAL_REQUEST
+  DRAWING_SUBMISSION
+  MATERIALS_CONFIRMATION
+  DELIVERY_NOTIFICATION
+  INSTALLATION_SCHEDULING
+  QUALITY_FEEDBACK
+  COMPLETION_NOTICE
+  GENERAL_INQUIRY
+  URGENT_ISSUE
+  PORTAL_PROMOTION
+  VARIATION_REQUEST
+}
+
+enum CommunicationDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum CommunicationStatus {
+  DRAFT
+  SENT
+  DELIVERED
+  READ
+  RESPONDED
+  FAILED
+}
+
+enum DrawingType {
+  TECHNICAL_DRAWING
+  ARCHITECTURAL_PLAN
+  SECTION_DETAIL
+  ELEVATION_VIEW
+  INSTALLATION_GUIDE
+  CUTTING_LIST
+  ASSEMBLY_DIAGRAM
+  SITE_SURVEY
+}
+
+enum DrawingApprovalStatus {
+  UPLOADED
+  CUSTOMER_REVIEW
+  TECHNICAL_REVIEW
+  PRODUCTION_REVIEW
+  FACTORY_VERIFICATION
+  APPROVED
+  REJECTED
+  REVISION_REQUIRED
+}
+
+enum DrawingApprovalStage {
+  CUSTOMER_UPLOAD
+  TECHNICAL_REVIEW
+  PRODUCTION_REVIEW
+  CUTTING_LIST_VERIFICATION
+  GLASS_SIZES_VERIFICATION
+  FINAL_APPROVAL
+}
+
+enum MaterialsAnalysisType {
+  DRAWING_BASED
+  SPECIFICATION_BASED
+  SITE_SURVEY_BASED
+  HYBRID_ANALYSIS
+}
+
+enum MaterialsAnalysisStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  APPROVED
+  REJECTED
+  REVISION_REQUIRED
+}
+
+enum OrderItemStatus {
+  PENDING
+  QUOTED
+  APPROVED
+  ORDERED
+  CONFIRMED
+  IN_PRODUCTION
+  READY_FOR_DELIVERY
+  DELIVERED
+  INSTALLED
+  COMPLETED
+}
+
+enum SupplierOrderStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  SENT_TO_SUPPLIER
+  CONFIRMED
+  IN_PRODUCTION
+  READY_FOR_DELIVERY
+  DELIVERED
+  COMPLETED
+  CANCELLED
+}
+
+enum WorkflowStepType {
+  CUSTOMER_COMMUNICATION
+  DRAWING_APPROVAL
+  MATERIALS_ANALYSIS
+  ORDER_CREATION
+  SUPPLIER_ORDERING
+  QUALITY_CHECK
+  PRODUCTION_STAGE
+  DELIVERY_COORDINATION
+  INSTALLATION_SCHEDULING
+  COMPLETION_VERIFICATION
+}
+
+enum WorkflowStepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+  CANCELLED
+  ON_HOLD
+}
+
+enum QualityCheckType {
+  DRAWING_ACCURACY
+  MATERIALS_SPECIFICATION
+  CUTTING_LIST_VERIFICATION
+  GLASS_SIZES_VERIFICATION
+  SUPPLIER_ORDER_ACCURACY
+  PRODUCTION_QUALITY
+  INSTALLATION_READINESS
+  FINAL_INSPECTION
+}
+
+enum QualityCheckStatus {
+  PENDING
+  IN_PROGRESS
+  PASSED
+  FAILED
+  REQUIRES_REVIEW
+  CORRECTIVE_ACTION_REQUIRED
+}
+
+enum GlassCategory {
+  DOUBLE_GLAZED
+  TRIPLE_GLAZED
+  LAMINATED
+  TOUGHENED
+  FIRE_RATED
+  ACOUSTIC
+  SECURITY
+  LOW_E
+  SOLAR_CONTROL
+  DECORATIVE
+}
+
+enum SecurityRating {
+  STANDARD
+  ENHANCED
+  HIGH_SECURITY
+  MAXIMUM_SECURITY
+  PAS24_COMPLIANT
+  SBD_COMPLIANT
+  INSURANCE_APPROVED
+}
+
+enum SecurityCategory {
+  RESIDENTIAL
+  COMMERCIAL
+  INDUSTRIAL
+  GOVERNMENT
+  HEALTHCARE
+  EDUCATION
+  RETAIL
+}
+
+enum FinishCategory {
+  FRAME_FINISH
+  GLASS_FINISH
+  HARDWARE_FINISH
+  GLAZING_BEAD
+  SILL_FINISH
+  GASKET_SEAL
+}
+
+enum MaterialType {
+  UPVC
+  ALUMINIUM
+  TIMBER
+  COMPOSITE
+  STEEL
+  GLASS
+  RUBBER
+  PLASTIC
+}
+
+enum SpecComplianceStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLIANT
+  NON_COMPLIANT
+  REQUIRES_REVIEW
+  EXPIRED
+  WAIVED
+}
+
+enum SpecificationStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  REJECTED
+  ACTIVE
+  ARCHIVED
+  SUPERSEDED
+}
+
+enum SecurityTierLevel {
+  ADMIN_TIER
+  ACCOUNTS_TIER
+  ELEVATED_TIER
+  STANDARD_TIER
+  LIMITED_TIER
+  BASIC_TIER
+}
+
+enum TeamRole {
+  LEADER
+  DEPUTY_LEADER
+  MEMBER
+  SPECIALIST
+  TEMPORARY
+}
+
+enum FabricationRole {
+  PRIMARY_FABRICATOR
+  HELPER
+  POWDER_COATING_OPERATIVE_1
+  POWDER_COATING_OPERATIVE_2
+  QC_INSPECTOR
+  ADMIN_SIGNOFF
+}
+
+enum InstallationRole {
+  TEAM_LEADER
+  INSTALLER
+  HELPER
+  SPECIALIST
+}
+
+enum FabricationWorkflowStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  PAUSED
+  OVERFLOW_FLAGGED
+  HELPER_ASSIGNED
+  WEEKEND_SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum InstallationStatus {
+  SCHEDULED
+  READY_FOR_INSTALL
+  IN_PROGRESS
+  MECHANICAL_AID_REQUIRED
+  SAFETY_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum ResourceType {
+  FABRICATION
+  INSTALLATION
+  QUALITY_CONTROL
+  ADMIN_SUPPORT
+  OVERFLOW_WORK
+  WEEKEND_WORK
+  TEMP_STAFF
+}
+
+enum HelperStatus {
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ScheduleBlockType {
+  FABRICATION_WORK
+  INSTALLATION_WORK
+  SITE_SURVEY
+  ADMIN_TIME
+  MEETING
+  TRAINING
+  HOLIDAY
+  SICK_LEAVE
+  OVERFLOW_WORK
+}
+
+enum ScheduleBlockStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum TeamType {
+  FABRICATION
+  INSTALLATION
+  ADMIN
+  MANAGEMENT
+  GENERAL
+}
+
+enum WorkflowType {
+  QUOTE_APPROVAL
+  JOB_APPROVAL
+  ENQUIRY_APPROVAL
+  DOCUMENT_APPROVAL
+  PRICING_APPROVAL
+  CUSTOM
+  APPROVAL
+}
+
+enum ApprovalType {
+  QUOTE_CREATION
+  QUOTE_PRICING
+  QUOTE_SEND
+  QUOTE_REVISION
+  JOB_CREATION
+  JOB_SCHEDULING
+  ENQUIRY_CONVERSION
+  PRICING_OVERRIDE
+  CUSTOM
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  EXPIRED
+  REQUIRES_SECOND_APPROVAL
+}
+
+enum QuoteTypeEnum {
+  SUPPLY_ONLY
+  SUPPLY_AND_INSTALL
+  LABOUR_ONLY
+  MAINTENANCE
+  EMERGENCY_REPAIR
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ProductType {
+  STANDARD_FABRICATION
+  BESPOKE
+  BOUGHT_IN_ITEM
+  MERGED_DESIGN
+  ROLLER_SHUTTERS
+  POWDER_COATING_ONLY
+  BUY_IN_WITH_DELIVERY
+  GLASS_ONLY
+  HARDWARE_ONLY
+}
+
+enum BuildingType {
+  RESIDENTIAL_NEW_BUILD
+  RESIDENTIAL_EXISTING
+  RESIDENTIAL_EXTENSION
+  COMMERCIAL_NEW_BUILD
+  COMMERCIAL_EXISTING
+  COMMERCIAL_EXTENSION
+  INDUSTRIAL_NEW_BUILD
+  INDUSTRIAL_EXISTING
+  INDUSTRIAL_EXTENSION
+  LISTED_BUILDING
+  CONSERVATION_AREA_BUILDING
+  SCHEDULED_MONUMENT
+  PLACE_OF_WORSHIP
+  TEMPORARY_BUILDING
+  AGRICULTURAL_BUILDING
+  WORKSHOP_LOW_ENERGY
+  CARPORT_COVERED_WAY
+  CONSERVATORY_PORCH
+  STAND_ALONE_UNDER_50M2
+  OTHER_EXEMPT
+}
+
+enum L2BComplianceStatus {
+  NOT_ASSESSED
+  ASSESSMENT_IN_PROGRESS
+  COMPLY_REQUIRED
+  EXEMPT_LISTED_BUILDING
+  EXEMPT_CONSERVATION_AREA
+  EXEMPT_SCHEDULED_MONUMENT
+  EXEMPT_PLACE_OF_WORSHIP
+  EXEMPT_TEMPORARY_BUILDING
+  EXEMPT_AGRICULTURAL_LOW_ENERGY
+  EXEMPT_UNDER_50M2
+  EXEMPT_OTHER
+  COMPLIANT
+  NON_COMPLIANT_ACCEPTABLE
+  NON_COMPLIANT_REQUIRES_ACTION
+  AWAITING_SPECIALIST_ADVICE
+}
+
+enum SystemSupplier {
+  SENIOR_ARCHITECTURAL
+  KESTRAL_SYSTEMS
+  JACK_ALUMINIUM
+  SFG_FABRICATION
+  OTHER_SYSTEM
+  MIXED_SUPPLIERS
+  CUSTOMER_SUPPLIED
+  TO_BE_DETERMINED
+}
+
+enum PriceDisplayMode {
+  NET_ONLY
+  GROSS_ONLY
+  NET_PLUS_VAT
+  BOTH_NET_AND_GROSS
+  TRADE_NET_ONLY
+}
+
+enum RollerShutterType {
+  MANUAL_ALUMINUM
+  ELECTRIC_ALUMINUM
+  SECURITY_SHUTTERS
+  INSULATED_SHUTTERS
+  PERFORATED_SHUTTERS
+  FIRE_SHUTTERS
+  COMMERCIAL_ROLLER_DOORS
+  INDUSTRIAL_SHUTTERS
+}
+
+enum BuyInItemType {
+  GLASS_PANELS
+  HARDWARE_SETS
+  SEALING_SYSTEMS
+  SPECIALIST_COMPONENTS
+  DELIVERY_ONLY_ITEMS
+  THIRD_PARTY_PRODUCTS
+  CUSTOMER_SUPPLIED_MATERIALS
+}
+
+enum AnalyticsPeriod {
+  HOURLY
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum DashboardMetricType {
+  PIPELINE_COUNT
+  PIPELINE_VALUE
+  CONVERSION_RATE
+  PROFIT_MARGIN
+  LABOR_EFFICIENCY
+  FABRICATION_EFFICIENCY
+  INSTALLATION_EFFICIENCY
+  CUSTOMER_SATISFACTION
+  QUOTE_WIN_RATE
+  AVERAGE_JOB_VALUE
+  PRODUCTION_CAPACITY
+  RESOURCE_UTILIZATION
+}
+
+enum TrendDirection {
+  UP
+  DOWN
+  STABLE
+  VOLATILE
+}
+
+enum PriceAlertType {
+  PRICE_TOO_LOW
+  PRICE_TOO_HIGH
+  MARGIN_TOO_LOW
+  MARKET_DEVIATION
+  COMPETITOR_UNDERCUT
+  COST_INCREASE_DETECTED
+  PRICING_OPPORTUNITY
+  DISCOUNT_REQUIRED
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertStatus {
+  ACTIVE
+  ACKNOWLEDGED
+  RESOLVED
+  DISMISSED
+  EXPIRED
+}
+
+enum AIImprovementType {
+  GENERAL_ENHANCEMENT
+  TECHNICAL_ACCURACY
+  COST_SPECIFICATION
+  CLARITY_IMPROVEMENT
+  PROFESSIONAL_TONE
+  DETAIL_EXPANSION
+  RESEARCH_INTEGRATION
+}
+
+enum CustomerFinanceType {
+  TYPE_1
+  TYPE_2
+  TYPE_3
+  TYPE_4
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  WRITTEN_OFF
+}
+
+enum VATStatus {
+  STANDARD_RATE
+  REDUCED_RATE
+  ZERO_RATE
+  EXEMPT
+  REVERSE_CHARGE
+}
+
+enum CISStatus {
+  NOT_APPLICABLE
+  STANDARD_RATE
+  HIGHER_RATE
+  GROSS_PAYMENT
+}
+
+enum DeliveryStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum DrawdownStatus {
+  PENDING
+  APPROVED
+  PROCESSED
+  PAID
+  REJECTED
+}
+
+enum ReminderType {
+  FIRST_REMINDER
+  SECOND_REMINDER
+  FINAL_REMINDER
+  CUSTOM
+}
+
+enum ComplianceType {
+  VAT_MONTHLY
+  VAT_QUARTERLY
+  CIS_MONTHLY
+  ANNUAL_RETURN
+}
+
+enum ComplianceStatus {
+  PENDING
+  SUBMITTED
+  ACCEPTED
+  REJECTED
+  OVERDUE
+}
+
+enum FinanceReportType {
+  CASH_FLOW
+  DRAWDOWN_ANALYSIS
+  COMPLIANCE_REPORT
+  PAYMENT_ANALYSIS
+  CUSTOMER_ANALYSIS
+  MONTHLY_SUMMARY
+  QUARTERLY_SUMMARY
+  ANNUAL_SUMMARY
+}
+
+enum CustomerType {
+  PROSPECT
+  LEAD
+  ACTIVE_CUSTOMER
+  REPEAT_CUSTOMER
+  VIP_CUSTOMER
+  DORMANT_CUSTOMER
+  SUPPLIER
+  PARTNER
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  BLACKLISTED
+  PENDING_APPROVAL
+}
+
+enum CreditStatus {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+  CREDIT_HOLD
+  CASH_ONLY
+}
+
+enum CustomerActivityType {
+  CUSTOMER_CREATED
+  CUSTOMER_UPDATED
+  CONTACT_ATTEMPTED
+  CONTACT_SUCCESSFUL
+  EMAIL_SENT
+  EMAIL_OPENED
+  EMAIL_CLICKED
+  QUOTE_REQUESTED
+  QUOTE_SENT
+  QUOTE_ACCEPTED
+  QUOTE_REJECTED
+  JOB_STARTED
+  JOB_COMPLETED
+  PAYMENT_RECEIVED
+  PAYMENT_OVERDUE
+  CREDIT_LIMIT_CHANGED
+  STATUS_CHANGED
+  VALIDATION_COMPLETED
+  PORTAL_ACCESS_GRANTED
+  PORTAL_LOGIN
+  DOCUMENT_SHARED
+  SURVEY_REQUESTED
+  SURVEY_COMPLETED
+  COMPLAINT_RECEIVED
+  COMPLAINT_RESOLVED
+}
+
+enum InteractionType {
+  INITIAL_CONTACT
+  FOLLOW_UP
+  QUOTE_DISCUSSION
+  PROJECT_CONSULTATION
+  TECHNICAL_SUPPORT
+  COMPLAINT_HANDLING
+  PAYMENT_DISCUSSION
+  GENERAL_INQUIRY
+  SURVEY_BOOKING
+  INSTALLATION_COORDINATION
+  MAINTENANCE_REQUEST
+  WARRANTY_CLAIM
+}
+
+enum ContactMethod {
+  EMAIL
+  PHONE
+  SMS
+  MEETING_ONSITE
+  MEETING_OFFICE
+  VIDEO_CALL
+  WHATSAPP
+  PORTAL_MESSAGE
+  LETTER
+  FAX
+}
+
+enum InteractionDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum ValidationStatus {
+  PENDING
+  IN_PROGRESS
+  VALIDATED
+  FAILED
+  REQUIRES_MANUAL_REVIEW
+  SKIPPED
+}
+
+enum NewCustomerStatus {
+  PENDING
+  EMAIL_SENT
+  AWAITING_RESPONSE
+  INFORMATION_RECEIVED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+enum SurveyStatus {
+  NOT_REQUIRED
+  REQUESTED
+  DISTANCE_CALCULATED
+  COST_CALCULATED
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+  FAILED
+}
+
+enum SurveyType {
+  STANDARD_SURVEY
+  DETAILED_SURVEY
+  EMERGENCY_SURVEY
+  FOLLOW_UP_SURVEY
+  TECHNICAL_SURVEY
+  ACCESS_SURVEY
+}
+
+enum ApprovalStatusType {
+  NOT_REQUIRED
+  PENDING_APPROVAL
+  QUOTE_APPROVED
+  COSTS_AGREED
+  DRAWING_APPROVED
+  EXTRA_ITEMS_APPROVED
+  VARIATIONS_APPROVED
+  FULLY_APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum ProjectComplexity {
+  SIMPLE
+  MODERATE
+  COMPLEX
+  HIGHLY_COMPLEX
+}
+
+enum WorkflowDirection {
+  FORWARD
+  BACKWARD
+  BIDIRECTIONAL
+}
+
+enum WorkflowStageAction {
+  ADVANCE
+  REVERT
+  SKIP
+  HOLD
+  CANCEL
+}
+
+enum CommunicationPlatform {
+  EMAIL
+  PHONE
+  WHATSAPP
+  TEAMS
+  PORTAL
+  IN_PERSON
+  SMS
+}
+
+enum WhatsAppMessageType {
+  DRAWING_APPROVAL_REQUEST
+  DAILY_REMINDER
+  PROJECT_UPDATE
+  PORTAL_PROMOTION
+  DEMO_INVITATION
+  APPROVAL_CONFIRMATION
+}
+
+enum TeamsChannelType {
+  WORKFLOW_UPDATES
+  VARIATION_REQUESTS
+  CUSTOMER_COMMUNICATIONS
+  APPROVALS
+  GENERAL
+}
+
+enum CustomerPortalFeature {
+  DEMO_ACCESS
+  NEW_ENQUIRY
+  PROJECT_TRACKING
+  DOCUMENT_SHARING
+  APPROVAL_WORKFLOW
+  PAYMENT_PORTAL
+}
+
+enum VariationType {
+  ADDITIONAL_ITEMS
+  SPECIFICATION_CHANGE
+  DESIGN_MODIFICATION
+  COST_ADJUSTMENT
+  TIMELINE_CHANGE
+  SCOPE_REDUCTION
+}
+
+enum RevisionReason {
+  CUSTOMER_REQUEST
+  DESIGN_IMPROVEMENT
+  COST_OPTIMIZATION
+  TECHNICAL_REQUIREMENT
+  COMPLIANCE_UPDATE
+  ERROR_CORRECTION
+}
+
+enum ContactRole {
+  PRIMARY_CONTACT
+  PROJECT_MANAGER
+  PURCHASING_MANAGER
+  FINANCE_CONTACT
+  TECHNICAL_CONTACT
+  SITE_MANAGER
+  EMERGENCY_CONTACT
+}
+
+enum ContactDataSource {
+  XERO_INTEGRATION
+  MANUAL_ENTRY
+  DIGITAL_FORM
+  CUSTOMER_PORTAL
+  PHONE_CALL
+  EMAIL_SIGNATURE
+}
+
+enum CreditCheckStatus {
+  NOT_REQUIRED
+  PENDING
+  IN_PROGRESS
+  APPROVED
+  DECLINED
+  REQUIRES_REVIEW
+  MANUAL_OVERRIDE
+}
+
+enum FormCollectionMethod {
+  EMAIL_LINK
+  QR_CODE
+  PORTAL_REGISTRATION
+  DIRECT_SUBMISSION
+  PHONE_CAPTURE
+}

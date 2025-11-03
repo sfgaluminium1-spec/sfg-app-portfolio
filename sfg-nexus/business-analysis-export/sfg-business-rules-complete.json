@@ -1,0 +1,827 @@
+
+{
+  "application": "SFG NEXUS - Business Rules Analysis",
+  "extracted_date": "2025-10-05",
+  "analyst": "Senior Business Systems Analyst",
+  "company": "SFG Aluminium (UK) Ltd",
+  "base_location": "Manchester M12 5PG",
+  "working_hours": {
+    "days": "Monday - Friday",
+    "start_time": "06:00",
+    "end_time": "16:00",
+    "timezone": "Europe/London",
+    "total_hours_per_day": 10,
+    "notes": "No weekend working unless explicitly planned as overflow"
+  },
+  "entities": {
+    "quote": {
+      "fields": [
+        {"name": "quoteNumber", "type": "string", "unique": true, "required": true},
+        {"name": "revision", "type": "integer", "default": 0},
+        {"name": "customerName", "type": "string", "required": true},
+        {"name": "value", "type": "float", "required": true},
+        {"name": "status", "type": "enum", "values": ["PENDING", "WON", "LOST", "ON_HOLD"], "default": "PENDING"},
+        {"name": "quoteType", "type": "string", "default": "Supply & Fit"},
+        {"name": "quoteTypeEnum", "type": "enum", "default": "SUPPLY_AND_INSTALL"},
+        {"name": "approvalStatus", "type": "enum", "default": "PENDING", "values": ["PENDING", "APPROVED", "REJECTED"]},
+        {"name": "requiresApproval", "type": "boolean", "default": true},
+        {"name": "canSelfApprove", "type": "boolean", "default": true},
+        {"name": "requiresSurvey", "type": "boolean", "default": false},
+        {"name": "surveyStatus", "type": "enum", "default": "NOT_REQUIRED"},
+        {"name": "surveyIsFree", "type": "boolean", "default": false},
+        {"name": "surveyTravelCost", "type": "float", "nullable": true},
+        {"name": "distanceFromBase", "type": "float", "nullable": true},
+        {"name": "installationAddress", "type": "string", "nullable": true},
+        {"name": "vatRate", "type": "float", "default": 20.0},
+        {"name": "isNetPricing", "type": "boolean", "default": true},
+        {"name": "markup", "type": "float", "nullable": true},
+        {"name": "markupAmount", "type": "float", "nullable": true}
+      ],
+      "relationships": [
+        {"relation": "belongsTo", "entity": "Customer", "optional": true},
+        {"relation": "belongsTo", "entity": "Enquiry", "optional": true},
+        {"relation": "hasMany", "entity": "QuoteItem"},
+        {"relation": "hasMany", "entity": "Approval"},
+        {"relation": "hasOne", "entity": "QuoteValidation"},
+        {"relation": "hasMany", "entity": "Job", "description": "Quote can convert to multiple jobs"}
+      ],
+      "business_rules": [
+        "Quote approval required before converting to job",
+        "Self-approval allowed if canSelfApprove is true",
+        "Survey required for projects over £2000 outside Manchester area",
+        "Survey is free for Manchester area projects under £2000",
+        "VAT default rate is 20%",
+        "Net pricing is default display mode"
+      ]
+    },
+    "job": {
+      "fields": [
+        {"name": "jobNumber", "type": "string", "unique": true, "required": true},
+        {"name": "orderNumber", "type": "string", "nullable": true},
+        {"name": "poReceivedDate", "type": "datetime", "nullable": true},
+        {"name": "client", "type": "string", "required": true},
+        {"name": "status", "type": "enum", "default": "APPROVED"},
+        {"name": "priority", "type": "enum", "default": "MEDIUM", "values": ["LOW", "MEDIUM", "HIGH", "URGENT"]},
+        {"name": "approvalStatus", "type": "enum", "default": "PENDING"},
+        {"name": "drawingStatus", "type": "string", "default": "PENDING"},
+        {"name": "glassOrderStatus", "type": "string", "default": "PENDING"},
+        {"name": "cutStatus", "type": "string", "default": "PENDING"},
+        {"name": "preparedStatus", "type": "string", "default": "PENDING"},
+        {"name": "coatingStatus", "type": "string", "default": "PENDING"},
+        {"name": "assemblyStatus", "type": "string", "default": "PENDING"},
+        {"name": "installStatus", "type": "string", "default": "PENDING"}
+      ],
+      "relationships": [
+        {"relation": "belongsTo", "entity": "Quote", "optional": true},
+        {"relation": "belongsTo", "entity": "Customer", "optional": true},
+        {"relation": "hasMany", "entity": "Order"},
+        {"relation": "hasMany", "entity": "DrawingApproval"},
+        {"relation": "hasMany", "entity": "MaterialsAnalysis"},
+        {"relation": "hasMany", "entity": "SupplierOrder"},
+        {"relation": "hasOne", "entity": "FabricationWorkflow"},
+        {"relation": "hasOne", "entity": "InstallationSchedule"}
+      ],
+      "workflow_statuses": [
+        "PENDING",
+        "DRAWING_APPROVAL",
+        "MATERIALS_ANALYSIS",
+        "ORDERING",
+        "FABRICATION",
+        "QUALITY_CHECK",
+        "ASSEMBLY",
+        "INSTALLATION",
+        "COMPLETED"
+      ],
+      "business_rules": [
+        "Job must have approved quote before starting",
+        "Drawing approval required before materials analysis",
+        "Materials analysis must be completed before ordering",
+        "Purchase orders require approval based on value thresholds",
+        "Orders under £100 require single approval",
+        "Orders £100-£500 require two approvals",
+        "Orders over £500 require Finance team approval",
+        "Quality checks required at multiple stages"
+      ]
+    },
+    "supplierOrder": {
+      "fields": [
+        {"name": "orderNumber", "type": "string", "unique": true, "required": true},
+        {"name": "orderDate", "type": "datetime", "default": "now()"},
+        {"name": "status", "type": "enum", "default": "DRAFT"},
+        {"name": "orderValue", "type": "float", "nullable": true},
+        {"name": "requiresApproval", "type": "boolean", "default": true},
+        {"name": "approved", "type": "boolean", "default": false},
+        {"name": "requiresTwoApprovals", "type": "boolean", "default": false},
+        {"name": "canAutoApprove", "type": "boolean", "default": false},
+        {"name": "firstApproval", "type": "boolean", "default": false},
+        {"name": "firstApprovedBy", "type": "string", "nullable": true},
+        {"name": "secondApproval", "type": "boolean", "default": false},
+        {"name": "secondApprovedBy", "type": "string", "nullable": true},
+        {"name": "emailSent", "type": "boolean", "default": false},
+        {"name": "emailSentAt", "type": "datetime", "nullable": true}
+      ],
+      "business_rules": [
+        "Orders under £100: Single approval required, can auto-approve",
+        "Orders £100-£500: Two approvals required (Ops + Finance)",
+        "Orders over £500: Finance team mandatory approval",
+        "Email automatically sent to supplier after full approval",
+        "MS Teams notification sent for approval milestones"
+      ]
+    },
+    "drawingApproval": {
+      "fields": [
+        {"name": "drawingName", "type": "string", "required": true},
+        {"name": "drawingVersion", "type": "string", "default": "1.0"},
+        {"name": "status", "type": "enum", "default": "UPLOADED"},
+        {"name": "currentStage", "type": "enum", "default": "CUSTOMER_UPLOAD"},
+        {"name": "customerApproved", "type": "boolean", "default": false},
+        {"name": "technicalReviewed", "type": "boolean", "default": false},
+        {"name": "productionReviewed", "type": "boolean", "default": false},
+        {"name": "cuttingListVerified", "type": "boolean", "default": false},
+        {"name": "glassSizesVerified", "type": "boolean", "default": false},
+        {"name": "finalApproved", "type": "boolean", "default": false}
+      ],
+      "approval_stages": [
+        {"stage": "CUSTOMER_UPLOAD", "order": 1, "description": "Customer uploads drawing"},
+        {"stage": "CUSTOMER_APPROVAL", "order": 2, "description": "Customer approves drawing"},
+        {"stage": "TECHNICAL_REVIEW", "order": 3, "description": "Technical team reviews"},
+        {"stage": "PRODUCTION_REVIEW", "order": 4, "description": "Production team reviews"},
+        {"stage": "CUTTING_LIST_VERIFICATION", "order": 5, "description": "Cutting list verified"},
+        {"stage": "GLASS_SIZES_VERIFICATION", "order": 6, "description": "Glass sizes verified"},
+        {"stage": "FINAL_APPROVAL", "order": 7, "description": "Final approval granted"}
+      ],
+      "business_rules": [
+        "Drawing must progress through all stages sequentially",
+        "Each stage requires explicit approval",
+        "Rejection at any stage returns to previous stage",
+        "Version control maintained for all revisions"
+      ]
+    },
+    "customer": {
+      "fields": [
+        {"name": "email", "type": "string", "unique": true, "nullable": true},
+        {"name": "firstName", "type": "string", "required": true},
+        {"name": "company", "type": "string", "nullable": true},
+        {"name": "customerType", "type": "enum", "default": "PROSPECT"},
+        {"name": "customerStatus", "type": "enum", "default": "ACTIVE"},
+        {"name": "creditLimit", "type": "float", "default": 0},
+        {"name": "creditTerms", "type": "integer", "default": 30},
+        {"name": "creditStatus", "type": "enum", "default": "GOOD"}
+      ],
+      "business_rules": [
+        "Credit check required for orders over credit limit",
+        "Default payment terms: 30 days",
+        "Customer validation required before major transactions"
+      ]
+    }
+  },
+  "workflows": {
+    "quote_to_job_conversion": {
+      "name": "Quote to Job Conversion",
+      "trigger": "Quote status changes to WON",
+      "steps": [
+        {"step": 1, "action": "Verify quote approval status", "required": true},
+        {"step": 2, "action": "Create job record from quote", "auto": true},
+        {"step": 3, "action": "Generate job number", "auto": true},
+        {"step": 4, "action": "Await customer PO", "manual": true, "sla_days": 14},
+        {"step": 5, "action": "Record PO received date", "manual": true},
+        {"step": 6, "action": "Initiate drawing approval workflow", "auto": true},
+        {"step": 7, "action": "Log activity", "auto": true},
+        {"step": 8, "action": "Notify teams via MS Teams", "auto": true}
+      ],
+      "sla": {
+        "total_days": 14,
+        "description": "Quote should convert to job within 14 days of winning",
+        "escalation": "Sales Manager if exceeds 21 days"
+      },
+      "business_rules": [
+        "Quote must be in WON status",
+        "Quote approval must be APPROVED",
+        "Customer PO required within 14 days",
+        "Job inherits all quote details",
+        "Drawing approval workflow starts automatically"
+      ]
+    },
+    "drawing_approval_workflow": {
+      "name": "Drawing Approval Workflow",
+      "trigger": "Job created or drawing uploaded",
+      "stages": [
+        {
+          "stage": "CUSTOMER_UPLOAD",
+          "actor": "Customer",
+          "actions": ["Upload drawing file", "Specify drawing type", "Add notes"],
+          "next_stage": "CUSTOMER_APPROVAL",
+          "sla_days": 7
+        },
+        {
+          "stage": "CUSTOMER_APPROVAL",
+          "actor": "Customer",
+          "actions": ["Review drawing", "Approve or request changes"],
+          "next_stage": "TECHNICAL_REVIEW",
+          "sla_days": 3
+        },
+        {
+          "stage": "TECHNICAL_REVIEW",
+          "actor": "Technical Team (Tier2)",
+          "actions": ["Review technical feasibility", "Check specifications", "Verify measurements"],
+          "next_stage": "PRODUCTION_REVIEW",
+          "sla_days": 2
+        },
+        {
+          "stage": "PRODUCTION_REVIEW",
+          "actor": "Production Team (Tier3)",
+          "actions": ["Verify fabrication requirements", "Assess production timeline"],
+          "next_stage": "CUTTING_LIST_VERIFICATION",
+          "sla_days": 1
+        },
+        {
+          "stage": "CUTTING_LIST_VERIFICATION",
+          "actor": "Production Team (Tier3)",
+          "actions": ["Generate cutting list", "Verify material quantities"],
+          "next_stage": "GLASS_SIZES_VERIFICATION",
+          "sla_days": 1
+        },
+        {
+          "stage": "GLASS_SIZES_VERIFICATION",
+          "actor": "Production Team (Tier3)",
+          "actions": ["Verify glass panel sizes", "Check safety compliance"],
+          "next_stage": "FINAL_APPROVAL",
+          "sla_days": 1
+        },
+        {
+          "stage": "FINAL_APPROVAL",
+          "actor": "Production Manager",
+          "actions": ["Final sign-off", "Proceed to materials analysis"],
+          "next_stage": "COMPLETED",
+          "sla_days": 1
+        }
+      ],
+      "total_sla_days": 16,
+      "escalation_rules": [
+        {"condition": "Customer approval exceeds 7 days", "action": "Send reminder email"},
+        {"condition": "Technical review exceeds 2 days", "action": "Escalate to Technical Manager"},
+        {"condition": "Any stage exceeds SLA by 50%", "action": "Notify Project Manager"}
+      ]
+    },
+    "purchase_order_approval": {
+      "name": "Purchase Order Approval Workflow",
+      "trigger": "Supplier order created",
+      "approval_tiers": [
+        {
+          "tier": "AUTO_APPROVE",
+          "condition": "orderValue < £100",
+          "approvers": ["Any Operations Staff (Tier1)"],
+          "approval_count": 1,
+          "notes": "Single approval sufficient, can auto-approve"
+        },
+        {
+          "tier": "DUAL_APPROVAL",
+          "condition": "£100 <= orderValue <= £500",
+          "approvers": ["Operations (Tier1)", "Finance (Tier2)"],
+          "approval_count": 2,
+          "sequence": "sequential",
+          "notes": "Requires both Operations and Finance approval"
+        },
+        {
+          "tier": "FINANCE_MANDATORY",
+          "condition": "orderValue > £500",
+          "approvers": ["Finance Team (Tier2)", "Finance Manager"],
+          "approval_count": 2,
+          "mandatory": "Finance team approval required",
+          "notes": "Finance team must be involved for high-value orders"
+        }
+      ],
+      "post_approval_actions": [
+        {"action": "Generate supplier email", "auto": true},
+        {"action": "Send email to supplier", "auto": true, "template": "supplier_order"},
+        {"action": "Update order status to SENT_TO_SUPPLIER", "auto": true},
+        {"action": "Send MS Teams notification", "auto": true},
+        {"action": "Create activity log", "auto": true}
+      ],
+      "business_rules": [
+        "Orders under £100: Single approval, can be overridden",
+        "Orders £100-£500: Two approvals required (Ops first, then Finance)",
+        "Orders over £500: Finance team mandatory approval",
+        "Email automatically sent to supplier after full approval",
+        "Override only allowed for orders under £100",
+        "MS Teams notification sent at each approval milestone"
+      ]
+    },
+    "enquiry_response": {
+      "name": "Enquiry Response Workflow",
+      "trigger": "New enquiry created",
+      "sla": {
+        "response_time_hours": 24,
+        "quote_delivery_days": 7,
+        "follow_up_days": 3
+      },
+      "steps": [
+        {"step": 1, "action": "Log enquiry", "auto": true, "time_minutes": 0},
+        {"step": 2, "action": "Acknowledge receipt", "manual": true, "sla_hours": 2},
+        {"step": 3, "action": "Assess requirements", "manual": true, "sla_hours": 24},
+        {"step": 4, "action": "Survey booking (if required)", "manual": true, "sla_days": 3},
+        {"step": 5, "action": "Prepare quote", "manual": true, "sla_days": 7},
+        {"step": 6, "action": "Send quote to customer", "manual": true, "sla_days": 7},
+        {"step": 7, "action": "Follow up", "manual": true, "sla_days": 10}
+      ],
+      "business_rules": [
+        "Initial response within 2 hours during business hours",
+        "Full assessment within 24 hours",
+        "Quote delivery within 7 days of enquiry",
+        "Follow-up after 3 days if no customer response",
+        "Survey required for projects over £2000 outside Manchester"
+      ]
+    }
+  },
+  "approvals": {
+    "quote_approval": {
+      "trigger": "Quote value or complexity thresholds met",
+      "thresholds": [
+        {"condition": "value < £5000 AND complexity = 'SIMPLE'", "approval_required": false, "can_self_approve": true},
+        {"condition": "value >= £5000 OR complexity = 'MODERATE'", "approval_required": true, "approvers": ["Sales Manager"], "count": 1},
+        {"condition": "value >= £10000 OR complexity = 'COMPLEX'", "approval_required": true, "approvers": ["Sales Manager", "Finance Manager"], "count": 2},
+        {"condition": "value >= £50000", "approval_required": true, "approvers": ["Sales Manager", "Finance Manager", "CEO"], "count": 3}
+      ],
+      "self_approval_rules": {
+        "allowed_when": "canSelfApprove = true AND value < £5000",
+        "not_allowed_when": "value >= £5000 OR projectComplexity >= 'MODERATE'"
+      },
+      "notes": [
+        "Quote approval status tracked separately from quote status",
+        "Approval required before converting quote to job",
+        "Self-approval allowed for simple, low-value quotes"
+      ]
+    },
+    "drawing_approval": {
+      "stages": ["CUSTOMER_APPROVAL", "TECHNICAL_REVIEW", "PRODUCTION_REVIEW", "CUTTING_LIST", "GLASS_SIZES", "FINAL_APPROVAL"],
+      "sequential": true,
+      "rejection_behavior": "Returns to previous stage",
+      "version_control": true,
+      "notes": [
+        "All stages must complete successfully",
+        "Each stage has specific SLA",
+        "Version tracking for all revisions"
+      ]
+    },
+    "purchase_order_approval": {
+      "value_thresholds": [
+        {
+          "range": "< £100",
+          "approvals_required": 1,
+          "approvers": ["Any Operations Staff"],
+          "can_auto_approve": true,
+          "notes": "Single approval sufficient"
+        },
+        {
+          "range": "£100 - £500",
+          "approvals_required": 2,
+          "approvers": ["Operations", "Finance"],
+          "sequence": "sequential",
+          "notes": "Both Operations and Finance approval required"
+        },
+        {
+          "range": "> £500",
+          "approvals_required": 2,
+          "approvers": ["Finance Team", "Finance Manager"],
+          "mandatory": "Finance",
+          "notes": "Finance team mandatory approval"
+        }
+      ]
+    }
+  },
+  "calculations": {
+    "survey_costing": {
+      "base_location": "Manchester M12 5PG",
+      "calculation_method": "distance_based",
+      "formula": "max(distance_miles × £1.00, £50.00)",
+      "rules": [
+        {
+          "rule": "manchester_exception",
+          "condition": "postcode starts with 'M' AND quote_value < £2000",
+          "cost": 0,
+          "description": "Free survey for Manchester area projects under £2000"
+        },
+        {
+          "rule": "standard_costing",
+          "condition": "distance_miles calculated via postcode lookup",
+          "cost": "distance_miles × £1.00 per mile",
+          "minimum": 50,
+          "description": "£1 per mile with £50 minimum charge"
+        },
+        {
+          "rule": "unknown_postcode",
+          "condition": "postcode not in lookup table",
+          "default_distance": 50,
+          "default_cost": 50,
+          "description": "Default to 50 miles / £50 for unknown postcodes"
+        }
+      ],
+      "variables": {
+        "cost_per_mile": 1.0,
+        "minimum_charge": 50.0,
+        "free_threshold_value": 2000.0
+      },
+      "estimated_travel_time": "distance_miles × 2 minutes",
+      "notes": [
+        "Distance calculated using Haversine formula",
+        "Postcode lookup table for common UK areas",
+        "Manchester M-prefix postcodes qualify for free survey exception"
+      ]
+    },
+    "quote_markup": {
+      "default_markup": {
+        "supply_and_install": {"base": 0.25, "description": "25% markup"},
+        "supply_only": {"base": 0.15, "description": "15% markup"},
+        "remedial": {"base": 0.30, "risk": 0.10, "description": "30% base + 10% risk markup"}
+      },
+      "risk_adjustments": [
+        {"factor": "projectComplexity = 'COMPLEX'", "additional_markup": 0.05},
+        {"factor": "productType = 'BESPOKE'", "additional_markup": 0.10},
+        {"factor": "quoteType = 'REMEDIAL'", "additional_markup": 0.10},
+        {"factor": "requiresWarrantyAssessment = true", "additional_markup": 0.05}
+      ],
+      "calculation": "value = baseValue × (1 + base_markup + risk_markup)"
+    },
+    "vat_calculation": {
+      "default_rate": 20.0,
+      "formula": "vatAmount = netValue × (vatRate / 100)",
+      "gross_value": "netValue + vatAmount",
+      "display_mode": "NET_ONLY (default) | GROSS_ONLY | BOTH",
+      "notes": "VAT rate configurable, defaults to 20% for UK"
+    }
+  },
+  "sla": {
+    "enquiry_response": {
+      "initial_response": {"value": 2, "unit": "hours", "business_hours": true},
+      "full_assessment": {"value": 24, "unit": "hours", "business_hours": true},
+      "quote_delivery": {"value": 7, "unit": "days", "business_days": true},
+      "follow_up": {"value": 3, "unit": "days", "after": "quote_sent"}
+    },
+    "quote_to_job_conversion": {
+      "po_await": {"value": 14, "unit": "days", "escalation_days": 21},
+      "description": "Customer PO expected within 14 days of quote acceptance"
+    },
+    "drawing_approval": {
+      "customer_upload": {"value": 7, "unit": "days"},
+      "customer_approval": {"value": 3, "unit": "days"},
+      "technical_review": {"value": 2, "unit": "days"},
+      "production_review": {"value": 1, "unit": "days"},
+      "cutting_list": {"value": 1, "unit": "days"},
+      "glass_sizes": {"value": 1, "unit": "days"},
+      "final_approval": {"value": 1, "unit": "days"},
+      "total": {"value": 16, "unit": "days"}
+    },
+    "purchase_order_processing": {
+      "order_creation": {"value": 1, "unit": "days"},
+      "approval": {"value": 2, "unit": "days", "dependent_on": "order_value"},
+      "supplier_notification": {"value": 0, "unit": "days", "auto": true, "trigger": "after_approval"}
+    },
+    "escalation_rules": [
+      {"entity": "Enquiry", "condition": "no_response_24_hours", "action": "Notify Sales Manager"},
+      {"entity": "Quote", "condition": "po_await_exceeds_21_days", "action": "Notify Sales Manager"},
+      {"entity": "DrawingApproval", "condition": "stage_exceeds_sla_50_percent", "action": "Notify Project Manager"},
+      {"entity": "SupplierOrder", "condition": "approval_pending_3_days", "action": "Notify Finance Team"}
+    ]
+  },
+  "rbac": {
+    "tiers": [
+      {
+        "tier": 1,
+        "name": "Executive & Operations",
+        "roles": ["CEO", "Operations Manager", "Operations Staff"],
+        "permissions": {
+          "full_system_access": true,
+          "financial_access": true,
+          "approve_quotes": true,
+          "approve_jobs": true,
+          "manage_schedule": true,
+          "view_reports": true,
+          "manage_users": true,
+          "max_approval_value": null
+        },
+        "description": "Full system access including financial data"
+      },
+      {
+        "tier": 2,
+        "name": "Finance & Estimating",
+        "roles": ["Finance Manager", "Finance Team", "Estimating Team"],
+        "permissions": {
+          "full_system_access": false,
+          "financial_access": true,
+          "department_access": true,
+          "approve_quotes": true,
+          "approve_jobs": true,
+          "manage_schedule": false,
+          "view_reports": true,
+          "manage_users": false,
+          "max_approval_value": 10000
+        },
+        "description": "Financial and estimating functions with approval authority"
+      },
+      {
+        "tier": 3,
+        "name": "Delivery, Sales & Production",
+        "roles": ["Sales Team", "Production Manager", "Delivery Manager", "Installation Teams"],
+        "permissions": {
+          "full_system_access": false,
+          "financial_access": false,
+          "department_access": true,
+          "team_management_access": true,
+          "approve_quotes": false,
+          "approve_jobs": false,
+          "manage_schedule": true,
+          "view_reports": true,
+          "manage_users": false,
+          "max_approval_value": 100
+        },
+        "description": "Department-specific access without financial visibility"
+      }
+    ],
+    "field_level_security": {
+      "quote": {
+        "fields_restricted_to_tier1_tier2": ["value", "revisedPrice", "markup", "markupAmount", "netValue", "grossValue", "baseValue"],
+        "fields_visible_to_all": ["quoteNumber", "customerName", "projectName", "status", "quoteDate"]
+      },
+      "job": {
+        "fields_restricted_to_tier1_tier2": ["value"],
+        "fields_visible_to_all": ["jobNumber", "client", "description", "status", "drawingStatus"]
+      },
+      "supplierOrder": {
+        "fields_restricted_to_tier1_tier2": ["orderValue", "totalAmount", "subtotal"],
+        "fields_visible_to_tier3": ["orderNumber", "supplier", "status", "orderDate"]
+      }
+    },
+    "approval_authority": {
+      "tier1": {
+        "quote_approval": "Unlimited",
+        "job_approval": "Unlimited",
+        "purchase_order_approval": "Unlimited"
+      },
+      "tier2": {
+        "quote_approval": "Up to £10,000",
+        "job_approval": "Up to £10,000",
+        "purchase_order_approval": "Required for orders £100+"
+      },
+      "tier3": {
+        "quote_approval": "Not authorized",
+        "job_approval": "Not authorized",
+        "purchase_order_approval": "First approval only for orders under £100"
+      }
+    }
+  },
+  "integrations": {
+    "ms_teams": {
+      "purpose": "Real-time notifications and team communication",
+      "triggers": [
+        "Quote approval required",
+        "Job created",
+        "Purchase order approval",
+        "Drawing approval stage change",
+        "Customer PO received",
+        "Critical deadline approaching"
+      ],
+      "recipients": ["sales@sfg-aluminium.co.uk", "finance@sfg-aluminium.co.uk", "operations@sfg-aluminium.co.uk"],
+      "message_format": "Structured JSON with title, message, and entity references"
+    },
+    "email_notifications": {
+      "templates": ["supplier_order", "customer_quote", "drawing_approval_request", "po_received_confirmation"],
+      "auto_send_triggers": [
+        "Supplier order approved → Send to supplier",
+        "Quote created → Send to customer",
+        "Drawing stage change → Notify next approver"
+      ]
+    },
+    "distance_calculation_api": {
+      "provider": "Internal calculation service",
+      "method": "Haversine formula with postcode lookup",
+      "base_location": "Manchester M12 5PG",
+      "purpose": "Calculate survey travel costs and distances"
+    }
+  },
+  "file_conventions": {
+    "naming": {
+      "quote_number": "Q{year}-{sequence} (e.g., Q2025-0001)",
+      "job_number": "J{year}-{sequence} (e.g., J2025-0001)",
+      "order_number": "PO{year}-{sequence} (e.g., PO2025-0001)",
+      "drawing_version": "Major.Minor (e.g., 1.0, 1.1, 2.0)"
+    },
+    "document_types": [
+      "QUOTE_DOCUMENT",
+      "DRAWING",
+      "TECHNICAL_SPECIFICATION",
+      "PURCHASE_ORDER",
+      "DELIVERY_NOTE",
+      "INVOICE",
+      "OTHER"
+    ],
+    "storage": {
+      "documents": "Database storage with uploadPath field",
+      "metadata": "Includes filename, originalName, fileType, fileSize, documentType"
+    }
+  },
+  "exceptions": {
+    "manchester_free_survey": {
+      "rule": "Surveys free for Manchester area projects under £2000",
+      "condition": "postcode starts with 'M' AND quoteValue < £2000",
+      "rationale": "Local customer incentive"
+    },
+    "small_order_auto_approve": {
+      "rule": "Purchase orders under £100 can auto-approve with single approval",
+      "condition": "orderValue < £100",
+      "rationale": "Streamline low-value transactions"
+    },
+    "self_approval_quotes": {
+      "rule": "Low-value simple quotes can self-approve",
+      "condition": "canSelfApprove = true AND value < £5000 AND complexity = 'SIMPLE'",
+      "rationale": "Reduce approval bottleneck for routine quotes"
+    }
+  },
+  "unknowns_and_gaps": [
+    {
+      "category": "Quote Markup",
+      "question": "What is the target margin percentage for different quote types?",
+      "impact": "HIGH",
+      "recommendation": "Define clear markup rules for each quoteTypeEnum",
+      "status": "NEEDS_CLARIFICATION"
+    },
+    {
+      "category": "CEO Approval",
+      "question": "At what value threshold does CEO approval become mandatory?",
+      "impact": "MEDIUM",
+      "recommendation": "Establish CEO approval threshold (suggested: £50,000+)",
+      "status": "NEEDS_CLARIFICATION"
+    },
+    {
+      "category": "Survey Pricing",
+      "question": "Are there different survey pricing models for different regions?",
+      "impact": "MEDIUM",
+      "recommendation": "Clarify regional pricing variations beyond Manchester exception",
+      "status": "NEEDS_CLARIFICATION"
+    },
+    {
+      "category": "Late Payment",
+      "question": "What are the late payment interest calculations and enforcement procedures?",
+      "impact": "MEDIUM",
+      "recommendation": "Define creditStatus transitions and late payment handling",
+      "status": "NEEDS_CLARIFICATION"
+    },
+    {
+      "category": "Quality Checks",
+      "question": "What are the specific quality check criteria for each fabrication stage?",
+      "impact": "HIGH",
+      "recommendation": "Document detailed quality check requirements",
+      "status": "NEEDS_CLARIFICATION"
+    }
+  ],
+  "planner_mappings": {
+    "top_10_workflows": [
+      {
+        "workflow": "New Enquiry Response",
+        "planner_task": "Respond to Enquiry #{enquiryNumber}",
+        "bucket": "Sales Pipeline",
+        "owner": "Sales Team",
+        "due_date": "+2 hours from creation",
+        "checklist": [
+          "Acknowledge receipt",
+          "Assess requirements",
+          "Determine if survey needed",
+          "Schedule survey if required",
+          "Prepare initial quote"
+        ]
+      },
+      {
+        "workflow": "Quote Approval",
+        "planner_task": "Approve Quote {quoteNumber}",
+        "bucket": "Pending Approvals",
+        "owner": "Determined by value threshold",
+        "due_date": "+1 business day",
+        "checklist": [
+          "Review quote value and complexity",
+          "Verify pricing and markup",
+          "Check customer credit status",
+          "Approve or reject with notes"
+        ]
+      },
+      {
+        "workflow": "Quote to Job Conversion",
+        "planner_task": "Convert Quote {quoteNumber} to Job",
+        "bucket": "Active Jobs",
+        "owner": "Operations Team",
+        "due_date": "PO received date",
+        "checklist": [
+          "Verify quote approval",
+          "Await customer PO",
+          "Record PO details",
+          "Generate job number",
+          "Initiate drawing approval"
+        ]
+      },
+      {
+        "workflow": "Drawing Approval - Customer",
+        "planner_task": "Customer Drawing Approval - Job {jobNumber}",
+        "bucket": "Customer Actions",
+        "owner": "Customer",
+        "due_date": "+7 days",
+        "checklist": [
+          "Upload drawing",
+          "Review technical specifications",
+          "Approve or request changes"
+        ]
+      },
+      {
+        "workflow": "Drawing Approval - Technical",
+        "planner_task": "Technical Review - Job {jobNumber}",
+        "bucket": "Technical Review",
+        "owner": "Technical Team (Tier2)",
+        "due_date": "+2 days from customer approval",
+        "checklist": [
+          "Review technical feasibility",
+          "Check specifications",
+          "Verify measurements",
+          "Approve or reject with notes"
+        ]
+      },
+      {
+        "workflow": "Materials Analysis",
+        "planner_task": "Analyze Materials - Job {jobNumber}",
+        "bucket": "Production Planning",
+        "owner": "Production Team (Tier3)",
+        "due_date": "+2 days from drawing approval",
+        "checklist": [
+          "Extract materials from drawing",
+          "Calculate material costs",
+          "Match suppliers",
+          "Check stock availability",
+          "Calculate lead times"
+        ]
+      },
+      {
+        "workflow": "Purchase Order Creation",
+        "planner_task": "Create Purchase Order - Job {jobNumber}",
+        "bucket": "Procurement",
+        "owner": "Operations",
+        "due_date": "+1 day from materials analysis",
+        "checklist": [
+          "Generate order items",
+          "Select suppliers",
+          "Calculate order totals",
+          "Submit for approval"
+        ]
+      },
+      {
+        "workflow": "Purchase Order Approval",
+        "planner_task": "Approve PO {orderNumber} - £{orderValue}",
+        "bucket": "Pending Approvals",
+        "owner": "Determined by order value",
+        "due_date": "+1 business day",
+        "checklist": [
+          "Review order value",
+          "Verify supplier and items",
+          "First approval (Ops)",
+          "Second approval (Finance) if required",
+          "Auto-send to supplier after approval"
+        ]
+      },
+      {
+        "workflow": "Fabrication Workflow",
+        "planner_task": "Fabricate Job {jobNumber}",
+        "bucket": "Fabrication",
+        "owner": "Lead Fabricator",
+        "due_date": "Based on fabrication schedule",
+        "checklist": [
+          "Review drawings and cutting list",
+          "Cut materials",
+          "Prepare components",
+          "Powder coating (if required)",
+          "Assembly",
+          "Quality check",
+          "Prepare for installation"
+        ]
+      },
+      {
+        "workflow": "Installation Scheduling",
+        "planner_task": "Schedule Installation - Job {jobNumber}",
+        "bucket": "Installation Planning",
+        "owner": "Installation Manager",
+        "due_date": "+7 days from fabrication complete",
+        "checklist": [
+          "Assign installation team",
+          "Assign van",
+          "Schedule date and time",
+          "Verify glass weight and staff requirements",
+          "Safety check",
+          "Complete installation",
+          "Customer sign-off"
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "This analysis is based on the current SFG NEXUS application structure and code",
+    "Business rules extracted from Prisma schema, API routes, and type definitions",
+    "Some rules may require clarification with SFG business stakeholders",
+    "RBAC tiers reflect organizational structure but need validation",
+    "SLA values are estimates based on workflow complexity and need confirmation",
+    "Integration patterns identified but implementation details may vary"
+  ]
+}

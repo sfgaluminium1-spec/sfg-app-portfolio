@@ -1,0 +1,128 @@
+SFG NEXUS Business Analysis Export Package
+===========================================
+Date: 5 October 2025
+Location: /home/ubuntu/sfg-nexus-mockup/business-analysis-export/
+
+FILE STRUCTURE
+==============
+
+business-analysis-export/
+│
+├── 📄 README.md (9.8 KB)
+│   └── Package overview, usage guide, implementation roadmap
+│
+├── 📄 EXPORT_SUMMARY.md (7.0 KB) + EXPORT_SUMMARY.pdf (54 KB)
+│   └── Quick reference: what was exported, next steps, checklist
+│
+├── 📊 sfg-business-rules-complete.json (34 KB)
+│   └── Complete structured JSON export
+│       ├── Entities (Quote, Job, Customer, Supplier, etc.)
+│       ├── Workflows (8 major workflows documented)
+│       ├── Approvals (Quote, Drawing, PO approval rules)
+│       ├── Calculations (Survey costing, VAT, markup)
+│       ├── SLAs (Response times, deadlines, escalations)
+│       ├── RBAC (3-tier access control)
+│       ├── Integrations (MS Teams, Email, Distance API)
+│       └── Exceptions (Manchester free survey, auto-approve rules)
+│
+├── 📋 sfg-actionable-summary.md (14 KB) + sfg-actionable-summary.pdf (57 KB)
+│   └── Executive summary & implementation guide
+│       ├── 6 Critical Business Rules (PO approvals, SLAs, RBAC)
+│       ├── Implementation Priority Order (Phase 1-3)
+│       ├── SharePoint List Configuration (7 lists + columns)
+│       ├── Power Automate Flows Required (12 critical flows)
+│       ├── MS Teams Notification Triggers
+│       ├── KPI Definitions (Operational, Financial, Quality)
+│       └── Exception Handling Rules
+│
+├── 📅 sfg-planner-mapping.md (29 KB) + sfg-planner-mapping.pdf (94 KB)
+│   └── Microsoft Planner workflow mappings
+│       ├── Planner Board Structure (10 buckets)
+│       ├── Top 10 Workflow Mappings (detailed task templates)
+│       │   1. New Enquiry Response (2-hour SLA)
+│       │   2. Quote Approval (value-based routing)
+│       │   3. Quote to Job Conversion (14-day PO wait)
+│       │   4. Drawing Approval - Customer Upload (7-day SLA)
+│       │   5. Drawing Approval - Technical Review (2-day SLA)
+│       │   6. Materials Analysis (2-day SLA)
+│       │   7. Purchase Order Creation (1-day SLA)
+│       │   8. Purchase Order Approval (value thresholds)
+│       │   9. Fabrication Workflow (14 stages)
+│       │   10. Installation Scheduling (resource allocation)
+│       ├── Automation Rules (auto-create, auto-assign, auto-calculate)
+│       ├── Integration with SharePoint (bi-directional sync)
+│       ├── Labels and Tags Strategy
+│       └── Reporting and Dashboards
+│
+└── ❓ sfg-gaps-and-questions.md (24 KB) + sfg-gaps-and-questions.pdf (82 KB)
+    └── Clarification questions for stakeholders
+        ├── 🔴 CRITICAL (2 items)
+        │   1. Quote Markup Calculation Rules (target margins undefined)
+        │   2. Quality Check Criteria (pass/fail standards undefined)
+        ├── 🟠 HIGH (2 items)
+        │   3. CEO Approval Threshold (£50k suggested)
+        │   4. Installation Staffing Rules (safety compliance)
+        ├── 🟡 MEDIUM (6 items)
+        │   5. Survey Pricing - Regional Variations
+        │   6. Late Payment Interest Calculations
+        │   7. Drawing Revision Limits
+        │   8. Supplier Performance Ratings
+        │   9. Fabrication Helper Assignment Rules
+        │   10. Warranty Risk Assessment
+        └── Stakeholder Question Template (ready to distribute)
+
+RECOMMENDED READING ORDER
+=========================
+
+For Business Stakeholders (Executives, Managers):
+    1. README.md (5 min) ← Start here
+    2. sfg-actionable-summary.pdf (30 min)
+    3. sfg-gaps-and-questions.pdf (20 min)
+    4. sfg-planner-mapping.pdf (optional - validation only)
+
+For Technical Team (Developers, Business Analysts):
+    1. README.md (5 min) ← Start here
+    2. sfg-business-rules-complete.json (review structure)
+    3. sfg-actionable-summary.md (implementation details)
+    4. sfg-planner-mapping.md (automation patterns)
+
+For Project Managers:
+    1. README.md (implementation roadmap) ← Start here
+    2. EXPORT_SUMMARY.md (status overview)
+    3. sfg-gaps-and-questions.md (stakeholder action items)
+    4. Track implementation phases and success metrics
+
+KEY HIGHLIGHTS
+==============
+
+✅ 20+ Entities analyzed
+✅ 8 Major workflows documented
+✅ 50+ Business rules extracted
+✅ 15+ SLA definitions
+✅ 3 RBAC tiers defined
+✅ 5 Approval thresholds identified
+✅ 4 Integration points mapped
+✅ 10 Critical gaps requiring clarification
+
+NEXT STEPS
+==========
+
+[ ] Schedule stakeholder workshop (CRITICAL - resolve gaps 1-4)
+[ ] Distribute clarification question form to department heads
+[ ] Review and validate extracted business rules
+[ ] Configure SharePoint lists (Phase 1)
+[ ] Build Power Automate flows (Phase 1)
+[ ] Set up Planner board (Phase 2)
+[ ] Deploy MS Teams integration (Phase 2)
+[ ] User training and go-live (Phase 3)
+
+STATUS: ✅ EXPORT COMPLETE - READY FOR STAKEHOLDER REVIEW
+
+For questions or issues, refer to README.md or schedule a review meeting.
+
+---
+Generated: 5 October 2025
+Analyst: Senior Business Systems Analyst
+Company: SFG Aluminium (UK) Ltd
+Confidential: Internal Use Only
+---

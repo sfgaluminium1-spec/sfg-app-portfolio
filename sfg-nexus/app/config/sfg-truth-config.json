@@ -1,0 +1,143 @@
+
+{
+  "meta": {
+    "title": "SFG Aluminium Limited – Project Number Generation & Process Change Truth File",
+    "version": "v1.2.3",
+    "date": "2025-10-07",
+    "owner": "Warren Heathcote, Operations Manager, SFG Aluminium Limited",
+    "authorityToChange": [
+      "Warren Heathcote (Operations Manager)",
+      "Yanika Heathcote (Admin/Director)",
+      "Pawel Marzec (Operations Manager)"
+    ],
+    "approvalProcess": "Written approval from at least two of the three approvers; version and log in Anti-Drift baseline.",
+    "nonNegotiables": [
+      "BaseNumber immutable and first in subject/filename/folder",
+      "Active/Completed are canonical; Month folders are shortcuts only",
+      "Required fields and ENQ_initial_count must not be MISSING for QUO→ORD",
+      "Product Count tracked ENQ→QUO (all revs)→ORD→INV→DEL/Collect→PAID",
+      "Email/filename patterns mandatory; deviation raises red alert",
+      "Drawing workflow (05a→05b→05c→05d→05e→10c) locked; no skips/reorders",
+      "Approved Documents (10) locked once populated; edits require version increment + audit trail",
+      "GDPR: no secrets client-side; Key Vault; Abacus.ai API key rotation every 90 days",
+      "Daily Anti-Drift hashing; major drift disables flows and alerts Governance",
+      "Xero contact flow option (A or B) must be documented before production"
+    ]
+  },
+  "paths": {
+    "activeRoot": "/sites/Files/SFG Aluminium/2025 SFG Aluminium/Active",
+    "completedRoot": "/sites/Files/SFG Aluminium/2025 SFG Aluminium/Completed",
+    "monthAccessRoot": "/sites/Files/SFG Aluminium/2025 SFG Aluminium",
+    "jobPathTemplate": "Active/{BaseNumber}-{Prefix}/{Customer}/{Project}/{Location}/{ProductType}/{DeliveryType}"
+  },
+  "requiredFields": [
+    "BaseNumber",
+    "Prefix",
+    "Customer",
+    "Project",
+    "Location",
+    "ProductType",
+    "DeliveryType",
+    "ENQ_initial_count"
+  ],
+  "productTypesList": "SharePoint:/sites/Files/Config/SFG Product Types",
+  "folders": [
+    "01 Enquiry",
+    "02 Customer Replies",
+    "03 SFG Quotes",
+    "04 Customer Orders (Inbound)",
+    "05 Drawings/05a Incoming Requests",
+    "05 Drawings/05b SFG Issue",
+    "05 Drawings/05c Change Requests",
+    "05 Drawings/05d Confirmations",
+    "05 Drawings/05e Approval",
+    "05 Drawings/05f Live Drawings",
+    "05 Drawings/05g Rejected Designs",
+    "06 Site Photos",
+    "07 Customers/07a RFQs",
+    "07 Customers/07b POs",
+    "08 Waiting For Approval",
+    "09 Invoicing",
+    "10 Approved Documents (locked)/10a Quotation Approved",
+    "10 Approved Documents (locked)/10b Purchase Order Received",
+    "10 Approved Documents (locked)/10c Drawing Approved",
+    "10 Approved Documents (locked)/10d Customer Agreements Mirror",
+    "11 O&Ms",
+    "12 Compliance",
+    "13 Customer Contacts/13a Primary",
+    "13 Customer Contacts/13b Accounts",
+    "13 Customer Contacts/13c Site",
+    "14 Misc",
+    "17 Completed Pack/17a Invoices (Customer)",
+    "17 Completed Pack/17b Delivery Notes (Prepared but un-signed)",
+    "17 Completed Pack/17c Delivery Notes (signed)",
+    "17 Completed Pack/17d O&M Final",
+    "17 Completed Pack/17e Completion Certificates/Warranty"
+  ],
+  "statusColours": {
+    "ENQ": "White",
+    "QUO": "Blue",
+    "ORD": "Amber",
+    "INV": "Purple",
+    "DEL": "Navy",
+    "PAID": "Green",
+    "MISSING": "RedBadge",
+    "ApprovedDocumentsPartial": "Blue",
+    "ApprovedDocumentsComplete": "Green",
+    "DeliveryNotesPreparedMatch": "Green",
+    "DeliveryNotesPreparedMismatch": "Amber"
+  },
+  "emailPatterns": {
+    "subject": "[{BaseNumber}-{Prefix}] → CUS {Customer} → {Project} → {Location} → {ProductType} → {DeliveryType} — SFG Aluminium — Customer Order nr {CustomerOrderNumber?}",
+    "filenameQuote": "{BaseNumber}-{Prefix}_Quote_{Revision}.pdf",
+    "filenamePO": "{BaseNumber}-{Prefix}_Customer_PO_{PONumber}.pdf",
+    "filenameSupplierRFQ": "{BaseNumber}-SFG-ENQ_RFQ_{Category}.pdf"
+  },
+  "productCount": {
+    "fields": {
+      "ENQ_initial_count": "integer",
+      "QUO_rev_counts": "array of {rev: string, count: integer, ts: ISO8601}",
+      "Current_product_count": "integer",
+      "prepared_count": "integer",
+      "delivered_count": "integer",
+      "collected_count": "integer"
+    },
+    "logs": {
+      "ProductCountLog": "array of {ts: ISO8601, user: string, source: string, additions: string[], removals: string[], extras: string[], note: string, status: string, estimatorSignoff: boolean, financeAcknowledged: boolean}"
+    },
+    "rules": [
+      "Count complete deliverables with their own price at quotation level",
+      "Separately priced accessories count; consumables do not",
+      "Block QUO→ORD if ENQ_initial_count or Current_product_count is MISSING"
+    ]
+  },
+  "workflow": {
+    "intake": {
+      "triggers": ["email:enquiries@", "email:orders@", "email:drawings@", "whatsapp:gateway", "mcp:portal"],
+      "actions": [
+        "Allocate BaseNumber (immutable) and create canonical folder path",
+        "Create Month shortcut to canonical path",
+        "If ProductType missing, set 'MISSING' and raise Teams red alert",
+        "Prompt for ENQ_initial_count (else set MISSING and remind)",
+        "Extract contacts into 13 Customer Contacts and sync with Xero (Option A temp default)"
+      ]
+    },
+    "customers": {
+      "mirrorToApproved": true,
+      "mirrorRules": [
+        "07a RFQs and 07b POs mirrored into 10d when approved/confirmed"
+      ]
+    },
+    "drawings": {
+      "flow": [
+        "05a Incoming Requests",
+        "05b SFG Issue",
+        "05c Change Requests",
+        "05d Confirmations",
+        "05e Approval",
+        "Promote approved to 10c; lock previous; maintain 05f Live Drawings; move rejected to 05g"
+      ],
+      "nonNegotiable": true
+    }
+  }
+}

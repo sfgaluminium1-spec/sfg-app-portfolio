@@ -1,0 +1,16 @@
+{
+  "summary": {
+    "totalRecords": 1730,
+    "validRecords": 792,
+    "duplicatesRemoved": 409,
+    "missingEmails": 83,
+    "missingPhones": 368,
+    "cleanedRecords": 383
+  },
+  "dataQuality": {
+    "emailCoverage": "89.5%",
+    "phoneCoverage": "53.5%",
+    "deduplicationRate": "23.6%"
+  },
+  "recommendations": []
+}
