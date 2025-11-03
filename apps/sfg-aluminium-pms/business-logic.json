@@ -1,0 +1,158 @@
+{
+  "appId": "sfg-aluminium-pms",
+  "version": "1.0.0",
+  "category": "PROJECT_MANAGEMENT",
+  "description": "SFG Aluminium Project Management System - Comprehensive ERP system with project tracking, financial management, cost control, resource allocation, and workflows",
+  "capabilities": [
+    "project_management",
+    "task_tracking",
+    "financial_management",
+    "cost_control",
+    "resource_allocation",
+    "document_management",
+    "workflow_automation",
+    "reporting_analytics",
+    "multi_department_support"
+  ],
+  "modules": [
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "description": "Centralized overview with KPIs and metrics",
+      "routes": [
+        "/dashboard"
+      ]
+    },
+    {
+      "id": "projects",
+      "name": "Project Management",
+      "description": "Project creation, tracking, and management",
+      "routes": [
+        "/projects"
+      ]
+    },
+    {
+      "id": "tasks",
+      "name": "Task Management",
+      "description": "Task assignment, tracking, and collaboration",
+      "routes": [
+        "/tasks"
+      ]
+    },
+    {
+      "id": "financial",
+      "name": "Financial Management",
+      "description": "Budget tracking, expense management, and financial analytics",
+      "routes": [
+        "/financial"
+      ]
+    },
+    {
+      "id": "cost_control",
+      "name": "Cost Control",
+      "description": "Cost estimation, tracking, and variance analysis",
+      "routes": [
+        "/cost-control"
+      ]
+    },
+    {
+      "id": "resources",
+      "name": "Resource Management",
+      "description": "Equipment, material, and human resource allocation",
+      "routes": [
+        "/resources"
+      ]
+    },
+    {
+      "id": "scheduling",
+      "name": "Scheduling",
+      "description": "Timeline planning and resource scheduling",
+      "routes": [
+        "/scheduling"
+      ]
+    },
+    {
+      "id": "documents",
+      "name": "Document Lifecycle",
+      "description": "Document management and version control",
+      "routes": [
+        "/documents-lifecycle"
+      ]
+    },
+    {
+      "id": "workflows",
+      "name": "Workflow Management",
+      "description": "Automated workflow creation and management",
+      "routes": [
+        "/workflows"
+      ]
+    },
+    {
+      "id": "reports",
+      "name": "Reports & Analytics",
+      "description": "Comprehensive reporting and data visualization",
+      "routes": [
+        "/reports"
+      ]
+    },
+    {
+      "id": "staff",
+      "name": "Staff Management",
+      "description": "Employee management and role assignments",
+      "routes": [
+        "/staff"
+      ]
+    },
+    {
+      "id": "customers",
+      "name": "Customer Management",
+      "description": "Client relationship and project association",
+      "routes": [
+        "/customers"
+      ]
+    }
+  ],
+  "database": {
+    "type": "PostgreSQL",
+    "orm": "Prisma",
+    "models": [
+      "User",
+      "Department",
+      "Project",
+      "Task",
+      "Customer",
+      "Staff",
+      "Resource",
+      "Document",
+      "Workflow",
+      "FinancialRecord"
+    ]
+  },
+  "authentication": {
+    "provider": "NextAuth",
+    "strategies": [
+      "credentials"
+    ],
+    "roleBasedAccess": true
+  },
+  "integrations": [
+    {
+      "type": "github",
+      "purpose": "Version control and satellite app management"
+    }
+  ],
+  "deployment": {
+    "platform": "abacusai.app",
+    "hostname": "sfg-project-plus.abacusai.app",
+    "status": "production"
+  },
+  "technicalStack": {
+    "framework": "Next.js 14",
+    "language": "TypeScript",
+    "uiLibrary": "React + Tailwind CSS + shadcn/ui",
+    "stateManagement": "React Hooks + Context API",
+    "database": "PostgreSQL with Prisma ORM",
+    "authentication": "NextAuth.js",
+    "deployment": "Abacus.AI Platform"
+  }
+}
