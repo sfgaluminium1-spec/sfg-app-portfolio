@@ -127,50 +127,6 @@
         "Classification confidence score",
         "Organized SharePoint structure"
       ]
-    },
-    {
-      "name": "Product Count Change Tracking",
-      "description": "Track and approve changes to project product quantities",
-      "steps": [
-        "User logs product count change (additions, removals, extras)",
-        "System calculates delta and pricing impact",
-        "Route to estimator for signoff",
-        "Route to finance for acknowledgement",
-        "Update project current product count",
-        "Log change in audit trail"
-      ],
-      "triggers": [
-        "Product count log creation",
-        "Revision submission"
-      ],
-      "outputs": [
-        "ProductCountLog record",
-        "Estimator signoff",
-        "Finance acknowledgement",
-        "Updated project count"
-      ]
-    },
-    {
-      "name": "Procedure Management & Conflict Detection",
-      "description": "Create, version, and detect conflicts in company procedures",
-      "steps": [
-        "User creates/updates procedure",
-        "System versions procedure (increment version number)",
-        "System scans for conflicts (duplicate rules, contradictory policies)",
-        "If conflict detected: Create ConflictReport",
-        "Notify relevant users of conflict",
-        "Track resolution progress"
-      ],
-      "triggers": [
-        "Procedure creation/update",
-        "Manual conflict scan"
-      ],
-      "outputs": [
-        "Procedure version",
-        "ConflictReport (if applicable)",
-        "Notification",
-        "Audit log"
-      ]
     }
   ],
   "businessRules": [
@@ -189,60 +145,11 @@
       "priority": "high"
     },
     {
-      "name": "Staff Tier Approval Limits",
-      "description": "Staff can only approve amounts within their tier limit",
-      "condition": "IF approvalAmount > staffTier.approvalLimit",
-      "action": "THEN escalate to next tier level",
-      "priority": "high"
-    },
-    {
       "name": "Insurance Compliance (Non-Negotiable)",
       "description": "Work must comply with insurance policy limits",
       "condition": "IF workHeight > 15m OR workDepth > 2m OR includesGroundwork = true OR workType in PROHIBITED_WORK",
       "action": "THEN block project and require special insurance approval",
       "priority": "high"
-    },
-    {
-      "name": "Drawing Workflow Sequential Progression",
-      "description": "Drawings must progress through workflow stages sequentially",
-      "condition": "IF targetStage.order != currentStage.order + 1",
-      "action": "THEN block and show \"Cannot skip workflow stages\"",
-      "priority": "high"
-    },
-    {
-      "name": "Xero Contact Creation Priority",
-      "description": "Contacts must be created in Xero before invoice generation",
-      "condition": "IF project.status = ORD AND project.xeroContactId = null",
-      "action": "THEN create Xero contact and store xeroContactId before allowing INV progression",
-      "priority": "high"
-    },
-    {
-      "name": "Credit Limit Enforcement",
-      "description": "Customers cannot exceed their tier-based credit limit",
-      "condition": "IF totalOutstanding + newOrderValue > customerTier.creditLimit",
-      "action": "THEN block order and require credit tier upgrade or payment",
-      "priority": "high"
-    },
-    {
-      "name": "Daily Turnover Target Tracking",
-      "description": "Track progress against £8,929 daily turnover target",
-      "condition": "IF date = today",
-      "action": "THEN sum all project values by status and display vs target",
-      "priority": "medium"
-    },
-    {
-      "name": "Monthly Overhead Coverage",
-      "description": "Ensure £50,000 monthly overhead is covered",
-      "condition": "IF monthToDate turnover < monthlyOverhead",
-      "action": "THEN display warning on dashboard",
-      "priority": "medium"
-    },
-    {
-      "name": "Audit Log Everything",
-      "description": "All create/update/delete operations must be logged",
-      "condition": "IF action in [CREATE, UPDATE, DELETE, APPROVE, REJECT]",
-      "action": "THEN create AuditLog record with oldValues, newValues, userId, timestamp",
-      "priority": "medium"
     }
   ],
   "calculations": [
@@ -274,60 +181,6 @@
       }
     },
     {
-      "name": "Labour Cost Calculation",
-      "description": "Calculate labour cost with overtime and weekend uplifts",
-      "formula": "cost = hours * rate * (isOvertime ? 1.5 : 1) * (isWeekend ? 1.5 : 1)",
-      "inputs": [
-        {
-          "name": "hours",
-          "type": "number",
-          "description": "Number of labour hours"
-        },
-        {
-          "name": "isOvertime",
-          "type": "boolean",
-          "description": "Whether work is overtime"
-        },
-        {
-          "name": "isWeekend",
-          "type": "boolean",
-          "description": "Whether work is on weekend"
-        }
-      ],
-      "output": {
-        "name": "cost",
-        "type": "number",
-        "description": "Total labour cost in GBP"
-      },
-      "example": {
-        "hours": 8,
-        "isOvertime": false,
-        "isWeekend": false,
-        "cost": 144
-      }
-    },
-    {
-      "name": "Monthly Progress Tracking",
-      "description": "Calculate progress towards £178,571 monthly turnover target",
-      "formula": "percentage = (currentTurnover / targetTurnover) * 100",
-      "inputs": [
-        {
-          "name": "currentTurnover",
-          "type": "number",
-          "description": "Month-to-date turnover"
-        }
-      ],
-      "output": {
-        "name": "percentage",
-        "type": "number",
-        "description": "Progress percentage (0-100)"
-      },
-      "example": {
-        "currentTurnover": 89285,
-        "percentage": 50
-      }
-    },
-    {
       "name": "Daily Turnover Target",
       "description": "Calculate daily target of £8,929 based on 22 working days/month",
       "formula": "dailyTarget = monthlyTarget / workingDaysPerMonth",
@@ -352,33 +205,6 @@
         "monthlyTarget": 178571,
         "workingDaysPerMonth": 22,
         "dailyTarget": 8929
-      }
-    },
-    {
-      "name": "Product Count Delta",
-      "description": "Calculate change in product quantities between revisions",
-      "formula": "delta = newCount - oldCount",
-      "inputs": [
-        {
-          "name": "oldCount",
-          "type": "number",
-          "description": "Previous product count"
-        },
-        {
-          "name": "newCount",
-          "type": "number",
-          "description": "New product count"
-        }
-      ],
-      "output": {
-        "name": "delta",
-        "type": "number",
-        "description": "Change in quantity (can be negative)"
-      },
-      "example": {
-        "oldCount": 25,
-        "newCount": 32,
-        "delta": 7
       }
     }
   ],
@@ -422,11 +248,6 @@
       "name": "Abacus.AI LLM APIs",
       "type": "api",
       "description": "RAG-powered chat assistant for querying procedures and knowledge base"
-    },
-    {
-      "name": "AWS S3 (via Abacus Cloud Storage)",
-      "type": "other",
-      "description": "Cloud storage for file attachments, drawings, and documents"
     }
   ],
   "dataModels": [
@@ -465,24 +286,6 @@
           "description": "Project name/description"
         },
         {
-          "name": "location",
-          "type": "string",
-          "required": false,
-          "description": "Project location"
-        },
-        {
-          "name": "productType",
-          "type": "string",
-          "required": false,
-          "description": "Type of product (e.g., \"Aluminium Windows\")"
-        },
-        {
-          "name": "deliveryType",
-          "type": "enum",
-          "required": false,
-          "description": "SUPPLY_ONLY | COLLECTED | SUPPLY_AND_INSTALL"
-        },
-        {
           "name": "status",
           "type": "enum",
           "required": true,
@@ -493,24 +296,12 @@
           "type": "string",
           "required": false,
           "description": "Xero contact ID for invoicing"
-        },
-        {
-          "name": "xeroInvoiceId",
-          "type": "string",
-          "required": false,
-          "description": "Xero invoice ID"
-        },
-        {
-          "name": "currentProductCount",
-          "type": "number",
-          "required": false,
-          "description": "Current number of products in project"
         }
       ]
     },
     {
       "name": "Procedure",
-      "description": "Company knowledge base procedures with versioning and conflict detection",
+      "description": "Company knowledge base procedures with versioning",
       "fields": [
         {
           "name": "id",
@@ -531,34 +322,16 @@
           "description": "Procedure content (markdown)"
         },
         {
-          "name": "categoryId",
-          "type": "string",
-          "required": true,
-          "description": "Parent category ID"
-        },
-        {
           "name": "version",
           "type": "number",
           "required": true,
           "description": "Version number"
         },
         {
-          "name": "isLatestVersion",
-          "type": "boolean",
-          "required": true,
-          "description": "Whether this is the latest version"
-        },
-        {
           "name": "status",
           "type": "enum",
           "required": true,
-          "description": "DRAFT | ACTIVE | INACTIVE | ARCHIVED | UNDER_REVIEW"
-        },
-        {
-          "name": "approvalLevel",
-          "type": "enum",
-          "required": true,
-          "description": "Required approval level (NONE | MANAGER | DIRECTOR | VP | CEO)"
+          "description": "DRAFT | ACTIVE | ARCHIVED"
         }
       ]
     },
@@ -601,24 +374,6 @@
           "type": "string",
           "required": false,
           "description": "Organized SharePoint URL"
-        },
-        {
-          "name": "jobNumber",
-          "type": "string",
-          "required": false,
-          "description": "Extracted job number"
-        },
-        {
-          "name": "customerName",
-          "type": "string",
-          "required": false,
-          "description": "Extracted customer name"
-        },
-        {
-          "name": "processingStatus",
-          "type": "enum",
-          "required": true,
-          "description": "Processing status"
         }
       ]
     },
@@ -636,7 +391,7 @@
           "name": "action",
           "type": "enum",
           "required": true,
-          "description": "CREATE | UPDATE | DELETE | VIEW | APPROVE | REJECT | RESTORE | ARCHIVE"
+          "description": "CREATE | UPDATE | DELETE | APPROVE"
         },
         {
           "name": "entityType",
@@ -645,76 +400,10 @@
           "description": "Type of entity affected"
         },
         {
-          "name": "entityId",
-          "type": "string",
-          "required": true,
-          "description": "ID of entity affected"
-        },
-        {
-          "name": "oldValues",
-          "type": "json",
-          "required": false,
-          "description": "Previous values (before change)"
-        },
-        {
-          "name": "newValues",
-          "type": "json",
-          "required": false,
-          "description": "New values (after change)"
-        },
-        {
           "name": "userId",
           "type": "string",
           "required": true,
           "description": "User who performed action"
-        }
-      ]
-    },
-    {
-      "name": "ConflictReport",
-      "description": "Detected conflicts between procedures and policies",
-      "fields": [
-        {
-          "name": "id",
-          "type": "string",
-          "required": true,
-          "description": "Unique conflict ID"
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "required": true,
-          "description": "Conflict title"
-        },
-        {
-          "name": "conflictType",
-          "type": "enum",
-          "required": true,
-          "description": "Type of conflict"
-        },
-        {
-          "name": "severity",
-          "type": "enum",
-          "required": true,
-          "description": "LOW | MEDIUM | HIGH | CRITICAL"
-        },
-        {
-          "name": "status",
-          "type": "enum",
-          "required": true,
-          "description": "DETECTED | INVESTIGATING | RESOLVED | ACCEPTED | IGNORED"
-        },
-        {
-          "name": "procedureId",
-          "type": "string",
-          "required": true,
-          "description": "Primary procedure involved"
-        },
-        {
-          "name": "relatedProcedureId",
-          "type": "string",
-          "required": false,
-          "description": "Related procedure (if applicable)"
         }
       ]
     }
@@ -746,18 +435,6 @@
     },
     {
       "method": "GET",
-      "path": "/api/categories",
-      "description": "List all categories",
-      "authentication": true
-    },
-    {
-      "method": "POST",
-      "path": "/api/categories",
-      "description": "Create new category",
-      "authentication": true
-    },
-    {
-      "method": "GET",
       "path": "/api/projects",
       "description": "List all projects",
       "authentication": true
@@ -770,104 +447,20 @@
     },
     {
       "method": "GET",
-      "path": "/api/projects/[id]",
-      "description": "Get project by ID",
-      "authentication": true
-    },
-    {
-      "method": "PUT",
-      "path": "/api/projects/[id]",
-      "description": "Update project",
-      "authentication": true
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/projects/[id]",
-      "description": "Delete project",
-      "authentication": true
-    },
-    {
-      "method": "POST",
-      "path": "/api/projects/[id]/product-count",
-      "description": "Log product count change",
-      "authentication": true
-    },
-    {
-      "method": "GET",
-      "path": "/api/projects/stats",
-      "description": "Get project statistics",
-      "authentication": true
-    },
-    {
-      "method": "GET",
       "path": "/api/companies-house/search",
-      "description": "Search Companies House by company name",
-      "authentication": true
-    },
-    {
-      "method": "GET",
-      "path": "/api/companies-house/profile",
-      "description": "Get company profile by number",
-      "authentication": true
-    },
-    {
-      "method": "GET",
-      "path": "/api/companies-house/officers",
-      "description": "Get company officers",
-      "authentication": true
-    },
-    {
-      "method": "GET",
-      "path": "/api/companies-house/credit-risk",
-      "description": "Assess credit risk",
-      "authentication": true
-    },
-    {
-      "method": "GET",
-      "path": "/api/xero/auth",
-      "description": "Initiate Xero OAuth flow",
-      "authentication": true
-    },
-    {
-      "method": "GET",
-      "path": "/api/xero/connect",
-      "description": "Xero OAuth callback",
-      "authentication": true
-    },
-    {
-      "method": "GET",
-      "path": "/api/xero/organisations",
-      "description": "List connected Xero organisations",
+      "description": "Search Companies House",
       "authentication": true
     },
     {
       "method": "POST",
       "path": "/api/xero/contacts",
-      "description": "Create or update Xero contact",
-      "authentication": true
-    },
-    {
-      "method": "POST",
-      "path": "/api/xero/invoices",
-      "description": "Create Xero invoice",
+      "description": "Create Xero contact",
       "authentication": true
     },
     {
       "method": "POST",
       "path": "/api/chat",
-      "description": "RAG chat assistant endpoint",
-      "authentication": true
-    },
-    {
-      "method": "POST",
-      "path": "/api/ai/chat",
-      "description": "AI chat completion",
-      "authentication": true
-    },
-    {
-      "method": "POST",
-      "path": "/api/notifications/sms",
-      "description": "Send SMS notification via Twilio",
+      "description": "RAG chat assistant",
       "authentication": true
     }
   ]

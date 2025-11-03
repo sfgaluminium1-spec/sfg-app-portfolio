@@ -1,13 +1,17 @@
 {
   "appName": "sfg-company-wiki",
-  "registrationDate": "2025-11-03T15:34:16.672Z",
+  "registrationDate": "2025-11-03T16:13:33.438Z",
   "status": "pending-approval",
   "version": "1.0.0",
+  "deployment": {
+    "url": "https://company-wiki-5g0kyk.abacusai.app",
+    "environment": "production"
+  },
   "techStack": {
     "framework": "Next.js 14",
     "language": "TypeScript",
     "database": "PostgreSQL (Prisma ORM)",
-    "deployment": "Abacus.AI"
+    "platform": "Abacus.AI"
   },
   "contact": {
     "maintainer": "Warren Heathcote",
