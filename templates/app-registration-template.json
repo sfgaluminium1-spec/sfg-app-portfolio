@@ -1,0 +1,30 @@
+
+{
+  "app_id": "[REQUIRED: Unique identifier, e.g., 'sfg-vertex']",
+  "app_name": "[REQUIRED: Full application name]",
+  "app_url": "[REQUIRED: Deployment URL]",
+  "app_category": "[REQUIRED: core|support|experimental]",
+  "version": "[REQUIRED: Semantic version]",
+  "registered_at": "[REQUIRED: ISO 8601 timestamp]",
+  "technical": {
+    "technology_stack": "[REQUIRED: Tech stack]",
+    "database": "[OPTIONAL: Database type]",
+    "hosting": "[REQUIRED: Hosting platform]",
+    "mcp_enabled": "[REQUIRED: true|false]",
+    "api_endpoints": ["[OPTIONAL: API endpoints]"]
+  },
+  "business": {
+    "primary_function": "[REQUIRED: What the app does]",
+    "target_users": "[REQUIRED: Who uses it]",
+    "key_features": ["[REQUIRED: Key features]"],
+    "staff_replaced": "[OPTIONAL: Number of staff roles replaced]",
+    "annual_savings_gbp": "[OPTIONAL: Annual savings in GBP]"
+  },
+  "integration": {
+    "integrates_with": ["[OPTIONAL: Apps this integrates with]"],
+    "data_sources": ["[OPTIONAL: Data sources]"],
+    "data_outputs": ["[OPTIONAL: Data outputs]"]
+  },
+  "status": "[REQUIRED: registered|active|maintenance|deprecated]",
+  "health": "[REQUIRED: healthy|degraded|down|unknown]"
+}
