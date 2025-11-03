@@ -1,0 +1,246 @@
+
+{
+  "app_name": "pichada-legal",
+  "category": "LEGAL_COMPLIANCE",
+  "description": "Comprehensive legal document management and compliance tracking system for construction contracts and regulations",
+  "version": "2.1.0",
+  "app_url": "https://pichada-legal.abacusai.app",
+  "contact_email": "warren@sfg-innovations.com",
+  "repository_url": "https://github.com/sfgaluminium1-spec/pichada-legal",
+  "capabilities": [
+    "Contract lifecycle management from draft to execution",
+    "Automated compliance checking against UK construction regulations",
+    "Document versioning with complete audit trail",
+    "E-signature integration with DocuSign",
+    "Multi-stage approval workflows",
+    "Deadline tracking and automated reminders",
+    "Template library for common contracts",
+    "Risk assessment and flagging",
+    "Integration with Companies House for entity verification"
+  ],
+  "workflows": [
+    {
+      "name": "Contract Approval",
+      "description": "Multi-stage contract approval workflow with compliance checks",
+      "steps": [
+        "Legal team drafts contract using template",
+        "System runs automated compliance check",
+        "Manager reviews contract and adds comments",
+        "Director reviews and approves or rejects",
+        "If approved, system generates DocuSign envelope",
+        "System sends contract to client for signature",
+        "System tracks signature status",
+        "Upon completion, system archives signed contract",
+        "System generates completion report and audit log"
+      ],
+      "triggers": "New contract created OR contract updated to pending approval status",
+      "outputs": "Signed contract PDF, Compliance report, Audit log entry, Notification emails"
+    },
+    {
+      "name": "Compliance Check",
+      "description": "Automated verification of contract compliance with regulations",
+      "steps": [
+        "System extracts text from contract document",
+        "System scans for required clauses per contract type",
+        "System checks clauses against compliance database",
+        "System validates terminology and legal language",
+        "System calculates risk score based on findings",
+        "System flags missing or non-compliant clauses",
+        "System generates detailed compliance report",
+        "If high risk, system notifies legal team immediately"
+      ],
+      "triggers": "Contract submitted for approval OR manual compliance check requested",
+      "outputs": "Compliance report with risk score, List of flagged issues, Recommendations"
+    },
+    {
+      "name": "Deadline Management",
+      "description": "Track and notify stakeholders of important contract deadlines",
+      "steps": [
+        "System extracts deadline dates from contract",
+        "System creates reminder schedule (30, 14, 7, 3, 1 days before)",
+        "System monitors deadline approach",
+        "System sends escalating reminders via email and dashboard",
+        "System marks deadline as met or missed",
+        "System generates deadline compliance report"
+      ],
+      "triggers": "Contract execution OR deadline date modified",
+      "outputs": "Calendar events, Email reminders, Deadline status updates"
+    }
+  ],
+  "business_rules": [
+    {
+      "name": "Director Approval Required",
+      "description": "Contracts over £50,000 require director-level approval",
+      "condition": "IF contract value > £50,000",
+      "action": "THEN route to director for approval and lock contract from further edits",
+      "priority": "high"
+    },
+    {
+      "name": "Mandatory Clauses",
+      "description": "All contracts must include mandatory clauses based on type",
+      "condition": "IF contract missing any mandatory clause for its type",
+      "action": "THEN block approval, notify legal team, and provide clause templates",
+      "priority": "high"
+    },
+    {
+      "name": "Entity Verification",
+      "description": "Verify client company exists and is active with Companies House",
+      "condition": "IF client is UK company AND not verified in last 30 days",
+      "action": "THEN query Companies House API and flag if inactive or dissolved",
+      "priority": "high"
+    },
+    {
+      "name": "Version Control",
+      "description": "Track all contract modifications with full audit trail",
+      "condition": "IF contract is modified",
+      "action": "THEN create new version, log change details, and preserve previous version",
+      "priority": "medium"
+    },
+    {
+      "name": "Signature Expiry",
+      "description": "E-signature requests expire after 30 days",
+      "condition": "IF signature request sent date > 30 days ago AND not completed",
+      "action": "THEN expire request, notify sender, and allow re-sending",
+      "priority": "medium"
+    }
+  ],
+  "integrations": [
+    "DocuSign - E-signature platform for contract execution",
+    "SharePoint Online - Document storage and version control",
+    "Xero - Financial data for contract value validation",
+    "Companies House API - UK company verification and status checks",
+    "Microsoft Teams - Notifications and collaboration",
+    "Outlook Calendar - Deadline tracking and reminders"
+  ],
+  "api_endpoints": [
+    {
+      "endpoint": "/api/contracts",
+      "method": "GET",
+      "purpose": "List all contracts with filtering and pagination",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/contracts",
+      "method": "POST",
+      "purpose": "Create new contract draft",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/contracts/:id",
+      "method": "GET",
+      "purpose": "Get contract details with full version history",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/contracts/:id",
+      "method": "PUT",
+      "purpose": "Update contract (creates new version)",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/contracts/:id/approve",
+      "method": "POST",
+      "purpose": "Approve contract and advance to next stage",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/contracts/:id/reject",
+      "method": "POST",
+      "purpose": "Reject contract with reason",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/compliance/check",
+      "method": "POST",
+      "purpose": "Run compliance check on contract",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/templates",
+      "method": "GET",
+      "purpose": "List available contract templates",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/deadlines",
+      "method": "GET",
+      "purpose": "Get upcoming deadlines across all contracts",
+      "auth_required": true
+    }
+  ],
+  "data_models": [
+    {
+      "name": "Contract",
+      "description": "Contract entity with full lifecycle tracking",
+      "key_fields": [
+        "id",
+        "title",
+        "type",
+        "value",
+        "status",
+        "client_id",
+        "client_name",
+        "created_by",
+        "approved_by",
+        "signed_date",
+        "start_date",
+        "end_date",
+        "docusign_envelope_id",
+        "current_version",
+        "risk_score"
+      ]
+    },
+    {
+      "name": "ContractVersion",
+      "description": "Version history for contract modifications",
+      "key_fields": [
+        "id",
+        "contract_id",
+        "version_number",
+        "content",
+        "modified_by",
+        "modified_at",
+        "change_summary"
+      ]
+    },
+    {
+      "name": "ComplianceRule",
+      "description": "Compliance rule definitions for contract checking",
+      "key_fields": [
+        "id",
+        "name",
+        "contract_type",
+        "clause_text",
+        "mandatory",
+        "category",
+        "regulation_reference"
+      ]
+    },
+    {
+      "name": "ComplianceCheck",
+      "description": "Results of compliance checks performed on contracts",
+      "key_fields": [
+        "id",
+        "contract_id",
+        "checked_at",
+        "risk_score",
+        "passed_rules",
+        "failed_rules",
+        "recommendations"
+      ]
+    },
+    {
+      "name": "ContractTemplate",
+      "description": "Reusable contract templates with predefined clauses",
+      "key_fields": [
+        "id",
+        "name",
+        "type",
+        "content",
+        "mandatory_clauses",
+        "created_by",
+        "last_updated"
+      ]
+    }
+  ]
+}

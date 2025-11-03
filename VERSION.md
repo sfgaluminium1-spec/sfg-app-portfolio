@@ -1,11 +1,60 @@
 
 # SFG Aluminium Ltd Website Version Log
 
-## Current Version: 1.4.0
-**Release Date:** October 31, 2025  
-**Status:** Comprehensive Chat History Extraction Complete  
+## Current Version: 1.5.0
+**Release Date:** November 3, 2025  
+**Status:** Satellite App Registration System Implemented  
 
 ### Version History
+
+#### v1.5.0 (November 3, 2025)
+- **MAJOR FEATURE** - SFG Satellite App Registration System
+- **GITHUB INTEGRATION:** Complete GitHub App authentication with Octokit
+- **AUTONOMOUS REGISTRATION:** Automated GitHub issue creation for satellite apps
+- **BUSINESS LOGIC FRAMEWORK:** Comprehensive extraction and documentation system
+- **DIRECTORY STRUCTURE:**
+  - `/satellite-registration/` - Root directory for registration system
+  - `/satellite-registration/scripts/` - GitHub auth, extraction, and registration scripts
+  - `/satellite-registration/types/` - TypeScript interface definitions
+  - `/satellite-registration/utils/` - Issue formatting utilities
+  - `/satellite-registration/examples/` - Templates and examples
+- **CORE COMPONENTS:**
+  - `github-auth.ts` - GitHub App authentication with credentials
+  - `extract-business-logic.ts` - Business logic extraction template
+  - `register-satellite.ts` - Main registration orchestration script
+  - `issue-formatter.ts` - GitHub issue body formatting
+  - `business-logic.ts` - TypeScript type definitions
+- **TEMPLATES PROVIDED:**
+  - Quick registration template (manual GitHub issue creation)
+  - Example business logic (QuickSpace workspace management)
+  - Complex app example (Pichada Legal compliance system)
+- **DOCUMENTATION:**
+  - Complete README with setup instructions
+  - 5-minute quick start guide
+  - 30-45 minute detailed registration guide
+  - Troubleshooting section
+  - Success criteria checklist
+- **ENVIRONMENT VARIABLES CONFIGURED:**
+  - `GITHUB_APP_ID=2228094`
+  - `GITHUB_APP_INSTALLATION_ID=92873690`
+  - `GITHUB_OWNER=sfgaluminium1-spec`
+  - `GITHUB_REPO=sfg-app-portfolio`
+  - `GITHUB_APP_PRIVATE_KEY` (RSA private key secured in .env)
+- **DEPENDENCIES ADDED:**
+  - `@octokit/rest` - GitHub REST API client
+  - `@octokit/auth-app` - GitHub App authentication
+- **CAPABILITIES:**
+  - Autonomous satellite app registration via GitHub issues
+  - Business logic extraction with validation
+  - Workflow documentation with steps, triggers, outputs
+  - Business rules with conditions and priorities
+  - API endpoint documentation
+  - Data model definitions
+  - Integration tracking
+  - Local backup of business logic (JSON)
+- **REPOSITORY:** https://github.com/sfgaluminium1-spec/sfg-app-portfolio
+- **NEXUS REVIEW:** 24-48 hour approval workflow
+- **STATUS:** ✅ Full Satellite App Registration System Operational
 
 #### v1.4.0 (October 31, 2025)
 - **MAJOR DOCUMENTATION** - Comprehensive Chat Extraction completed
