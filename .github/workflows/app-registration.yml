@@ -1,0 +1,68 @@
+
+name: Process App Registration
+
+on:
+  push:
+    paths:
+      - 'apps/*/app-registration.json'
+  pull_request:
+    paths:
+      - 'apps/*/app-registration.json'
+
+jobs:
+  validate-registration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate registration JSON
+        run: |
+          for file in apps/*/app-registration.json; do
+            if [ -f "$file" ]; then
+              echo "Validating $file"
+              # Check if valid JSON
+              if ! jq empty "$file" 2>/dev/null; then
+                echo "❌ Invalid JSON in $file"
+                exit 1
+              fi
+              
+              # Check required fields
+              required_fields=("app_id" "app_name" "app_url" "app_category")
+              for field in "${required_fields[@]}"; do
+                if ! jq -e ".$field" "$file" > /dev/null; then
+                  echo "❌ Missing required field: $field in $file"
+                  exit 1
+                fi
+              done
+              
+              echo "✅ $file is valid"
+            fi
+          done
+
+      - name: Create registration summary
+        run: |
+          echo "# Registration Summary" > registration-summary.md
+          echo "" >> registration-summary.md
+          for file in apps/*/app-registration.json; do
+            if [ -f "$file" ]; then
+              app_id=$(jq -r '.app_id' "$file")
+              app_name=$(jq -r '.app_name' "$file")
+              category=$(jq -r '.app_category' "$file")
+              echo "- **$app_name** ($app_id) - Category: $category" >> registration-summary.md
+            fi
+          done
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('registration-summary.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });

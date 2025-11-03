@@ -1,0 +1,1 @@
+ import TeamMemberManagement from '@/components/team-member-management'; export default function TeamsPage() { return <TeamMemberManagement />; } 

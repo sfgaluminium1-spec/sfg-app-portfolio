@@ -1,0 +1,1 @@
+ import SupplierManagement from '@/components/supplier-management'; export default function SuppliersPage() { return <SupplierManagement />; } 
