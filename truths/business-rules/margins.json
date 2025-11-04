@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-04",
+  "rules": [
+    {
+      "id": "MIN_MARGIN",
+      "value": 0.15,
+      "description": "Minimum margin percentage (15%)",
+      "enforced": true
+    },
+    {
+      "id": "TARGET_MARGIN",
+      "value": 0.25,
+      "description": "Target margin percentage (25%)",
+      "enforced": false
+    },
+    {
+      "id": "MARGIN_WARNING_THRESHOLD",
+      "value": 0.18,
+      "description": "Show warning if margin below 18%",
+      "enforced": true
+    }
+  ]
+}
