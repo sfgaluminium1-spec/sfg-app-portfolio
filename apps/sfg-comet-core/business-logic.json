@@ -1,0 +1,144 @@
+{
+  "capabilities": [
+    "Project management with 6-stage workflow (ENQ\u2192QUO\u2192ORD\u2192INV\u2192DEL\u2192PAID)",
+    "Customer credit checking via Companies House API",
+    "Document management with AWS S3 cloud storage",
+    "RAG truth system with AI-queryable business rules",
+    "User management with 5-tier role-based access control",
+    "Activity logging and comprehensive audit trails",
+    "Approval workflows with tier-based authority",
+    "Notification system for project events",
+    "Dashboard and analytics",
+    "MCP (Multi-Channel Processor) orchestration"
+  ],
+  "workflows": [
+    {
+      "name": "Project Lifecycle",
+      "steps": [
+        "ENQ - Receive customer enquiry",
+        "QUO - Generate and send quote",
+        "ORD - Confirm customer order",
+        "INV - Generate and send invoice",
+        "DEL - Create delivery note and dispatch",
+        "PAID - Receive payment and close project"
+      ]
+    },
+    {
+      "name": "Credit Checking",
+      "steps": [
+        "Extract company number",
+        "Query Companies House API",
+        "Calculate traditional credit score",
+        "Calculate AI-enhanced credit score",
+        "Determine risk tier and credit limit",
+        "Store result in database"
+      ]
+    },
+    {
+      "name": "Document Management",
+      "steps": [
+        "User uploads document",
+        "Validate file type and size",
+        "Upload to AWS S3 cloud storage",
+        "Store S3 key in PostgreSQL database",
+        "Generate signed URL for download",
+        "Track document version history"
+      ]
+    },
+    {
+      "name": "Approval Workflow",
+      "steps": [
+        "User submits approval request",
+        "System determines required tier based on amount",
+        "Notify approvers in required tier",
+        "Approver reviews and approves/rejects",
+        "System updates project status",
+        "Send confirmation notification"
+      ]
+    }
+  ],
+  "business_rules": [
+    {
+      "rule": "5-tier staff permission system",
+      "condition": "User tier determines approval authority",
+      "action": "T1: Unlimited, T2: \u00a350k, T3: \u00a315k, T4: \u00a35k, T5: \u00a31k"
+    },
+    {
+      "rule": "5-tier customer credit system",
+      "condition": "Customer tier based on credit limit",
+      "action": "Platinum: \u00a350k+, Sapphire: \u00a315-50k, Steel: \u00a35-15k, Green: \u00a31-5k, Crimson: \u00a30-1k"
+    },
+    {
+      "rule": "Sequential base number system",
+      "condition": "All projects get sequential base number",
+      "action": "Format: {BASE_NUMBER}-{STAGE} (e.g., 24001-ENQ)"
+    },
+    {
+      "rule": "Credit check for high-value orders",
+      "condition": "order_value > \u00a310,000",
+      "action": "Perform credit check before order approval"
+    },
+    {
+      "rule": "Minimum margin requirement",
+      "condition": "margin >= 0.15",
+      "action": "Require 15% minimum margin on all quotes"
+    },
+    {
+      "rule": "Tier-based approval escalation",
+      "condition": "value > user_tier_limit",
+      "action": "Escalate to higher tier for approval"
+    }
+  ],
+  "integrations": [
+    {
+      "system": "Companies House",
+      "purpose": "Company data and credit checking"
+    },
+    {
+      "system": "AWS S3",
+      "purpose": "Cloud document storage"
+    },
+    {
+      "system": "PostgreSQL",
+      "purpose": "Primary database"
+    },
+    {
+      "system": "ChromaDB",
+      "purpose": "Vector database for RAG system"
+    },
+    {
+      "system": "Xero",
+      "purpose": "Accounting and invoicing (pending OAuth)"
+    },
+    {
+      "system": "Microsoft Graph",
+      "purpose": "Email, calendar, SharePoint (pending OAuth)"
+    },
+    {
+      "system": "Twilio",
+      "purpose": "SMS notifications (configured)"
+    },
+    {
+      "system": "Abacus.AI LLM APIs",
+      "purpose": "AI-powered features"
+    }
+  ],
+  "webhook_events": [
+    "project.created",
+    "project.status_changed",
+    "document.uploaded",
+    "approval.requested",
+    "approval.approved",
+    "approval.rejected",
+    "payment.received",
+    "credit_check.completed"
+  ],
+  "supported_messages": [
+    "query.project_status",
+    "query.customer_data",
+    "query.credit_check",
+    "action.create_project",
+    "action.update_status",
+    "action.request_approval"
+  ]
+}
