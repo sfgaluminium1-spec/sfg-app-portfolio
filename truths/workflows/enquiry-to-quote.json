@@ -1,0 +1,50 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-04",
+  "workflow": {
+    "name": "Enquiry to Quote",
+    "stages": [
+      {
+        "stage": "ENQ",
+        "name": "Enquiry Received",
+        "nextStage": "QUO",
+        "actions": [
+          "Record customer details",
+          "Check if existing customer",
+          "Assign to sales team"
+        ]
+      },
+      {
+        "stage": "QUO",
+        "name": "Quote Preparation",
+        "nextStage": "SENT",
+        "actions": [
+          "Calculate costs",
+          "Apply margin rules",
+          "Check credit if needed",
+          "Get approval if needed"
+        ]
+      },
+      {
+        "stage": "SENT",
+        "name": "Quote Sent",
+        "nextStage": "ACC",
+        "actions": [
+          "Send quote to customer",
+          "Set follow-up reminder",
+          "Track customer response"
+        ]
+      },
+      {
+        "stage": "ACC",
+        "name": "Quote Accepted",
+        "nextStage": "ORD",
+        "actions": [
+          "Convert to order",
+          "Schedule production",
+          "Request deposit if needed"
+        ]
+      }
+    ]
+  }
+}
