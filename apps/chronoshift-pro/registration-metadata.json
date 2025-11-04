@@ -1,0 +1,355 @@
+{
+  "app_name": "chronoshift-pro",
+  "display_name": "ChronoShift Pro",
+  "version": "2.3.0",
+  "platform": "Next.js 14 + TypeScript + Prisma + PostgreSQL",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "deployed_url": "https://chronoshift-pro.abacusai.app",
+  "description": "Advanced payroll and timesheet management system for SFG Aluminium Ltd with real-time location tracking, supervisor approvals, and comprehensive HR compliance features",
+  "webhook_url": "https://chronoshift-pro.abacusai.app/api/webhooks/nexus",
+  "webhook_secret": "chronoshift-pro-nexus-secret-2025",
+  "webhook_events": [
+    "employee.registered",
+    "employee.updated",
+    "payroll.process_requested",
+    "timesheet.bulk_import",
+    "compliance.audit_required",
+    "test.event"
+  ],
+  "message_handler_url": "https://chronoshift-pro.abacusai.app/api/messages/handle",
+  "supported_messages": [
+    "query.employee_data",
+    "query.timesheet_summary",
+    "query.payroll_summary",
+    "action.approve_timesheet",
+    "action.generate_payslip",
+    "action.export_payroll_data",
+    "test.message"
+  ],
+  "github_webhook_url": "https://chronoshift-pro.abacusai.app/api/github-webhook",
+  "contact": {
+    "primary": "Warren @ SFG Aluminium",
+    "technical": "ChronoShift Pro System",
+    "support_url": "https://chronoshift-pro.abacusai.app"
+  },
+  "dependencies": {
+    "sfg_systems": [
+      "NEXUS (orchestration hub)",
+      "MCP-OPERATIONS (operations tools)",
+      "MCP-HR (HR tools)",
+      "MCP-FINANCE (finance tools)",
+      "MCP-COMMUNICATIONS (comms tools)"
+    ],
+    "external_services": [
+      "Microsoft 365 (Teams, SharePoint, Office 365)",
+      "BrightPay (payroll export)",
+      "Azure AD (authentication)",
+      "PostgreSQL (database)"
+    ]
+  },
+  "capabilities": [
+    "Real-time timesheet entry with mandatory location tracking",
+    "Automated time calculations (regular/overtime with SFG rules)",
+    "Multi-level supervisor approval workflows",
+    "Comprehensive payroll processing and export",
+    "Microsoft Teams integration for notifications",
+    "SharePoint integration for document management",
+    "BrightPay export for final payroll processing",
+    "Mobile PWA with offline sync capability",
+    "Voice dictation for timesheet entry",
+    "Advanced HR compliance tracking and audit logs",
+    "Role-based access control (Admin/Supervisor/Employee)",
+    "Dark mode and responsive design",
+    "Real-time geolocation verification"
+  ],
+  "business_rules": {
+    "timesheet_rules": [
+      {
+        "rule": "Mandatory Location Tracking",
+        "description": "All timesheet entries must include GPS coordinates for compliance",
+        "enforcement": "strict"
+      },
+      {
+        "rule": "Overtime Calculation (UK)",
+        "description": "Hours > 37.5/week at 1.5x base rate",
+        "formula": "overtime_hours = max(0, total_hours - 37.5); overtime_pay = overtime_hours * base_rate * 1.5"
+      },
+      {
+        "rule": "Break Time Deduction",
+        "description": "Default 30 minutes break, adjustable per shift",
+        "validation": "break_minutes <= (shift_duration / 2)"
+      },
+      {
+        "rule": "Supervisor Approval Required",
+        "description": "All timesheets must be approved before payroll processing",
+        "workflow": "Employee Submit \u2192 Supervisor Review \u2192 Admin Process"
+      }
+    ],
+    "approval_workflow": [
+      {
+        "stage": "submission",
+        "actor": "employee",
+        "action": "Submit timesheet with location",
+        "validations": [
+          "valid_location",
+          "reasonable_hours",
+          "no_duplicates"
+        ]
+      },
+      {
+        "stage": "review",
+        "actor": "supervisor",
+        "action": "Approve or reject with notes",
+        "sla": "24 hours"
+      },
+      {
+        "stage": "processing",
+        "actor": "admin",
+        "action": "Process approved timesheets for payroll",
+        "outputs": [
+          "payslips",
+          "brightpay_export",
+          "sharepoint_backup"
+        ]
+      }
+    ],
+    "compliance_rules": [
+      {
+        "rule": "Audit Trail",
+        "description": "All actions logged with timestamp, user, IP address",
+        "retention": "7 years (UK legal requirement)"
+      },
+      {
+        "rule": "Data Privacy (UK GDPR)",
+        "description": "Employee data processed according to UK GDPR",
+        "features": [
+          "data_export",
+          "data_deletion",
+          "consent_management"
+        ]
+      },
+      {
+        "rule": "Working Time Directive",
+        "description": "Monitoring for 48-hour average working week",
+        "alerts": "Notify admin if employee exceeds limits"
+      }
+    ]
+  },
+  "workflows": [
+    {
+      "name": "Daily Timesheet Entry",
+      "description": "Employee records daily hours with location verification",
+      "steps": [
+        "Employee logs in via mobile/desktop",
+        "System captures GPS location",
+        "Employee enters start time, end time, break duration",
+        "System calculates hours (regular/overtime)",
+        "System calculates pay based on employee rate",
+        "Employee adds notes (optional)",
+        "Employee submits timesheet",
+        "Supervisor receives notification",
+        "Timesheet status: pending"
+      ],
+      "triggers": [
+        "manual_entry"
+      ],
+      "outputs": [
+        "timesheet_record",
+        "supervisor_notification"
+      ]
+    },
+    {
+      "name": "Supervisor Approval Workflow",
+      "description": "Supervisors review and approve team timesheets",
+      "steps": [
+        "Supervisor views pending timesheets",
+        "Supervisor reviews hours, location, notes",
+        "Supervisor approves or rejects with comments",
+        "System updates timesheet status",
+        "Employee receives notification",
+        "Admin can view approved timesheets"
+      ],
+      "triggers": [
+        "timesheet_submission"
+      ],
+      "outputs": [
+        "approval_decision",
+        "employee_notification",
+        "audit_log"
+      ]
+    },
+    {
+      "name": "Weekly Payroll Processing",
+      "description": "Admin processes approved timesheets for payroll",
+      "steps": [
+        "Admin selects date range",
+        "System aggregates approved timesheets",
+        "System generates payroll summary",
+        "Admin exports to BrightPay format",
+        "System generates individual payslips",
+        "System backs up data to SharePoint",
+        "Admin finalizes payroll in BrightPay",
+        "Employees can view payslips in app"
+      ],
+      "triggers": [
+        "admin_action",
+        "scheduled_weekly"
+      ],
+      "outputs": [
+        "brightpay_export",
+        "payslips",
+        "sharepoint_backup",
+        "teams_notification"
+      ]
+    },
+    {
+      "name": "NEXUS Orchestrated Payroll",
+      "description": "Payroll processing triggered by NEXUS",
+      "steps": [
+        "NEXUS sends payroll.process_requested event",
+        "ChronoShift Pro receives webhook",
+        "System retrieves approved timesheets for period",
+        "System calculates payroll totals",
+        "System returns payroll data to NEXUS",
+        "NEXUS coordinates with finance systems"
+      ],
+      "triggers": [
+        "nexus_webhook"
+      ],
+      "outputs": [
+        "payroll_data_response"
+      ]
+    }
+  ],
+  "integration_points": {
+    "nexus_orchestration": {
+      "description": "Central orchestration hub for SFG apps",
+      "communication": [
+        "webhooks",
+        "message_api"
+      ],
+      "events_listened": [
+        "employee.registered",
+        "employee.updated",
+        "payroll.process_requested",
+        "timesheet.bulk_import",
+        "compliance.audit_required"
+      ],
+      "messages_handled": [
+        "query.employee_data",
+        "query.timesheet_summary",
+        "query.payroll_summary",
+        "action.approve_timesheet",
+        "action.generate_payslip",
+        "action.export_payroll_data"
+      ]
+    },
+    "microsoft_365": {
+      "services": [
+        "Teams",
+        "SharePoint",
+        "Office 365",
+        "Azure AD"
+      ],
+      "use_cases": [
+        "Teams notifications for approvals",
+        "SharePoint document storage",
+        "Azure AD authentication",
+        "Calendar integration"
+      ],
+      "setup_required": "Azure App Registration with appropriate permissions"
+    },
+    "brightpay": {
+      "description": "UK payroll processing software",
+      "integration_type": "CSV export",
+      "data_format": "BrightPay-compatible CSV with columns: Employee Number, Name, Regular Hours, Overtime Hours, Regular Pay, Overtime Pay, Total Pay"
+    },
+    "mcp_servers": {
+      "operations": "Operational data and tools",
+      "hr": "HR policies and employee management",
+      "finance": "Financial calculations and reporting",
+      "communications": "Notifications and messaging"
+    }
+  },
+  "technical_stack": {
+    "frontend": "Next.js 14 (App Router), React 18, TypeScript",
+    "ui_framework": "shadcn/ui + Tailwind CSS",
+    "backend": "Next.js API Routes, NextAuth.js",
+    "database": "PostgreSQL + Prisma ORM",
+    "authentication": "NextAuth.js + Azure AD (optional)",
+    "hosting": "Abacus.AI Platform",
+    "pwa": "Service Worker + Web App Manifest",
+    "api_integrations": [
+      "Microsoft Graph API",
+      "Mapbox GL (geolocation)",
+      "Web Speech API (voice dictation)"
+    ]
+  },
+  "security_features": [
+    "Role-based access control (RBAC)",
+    "Mandatory location verification",
+    "Session management with NextAuth",
+    "API route protection",
+    "SQL injection prevention (Prisma ORM)",
+    "XSS protection (React default)",
+    "CSRF protection",
+    "Secure password hashing (bcrypt)",
+    "Audit logging for all actions",
+    "IP address tracking"
+  ],
+  "compliance_features": [
+    "UK GDPR compliant",
+    "7-year audit trail retention",
+    "Data export functionality",
+    "Data deletion requests",
+    "Working Time Directive monitoring",
+    "HR compliance logging",
+    "Privacy policy and terms of service",
+    "Consent management"
+  ],
+  "deployment_info": {
+    "production_url": "https://chronoshift-pro.abacusai.app",
+    "deployment_platform": "Abacus.AI",
+    "deployment_date": "2025-09-13",
+    "last_updated": "2025-11-04",
+    "build_id": "31030338"
+  },
+  "testing": {
+    "test_accounts": [
+      {
+        "role": "admin",
+        "email": "admin@sfgaluminium.com",
+        "password": "Admin123!",
+        "description": "Full system access"
+      },
+      {
+        "role": "supervisor",
+        "email": "supervisor@sfgaluminium.com",
+        "password": "Super123!",
+        "description": "Team approval access"
+      },
+      {
+        "role": "employee",
+        "email": "employee@sfgaluminium.com",
+        "password": "Emp123!",
+        "description": "Timesheet entry only"
+      }
+    ]
+  },
+  "documentation": {
+    "readme": "apps/chronoshift-pro/README.md",
+    "business_logic": "apps/chronoshift-pro/business-logic.json",
+    "api_docs": "Webhook and Message Handler endpoints documented in route files",
+    "setup_guide": "Azure App Registration required for full Microsoft 365 integration"
+  },
+  "monitoring": {
+    "health_check_url": "https://chronoshift-pro.abacusai.app/api/health",
+    "webhook_verify_url": "https://chronoshift-pro.abacusai.app/api/webhooks/nexus",
+    "message_verify_url": "https://chronoshift-pro.abacusai.app/api/messages/handle"
+  },
+  "registered_at": "2025-11-04T00:00:00Z",
+  "registered_by": "Warren @ SFG Aluminium",
+  "registration_version": "2.0",
+  "notes": "ChronoShift Pro is a mission-critical payroll system for SFG Aluminium. Real-time orchestration via NEXUS webhooks and message handlers enabled."
+}
