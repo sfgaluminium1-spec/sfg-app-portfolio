@@ -1,0 +1,279 @@
+{
+  "app_name": "Warren Heathcote AI & Aluminium Innovation Hub",
+  "category": "EXECUTIVE_INNOVATION_HUB",
+  "description": "Premier executive command center integrating strategic leadership, AI-driven business intelligence, luxury lifestyle management, creative wellness initiatives, and comprehensive SharePoint/Xero integration for Warren Heathcote and family.",
+  "version": "2.5.0",
+  "url": "https://sfg-heathcote-hub.abacusai.app",
+  "capabilities": [
+    "Executive dashboard with real-time business intelligence",
+    "AI-powered chat assistant for strategic insights",
+    "Dual-persona management (Warren Executive + Yanika Creative Oasis)",
+    "SharePoint library management with futuristic UI",
+    "Xero financial integration with real-time analytics",
+    "Power BI dashboard integration",
+    "Luxury lifestyle & motorsport tracking",
+    "Investment & cryptocurrency portfolio management",
+    "Creative wellness & beauty management",
+    "Dermatology AI chatbot for skincare advice",
+    "Instagram marketing analytics & campaign management",
+    "Content updates & scheduling system",
+    "Dubai-themed wellness hub",
+    "Multi-platform social media console",
+    "Family & travel moments tracking"
+  ],
+  "workflows": [
+    {
+      "name": "Executive Dashboard Access",
+      "description": "Provide Warren with comprehensive executive command center",
+      "steps": [
+        "User accesses main innovation hub",
+        "System displays dual-access options (Executive vs Creative)",
+        "User selects Warren Executive Suite",
+        "Authentication verification",
+        "Load executive dashboard with real-time metrics",
+        "Display innovation strategy, motorsport, luxury, and investment sections"
+      ],
+      "triggers": "User navigates to /warren-executive",
+      "outputs": "Executive dashboard with 4 strategic sections and real-time analytics"
+    },
+    {
+      "name": "Creative Wellness Management",
+      "description": "Yanika's comprehensive wellness and beauty management hub",
+      "steps": [
+        "User accesses Yanika Oasis",
+        "System displays Dubai-themed wellness interface",
+        "Load AI dermatology assistant",
+        "Present Instagram analytics & marketing campaigns",
+        "Display content management & scheduling tools",
+        "Enable social media console access"
+      ],
+      "triggers": "User navigates to /yanika-oasis",
+      "outputs": "Wellness dashboard with AI chatbot, marketing analytics, and content management"
+    },
+    {
+      "name": "SharePoint Integration",
+      "description": "Seamless SharePoint library access with modern UI",
+      "steps": [
+        "User views SharePoint libraries grid",
+        "System displays futuristic folder cards",
+        "User clicks on library",
+        "System opens SharePoint in optimized iframe or new tab",
+        "Track analytics and usage patterns"
+      ],
+      "triggers": "User interacts with folder grid",
+      "outputs": "Direct SharePoint access with usage analytics"
+    },
+    {
+      "name": "Xero Financial Analytics",
+      "description": "Real-time financial data integration and visualization",
+      "steps": [
+        "System connects to Xero API",
+        "Fetch invoices, cash flow, and profitability data",
+        "Generate real-time charts and metrics",
+        "Display financial health indicators",
+        "Enable invoice generation and management"
+      ],
+      "triggers": "User views Xero integration section",
+      "outputs": "Financial dashboard with real-time metrics and actionable insights"
+    },
+    {
+      "name": "AI-Powered Dermatology Consultation",
+      "description": "Provide personalized skincare advice using AI",
+      "steps": [
+        "User enters skincare question",
+        "AI analyzes query and Dubai climate factors",
+        "Generate personalized recommendations",
+        "Provide product suggestions and routine advice",
+        "Track consultation history"
+      ],
+      "triggers": "User asks question in Derma AI chatbot",
+      "outputs": "Personalized skincare advice with Dubai climate considerations"
+    },
+    {
+      "name": "Marketing Campaign Management",
+      "description": "Track and optimize Instagram marketing campaigns",
+      "steps": [
+        "System fetches Instagram analytics",
+        "Display campaign performance metrics",
+        "Calculate ROI and engagement rates",
+        "Generate insights and recommendations",
+        "Enable campaign creation and budget management"
+      ],
+      "triggers": "User accesses Marketing tab",
+      "outputs": "Campaign performance dashboard with budget tracking and insights"
+    }
+  ],
+  "business_rules": [
+    {
+      "name": "Dual-Persona Access Control",
+      "description": "Separate executive and creative workspaces with distinct themes",
+      "condition": "User accesses either /warren-executive or /yanika-oasis",
+      "action": "Load appropriate theme (diamond gold for Warren, Dubai pink-purple for Yanika)",
+      "priority": "high"
+    },
+    {
+      "name": "SharePoint Iframe Optimization",
+      "description": "Optimize UI for both standalone and SharePoint iframe embedding",
+      "condition": "Detect if running in iframe or SharePoint environment",
+      "action": "Adjust layout, animations, and content density accordingly",
+      "priority": "high"
+    },
+    {
+      "name": "Real-Time Data Synchronization",
+      "description": "Keep Xero financial data and SharePoint analytics up-to-date",
+      "condition": "User views financial or SharePoint sections",
+      "action": "Fetch latest data from respective APIs",
+      "priority": "medium"
+    },
+    {
+      "name": "AI Response Personalization",
+      "description": "Tailor AI responses based on user context and persona",
+      "condition": "User interacts with AI chatbot",
+      "action": "Use persona-specific knowledge base and tone (Executive vs Wellness)",
+      "priority": "medium"
+    },
+    {
+      "name": "Dubai Climate Awareness",
+      "description": "All dermatology recommendations consider Dubai's climate",
+      "condition": "User asks skincare question",
+      "action": "Include Dubai-specific advice (sun protection, hydration, heat management)",
+      "priority": "high"
+    }
+  ],
+  "integrations": [
+    {
+      "system": "SharePoint",
+      "purpose": "Document library management and analytics"
+    },
+    {
+      "system": "Xero",
+      "purpose": "Financial data, invoicing, and cash flow analytics"
+    },
+    {
+      "system": "Power BI",
+      "purpose": "Advanced business intelligence dashboards"
+    },
+    {
+      "system": "Instagram",
+      "purpose": "Social media analytics and marketing campaign management"
+    },
+    {
+      "system": "Abacus.AI",
+      "purpose": "AI chatbot, content generation, and analytics"
+    },
+    {
+      "system": "Companies House",
+      "purpose": "Business intelligence and company data (via Xero integration)"
+    }
+  ],
+  "api_endpoints": [
+    {
+      "endpoint": "/api/chat",
+      "method": "POST",
+      "purpose": "AI chatbot conversations for both Executive and Wellness personas",
+      "auth_required": false
+    },
+    {
+      "endpoint": "/api/xero/*",
+      "method": "GET",
+      "purpose": "Xero financial data endpoints (invoices, contacts, accounts)",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/sharepoint/analytics",
+      "method": "GET",
+      "purpose": "SharePoint library usage analytics and statistics",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/instagram/analytics",
+      "method": "GET",
+      "purpose": "Instagram engagement metrics and campaign performance",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/campaigns",
+      "method": "GET",
+      "purpose": "Marketing campaign data and management",
+      "auth_required": true
+    },
+    {
+      "endpoint": "/api/updates",
+      "method": "POST",
+      "purpose": "Content update creation and management",
+      "auth_required": true
+    }
+  ],
+  "data_models": [
+    {
+      "name": "Executive Dashboard",
+      "description": "Warren's strategic command center data",
+      "key_fields": [
+        "innovation_metrics",
+        "motorsport_stats",
+        "luxury_portfolio",
+        "investment_data",
+        "crypto_holdings"
+      ]
+    },
+    {
+      "name": "Creative Wellness Hub",
+      "description": "Yanika's wellness and beauty management data",
+      "key_fields": [
+        "wellness_score",
+        "creative_projects",
+        "engagement_rate",
+        "derma_consultations",
+        "marketing_campaigns"
+      ]
+    },
+    {
+      "name": "SharePoint Library",
+      "description": "SharePoint document library metadata",
+      "key_fields": [
+        "library_id",
+        "library_name",
+        "url",
+        "icon",
+        "category",
+        "item_count"
+      ]
+    },
+    {
+      "name": "Xero Financial Data",
+      "description": "Financial metrics from Xero integration",
+      "key_fields": [
+        "total_revenue",
+        "outstanding_invoices",
+        "cash_flow",
+        "profitability",
+        "account_balance"
+      ]
+    },
+    {
+      "name": "Marketing Campaign",
+      "description": "Instagram marketing campaign data",
+      "key_fields": [
+        "campaign_id",
+        "name",
+        "status",
+        "reach",
+        "engagement",
+        "budget",
+        "spent",
+        "roi"
+      ]
+    },
+    {
+      "name": "AI Chat Session",
+      "description": "Conversational AI chat history",
+      "key_fields": [
+        "session_id",
+        "persona",
+        "messages",
+        "timestamp",
+        "context"
+      ]
+    }
+  ]
+}
