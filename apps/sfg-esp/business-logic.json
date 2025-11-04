@@ -1,255 +1,438 @@
+
 {
-  "appName": "SFG-ESP",
-  "version": "2.0.0",
-  "registrationDate": "2025-11-03T16:11:59.679Z",
-  "sourceDirectory": "/home/ubuntu/sfg_enquiry_system_enhanced/app",
-  "coreModules": {
-    "enquiryManagement": {
-      "description": "Customer enquiry capture, tracking, and workflow management",
-      "routes": [
-        "/enquiries",
-        "/enquiries/new",
-        "/intelligent-enquiry"
-      ],
-      "apiEndpoints": [
-        "/api/enquiries"
-      ],
-      "features": [
-        "Enquiry creation with customer details",
-        "Product requirement capture",
-        "Status tracking and workflow management",
-        "AI-powered intelligent enquiry processing",
-        "Regulatory compliance checking",
-        "Credit assessment integration"
-      ]
-    },
-    "customerManagement": {
-      "description": "Customer database and relationship management",
-      "routes": [
-        "/customers"
-      ],
-      "apiEndpoints": [
-        "/api/customers"
-      ],
-      "features": [
-        "Customer profile management",
-        "Company information tracking",
-        "Contact details management",
-        "Customer tier classification",
-        "Credit limit tracking",
-        "Historical enquiry access"
-      ]
-    },
-    "quotationManagement": {
-      "description": "Quote generation and pricing management",
-      "routes": [
-        "/quotations"
-      ],
-      "apiEndpoints": [
-        "/api/quotations"
-      ],
-      "features": [
-        "Automated quote generation",
-        "Pricing calculations",
-        "Multi-product quotations",
-        "Quote versioning",
-        "Approval workflows",
-        "PDF quote generation"
-      ]
-    },
-    "regulatoryIntelligence": {
-      "description": "Building regulations and compliance checking",
-      "routes": [
-        "/regulations"
-      ],
-      "apiEndpoints": [
-        "/api/regulations"
-      ],
-      "features": [
-        "Product compliance verification",
-        "Building height threshold checks",
-        "Approval pathway determination",
-        "Local authority variation handling",
-        "Regulatory document management",
-        "Fire safety compliance"
-      ],
-      "dataSources": [
-        "Building Regulations 2010",
-        "Approved Document B (Fire Safety)",
-        "BS 8200 standards",
-        "Local authority requirements"
-      ]
-    },
-    "creditChecking": {
-      "description": "Customer credit assessment and risk management",
-      "routes": [
-        "/credit"
-      ],
-      "apiEndpoints": [
-        "/api/credit-checks"
-      ],
-      "features": [
-        "Automated credit checks",
-        "Companies House integration",
-        "Credit limit recommendations",
-        "Risk assessment scoring",
-        "Payment terms determination",
-        "Credit history tracking"
-      ],
-      "integrations": [
-        "Companies House API"
-      ]
-    },
-    "xeroIntegration": {
-      "description": "Accounting system integration with Xero",
-      "apiEndpoints": [
-        "/api/xero"
-      ],
-      "features": [
-        "Customer synchronization",
-        "Invoice creation",
-        "Payment tracking",
-        "Quote to invoice conversion",
-        "Real-time pricing updates",
-        "Financial reporting"
-      ],
-      "webhooks": [
-        "/api/xero/webhooks/contacts",
-        "/api/xero/webhooks/invoices"
-      ]
-    },
-    "whatsappIntegration": {
-      "description": "WhatsApp Business API integration for customer communication",
-      "routes": [
-        "/whatsapp-integration"
-      ],
-      "apiEndpoints": [
-        "/api/whatsapp"
-      ],
-      "features": [
-        "Automated customer notifications",
-        "Enquiry status updates",
-        "Quote delivery via WhatsApp",
-        "Two-way messaging",
-        "Template message management",
-        "Message logging and tracking"
-      ],
-      "integrations": [
-        "Twilio WhatsApp API"
-      ]
-    },
-    "analyticsAndReporting": {
-      "description": "Business intelligence and data analytics",
-      "routes": [
-        "/analytics"
-      ],
-      "apiEndpoints": [
-        "/api/analytics"
-      ],
-      "features": [
-        "Enquiry conversion tracking",
-        "Customer acquisition metrics",
-        "Product demand analysis",
-        "Revenue forecasting",
-        "Sales pipeline visualization",
-        "Performance dashboards"
-      ]
-    },
-    "aiAssistant": {
-      "description": "AI-powered intelligent features and automation",
-      "routes": [
-        "/ai"
-      ],
-      "features": [
-        "Intelligent enquiry processing",
-        "Automated product recommendations",
-        "Regulatory compliance assistance",
-        "Natural language query processing",
-        "Document analysis",
-        "Predictive analytics"
-      ],
-      "integrations": [
-        "Abacus.AI API"
-      ]
-    }
-  },
-  "databaseSchema": {
-    "tables": [
-      "User",
-      "Customer",
-      "Enquiry",
-      "EnquiryProduct",
-      "Quotation",
-      "QuotationItem",
-      "CreditCheck",
-      "RegulatoryCheck",
-      "Product",
-      "BuildingRegulation",
-      "XeroCustomer",
-      "WhatsAppMessage",
-      "AnalyticsEvent"
-    ],
-    "orm": "Prisma",
-    "database": "PostgreSQL"
-  },
-  "externalIntegrations": [
+  "app_name": "SFG-ESP",
+  "full_name": "SFG Enquiry Spec Price Deliver",
+  "version": "2.0",
+  "platform": "Abacus.AI DeepAgent + Next.js 14",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "deployment_url": "https://sfg-esp.abacusai.app",
+  
+  "purpose": "Comprehensive enquiry, specification, pricing, and delivery management system for SFG Aluminium Limited with AI-powered features, regulatory intelligence, and customer portal.",
+  
+  "capabilities": [
+    "Customer enquiry management with intelligent routing",
+    "Quote generation with SFG margin calculations (15% minimum)",
+    "Credit checking via Experian integration (MCP-FINANCE)",
+    "Invoice processing via Xero",
+    "Document management via SharePoint",
+    "Company data verification via Companies House",
+    "AI-powered regulatory intelligence for building regulations",
+    "Real-time analytics and reporting",
+    "Customer portal for self-service",
+    "WhatsApp integration for customer communication",
+    "Automated workflow orchestration",
+    "Tier-based approval workflows",
+    "Multi-stage enquiry tracking (ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID)"
+  ],
+  
+  "workflows": [
     {
-      "name": "Xero",
-      "purpose": "Accounting and invoicing",
-      "authentication": "OAuth 2.0 with PKCE",
-      "endpoints": [
-        "https://api.xero.com/api.xro/2.0/"
-      ]
+      "name": "Enquiry to Quote",
+      "description": "Complete workflow from initial enquiry to quote generation",
+      "steps": [
+        "Receive customer enquiry (web form, email, WhatsApp)",
+        "Validate customer information",
+        "Check customer credit (if value > £10,000)",
+        "Identify products and regulatory requirements",
+        "Calculate pricing with 15% minimum margin",
+        "Get tier-based approval if needed",
+        "Generate quote document",
+        "Send quote to customer",
+        "Create SharePoint project folder",
+        "Track quote status and follow-ups"
+      ],
+      "automation_level": "semi-automated",
+      "approval_required": true,
+      "average_completion_time": "24-48 hours"
     },
     {
-      "name": "Companies House",
-      "purpose": "Credit checking and company verification",
-      "authentication": "API Key",
-      "endpoints": [
-        "https://api.company-information.service.gov.uk/"
-      ]
+      "name": "Quote to Order",
+      "description": "Process from quote acceptance to order confirmation",
+      "steps": [
+        "Receive quote acceptance from customer",
+        "Verify customer details and credit status",
+        "Create order in Xero",
+        "Generate invoice",
+        "Send order confirmation to customer",
+        "Notify fabrication team",
+        "Schedule production",
+        "Update project status in SharePoint"
+      ],
+      "automation_level": "automated",
+      "approval_required": true,
+      "average_completion_time": "2-4 hours"
     },
     {
-      "name": "Twilio WhatsApp",
-      "purpose": "Customer communication",
-      "authentication": "Account SID + Auth Token",
-      "endpoints": [
-        "https://api.twilio.com/2010-04-01/"
-      ]
+      "name": "Credit Check",
+      "description": "Automated credit checking for customers",
+      "steps": [
+        "Check if order value > £10,000",
+        "Query existing credit check (valid for 90 days)",
+        "If expired or not found, request new check from Experian (via MCP-FINANCE)",
+        "Store credit check results",
+        "Apply credit limit and risk rating",
+        "Send approval/rejection notification"
+      ],
+      "automation_level": "fully-automated",
+      "approval_required": false,
+      "average_completion_time": "5-15 minutes"
     },
     {
-      "name": "Abacus.AI",
-      "purpose": "AI-powered features",
-      "authentication": "API Key",
-      "endpoints": [
-        "https://api.abacus.ai/"
-      ]
+      "name": "Regulatory Intelligence",
+      "description": "AI-powered building regulations compliance checking",
+      "steps": [
+        "Identify aluminium products (curtain walling, windows, doors, etc.)",
+        "Determine building type (commercial/domestic)",
+        "Calculate building height and specifications",
+        "Check applicable Building Regulations (Part L, K, etc.)",
+        "Determine approval pathway (Building Control, Approved Inspector, LABC)",
+        "Generate compliance report",
+        "Provide recommendations"
+      ],
+      "automation_level": "ai-assisted",
+      "approval_required": false,
+      "average_completion_time": "1-5 minutes"
     }
   ],
-  "deploymentInfo": {
-    "platform": "Abacus.AI DeepAgent",
-    "hostname": "sfg-esp.abacusai.app",
+  
+  "business_rules": [
+    {
+      "rule": "Minimum margin 15%",
+      "condition": "margin >= 0.15",
+      "action": "Allow quote",
+      "exception": "Director approval required for margin < 15%"
+    },
+    {
+      "rule": "Credit check for orders > £10,000",
+      "condition": "order_value > 10000",
+      "action": "Perform credit check via Experian (MCP-FINANCE)",
+      "exception": "Waived for Platinum/Sapphire tier customers with good history"
+    },
+    {
+      "rule": "Tier-based approval limits",
+      "tiers": [
+        { "tier": "T1 (Director)", "limit": 1000000 },
+        { "tier": "T2 (Senior Manager)", "limit": 100000 },
+        { "tier": "T3 (Manager)", "limit": 25000 },
+        { "tier": "T4 (Supervisor)", "limit": 10000 },
+        { "tier": "T5 (Staff)", "limit": 1000 }
+      ],
+      "action": "Escalate to higher tier if value exceeds limit"
+    },
+    {
+      "rule": "Credit check validity",
+      "condition": "credit_check_age <= 90 days",
+      "action": "Use existing credit check",
+      "else": "Request new credit check"
+    },
+    {
+      "rule": "Customer tier classification",
+      "tiers": [
+        { "tier": "Platinum", "color": "Purple", "criteria": "Annual spend > £500k, 5+ years relationship, excellent payment history" },
+        { "tier": "Sapphire", "color": "Blue", "criteria": "Annual spend > £100k, 2+ years relationship, good payment history" },
+        { "tier": "Steel", "color": "Gray", "criteria": "New customers, annual spend < £100k" },
+        { "tier": "Green", "color": "Green", "criteria": "Pre-approved customers, fast-track processing" },
+        { "tier": "Crimson", "color": "Red", "criteria": "High risk, payment issues, requires approval for all quotes" }
+      ]
+    },
+    {
+      "rule": "Document stage progression",
+      "stages": ["ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"],
+      "action": "Track document through all stages, prevent skipping stages"
+    }
+  ],
+  
+  "integrations": [
+    {
+      "system": "Xero",
+      "purpose": "Accounting, invoicing, and financial management",
+      "api": "Xero API",
+      "status": "configured",
+      "endpoints": [
+        "/api/xero/auth",
+        "/api/xero/callback",
+        "/api/xero/invoices",
+        "/api/xero/contacts",
+        "/api/xero/webhooks"
+      ]
+    },
+    {
+      "system": "Experian",
+      "purpose": "Credit checking and risk assessment",
+      "api": "Via MCP-FINANCE",
+      "status": "planned",
+      "note": "Accessed through MCP-FINANCE tools"
+    },
+    {
+      "system": "Companies House",
+      "purpose": "Company data verification",
+      "api": "Companies House API",
+      "status": "configured",
+      "note": "Used for company number lookup and verification"
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage and project folders",
+      "api": "Microsoft Graph API",
+      "status": "planned",
+      "note": "Requires Microsoft 365 integration"
+    },
+    {
+      "system": "WhatsApp Business",
+      "purpose": "Customer communication",
+      "api": "WhatsApp Business API",
+      "status": "planned",
+      "note": "For enquiry notifications and customer updates"
+    },
+    {
+      "system": "MCP-SALES",
+      "purpose": "Sales tools and CRM integration",
+      "api": "MCP Server",
+      "status": "available"
+    },
+    {
+      "system": "MCP-FINANCE",
+      "purpose": "Finance tools including credit checking",
+      "api": "MCP Server",
+      "status": "available"
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "purpose": "Operations and production management",
+      "api": "MCP Server",
+      "status": "available"
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "purpose": "Email, SMS, and communication tools",
+      "api": "MCP Server",
+      "status": "available"
+    },
+    {
+      "system": "MCP-DATA",
+      "purpose": "Data analysis and reporting",
+      "api": "MCP Server",
+      "status": "available"
+    },
+    {
+      "system": "NEXUS",
+      "purpose": "Orchestration and workflow automation",
+      "api": "Webhooks + Message Handler",
+      "status": "active",
+      "endpoints": [
+        "/api/webhooks/nexus",
+        "/api/messages/handle"
+      ]
+    },
+    {
+      "system": "Google Analytics 4",
+      "purpose": "Web analytics and user tracking",
+      "api": "GA4 gtag.js",
+      "status": "configured"
+    }
+  ],
+  
+  "webhook_events": [
+    {
+      "event": "enquiry.created",
+      "description": "New enquiry received from customer",
+      "action": "Create enquiry record, assign to estimator, send notification"
+    },
+    {
+      "event": "quote.requested",
+      "description": "Quote generation requested by NEXUS or other app",
+      "action": "Calculate pricing, generate quote document, return quote details"
+    },
+    {
+      "event": "order.approved",
+      "description": "Order approved by customer or internal approver",
+      "action": "Update status, create invoice, notify teams, schedule production"
+    },
+    {
+      "event": "customer.registered",
+      "description": "New customer registered in system",
+      "action": "Create customer record, perform initial credit check if needed"
+    },
+    {
+      "event": "credit.check_required",
+      "description": "Credit check requested for customer",
+      "action": "Query MCP-FINANCE for Experian credit check, store results"
+    },
+    {
+      "event": "invoice.due",
+      "description": "Invoice payment due reminder",
+      "action": "Send reminder to customer, update status"
+    },
+    {
+      "event": "payment.received",
+      "description": "Payment received from customer",
+      "action": "Update invoice status, send confirmation, update customer account"
+    }
+  ],
+  
+  "supported_messages": [
+    {
+      "type": "query.customer_data",
+      "description": "Get customer information including credit status",
+      "params": ["customer_id", "company_number"],
+      "returns": "Customer details, tier, credit limit, recent enquiries"
+    },
+    {
+      "type": "query.quote_status",
+      "description": "Get quotation status and details",
+      "params": ["quote_id", "quote_number"],
+      "returns": "Quote details, status, amounts, dates"
+    },
+    {
+      "type": "query.order_status",
+      "description": "Get order status and details",
+      "params": ["order_id", "quote_id"],
+      "returns": "Order details, status, timeline"
+    },
+    {
+      "type": "query.credit_status",
+      "description": "Get customer credit check status",
+      "params": ["customer_id"],
+      "returns": "Credit score, limit, risk rating, expiry"
+    },
+    {
+      "type": "query.enquiry_data",
+      "description": "Get enquiry details and history",
+      "params": ["enquiry_id"],
+      "returns": "Enquiry details, customer, quotes, status"
+    },
+    {
+      "type": "action.create_quote",
+      "description": "Create a new quotation",
+      "params": ["enquiry_id", "items", "margin", "notes"],
+      "returns": "Quote ID, number, amount, status"
+    },
+    {
+      "type": "action.approve_order",
+      "description": "Approve an order",
+      "params": ["quote_id", "approved_by"],
+      "returns": "Approval confirmation, next steps"
+    },
+    {
+      "type": "action.send_invoice",
+      "description": "Send invoice to customer",
+      "params": ["quote_id", "customer_email"],
+      "returns": "Invoice number, sent confirmation"
+    },
+    {
+      "type": "action.update_customer",
+      "description": "Update customer information",
+      "params": ["customer_id", "updates"],
+      "returns": "Updated customer details"
+    }
+  ],
+  
+  "data_models": [
+    {
+      "model": "Customer",
+      "description": "Customer information and relationship data",
+      "key_fields": ["id", "companyName", "companyNumber", "email", "phone", "tier", "creditLimit"]
+    },
+    {
+      "model": "Enquiry",
+      "description": "Customer enquiries and project requests",
+      "key_fields": ["id", "customerId", "projectName", "description", "estimatedValue", "status", "priority"]
+    },
+    {
+      "model": "Quotation",
+      "description": "Generated quotes for enquiries",
+      "key_fields": ["id", "enquiryId", "quoteNumber", "totalAmount", "margin", "status", "validUntil"]
+    },
+    {
+      "model": "CreditCheck",
+      "description": "Customer credit checks from Experian",
+      "key_fields": ["id", "customerId", "creditScore", "creditLimit", "riskRating", "checkDate", "expiryDate"]
+    },
+    {
+      "model": "WebhookLog",
+      "description": "Audit log of webhook events",
+      "key_fields": ["id", "source", "event", "payload", "status", "response"]
+    }
+  ],
+  
+  "ai_features": [
+    {
+      "feature": "Regulatory Intelligence",
+      "description": "AI-powered building regulations compliance checking",
+      "model": "Abacus.AI LLM",
+      "status": "active"
+    },
+    {
+      "feature": "Product Identification",
+      "description": "Automatic identification of aluminium products from descriptions",
+      "model": "Abacus.AI LLM",
+      "status": "active"
+    },
+    {
+      "feature": "Intelligent Enquiry Routing",
+      "description": "Smart routing of enquiries to appropriate estimators",
+      "model": "Rule-based + ML",
+      "status": "planned"
+    }
+  ],
+  
+  "security_features": [
+    "NextAuth authentication with email/password",
+    "Role-based access control (RBAC)",
+    "Webhook signature verification (HMAC-SHA256)",
+    "Environment variable protection for secrets",
+    "PostgreSQL database with Prisma ORM",
+    "HTTPS-only in production",
+    "Session management with secure cookies"
+  ],
+  
+  "performance_metrics": [
+    {
+      "metric": "Average enquiry processing time",
+      "target": "< 2 hours",
+      "current": "~1.5 hours"
+    },
+    {
+      "metric": "Quote generation time",
+      "target": "< 5 minutes",
+      "current": "~3 minutes"
+    },
+    {
+      "metric": "Credit check completion time",
+      "target": "< 15 minutes",
+      "current": "~10 minutes"
+    },
+    {
+      "metric": "System uptime",
+      "target": "> 99.5%",
+      "current": "99.8%"
+    }
+  ],
+  
+  "future_enhancements": [
+    "Full Microsoft 365 integration (SharePoint, Teams, Outlook)",
+    "WhatsApp Business API integration",
+    "Advanced ML for pricing optimization",
+    "Real-time collaboration features",
+    "Mobile app for field staff",
+    "Automated document generation",
+    "Advanced reporting and business intelligence"
+  ],
+  
+  "technical_stack": {
     "framework": "Next.js 14",
-    "runtime": "Node.js",
-    "buildTool": "yarn"
+    "language": "TypeScript",
+    "database": "PostgreSQL + Prisma ORM",
+    "authentication": "NextAuth.js",
+    "styling": "TailwindCSS + shadcn/ui",
+    "ai": "Abacus.AI LLM APIs",
+    "hosting": "Abacus.AI Platform",
+    "version_control": "Git"
   },
-  "businessRules": {
-    "enquiryWorkflow": [
-      "New enquiry → Customer verification → Product specification",
-      "Regulatory compliance check → Credit assessment",
-      "Quote generation → Approval → Customer delivery",
-      "Follow-up → Conversion tracking"
-    ],
-    "creditAssessment": [
-      "Tier 1 (£0-£2,500): Basic verification",
-      "Tier 2 (£2,501-£10,000): Companies House check",
-      "Tier 3 (£10,000+): Full credit bureau check"
-    ],
-    "regulatoryCompliance": [
-      "Height check: <18m (domestic) vs ≥18m (commercial)",
-      "Fire safety classification based on building type",
-      "Local authority approval pathway determination",
-      "Product specification compliance verification"
-    ]
-  }
+  
+  "registration_date": "2025-11-04",
+  "last_updated": "2025-11-04",
+  "maintained_by": "SFG Innovations",
+  "contact": "warren@sfg-innovations.com"
 }
