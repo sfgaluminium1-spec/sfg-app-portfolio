@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-04",
+  "tiers": [
+    {
+      "tier": "T1",
+      "name": "Director",
+      "approvalLimit": 10000,
+      "canApproveAll": true
+    },
+    {
+      "tier": "T2",
+      "name": "Senior Manager",
+      "approvalLimit": 10000,
+      "canApproveAll": false
+    },
+    {
+      "tier": "T3",
+      "name": "Manager",
+      "approvalLimit": 25000,
+      "canApproveAll": false
+    },
+    {
+      "tier": "T4",
+      "name": "Supervisor",
+      "approvalLimit": 10000,
+      "canApproveAll": false
+    },
+    {
+      "tier": "T5",
+      "name": "Staff",
+      "approvalLimit": 1000,
+      "canApproveAll": false
+    }
+  ]
+}
