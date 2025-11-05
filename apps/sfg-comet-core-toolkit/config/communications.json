@@ -1,0 +1,95 @@
+{
+  "email_templates": [
+    {
+      "name": "New Enquiry Notification",
+      "subject": "New Enquiry: {enquiry_number} - {customer_name}",
+      "description": "Sent to estimator when new enquiry is received"
+    },
+    {
+      "name": "Quote Ready",
+      "subject": "Your Quote is Ready: {quote_number}",
+      "description": "Sent to customer when quote is generated"
+    },
+    {
+      "name": "Order Confirmation",
+      "subject": "Order Confirmed: {order_number}",
+      "description": "Sent to customer when order is approved"
+    },
+    {
+      "name": "Invoice Notification",
+      "subject": "Invoice: {invoice_number}",
+      "description": "Sent to customer with invoice details"
+    },
+    {
+      "name": "Payment Reminder",
+      "subject": "Payment Reminder: Invoice {invoice_number}",
+      "description": "Sent when invoice payment is due"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#sales",
+      "trigger": "New enquiry received"
+    },
+    {
+      "type": "slack",
+      "channel": "#production",
+      "trigger": "Order approved, production scheduled"
+    },
+    {
+      "type": "slack",
+      "channel": "#accounts",
+      "trigger": "Invoice paid, update required"
+    },
+    {
+      "type": "email",
+      "channel": "warren@sfgaluminium.com.au",
+      "trigger": "High-value order requires director approval"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Active Projects",
+      "type": "metric",
+      "description": "Count of active projects by status (ENQ/QUO/ORD/INV/DEL/PAID)"
+    },
+    {
+      "name": "Revenue Pipeline",
+      "type": "chart",
+      "description": "Total value of quotes and orders in pipeline"
+    },
+    {
+      "name": "Document Archive Status",
+      "type": "table",
+      "description": "Document counts by type and retention status"
+    },
+    {
+      "name": "SharePoint Sync Status",
+      "type": "alert",
+      "description": "Alerts for folder creation failures or sync issues"
+    }
+  ],
+  "message_handlers": [
+    {
+      "event": "project.created",
+      "handler": "handle_project_created",
+      "description": "New project has been created with auto-assigned number"
+    },
+    {
+      "event": "folder.created",
+      "handler": "handle_folder_created",
+      "description": "SharePoint folder structure has been created"
+    },
+    {
+      "event": "document.classified",
+      "handler": "handle_document_classified",
+      "description": "Document has been classified and archived"
+    },
+    {
+      "event": "decision.recorded",
+      "handler": "handle_decision_recorded",
+      "description": "Knowledge Smelter decision has been recorded"
+    }
+  ]
+}
