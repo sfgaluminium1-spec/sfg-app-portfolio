@@ -37,4 +37,4 @@ Warren Heathcote - warren@sfg-innovations.com
 
 ## Registration
 
-Registered in SFG App Portfolio: [GitHub Issue](https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/29)
+Registered in SFG App Portfolio: [GitHub Issue](https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/47)
