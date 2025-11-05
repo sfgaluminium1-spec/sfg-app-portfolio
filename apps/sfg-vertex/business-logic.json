@@ -1,0 +1,89 @@
+{
+  "appName": "SFG Vertex",
+  "version": "1.0.0",
+  "category": "sfg-aluminium-app",
+  "description": "Comprehensive project management platform for SFG Aluminium integrating enquiry tracking, quotation generation, professional CAD drawing, autonomous workflow automation, and real-time business intelligence dashboard for curtain wall, window, and door systems.",
+  "capabilities": [
+    "Enquiry Management - Track customer enquiries with full lifecycle management",
+    "Quotation Generation - Create, manage and track quotations with multi-stage approval workflows",
+    "Professional CAD Drawing - AutoCAD-style interface with full drawing tools, layers, and DWG export",
+    "Autonomous Workflow Engine - AI-powered automation for document processing, OCR, and workflow orchestration",
+    "Project Tracking - Real-time project status tracking with Gantt charts and milestone management",
+    "Business Intelligence Dashboard - Live metrics, KPIs, and analytics with interactive visualizations",
+    "Document Management - Centralized repository for specifications, drawings, and cutting lists",
+    "Terminology Dictionary - Industry-specific terminology and standardization system",
+    "AutoCAD Integration - Direct integration with AutoCAD and NanoCAD via COM interface",
+    "Logikal Integration - Bridge to Logikal for advanced curtain wall design and calculations",
+    "Email Automation - Automated email notifications for enquiries, quotations, and project updates",
+    "Multi-user Authentication - Role-based access control with NextAuth integration"
+  ],
+  "workflows": [
+    {
+      "name": "Enquiry to Quotation Workflow",
+      "description": "Complete lifecycle from customer enquiry to approved quotation",
+      "steps": [
+        "Receive customer enquiry via form or email",
+        "Parse and extract key information (customer, project details, requirements)",
+        "Create enquiry record in database",
+        "Trigger notification to sales team",
+        "Generate preliminary quotation",
+        "Internal review and approval",
+        "Send quotation to customer",
+        "Track quotation status and follow-ups"
+      ]
+    },
+    {
+      "name": "Drawing Automation Workflow",
+      "description": "Automated generation of technical drawings from project specifications",
+      "steps": [
+        "Upload project specification document",
+        "OCR processing to extract dimensions and requirements",
+        "Generate AutoCAD/FreeCAD parametric model",
+        "Apply SFG standards and templates",
+        "Create fabrication and installation drawings",
+        "Export to DWG format",
+        "Store in document repository",
+        "Link to project and quotation"
+      ]
+    },
+    {
+      "name": "Project Tracking Workflow",
+      "description": "End-to-end project management from order to delivery",
+      "steps": [
+        "Convert quotation to project on approval",
+        "Create project timeline with milestones",
+        "Assign team members and resources",
+        "Track fabrication progress",
+        "Monitor quality control checkpoints",
+        "Schedule installation",
+        "Update real-time dashboard",
+        "Generate completion report"
+      ]
+    },
+    {
+      "name": "Autonomous Document Processing",
+      "description": "AI-powered processing of incoming documents and emails",
+      "steps": [
+        "Receive document via email or upload",
+        "Classify document type (enquiry, spec, drawing, invoice)",
+        "Extract structured data using OCR and NLP",
+        "Create appropriate database records",
+        "Trigger relevant workflows",
+        "Send notifications to stakeholders",
+        "Archive in document management system"
+      ]
+    }
+  ],
+  "integrations": [
+    "NEXUS",
+    "MCP-SALES",
+    "MCP-FINANCE",
+    "MCP-OPERATIONS",
+    "MCP-COMMUNICATIONS",
+    "AutoCAD",
+    "NanoCAD",
+    "FreeCAD",
+    "Logikal"
+  ],
+  "extracted_at": "2025-11-05T22:41:42.764215Z"
+}
