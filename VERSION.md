@@ -1,11 +1,85 @@
 
 # SFG Aluminium Ltd Website Version Log
 
-## Current Version: 1.7.0
+## Current Version: 1.8.0
 **Release Date:** November 5, 2025  
-**Status:** Google Analytics Integration & Autonomous Registration Complete  
+**Status:** Fully Registered in SFG App Portfolio with Webhook & Message Handlers  
 
 ### Version History
+
+#### v1.8.0 (November 5, 2025)
+- **NEXUS ORCHESTRATION INTEGRATION COMPLETE** - Real-time communication infrastructure
+- **GITHUB ISSUE CREATED:** #40 - https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/40
+- **WEBHOOK ENDPOINT IMPLEMENTED:** `/api/webhooks/nexus`
+  - HMAC signature verification for security
+  - Handles 7 event types: enquiry.created, quote.requested, order.approved, customer.registered, credit.check_required, invoice.due, payment.received
+  - Automated response processing and database updates
+  - Real-time notifications to sales and operations teams
+- **MESSAGE HANDLER IMPLEMENTED:** `/api/messages/handle`
+  - API key authentication
+  - Handles 5 message types: query.enquiry_status, query.customer_enquiries, action.update_enquiry_status, action.send_quote_email, action.create_follow_up_task
+  - Request/response tracking with request IDs
+  - Database queries and action execution
+- **HEALTH CHECK ENDPOINT:** `/api/health`
+  - System status monitoring
+  - Service uptime tracking
+  - Memory usage reporting
+  - Endpoint availability verification
+- **ENVIRONMENT VARIABLES CONFIGURED:**
+  - `WEBHOOK_SECRET` - Webhook signature verification
+  - `NEXUS_API_KEY` - Message handler authentication
+  - GitHub App credentials for app registration
+- **BUSINESS LOGIC DOCUMENTED:**
+  - Full business-logic.json with 10 capabilities
+  - 4 workflows defined with triggers and outputs
+  - 7 business rules documented
+  - 7 integration points mapped
+  - 7 webhook events subscribed
+  - 5 message types supported
+  - 5 API endpoints available
+  - 3 data models defined
+- **AUTONOMOUS REGISTRATION SCRIPT:**
+  - `autonomous_registration.py` - Successfully executed
+  - Created GitHub issue #40 automatically
+  - Zero manual intervention required
+  - Local backup saved: `registration-backup.json`
+- **APP CAPABILITIES:**
+  - Lead capture via contact forms
+  - Quote request processing
+  - Service inquiry management
+  - Product catalog display
+  - Customer self-service portal
+  - Real-time enquiry notifications
+  - Multi-channel lead routing
+  - Document generation
+  - CRM integration
+  - Analytics and conversion tracking
+- **INTEGRATION READY:**
+  - NEXUS orchestration hub
+  - MCP-SALES tools
+  - MCP-FINANCE tools
+  - MCP-OPERATIONS tools
+  - MCP-COMMUNICATIONS tools
+  - Cloud storage (S3)
+  - Email service
+- **MONITORING:**
+  - Health check: https://sfg-website-2025.abacusai.app/api/health
+  - Uptime requirement: 99.9%
+  - Response time target: < 500ms
+- **FILES CREATED:**
+  - `app/api/webhooks/nexus/route.ts` - Webhook handler
+  - `app/api/messages/handle/route.ts` - Message handler
+  - `app/api/health/route.ts` - Health check endpoint
+  - `business-logic.json` - Complete business logic documentation
+  - `autonomous_registration.py` - Registration script
+  - `registration-backup.json` - Registration confirmation
+- **STATUS:** ✅ Fully Registered & Ready for NEXUS Orchestration
+- **NEXT STEPS:**
+  - NEXUS to review registration (within 24 hours)
+  - NEXUS to test webhook endpoint
+  - NEXUS to test message handler
+  - Upon approval, app will receive `approved` label
+  - Real-time orchestration will begin
 
 #### v1.7.0 (November 5, 2025)
 - **GOOGLE ANALYTICS 4 (GA4) INTEGRATION** - Full tracking and analytics implementation

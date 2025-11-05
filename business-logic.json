@@ -1,154 +1,285 @@
+
 {
-  "app_name": "SFG Aluminium Corporate Website",
-  "app_code": "sfg-aluminium-corporate-website",
-  "version": "1.6.0",
+  "appName": "SFG-Website",
+  "description": "SFG Aluminium Ltd corporate website - lead generation, customer self-service, and brand presence",
+  "version": "1.7.0",
+  "platform": "Next.js 14 (App Router)",
   "category": "sfg-aluminium-app",
-  "description": "Professional corporate website for SFG Aluminium Ltd featuring lead generation, product showcase, service inquiries, and customer self-service capabilities.",
+  "status": "production",
+  "deployed_url": "https://sfg-website-2025.abacusai.app",
+  "webhook_url": "https://sfg-website-2025.abacusai.app/api/webhooks/nexus",
+  "message_handler_url": "https://sfg-website-2025.abacusai.app/api/messages/handle",
   "capabilities": [
-    "Lead Generation & Contact Forms",
-    "Quote Request Management",
-    "Service Inquiry Processing",
-    "Product Catalog & Showcase",
-    "Real-time Analytics Integration (GA4)",
-    "Responsive Design (Mobile/Tablet/Desktop)",
-    "SEO Optimization",
-    "Customer Self-Service Portal",
-    "Multi-channel Communication",
-    "Brand Compliance & Professional Design"
+    "Lead capture via contact forms",
+    "Quote request processing",
+    "Service inquiry management",
+    "Product catalog display (windows, doors, curtain walling, etc.)",
+    "Customer self-service portal",
+    "Real-time enquiry notifications",
+    "Multi-channel lead routing",
+    "Document generation (quotes, brochures)",
+    "Integration with CRM systems",
+    "Analytics and conversion tracking"
   ],
   "workflows": [
     {
-      "name": "Lead Generation Workflow",
-      "description": "Captures and processes customer inquiries through contact forms",
+      "name": "Contact Form Submission",
       "steps": [
-        "Customer submits contact form",
-        "Form validation and sanitization",
-        "Data stored in database",
-        "Notification sent to sales team",
-        "Follow-up workflow triggered"
-      ]
+        "Customer fills contact form",
+        "Form validation (email, phone, message)",
+        "Store lead in database",
+        "Send confirmation email to customer",
+        "Notify sales team",
+        "Create CRM record",
+        "Track conversion funnel"
+      ],
+      "triggers": ["form.submit"],
+      "outputs": ["lead.created", "email.sent", "crm.updated"]
     },
     {
-      "name": "Quote Request Workflow",
-      "description": "Manages product/service quote requests",
+      "name": "Quote Request Processing",
       "steps": [
-        "Customer requests quote with specifications",
-        "Request validated and stored",
-        "Sales team notified",
-        "Quote prepared and sent",
-        "Follow-up scheduled"
-      ]
+        "Customer submits quote request form",
+        "Validate product selection and specifications",
+        "Store request in database",
+        "Send webhook to NEXUS (quote.requested)",
+        "Await quote generation from Quote Generator app",
+        "Send quote PDF to customer",
+        "Create follow-up task for sales"
+      ],
+      "triggers": ["quote_form.submit"],
+      "outputs": ["quote.requested", "customer.notified"]
     },
     {
-      "name": "Service Inquiry Workflow",
-      "description": "Handles service-specific inquiries",
+      "name": "Service Inquiry",
       "steps": [
         "Customer submits service inquiry",
-        "Inquiry categorized by service type",
-        "Routed to appropriate department",
-        "Response prepared and sent",
-        "Customer satisfaction tracked"
-      ]
+        "Categorize inquiry type (installation, repair, maintenance)",
+        "Store in database",
+        "Route to appropriate team",
+        "Send acknowledgment to customer",
+        "Create service ticket"
+      ],
+      "triggers": ["service_form.submit"],
+      "outputs": ["service.inquiry_created", "ticket.created"]
+    },
+    {
+      "name": "Enquiry to NEXUS",
+      "steps": [
+        "Receive enquiry from any form",
+        "Validate and normalize data",
+        "Send webhook to NEXUS (enquiry.created)",
+        "NEXUS orchestrates downstream actions",
+        "Receive confirmation from NEXUS",
+        "Update customer with reference number"
+      ],
+      "triggers": ["enquiry.created"],
+      "outputs": ["nexus.notified", "customer.updated"]
     }
   ],
-  "business_rules": [
+  "businessRules": [
     {
-      "rule_id": "BR001",
-      "name": "Form Validation Rule",
-      "description": "Ensures all form submissions meet quality standards",
-      "condition": "when form is submitted",
-      "action": "validate required fields, email format, phone format, and message length"
+      "rule": "Email validation required",
+      "condition": "valid_email_format",
+      "action": "Accept submission"
     },
     {
-      "rule_id": "BR002",
-      "name": "Lead Priority Rule",
-      "description": "Prioritizes leads based on inquiry type",
-      "condition": "when lead is captured",
-      "action": "assign priority level based on inquiry type (quote = high, general = medium)"
+      "rule": "Phone number formatting",
+      "condition": "UK_phone_format",
+      "action": "Normalize to E.164 format"
     },
     {
-      "rule_id": "BR003",
-      "name": "Response Time SLA",
-      "description": "Ensures timely response to inquiries",
-      "condition": "when inquiry received",
-      "action": "notify sales team within 1 hour, follow-up within 24 hours"
+      "rule": "Quote requests require product selection",
+      "condition": "product_selected",
+      "action": "Allow quote request"
     },
     {
-      "rule_id": "BR004",
-      "name": "Data Privacy Rule",
-      "description": "Ensures GDPR/UK data compliance",
-      "condition": "when customer data collected",
-      "action": "encrypt sensitive data, log consent, enable data deletion requests"
+      "rule": "Lead categorization",
+      "condition": "enquiry_type",
+      "action": "Route to appropriate team (residential/commercial)"
+    },
+    {
+      "rule": "High-value enquiry flagging",
+      "condition": "estimated_value > £50,000",
+      "action": "Flag for director review"
+    },
+    {
+      "rule": "Response time SLA",
+      "condition": "enquiry_received",
+      "action": "Respond within 2 business hours"
+    },
+    {
+      "rule": "GDPR compliance",
+      "condition": "personal_data_collected",
+      "action": "Record consent, enable data deletion"
     }
   ],
   "integrations": [
-    "Google Analytics 4",
-    "Email Notification System",
-    "Database (PostgreSQL/Prisma)",
-    "UK Companies House (planned)",
-    "Xero Accounting (planned)",
-    "SharePoint Document Management (planned)"
+    {
+      "system": "NEXUS",
+      "purpose": "Orchestration hub - sends enquiries for processing",
+      "methods": ["webhook", "api"]
+    },
+    {
+      "system": "Database (PostgreSQL)",
+      "purpose": "Store enquiries, quotes, and customer data",
+      "methods": ["prisma_orm"]
+    },
+    {
+      "system": "Email Service",
+      "purpose": "Customer notifications and internal alerts",
+      "methods": ["smtp", "api"]
+    },
+    {
+      "system": "Analytics (GA4)",
+      "purpose": "Track conversions and user behavior",
+      "methods": ["gtag"]
+    },
+    {
+      "system": "MCP-SALES",
+      "purpose": "Access sales tools and CRM",
+      "methods": ["api"]
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "purpose": "Send emails and SMS notifications",
+      "methods": ["api"]
+    },
+    {
+      "system": "Cloud Storage (S3)",
+      "purpose": "Store uploaded documents and generated PDFs",
+      "methods": ["aws_sdk"]
+    }
   ],
-  "api_endpoints": [
+  "webhook_events": [
+    "enquiry.created",
+    "quote.requested",
+    "service.inquiry_created",
+    "contact.submitted",
+    "form.validation_failed",
+    "lead.qualified",
+    "customer.registered"
+  ],
+  "supported_messages": [
+    "query.enquiry_status",
+    "query.customer_enquiries",
+    "action.update_enquiry_status",
+    "action.send_quote_email",
+    "action.create_follow_up_task"
+  ],
+  "apiEndpoints": [
     {
       "path": "/api/contact",
       "method": "POST",
-      "description": "Handles general contact form submissions"
+      "description": "Submit contact form",
+      "auth": "none",
+      "rate_limit": "10/minute"
     },
     {
       "path": "/api/quote",
       "method": "POST",
-      "description": "Processes quote request submissions"
+      "description": "Submit quote request",
+      "auth": "none",
+      "rate_limit": "5/minute"
     },
     {
       "path": "/api/service",
       "method": "POST",
-      "description": "Handles service inquiry submissions"
+      "description": "Submit service inquiry",
+      "auth": "none",
+      "rate_limit": "10/minute"
+    },
+    {
+      "path": "/api/webhooks/nexus",
+      "method": "POST",
+      "description": "Receive webhooks from NEXUS",
+      "auth": "hmac_signature",
+      "rate_limit": "1000/minute"
+    },
+    {
+      "path": "/api/messages/handle",
+      "method": "POST",
+      "description": "Handle messages from NEXUS or other apps",
+      "auth": "api_key",
+      "rate_limit": "1000/minute"
     }
   ],
-  "data_models": [
+  "dataModels": [
     {
-      "name": "ContactSubmission",
+      "name": "ContactEnquiry",
       "fields": [
-        "name",
-        "email",
-        "phone",
-        "company",
-        "message",
-        "timestamp",
-        "status"
+        {"name": "id", "type": "string", "required": true},
+        {"name": "name", "type": "string", "required": true},
+        {"name": "email", "type": "string", "required": true},
+        {"name": "phone", "type": "string", "required": false},
+        {"name": "company", "type": "string", "required": false},
+        {"name": "message", "type": "string", "required": true},
+        {"name": "enquiry_type", "type": "enum", "values": ["general", "quote", "service"]},
+        {"name": "status", "type": "enum", "values": ["new", "contacted", "quoted", "converted", "closed"]},
+        {"name": "created_at", "type": "datetime"},
+        {"name": "updated_at", "type": "datetime"}
       ]
     },
     {
       "name": "QuoteRequest",
       "fields": [
-        "customer_name",
-        "email",
-        "phone",
-        "product",
-        "specifications",
-        "quantity",
-        "timeline",
-        "timestamp"
+        {"name": "id", "type": "string", "required": true},
+        {"name": "customer_name", "type": "string", "required": true},
+        {"name": "email", "type": "string", "required": true},
+        {"name": "phone", "type": "string", "required": true},
+        {"name": "product_type", "type": "enum", "values": ["windows", "doors", "curtain_walling", "shopfronts", "balustrades"]},
+        {"name": "quantity", "type": "integer"},
+        {"name": "specifications", "type": "json"},
+        {"name": "estimated_value", "type": "decimal"},
+        {"name": "status", "type": "enum", "values": ["pending", "quoted", "accepted", "rejected"]},
+        {"name": "quote_reference", "type": "string"},
+        {"name": "created_at", "type": "datetime"}
       ]
     },
     {
       "name": "ServiceInquiry",
       "fields": [
-        "customer_name",
-        "email",
-        "service_type",
-        "description",
-        "urgency",
-        "timestamp"
+        {"name": "id", "type": "string", "required": true},
+        {"name": "customer_name", "type": "string", "required": true},
+        {"name": "email", "type": "string", "required": true},
+        {"name": "phone", "type": "string", "required": true},
+        {"name": "service_type", "type": "enum", "values": ["installation", "repair", "maintenance", "consultation"]},
+        {"name": "urgency", "type": "enum", "values": ["routine", "urgent", "emergency"]},
+        {"name": "description", "type": "text"},
+        {"name": "preferred_date", "type": "date"},
+        {"name": "status", "type": "enum", "values": ["new", "scheduled", "in_progress", "completed"]},
+        {"name": "created_at", "type": "datetime"}
       ]
     }
   ],
-  "webhook_endpoint": "/api/webhook",
-  "message_handler": "/api/messages",
-  "deployment": {
-    "url": "https://sfg-website-2025.abacusai.app",
-    "status": "production",
-    "version": "1.6.0"
+  "repository": {
+    "url": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio",
+    "branch": "main",
+    "last_commit": "2025-11-05"
+  },
+  "dependencies": {
+    "runtime": [
+      "next@14.2.28",
+      "react@18.2.0",
+      "prisma@6.7.0",
+      "@radix-ui/react-*@latest",
+      "tailwindcss@3.3.3"
+    ],
+    "integrations": [
+      "nexus-client",
+      "aws-sdk-s3",
+      "nodemailer",
+      "google-analytics"
+    ]
+  },
+  "monitoring": {
+    "health_check_url": "https://sfg-website-2025.abacusai.app/api/health",
+    "uptime_requirement": "99.9%",
+    "response_time_target": "< 500ms"
+  },
+  "team": {
+    "owner": "Warren (SFG Director)",
+    "developers": ["DeepAgent", "Future Teams"],
+    "contact": "warren@sfgaluminium.co.uk"
   }
 }
