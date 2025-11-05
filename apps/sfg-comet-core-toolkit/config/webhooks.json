@@ -1,0 +1,114 @@
+{
+  "incoming_webhooks": [
+    {
+      "event": "enquiry.created",
+      "description": "New customer enquiry received - creates project folder, assigns estimator, sends notifications",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-0001",
+        "customer": {
+          "id": "CUST001",
+          "name": "ABC Building Pty Ltd",
+          "tier": "Sapphire"
+        },
+        "estimated_value": 15750,
+        "priority": "normal"
+      }
+    },
+    {
+      "event": "quote.requested",
+      "description": "Quote generation requested - calculates pricing with SFG margins, checks approval requirements",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-0001",
+        "items": [
+          {
+            "description": "Shopfront",
+            "quantity": 1
+          }
+        ],
+        "customer_tier": "Sapphire"
+      }
+    },
+    {
+      "event": "order.approved",
+      "description": "Order has been approved - schedules production, creates invoice in Xero, updates folder status",
+      "payload_example": {
+        "order_id": "ORD-2025-0001",
+        "approved_by": "Warren Heathcote",
+        "approval_amount": 25000
+      }
+    },
+    {
+      "event": "customer.registered",
+      "description": "New customer registered - creates customer folder, sets up tier permissions",
+      "payload_example": {
+        "customer_id": "CUST001",
+        "name": "ABC Building",
+        "tier": "Sapphire",
+        "credit_limit": 50000
+      }
+    },
+    {
+      "event": "folder.create_required",
+      "description": "SharePoint folder creation needed - creates project folder structure with tier-based permissions",
+      "payload_example": {
+        "project_id": "PRJ-2025-0001",
+        "customer_name": "ABC Building",
+        "tier": "Sapphire",
+        "folder_type": "project"
+      }
+    },
+    {
+      "event": "document.move_required",
+      "description": "Document needs to be moved in SharePoint - moves document and updates audit trail",
+      "payload_example": {
+        "document_id": "DOC123",
+        "source_path": "/temp/file.pdf",
+        "destination_path": "/projects/PRJ-2025-0001/01-Quotes/file.pdf"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "project.created",
+      "description": "New project has been created with auto-assigned number",
+      "payload_example": {
+        "project_id": "PRJ-2025-0001",
+        "project_number": "00123-ENQ-WH",
+        "customer_name": "ABC Building",
+        "created_at": "2025-11-05T05:30:00Z"
+      }
+    },
+    {
+      "event": "folder.created",
+      "description": "SharePoint folder structure has been created",
+      "payload_example": {
+        "project_id": "PRJ-2025-0001",
+        "folder_path": "/sites/sfg-projects/PRJ-2025-0001",
+        "folders_created": 17
+      }
+    },
+    {
+      "event": "document.classified",
+      "description": "Document has been classified and archived",
+      "payload_example": {
+        "document_id": "DOC123",
+        "file_type": "INVOICE",
+        "retention_years": 7,
+        "is_immutable": true
+      }
+    },
+    {
+      "event": "decision.recorded",
+      "description": "Knowledge Smelter decision has been recorded",
+      "payload_example": {
+        "decision_id": "DEC123",
+        "project_id": "PRJ-2025-0001",
+        "category": "Technical",
+        "decision": "Use aluminum grade 6063 for this project"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-comet-core-toolkit.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification",
+  "webhook_secret_env": "NEXUS_WEBHOOK_SECRET"
+}
