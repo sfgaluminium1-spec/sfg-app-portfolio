@@ -1,0 +1,150 @@
+{
+  "incoming_webhooks": [
+    {
+      "event": "enquiry.received",
+      "description": "New customer enquiry received from email or web form",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_name": "ABC Construction Ltd",
+        "customer_email": "contact@abcconstruction.com",
+        "project_name": "High-rise Curtain Wall Project",
+        "requirements": "200 sqm curtain wall system with thermal break",
+        "deadline": "2025-12-31",
+        "source": "email",
+        "timestamp": "2025-11-05T10:30:00Z"
+      }
+    },
+    {
+      "event": "quotation.approval_requested",
+      "description": "Request for quotation approval from management",
+      "payload_example": {
+        "quotation_id": "QUO-2025-045",
+        "enquiry_id": "ENQ-2025-001",
+        "amount": 150000.0,
+        "currency": "GBP",
+        "prepared_by": "sales@sfgaluminium.com",
+        "approval_level": "manager",
+        "timestamp": "2025-11-05T14:00:00Z"
+      }
+    },
+    {
+      "event": "project.milestone_update",
+      "description": "Update project milestone status from external systems",
+      "payload_example": {
+        "project_id": "PRJ-2025-012",
+        "milestone": "fabrication_complete",
+        "status": "completed",
+        "completion_date": "2025-11-05",
+        "notes": "All panels fabricated and QC passed",
+        "timestamp": "2025-11-05T16:00:00Z"
+      }
+    },
+    {
+      "event": "document.uploaded",
+      "description": "New document uploaded for processing",
+      "payload_example": {
+        "document_id": "DOC-2025-234",
+        "document_type": "specification",
+        "file_url": "https://storage.sfg.com/specs/spec-001.pdf",
+        "uploaded_by": "user@sfgaluminium.com",
+        "project_id": "PRJ-2025-012",
+        "timestamp": "2025-11-05T11:00:00Z"
+      }
+    },
+    {
+      "event": "logikal.calculation_complete",
+      "description": "Logikal calculation results ready for import",
+      "payload_example": {
+        "calculation_id": "CALC-2025-089",
+        "project_id": "PRJ-2025-012",
+        "results_url": "https://logikal.sfg.com/results/calc-089.json",
+        "bill_of_materials": [],
+        "timestamp": "2025-11-05T13:30:00Z"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "enquiry.created",
+      "description": "New enquiry created in SFG Vertex system",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_name": "ABC Construction Ltd",
+        "project_name": "High-rise Curtain Wall Project",
+        "estimated_value": 150000.0,
+        "priority": "high",
+        "created_at": "2025-11-05T10:30:00Z"
+      }
+    },
+    {
+      "event": "quotation.generated",
+      "description": "New quotation generated and ready for review",
+      "payload_example": {
+        "quotation_id": "QUO-2025-045",
+        "enquiry_id": "ENQ-2025-001",
+        "total_amount": 150000.0,
+        "line_items": [],
+        "pdf_url": "https://vertex.sfg.com/quotations/QUO-2025-045.pdf",
+        "created_at": "2025-11-05T12:00:00Z"
+      }
+    },
+    {
+      "event": "quotation.approved",
+      "description": "Quotation approved by management and sent to customer",
+      "payload_example": {
+        "quotation_id": "QUO-2025-045",
+        "approved_by": "manager@sfgaluminium.com",
+        "approved_at": "2025-11-05T14:30:00Z",
+        "sent_to_customer": true
+      }
+    },
+    {
+      "event": "project.created",
+      "description": "New project created from approved quotation",
+      "payload_example": {
+        "project_id": "PRJ-2025-012",
+        "quotation_id": "QUO-2025-045",
+        "project_name": "High-rise Curtain Wall Project",
+        "start_date": "2025-11-10",
+        "estimated_completion": "2025-12-31",
+        "project_manager": "pm@sfgaluminium.com"
+      }
+    },
+    {
+      "event": "drawing.generated",
+      "description": "CAD drawing generated and ready for review",
+      "payload_example": {
+        "drawing_id": "DRW-2025-156",
+        "project_id": "PRJ-2025-012",
+        "drawing_type": "fabrication",
+        "format": "DWG",
+        "file_url": "https://vertex.sfg.com/drawings/DRW-2025-156.dwg",
+        "created_at": "2025-11-05T15:00:00Z"
+      }
+    },
+    {
+      "event": "workflow.automation_complete",
+      "description": "Automated workflow completed successfully",
+      "payload_example": {
+        "workflow_id": "WF-2025-789",
+        "workflow_type": "document_processing",
+        "status": "completed",
+        "processed_items": 12,
+        "completion_time": "2025-11-05T16:45:00Z"
+      }
+    },
+    {
+      "event": "alert.critical",
+      "description": "Critical alert requiring immediate attention",
+      "payload_example": {
+        "alert_type": "project_delay",
+        "project_id": "PRJ-2025-012",
+        "severity": "critical",
+        "message": "Project milestone delayed by 5 days",
+        "timestamp": "2025-11-05T17:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-vertex.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification"
+}
