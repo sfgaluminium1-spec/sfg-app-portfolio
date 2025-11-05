@@ -1,323 +1,435 @@
 
-# 🚀 SFG Satellite App Registration System - Implementation Complete
+# 🎯 SFG ALUMINIUM APP REGISTRATION - IMPLEMENTATION SUMMARY
 
-**Version:** 1.5.0  
-**Implementation Date:** November 3, 2025  
-**Status:** ✅ Fully Operational  
-
----
-
-## 📋 Executive Summary
-
-The **SFG Satellite App Registration System** has been successfully implemented and integrated into the SFG Aluminium Ltd website project. This system enables autonomous registration of satellite applications in the SFG orchestration ecosystem through automated GitHub issue creation.
+**Version:** 1.6.0  
+**Implementation Date:** November 5, 2025  
+**Status:** ✅ Complete and Operational
 
 ---
 
-## 🎯 What Was Implemented
+## 📋 OVERVIEW
 
-### 1. Complete Directory Structure
+This document summarizes the implementation of the **SFG Aluminium-specific App Registration System** with real-time orchestration capabilities. This is a major enhancement to the existing satellite registration system (v1.5.0), adding webhook endpoints and message handlers for business-critical apps.
 
+---
+
+## 🎯 WHAT WAS IMPLEMENTED
+
+### 1. **SFG Aluminium Registration Guide**
+**File:** `/satellite-registration/SFG_ALUMINIUM_APP_REGISTRATION.md`
+
+A comprehensive registration prompt specifically for SFG Aluminium business apps that require real-time communication with NEXUS and other SFG systems.
+
+**Key Features:**
+- Complete step-by-step registration process
+- GitHub App credentials included
+- Webhook setup instructions with signature verification
+- Message handler implementation patterns
+- SFG-specific business rules documentation
+- Troubleshooting guides
+- Success criteria and approval workflow
+
+### 2. **Webhook Handler Examples**
+
+#### Python Implementation
+**File:** `/satellite-registration/examples/webhook-handler-python.py`
+
+**Features:**
+- FastAPI-based webhook endpoint
+- HMAC signature verification for security
+- Event routing system for 7 event types
+- Business logic implementation for each event type
+- Health check endpoint
+
+**Event Types Handled:**
+- `enquiry.created` - New customer enquiry received
+- `quote.requested` - Quote generation requested
+- `order.approved` - Order approval notification
+- `customer.registered` - New customer registration
+- `credit.check_required` - Credit check trigger
+- `invoice.due` - Payment due notification
+- `payment.received` - Payment confirmation
+
+**Business Logic Examples:**
+- SharePoint folder creation on enquiry
+- Estimator assignment based on workload
+- Credit check automation for orders > £10k
+- Quote generation with 15% minimum margin enforcement
+- Tier-based approval routing
+- Production scheduling
+- Invoice creation in Xero
+
+#### Node.js Implementation
+**File:** `/satellite-registration/examples/webhook-handler-nodejs.js`
+
+Same functionality as Python version, implemented using Express.js.
+
+### 3. **Message Handler Examples**
+
+#### Python Implementation
+**File:** `/satellite-registration/examples/message-handler-python.py`
+
+**Features:**
+- FastAPI-based message endpoint
+- Request/response message pattern
+- Message routing system for 6 message types
+- Structured response format with request tracking
+
+**Message Types Handled:**
+- `query.customer_data` - Fetch customer information (tier, credit limit, balance)
+- `query.quote_status` - Get quote details and validity
+- `query.order_status` - Get order tracking and production progress
+- `action.create_quote` - Generate new quote with margin validation
+- `action.approve_order` - Approve order and trigger production
+- `action.send_invoice` - Send invoice via email
+
+**Data Returned:**
+- Customer data with tier information and credit status
+- Quote status with expiration and PDF URLs
+- Order status with production timeline
+- Quote creation with margin enforcement
+- Order approval with production scheduling
+- Invoice generation with Xero integration
+
+#### Node.js Implementation
+**File:** `/satellite-registration/examples/message-handler-nodejs.js`
+
+Same functionality as Python version, implemented using Express.js.
+
+### 4. **SFG Aluminium Example Registration**
+**File:** `/satellite-registration/examples/sfg-aluminium-example.json`
+
+A complete, production-ready registration example for "SFG Customer Portal" including:
+
+**App Information:**
+- Name, version, platform, status, URL
+- Webhook URL and events
+- Message handler URL and supported messages
+
+**Capabilities:**
+- Customer self-service portal
+- Real-time enquiry submission
+- Instant quote requests
+- Live order tracking
+- Document library access
+- Credit limit visibility
+- Real-time notifications
+- Mobile-responsive design
+
+**Workflows:**
+- Customer Enquiry Submission (7 steps)
+- Quote Request Processing (9 steps)
+- Order Tracking (7 steps)
+- Each with SFG-specific business rules
+
+**Business Rules:**
+- Minimum margin enforcement (15%)
+- Credit check requirement (> £10k)
+- Tier-based approval limits (T1-T5)
+- Customer tier discounts (Platinum to Crimson)
+
+**Integrations:**
+- NEXUS (orchestration)
+- MCP servers (SALES, FINANCE, OPERATIONS, COMMUNICATIONS, DATA)
+- SharePoint (documents)
+- Xero (accounting)
+- Experian (credit checks)
+- Companies House (company verification)
+
+**API Endpoints:**
+- POST /api/enquiries (submit enquiry)
+- POST /api/quotes/request (request quote)
+- GET /api/orders/:id/status (get order status)
+- GET /api/customer/profile (get customer profile)
+
+**Data Models:**
+- Customer (tier, credit limit, balance)
+- Enquiry (customer, description, status)
+- Quote (items, amount, margin, status)
+- Order (status, production dates, progress)
+
+---
+
+## 🔑 SFG BUSINESS RULES IMPLEMENTED
+
+### 1. **Margin Enforcement**
+```python
+# Minimum margin: 15%
+# Target margin: 25%
+# Warning threshold: 18%
+
+if margin < 0.15:
+    return {"status": "rejected", "reason": "Margin below minimum (15%)"}
 ```
-/home/ubuntu/sfg_aluminium_ltd/satellite-registration/
-├── README.md                           # Complete documentation
-├── INSTRUCTIONS.md                     # Original uploaded instructions
-├── scripts/
-│   ├── github-auth.ts                  # GitHub App authentication
-│   ├── extract-business-logic.ts       # Business logic extraction
-│   └── register-satellite.ts           # Main registration script
-├── types/
-│   └── business-logic.ts               # TypeScript interfaces
-├── utils/
-│   └── issue-formatter.ts              # GitHub issue formatting
-└── examples/
-    ├── example-business-logic.ts       # QuickSpace example
-    ├── complex-app-example.json        # Pichada Legal example
-    └── quick-registration-template.md  # Manual registration guide
-```
 
-### 2. Core Components
-
-#### GitHub Authentication (`github-auth.ts`)
-- ✅ GitHub App authentication using Octokit
-- ✅ Environment variable configuration
-- ✅ Authentication verification function
-- ✅ Repository configuration getter
-
-#### Business Logic Extraction (`extract-business-logic.ts`)
-- ✅ Complete TypeScript interface definitions
-- ✅ Customizable extraction template
-- ✅ Validation functions with warnings
-- ✅ Support for all metadata fields
-
-#### Registration Script (`register-satellite.ts`)
-- ✅ Automated GitHub issue creation
-- ✅ Business logic validation
-- ✅ Local JSON backup of business logic
-- ✅ Complete error handling and logging
-- ✅ Success criteria reporting
-
-#### Issue Formatter (`issue-formatter.ts`)
-- ✅ Professional GitHub issue formatting
-- ✅ Markdown template generation
-- ✅ Label management
-- ✅ Repository URL generation
-
-### 3. Environment Configuration
-
-All GitHub credentials have been securely configured in `.env`:
-
-```bash
-GITHUB_APP_ID=2228094
-GITHUB_APP_INSTALLATION_ID=92873690
-GITHUB_OWNER=sfgaluminium1-spec
-GITHUB_REPO=sfg-app-portfolio
-GITHUB_APP_PRIVATE_KEY=[SECURED]
-```
-
-### 4. Dependencies Installed
-
-```json
-{
-  "@octokit/rest": "^22.0.1",
-  "@octokit/auth-app": "^8.1.2"
+### 2. **Tier-Based Approval Limits**
+```python
+tiers = {
+    "T1": {"name": "Director", "limit": 1000000},
+    "T2": {"name": "Senior Manager", "limit": 100000},
+    "T3": {"name": "Manager", "limit": 25000},
+    "T4": {"name": "Supervisor", "limit": 10000},
+    "T5": {"name": "Staff", "limit": 1000}
 }
+
+# Escalate if value exceeds tier limit
+if order_value > tier_limit:
+    escalate_to_higher_tier()
 ```
 
-### 5. Documentation
+### 3. **Credit Check Automation**
+```python
+# Required for orders > £10,000
+# Valid for 90 days
+# Use Experian API via MCP-FINANCE
 
-#### README.md
-- Complete setup instructions
-- Quick start guide (5 minutes)
-- Detailed registration guide (30-45 minutes)
-- Troubleshooting section
-- Success criteria checklist
+if order_value > 10000:
+    if credit_check_age > 90:
+        request_credit_check_via_experian()
+```
 
-#### Examples Provided
-1. **QuickSpace** - Simple workspace management app
-2. **Pichada Legal** - Complex legal compliance system
-3. **Quick Registration Template** - Manual registration guide
+### 4. **Customer Tier System**
+```python
+tiers = {
+    "platinum": {"color": "purple", "discount": 0.10},
+    "sapphire": {"color": "blue", "discount": 0.07},
+    "steel": {"color": "gray", "discount": 0.03},
+    "green": {"color": "green", "discount": 0.00},
+    "crimson": {"color": "red", "discount": 0.00}
+}
 
----
+# Apply tier discount to pricing
+price_with_discount = base_price * (1 - tier_discount)
+```
 
-## 🔧 How to Use
+### 5. **Document Stage Tracking**
+```
+ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID
 
-### Option 1: Quick Registration (5 Minutes)
-
-1. Navigate to: https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/new
-2. Use the template from `satellite-registration/examples/quick-registration-template.md`
-3. Fill in your app details
-4. Add labels: `registration`, `satellite-app`, `pending-approval`
-5. Submit the issue
-6. Wait for Nexus review (24-48 hours)
-
-### Option 2: Automated Registration (30-45 Minutes)
-
-1. **Customize Business Logic:**
-   ```bash
-   cd /home/ubuntu/sfg_aluminium_ltd/satellite-registration/scripts
-   # Edit extract-business-logic.ts with your app details
-   ```
-
-2. **Run Registration:**
-   ```bash
-   cd /home/ubuntu/sfg_aluminium_ltd/app
-   yarn ts-node ../satellite-registration/scripts/register-satellite.ts
-   ```
-
-3. **Output:**
-   - GitHub issue created automatically
-   - Business logic saved to `/registration_output/`
-   - Success confirmation with issue URL
+ENQ  = Enquiry received
+QUO  = Quote generated
+SENT = Quote sent to customer
+ACC  = Quote accepted by customer
+ORD  = Order placed
+FAB  = In fabrication
+INS  = Installation scheduled/complete
+INV  = Invoice sent
+PAID = Payment received
+```
 
 ---
 
-## 📊 Business Logic Structure
+## 🔄 REGISTRATION WORKFLOW
 
-Your registration includes:
+### For SFG Aluminium Business Apps
 
-### Required Information
-- ✅ **Basic Info:** App name, category, description, version
-- ✅ **Capabilities:** List of features your app provides
-- ✅ **Workflows:** Step-by-step processes with triggers and outputs
-- ✅ **Business Rules:** Conditional logic with priorities
-- ✅ **Integrations:** External systems connected
-- ✅ **API Endpoints:** Available APIs with methods
-- ✅ **Data Models:** Key data structures
+**Step 1:** Choose the SFG-specific registration guide
+- File: `/satellite-registration/SFG_ALUMINIUM_APP_REGISTRATION.md`
+- Use for: Customer portals, operations apps, finance apps
 
-### Supported Categories
-- PROJECT_MANAGEMENT
-- ESTIMATING
-- SCHEDULING
-- LEGAL_COMPLIANCE
-- WORKSPACE_MANAGEMENT
-- DOCUMENT_MANAGEMENT
-- CRM
-- FINANCE
-- HR
-- OPERATIONS
-- ANALYTICS
-- INTEGRATION
-- AUTOMATION
-- OTHER
+**Step 2:** Implement webhook endpoint
+- Copy code from `webhook-handler-python.py` or `webhook-handler-nodejs.js`
+- Deploy to your app server
+- Register webhook URL in metadata
+
+**Step 3:** Implement message handler
+- Copy code from `message-handler-python.py` or `message-handler-nodejs.js`
+- Deploy to your app server
+- Register message handler URL in metadata
+
+**Step 4:** Extract business logic
+- Follow the template in `sfg-aluminium-example.json`
+- Include SFG-specific rules (margins, tiers, approval limits)
+- Document workflows with steps and triggers
+
+**Step 5:** Create registration issue on GitHub
+- Title: `[Registration] [Your App Name]`
+- Body: Include webhook URL, message handler URL, capabilities, workflows
+- Labels: `registration`, `satellite-app`, `sfg-aluminium-app`, `pending-approval`
+
+**Step 6:** NEXUS reviews and tests
+- Webhook endpoint tested (sends test event)
+- Message handler tested (sends test message)
+- Business logic validated
+- Approval within 24 hours
+
+**Step 7:** Begin orchestrated operation
+- Receive real-time events from NEXUS
+- Respond to messages from other apps
+- Participate in orchestrated workflows
 
 ---
 
-## ✅ Success Criteria
+## 🎯 USE CASES
 
-Your registration is complete when:
+### **Use SFG Aluminium Registration For:**
+✅ Customer portals (enquiries, quotes, orders)  
+✅ Operations apps (fabrication, installation, scheduling)  
+✅ Finance apps (invoicing, credit checking, payments)  
+✅ Sales apps (CRM, lead management, quote generation)  
+✅ Any app that needs real-time NEXUS orchestration  
+
+### **Use Universal Registration For:**
+✅ Analytics dashboards  
+✅ Reporting tools  
+✅ Admin panels  
+✅ Configuration tools  
+✅ Utility apps  
+
+---
+
+## 📦 FILES ADDED IN v1.6.0
+
+```
+satellite-registration/
+├── SFG_ALUMINIUM_APP_REGISTRATION.md      # Main guide (38KB)
+└── examples/
+    ├── webhook-handler-python.py          # Python webhook (12KB)
+    ├── webhook-handler-nodejs.js          # Node.js webhook (10KB)
+    ├── message-handler-python.py          # Python message handler (9KB)
+    ├── message-handler-nodejs.js          # Node.js message handler (8KB)
+    └── sfg-aluminium-example.json         # Complete example (15KB)
+```
+
+**Total Files:** 5 new implementation files  
+**Total Code:** ~92KB of production-ready code  
+**Languages:** Python (FastAPI) and Node.js (Express)  
+
+---
+
+## 🔒 SECURITY FEATURES
+
+### Webhook Security
+- HMAC-SHA256 signature verification
+- Webhook secret stored securely in environment variables
+- Request validation on every webhook call
+- Invalid signatures rejected with 401 Unauthorized
+
+### Message Handler Security
+- Request ID tracking for audit trails
+- Structured error responses
+- Input validation on all parameters
+- No sensitive data in logs
+
+### GitHub Integration Security
+- GitHub App authentication (not personal access tokens)
+- Private key stored securely in .env file
+- Scoped permissions (issues only)
+- Automated credential rotation supported
+
+---
+
+## ✅ SUCCESS CRITERIA
+
+Your app is successfully registered when:
 
 1. ✅ GitHub issue created with `[Registration]` title
-2. ✅ Issue has labels: `registration`, `satellite-app`, `pending-approval`
-3. ✅ Business logic documented in issue body
-4. ✅ Nexus reviews and approves (within 24-48 hours)
-5. ✅ Issue label changed to `approved`
+2. ✅ Files created in `/apps/[your-app-name]/` directory
+3. ✅ Business logic documented with SFG rules
+4. ✅ **Webhook endpoint deployed and URL registered**
+5. ✅ **Message handler deployed and URL registered**
+6. ✅ Issue has labels: `registration`, `satellite-app`, `sfg-aluminium-app`, `pending-approval`
+7. ✅ NEXUS tests webhook (receives test event successfully)
+8. ✅ NEXUS tests message handler (receives test message successfully)
+9. ✅ Issue label changed to `approved` by NEXUS
+10. ✅ Real-time events begin flowing from NEXUS
 
 ---
 
-## 🔒 Security Features
+## 📊 INTEGRATION REQUIREMENTS
 
-- ✅ Private keys stored securely in `.env` file
-- ✅ Never committed to version control
-- ✅ GitHub App has minimal required permissions
-- ✅ All API calls are authenticated and logged
-- ✅ Environment variable validation
+### **Required Integrations (MUST HAVE)**
+- ✅ NEXUS - Central orchestration hub
+- ✅ MCP-SALES - Sales tools and CRM
+- ✅ MCP-FINANCE - Finance tools (Experian, Xero)
+- ✅ MCP-OPERATIONS - Production tracking
+- ✅ MCP-COMMUNICATIONS - Notifications
+- ✅ MCP-DATA - Data tools
 
----
-
-## 📞 Support & Resources
-
-**GitHub Repository:**  
-https://github.com/sfgaluminium1-spec/sfg-app-portfolio
-
-**Create Registration Issue:**  
-https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/new
-
-**Contact:**  
-warren@sfg-innovations.com
-
-**Review Time:**  
-24-48 hours
+### **Recommended Integrations (SHOULD HAVE)**
+- ✅ SharePoint - Document storage
+- ✅ Xero - Accounting and invoicing
+- ✅ Experian - Credit checking
+- ✅ Companies House - Company verification
 
 ---
 
-## 🎓 Technical Details
+## 🚀 NEXT STEPS
 
-### TypeScript Interfaces
+### For New SFG Apps
+1. Read `/satellite-registration/SFG_ALUMINIUM_APP_REGISTRATION.md`
+2. Copy webhook handler code (Python or Node.js)
+3. Copy message handler code (Python or Node.js)
+4. Customize business logic for your app
+5. Deploy webhook and message endpoints
+6. Create GitHub registration issue
+7. Wait for NEXUS approval (24 hours)
+8. Begin receiving events and messages
 
-```typescript
-interface BusinessLogic {
-  app_name: string;
-  category: AppCategory;
-  description: string;
-  version: string;
-  app_url?: string;
-  capabilities: string[];
-  workflows: Workflow[];
-  business_rules: BusinessRule[];
-  integrations: string[];
-  api_endpoints: ApiEndpoint[];
-  data_models: DataModel[];
-  contact_email?: string;
-  repository_url?: string;
-}
-```
-
-### Workflow Structure
-
-```typescript
-interface Workflow {
-  name: string;
-  description: string;
-  steps?: string[];
-  triggers?: string;
-  outputs?: string;
-}
-```
-
-### Business Rule Structure
-
-```typescript
-interface BusinessRule {
-  name: string;
-  description: string;
-  condition?: string;
-  action?: string;
-  priority?: 'high' | 'medium' | 'low';
-}
-```
+### For Existing Apps
+1. Add webhook endpoint to your app
+2. Add message handler to your app
+3. Update registration with webhook URL and message handler URL
+4. NEXUS will test endpoints
+5. Begin receiving orchestrated events
 
 ---
 
-## 📈 Version Information
+## 📞 SUPPORT
 
-**Current Version:** 1.5.0  
-**Build Date:** November 3, 2025  
-**Status:** Satellite App Registration System Implemented
-
-### Version Display
-- ✅ Updated in VERSION.md
-- ✅ Updated in lib/version.ts
-- ✅ Visible on website footer
-- ✅ Includes new features in feature list
+**GitHub Repository:** https://github.com/sfgaluminium1-spec/sfg-app-portfolio  
+**Create Issue:** https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/new  
+**Contact:** warren@sfg-innovations.com  
+**Review Time:** 24 hours for webhook/message testing and approval  
 
 ---
 
-## 🚀 Next Steps
+## 📈 VERSION TRACKING
 
-After registration approval, you'll receive:
+**Current Version:** v1.6.0  
+**Previous Version:** v1.5.0 (Satellite Registration System)  
+**Version Increment:** MINOR (new feature, backward compatible)  
 
-1. **Integration Instructions** - How to connect your app to the SFG ecosystem
-2. **MCP Server Setup Guide** - Model Context Protocol configuration
-3. **Orchestration Workflow Assignments** - Your app's role in the ecosystem
-4. **API Documentation** - How other apps can interact with yours
-5. **Testing Guidelines** - Validation procedures
-6. **Deployment Instructions** - Production rollout process
+**Breaking Changes:** None  
+**Deprecations:** None  
+**Migration Required:** No (existing apps continue to work)  
 
----
-
-## 🎯 Key Achievements
-
-✅ **Complete GitHub Integration** - Fully automated registration via Octokit  
-✅ **Business Logic Framework** - Comprehensive extraction and validation  
-✅ **Type Safety** - Full TypeScript interface definitions  
-✅ **Documentation** - Extensive guides and examples  
-✅ **Security** - Proper credential management  
-✅ **Error Handling** - Robust validation and reporting  
-✅ **Template System** - Multiple registration approaches  
-✅ **Version Control** - Integrated with project versioning  
+**Universal Registration Still Supported:** Yes  
+- Simple apps can still use basic registration
+- No webhooks or message handlers required for utility apps
 
 ---
 
-## 📝 Implementation Notes
+## 🎯 IMPACT
 
-### Files Created
-- 9 new TypeScript/JavaScript files
-- 3 example files
-- 2 documentation files
-- 1 JSON example
+### **Business Impact**
+- Real-time orchestration across SFG apps
+- Automated workflows between apps
+- Faster quote generation and order processing
+- Better customer experience with instant updates
+- Reduced manual handoffs between systems
 
-### Environment Variables
-- 5 GitHub credentials configured
-- All stored securely in `.env`
-- Never exposed in client code
+### **Technical Impact**
+- Event-driven architecture
+- Loosely coupled microservices
+- Scalable integration pattern
+- Standardized communication protocol
+- Easier to add new apps to ecosystem
 
-### Dependencies
-- 2 new packages installed
-- Compatible with existing stack
-- No conflicts detected
-
-### Testing
-- ✅ TypeScript compilation successful
-- ✅ Zero build errors
-- ✅ All routes functional
-- ✅ Version display updated
-
----
-
-**Built with:** TypeScript, Octokit, Node.js, Next.js 14  
-**Maintained by:** SFG Aluminium Ltd Engineering Team  
-**Documentation:** Complete and ready for production use
+### **Developer Impact**
+- Clear implementation examples
+- Production-ready code templates
+- Comprehensive documentation
+- Fast onboarding (webhook + message handler < 1 day)
+- Automated testing by NEXUS
 
 ---
 
-*This system is now operational and ready to register satellite applications in the SFG orchestration ecosystem.*
+**Implementation Summary Completed:** November 5, 2025  
+**Status:** ✅ All components operational and documented  
+**Next Deployment:** v1.7.0 (TBD based on business needs)
+
+---
+
+*SFG Aluminium Real-Time Orchestration System*  
+*Empowering seamless communication across the SFG app ecosystem*

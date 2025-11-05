@@ -1,0 +1,299 @@
+
+{
+  "app_info": {
+    "name": "SFG Customer Portal",
+    "category": "customer_portal",
+    "description": "Customer-facing portal for SFG Aluminium with enquiry management, quote requests, order tracking, and document access",
+    "version": "2.1.0",
+    "platform": "Abacus.AI",
+    "status": "production",
+    "url": "https://portal.sfg-aluminium.co.uk"
+  },
+  "real_time_communication": {
+    "webhook_url": "https://portal.sfg-aluminium.co.uk/webhooks/nexus",
+    "webhook_secret": "prod-webhook-secret-xyz789",
+    "webhook_events": [
+      "enquiry.created",
+      "quote.requested",
+      "order.approved",
+      "customer.registered",
+      "invoice.due",
+      "payment.received"
+    ],
+    "message_handler_url": "https://portal.sfg-aluminium.co.uk/messages/handle",
+    "supported_messages": [
+      "query.customer_data",
+      "query.quote_status",
+      "query.order_status",
+      "action.create_quote",
+      "action.send_invoice"
+    ]
+  },
+  "capabilities": [
+    "Customer self-service portal",
+    "Real-time enquiry submission with file uploads",
+    "Instant quote requests for standard products",
+    "Live order tracking with production updates",
+    "Document library (quotes, invoices, specifications)",
+    "Credit limit and payment status visibility",
+    "Real-time notification system",
+    "Mobile-responsive design"
+  ],
+  "workflows": [
+    {
+      "name": "Customer Enquiry Submission",
+      "trigger": "Customer submits enquiry form",
+      "steps": [
+        "Validate enquiry data",
+        "Upload attachments to SharePoint",
+        "Create enquiry record in database",
+        "Emit webhook: enquiry.created to NEXUS",
+        "Assign estimator based on workload",
+        "Send confirmation email to customer",
+        "Send notification to sales team"
+      ],
+      "sfg_business_rules": [
+        "Check if credit check required (> £10k)",
+        "Assign customer tier based on history",
+        "Apply tier-specific response SLA"
+      ]
+    },
+    {
+      "name": "Quote Request Processing",
+      "trigger": "Customer requests quote from enquiry",
+      "steps": [
+        "Receive webhook: quote.requested from NEXUS",
+        "Fetch product pricing from database",
+        "Calculate total with customer tier discount",
+        "Check margin >= 15% (SFG minimum)",
+        "Check if approval needed (tier-based limits)",
+        "Generate quote document (PDF)",
+        "Store in SharePoint",
+        "Send message reply: quote generated",
+        "Notify customer via email"
+      ],
+      "sfg_business_rules": [
+        "Minimum margin: 15%",
+        "Target margin: 25%",
+        "Tier 3 approval if quote > £25,000",
+        "Tier 2 approval if quote > £100,000",
+        "Quote validity: 30 days"
+      ]
+    },
+    {
+      "name": "Order Tracking",
+      "trigger": "Customer views order status",
+      "steps": [
+        "Send message: query.order_status to Order Management App",
+        "Receive order status from message reply",
+        "Fetch production progress from MCP-OPERATIONS",
+        "Calculate estimated completion",
+        "Display live tracking timeline",
+        "Show fabrication photos if available",
+        "Provide installation date if scheduled"
+      ],
+      "sfg_business_rules": [
+        "Show document stages: ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID",
+        "Display customer tier color coding",
+        "Show credit status and available credit"
+      ]
+    }
+  ],
+  "business_rules": [
+    {
+      "rule": "Minimum margin enforcement",
+      "condition": "margin >= 0.15",
+      "action": "Allow quote generation",
+      "rejection": "Reject quote and notify sales team"
+    },
+    {
+      "rule": "Credit check requirement",
+      "condition": "order_value > 10000 AND credit_check_age > 90",
+      "action": "Request credit check via MCP-FINANCE (Experian)",
+      "blocking": true
+    },
+    {
+      "rule": "Tier-based approval limits",
+      "tiers": [
+        {"tier": "T5", "name": "Staff", "limit": 1000},
+        {"tier": "T4", "name": "Supervisor", "limit": 10000},
+        {"tier": "T3", "name": "Manager", "limit": 25000},
+        {"tier": "T2", "name": "Senior Manager", "limit": 100000},
+        {"tier": "T1", "name": "Director", "limit": 1000000}
+      ],
+      "action": "Escalate to higher tier if value exceeds limit"
+    },
+    {
+      "rule": "Customer tier discounts",
+      "tiers": [
+        {"tier": "platinum", "color": "purple", "discount": 0.10},
+        {"tier": "sapphire", "color": "blue", "discount": 0.07},
+        {"tier": "steel", "color": "gray", "discount": 0.03},
+        {"tier": "green", "color": "green", "discount": 0.00},
+        {"tier": "crimson", "color": "red", "discount": 0.00}
+      ],
+      "action": "Apply tier discount to quote pricing"
+    }
+  ],
+  "integrations": [
+    {
+      "system": "NEXUS",
+      "purpose": "Central orchestration hub",
+      "communication": "Webhooks + Message Handlers",
+      "events_received": [
+        "enquiry.created",
+        "quote.requested",
+        "order.approved"
+      ],
+      "messages_sent": [
+        "query.customer_data",
+        "action.create_quote"
+      ]
+    },
+    {
+      "system": "MCP-SALES",
+      "purpose": "Sales tools and CRM integration",
+      "tools_used": [
+        "enquiry_management",
+        "quote_generation",
+        "customer_communication"
+      ]
+    },
+    {
+      "system": "MCP-FINANCE",
+      "purpose": "Financial operations",
+      "tools_used": [
+        "credit_checking (Experian)",
+        "invoice_generation (Xero)",
+        "payment_tracking"
+      ]
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "purpose": "Production and installation tracking",
+      "tools_used": [
+        "production_status",
+        "fabrication_progress",
+        "installation_scheduling"
+      ]
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage and management",
+      "operations": [
+        "Upload quotes",
+        "Upload invoices",
+        "Upload specifications",
+        "Create project folders"
+      ]
+    },
+    {
+      "system": "Xero",
+      "purpose": "Accounting and invoicing",
+      "operations": [
+        "Generate invoices",
+        "Track payments",
+        "Sync financial data"
+      ]
+    },
+    {
+      "system": "Companies House",
+      "purpose": "UK company data verification",
+      "operations": [
+        "Verify company registration",
+        "Fetch company details",
+        "Check company status"
+      ]
+    }
+  ],
+  "api_endpoints": [
+    {
+      "method": "POST",
+      "endpoint": "/api/enquiries",
+      "description": "Submit new customer enquiry",
+      "authentication": "required",
+      "emits_webhook": true
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/quotes/request",
+      "description": "Request quote from enquiry",
+      "authentication": "required",
+      "emits_webhook": true
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/orders/:id/status",
+      "description": "Get order status and tracking",
+      "authentication": "required",
+      "sends_message": true
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/customer/profile",
+      "description": "Get customer profile with tier and credit info",
+      "authentication": "required"
+    }
+  ],
+  "data_models": [
+    {
+      "model": "Customer",
+      "fields": [
+        "id",
+        "name",
+        "email",
+        "tier (platinum|sapphire|steel|green|crimson)",
+        "credit_limit",
+        "outstanding_balance",
+        "payment_terms"
+      ]
+    },
+    {
+      "model": "Enquiry",
+      "fields": [
+        "id",
+        "customer_id",
+        "description",
+        "estimated_value",
+        "status",
+        "assigned_estimator",
+        "created_at"
+      ]
+    },
+    {
+      "model": "Quote",
+      "fields": [
+        "id",
+        "quote_number",
+        "enquiry_id",
+        "items",
+        "total_amount",
+        "margin",
+        "status (draft|sent|accepted|rejected)",
+        "expires_at"
+      ]
+    },
+    {
+      "model": "Order",
+      "fields": [
+        "id",
+        "order_number",
+        "quote_id",
+        "status (approved|fabrication|installation|complete)",
+        "production_start",
+        "estimated_completion",
+        "installation_date"
+      ]
+    }
+  ],
+  "registration_metadata": {
+    "registered_by": "Warren Davies (SFG Aluminium)",
+    "registration_date": "2025-11-05",
+    "last_updated": "2025-11-05",
+    "nexus_approved": true,
+    "approval_date": "2025-11-05",
+    "webhook_tested": true,
+    "message_handler_tested": true,
+    "status": "production"
+  }
+}

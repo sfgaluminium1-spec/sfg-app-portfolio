@@ -1,11 +1,86 @@
 
 # SFG Aluminium Ltd Website Version Log
 
-## Current Version: 1.5.0
-**Release Date:** November 3, 2025  
-**Status:** Satellite App Registration System Implemented  
+## Current Version: 1.6.0
+**Release Date:** November 5, 2025  
+**Status:** SFG Aluminium Real-Time Orchestration System Implemented  
 
 ### Version History
+
+#### v1.6.0 (November 5, 2025)
+- **MAJOR ENHANCEMENT** - SFG Aluminium-Specific App Registration with Real-Time Orchestration
+- **WEBHOOK SYSTEM:** Complete webhook endpoint implementation for real-time NEXUS events
+- **MESSAGE HANDLERS:** Request/response message system for inter-app communication
+- **SFG BUSINESS RULES:** Complete implementation of SFG-specific business logic
+  - Margin enforcement (15% minimum, 25% target)
+  - Tier-based approval limits (T1-T5: £1k to £1M)
+  - Credit check automation (> £10k orders, 90-day validity)
+  - Customer tier system (Platinum, Sapphire, Steel, Green, Crimson)
+  - Document stage tracking (ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID)
+- **WEBHOOK EVENT TYPES:**
+  - `enquiry.created` - New customer enquiry received
+  - `quote.requested` - Quote generation requested
+  - `order.approved` - Order approval notification
+  - `customer.registered` - New customer registration
+  - `credit.check_required` - Credit check trigger
+  - `invoice.due` - Payment due notification
+  - `payment.received` - Payment confirmation
+- **MESSAGE TYPES SUPPORTED:**
+  - `query.customer_data` - Fetch customer information
+  - `query.quote_status` - Get quote details
+  - `query.order_status` - Get order tracking info
+  - `action.create_quote` - Generate new quote
+  - `action.approve_order` - Approve order
+  - `action.send_invoice` - Send invoice to customer
+- **CODE EXAMPLES PROVIDED:**
+  - `webhook-handler-python.py` - Python/FastAPI webhook implementation
+  - `webhook-handler-nodejs.js` - Node.js/Express webhook implementation
+  - `message-handler-python.py` - Python/FastAPI message handler
+  - `message-handler-nodejs.js` - Node.js/Express message handler
+  - `sfg-aluminium-example.json` - Complete registration example for SFG Customer Portal
+- **INTEGRATION REQUIREMENTS:**
+  - NEXUS (orchestration hub) - Required
+  - MCP-SALES (sales tools) - Required
+  - MCP-FINANCE (finance tools, Experian, Xero) - Required
+  - MCP-OPERATIONS (production tracking) - Required
+  - MCP-COMMUNICATIONS (notifications) - Required
+  - MCP-DATA (data tools) - Required
+  - SharePoint (document storage) - Recommended
+  - Xero (accounting) - Recommended
+  - Companies House (company verification) - Recommended
+- **DOCUMENTATION CREATED:**
+  - `SFG_ALUMINIUM_APP_REGISTRATION.md` - Complete SFG-specific registration guide
+  - Webhook setup instructions with signature verification
+  - Message handler implementation patterns
+  - SFG business rules reference
+  - Troubleshooting guides for webhooks and message handlers
+- **REGISTRATION WORKFLOW:**
+  1. Install GitHub client (Python/Node.js)
+  2. Authenticate with GitHub App credentials
+  3. Extract business logic with SFG requirements
+  4. Implement webhook endpoint
+  5. Implement message handler
+  6. Create registration files
+  7. Submit GitHub issue
+  8. NEXUS tests webhook and message handler
+  9. Approval within 24 hours
+  10. Begin orchestrated operation
+- **APPROVAL WORKFLOW:**
+  - NEXUS reviews registration (24 hours)
+  - Webhook endpoint tested (sends test event)
+  - Message handler tested (sends test message)
+  - Issue labeled `approved` upon success
+  - Real-time orchestration begins
+- **FILES ADDED:**
+  - `/satellite-registration/SFG_ALUMINIUM_APP_REGISTRATION.md`
+  - `/satellite-registration/examples/webhook-handler-python.py`
+  - `/satellite-registration/examples/webhook-handler-nodejs.js`
+  - `/satellite-registration/examples/message-handler-python.py`
+  - `/satellite-registration/examples/message-handler-nodejs.js`
+  - `/satellite-registration/examples/sfg-aluminium-example.json`
+- **TARGET APPS:** Customer portals, operations apps, finance apps, any SFG business-critical apps
+- **UNIVERSAL PROMPT PRESERVED:** Simple registration still available for utility apps
+- **STATUS:** ✅ Full Real-Time SFG Aluminium App Orchestration System Operational
 
 #### v1.5.0 (November 3, 2025)
 - **MAJOR FEATURE** - SFG Satellite App Registration System
