@@ -1,0 +1,742 @@
+
+{
+  "app_name": "SFG-IntelligentTextCorrector",
+  "version": "1.2.0",
+  "category": "productivity",
+  "platform": "chrome-extension-web-app",
+  "status": "production",
+  "deployed_url": "https://sfg-ai-prompt.abacusai.app",
+  
+  "capabilities": [
+    {
+      "name": "Grammar Correction",
+      "description": "Automatically detect and correct grammar errors in any text",
+      "input": "Raw text with potential grammar issues",
+      "output": "Grammatically corrected text",
+      "processing_time": "1-3 seconds",
+      "accuracy": "95%+"
+    },
+    {
+      "name": "Punctuation Checking",
+      "description": "Validate and correct punctuation usage",
+      "input": "Text with punctuation issues",
+      "output": "Properly punctuated text",
+      "processing_time": "1-2 seconds",
+      "accuracy": "98%+"
+    },
+    {
+      "name": "Simple Rewrite",
+      "description": "Rewrite text in clear, straightforward language",
+      "input": "Complex or unclear text",
+      "output": "Simplified, clear text",
+      "processing_time": "2-3 seconds",
+      "use_case": "General communication clarity"
+    },
+    {
+      "name": "Business Style Rewrite",
+      "description": "Transform text into professional corporate tone",
+      "input": "Casual or informal text",
+      "output": "Professional business-style text",
+      "processing_time": "2-3 seconds",
+      "use_case": "Emails, proposals, reports"
+    },
+    {
+      "name": "Technical Rewrite",
+      "description": "Convert text into precise technical documentation style",
+      "input": "General or imprecise text",
+      "output": "Technical, precise documentation",
+      "processing_time": "2-4 seconds",
+      "use_case": "Technical docs, specifications"
+    },
+    {
+      "name": "AI Prompt Enhancement",
+      "description": "Transform basic prompts into detailed, effective AI instructions",
+      "input": "Basic or vague prompt",
+      "output": "Detailed, structured, effective prompt",
+      "processing_time": "2-4 seconds",
+      "improvements": [
+        "Adds context and specificity",
+        "Structures for clarity",
+        "Includes constraints and requirements",
+        "Optimizes for AI understanding"
+      ]
+    },
+    {
+      "name": "Business Templates",
+      "description": "Pre-built templates for common business communications",
+      "templates": [
+        "Professional email",
+        "Business proposal",
+        "Meeting agenda",
+        "Status report",
+        "Project brief"
+      ],
+      "customizable": true
+    },
+    {
+      "name": "Correction History",
+      "description": "Track and review past corrections",
+      "features": [
+        "View all corrections",
+        "Search history",
+        "Export corrections",
+        "Reuse corrections"
+      ]
+    }
+  ],
+  
+  "workflows": [
+    {
+      "name": "Right-Click Text Correction",
+      "description": "Correct selected text via Chrome context menu",
+      "steps": [
+        {
+          "step": 1,
+          "action": "User selects text on any webpage",
+          "actor": "user"
+        },
+        {
+          "step": 2,
+          "action": "User right-clicks to open context menu",
+          "actor": "user"
+        },
+        {
+          "step": 3,
+          "action": "User selects correction type from 'SFG AI Tools' menu",
+          "actor": "user",
+          "options": [
+            "Grammar Check",
+            "Punctuation Check",
+            "Simple Rewrite",
+            "Business Style Rewrite",
+            "Technical Rewrite",
+            "AI Prompt Enhance"
+          ]
+        },
+        {
+          "step": 4,
+          "action": "Extension captures selected text and mode",
+          "actor": "extension"
+        },
+        {
+          "step": 5,
+          "action": "Extension sends POST request to /api/correct",
+          "actor": "extension",
+          "payload": {
+            "text": "selected_text",
+            "mode": "correction_mode",
+            "userId": "user_id_if_logged_in"
+          }
+        },
+        {
+          "step": 6,
+          "action": "API processes text via Abacus.AI LLM",
+          "actor": "api",
+          "processing": "LLM-based correction/enhancement"
+        },
+        {
+          "step": 7,
+          "action": "API returns corrected text",
+          "actor": "api",
+          "response": {
+            "corrected_text": "improved_text",
+            "changes": [],
+            "confidence": 0.95
+          }
+        },
+        {
+          "step": 8,
+          "action": "Extension replaces original text with corrected text",
+          "actor": "extension"
+        },
+        {
+          "step": 9,
+          "action": "Correction saved to user history (if logged in)",
+          "actor": "api",
+          "optional": true
+        }
+      ],
+      "duration": "2-5 seconds",
+      "success_rate": "98%"
+    },
+    {
+      "name": "AI Prompt Enhancement Workflow",
+      "description": "Transform basic prompts into effective AI instructions",
+      "steps": [
+        {
+          "step": 1,
+          "action": "User writes basic prompt",
+          "actor": "user"
+        },
+        {
+          "step": 2,
+          "action": "User selects prompt text and right-clicks",
+          "actor": "user"
+        },
+        {
+          "step": 3,
+          "action": "User chooses 'AI Prompt Enhance'",
+          "actor": "user"
+        },
+        {
+          "step": 4,
+          "action": "Extension sends prompt to /api/prompt-enhance",
+          "actor": "extension",
+          "payload": {
+            "prompt": "basic_prompt",
+            "userId": "user_id"
+          }
+        },
+        {
+          "step": 5,
+          "action": "API analyzes and enhances prompt",
+          "actor": "api",
+          "enhancements": [
+            "Adds context and background",
+            "Structures into clear sections",
+            "Includes specific requirements",
+            "Adds constraints and guidelines",
+            "Optimizes for AI understanding"
+          ]
+        },
+        {
+          "step": 6,
+          "action": "API returns enhanced prompt",
+          "actor": "api",
+          "response": {
+            "enhanced_prompt": "detailed_effective_prompt",
+            "improvements": [],
+            "tips": []
+          }
+        },
+        {
+          "step": 7,
+          "action": "Extension replaces original prompt",
+          "actor": "extension"
+        },
+        {
+          "step": 8,
+          "action": "User gets better AI responses",
+          "actor": "user",
+          "benefit": "Higher quality AI output"
+        }
+      ],
+      "duration": "2-4 seconds",
+      "improvement_rate": "300-500%"
+    },
+    {
+      "name": "Business Template Application",
+      "description": "Apply pre-built business templates to documents",
+      "steps": [
+        {
+          "step": 1,
+          "action": "User clicks in editable field",
+          "actor": "user"
+        },
+        {
+          "step": 2,
+          "action": "User right-clicks for context menu",
+          "actor": "user"
+        },
+        {
+          "step": 3,
+          "action": "User selects 'Business Templates'",
+          "actor": "user"
+        },
+        {
+          "step": 4,
+          "action": "User chooses template type",
+          "actor": "user",
+          "options": [
+            "Professional email",
+            "Business proposal",
+            "Meeting agenda",
+            "Status report"
+          ]
+        },
+        {
+          "step": 5,
+          "action": "Extension fetches template from /api/templates",
+          "actor": "extension"
+        },
+        {
+          "step": 6,
+          "action": "Template inserted with placeholders",
+          "actor": "extension"
+        },
+        {
+          "step": 7,
+          "action": "User customizes content",
+          "actor": "user"
+        },
+        {
+          "step": 8,
+          "action": "Template saved for future reuse",
+          "actor": "api",
+          "optional": true
+        }
+      ],
+      "duration": "10-30 seconds",
+      "time_saved": "5-15 minutes per document"
+    },
+    {
+      "name": "User Registration and Authentication",
+      "description": "Secure user signup and login flow",
+      "steps": [
+        {
+          "step": 1,
+          "action": "User visits web app or extension popup",
+          "actor": "user"
+        },
+        {
+          "step": 2,
+          "action": "User clicks Sign Up",
+          "actor": "user"
+        },
+        {
+          "step": 3,
+          "action": "User provides email and password",
+          "actor": "user"
+        },
+        {
+          "step": 4,
+          "action": "API validates and hashes password",
+          "actor": "api",
+          "security": "bcrypt with 12 rounds"
+        },
+        {
+          "step": 5,
+          "action": "User account created in database",
+          "actor": "api"
+        },
+        {
+          "step": 6,
+          "action": "JWT token issued via NextAuth.js",
+          "actor": "api"
+        },
+        {
+          "step": 7,
+          "action": "User logged in automatically",
+          "actor": "system"
+        },
+        {
+          "step": 8,
+          "action": "Extension syncs authentication state",
+          "actor": "extension"
+        }
+      ],
+      "security_measures": [
+        "HTTPS only",
+        "Password hashing (bcrypt)",
+        "JWT with expiration",
+        "Secure session management"
+      ]
+    },
+    {
+      "name": "Password Reset Flow",
+      "description": "Allow users to reset forgotten passwords",
+      "steps": [
+        {
+          "step": 1,
+          "action": "User clicks 'Forgot Password'",
+          "actor": "user"
+        },
+        {
+          "step": 2,
+          "action": "User enters email address",
+          "actor": "user"
+        },
+        {
+          "step": 3,
+          "action": "API generates time-limited reset token",
+          "actor": "api",
+          "expiration": "1 hour"
+        },
+        {
+          "step": 4,
+          "action": "Reset token stored (in-memory for demo)",
+          "actor": "api"
+        },
+        {
+          "step": 5,
+          "action": "User receives reset instructions",
+          "actor": "system",
+          "note": "Email not implemented in demo"
+        },
+        {
+          "step": 6,
+          "action": "User enters token and new password",
+          "actor": "user"
+        },
+        {
+          "step": 7,
+          "action": "API validates token and updates password",
+          "actor": "api"
+        },
+        {
+          "step": 8,
+          "action": "User can log in with new password",
+          "actor": "user"
+        }
+      ],
+      "security": "Time-limited tokens, single-use"
+    }
+  ],
+  
+  "business_rules": [
+    {
+      "rule": "Text Processing Quality",
+      "condition": "confidence >= 0.85",
+      "action": "Accept and apply correction",
+      "else": "Flag for manual review"
+    },
+    {
+      "rule": "Maximum Processing Time",
+      "condition": "processing_time <= 5000ms",
+      "action": "Return result",
+      "else": "Timeout and notify user"
+    },
+    {
+      "rule": "Preserve Original Intent",
+      "condition": "all corrections",
+      "action": "Maintain meaning and context",
+      "priority": "highest"
+    },
+    {
+      "rule": "Secure Authentication",
+      "condition": "all user actions",
+      "action": "Require valid JWT token",
+      "exceptions": ["signup", "login", "public pages"]
+    },
+    {
+      "rule": "Password Security",
+      "condition": "password creation/reset",
+      "action": "Minimum 8 characters, bcrypt hash",
+      "strength": "Medium+"
+    },
+    {
+      "rule": "History Retention",
+      "condition": "user opted in",
+      "action": "Store correction history",
+      "retention": "90 days",
+      "privacy": "User can delete anytime"
+    }
+  ],
+  
+  "integrations": [
+    {
+      "system": "Abacus.AI LLM APIs",
+      "purpose": "Text correction and AI prompt enhancement",
+      "type": "API",
+      "status": "active",
+      "endpoints": [
+        "/v1/chat/complete"
+      ],
+      "authentication": "API key via ABACUSAI_API_KEY"
+    },
+    {
+      "system": "Chrome Browser",
+      "purpose": "Extension APIs for context menu and content scripts",
+      "type": "Browser API",
+      "status": "active",
+      "apis_used": [
+        "chrome.contextMenus",
+        "chrome.runtime",
+        "chrome.storage",
+        "chrome.tabs"
+      ]
+    },
+    {
+      "system": "PostgreSQL",
+      "purpose": "User data, preferences, and history storage",
+      "type": "Database",
+      "status": "active",
+      "orm": "Prisma",
+      "tables": [
+        "User",
+        "CorrectionHistory",
+        "UserPreferences",
+        "Templates"
+      ]
+    },
+    {
+      "system": "NextAuth.js",
+      "purpose": "Authentication and session management",
+      "type": "Auth Library",
+      "status": "active",
+      "providers": [
+        "Credentials"
+      ],
+      "future_providers": [
+        "Google SSO",
+        "Microsoft SSO"
+      ]
+    }
+  ],
+  
+  "potential_sfg_integrations": [
+    {
+      "system": "NEXUS",
+      "purpose": "Orchestrated text processing workflows",
+      "status": "planned",
+      "use_cases": [
+        "Batch document correction",
+        "Automated email enhancement",
+        "Proposal quality checking"
+      ]
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "purpose": "Email and document enhancement",
+      "status": "planned",
+      "use_cases": [
+        "Outgoing email correction",
+        "Quote/proposal text quality",
+        "Customer communication enhancement"
+      ]
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document correction in enterprise storage",
+      "status": "planned",
+      "use_cases": [
+        "Correct documents before upload",
+        "Batch process existing documents",
+        "Template application"
+      ]
+    },
+    {
+      "system": "Microsoft 365",
+      "purpose": "Office document enhancement",
+      "status": "planned",
+      "use_cases": [
+        "Word document correction",
+        "Outlook email enhancement",
+        "Teams message improvement"
+      ]
+    }
+  ],
+  
+  "webhook_events": {
+    "current": [],
+    "future": [
+      {
+        "event": "text.corrected",
+        "description": "Text correction completed",
+        "payload": {
+          "user_id": "string",
+          "original_text": "string",
+          "corrected_text": "string",
+          "mode": "string",
+          "timestamp": "datetime"
+        }
+      },
+      {
+        "event": "prompt.enhanced",
+        "description": "AI prompt enhancement completed",
+        "payload": {
+          "user_id": "string",
+          "original_prompt": "string",
+          "enhanced_prompt": "string",
+          "timestamp": "datetime"
+        }
+      },
+      {
+        "event": "user.registered",
+        "description": "New user registration",
+        "payload": {
+          "user_id": "string",
+          "email": "string",
+          "timestamp": "datetime"
+        }
+      },
+      {
+        "event": "document.processed",
+        "description": "Batch document correction completed",
+        "payload": {
+          "user_id": "string",
+          "document_count": "number",
+          "total_corrections": "number",
+          "timestamp": "datetime"
+        }
+      }
+    ]
+  },
+  
+  "supported_messages": {
+    "current": [],
+    "future": [
+      {
+        "type": "action.correct_text",
+        "description": "Correct provided text",
+        "params": {
+          "text": "string (required)",
+          "mode": "string (required)",
+          "user_id": "string (optional)"
+        },
+        "response": {
+          "corrected_text": "string",
+          "changes": "array",
+          "confidence": "number"
+        }
+      },
+      {
+        "type": "action.enhance_prompt",
+        "description": "Enhance AI prompt",
+        "params": {
+          "prompt": "string (required)",
+          "user_id": "string (optional)"
+        },
+        "response": {
+          "enhanced_prompt": "string",
+          "improvements": "array",
+          "tips": "array"
+        }
+      },
+      {
+        "type": "query.correction_history",
+        "description": "Get user's correction history",
+        "params": {
+          "user_id": "string (required)",
+          "limit": "number (optional)",
+          "offset": "number (optional)"
+        },
+        "response": {
+          "corrections": "array",
+          "total": "number"
+        }
+      },
+      {
+        "type": "query.available_templates",
+        "description": "Get template list",
+        "params": {
+          "category": "string (optional)"
+        },
+        "response": {
+          "templates": "array"
+        }
+      },
+      {
+        "type": "action.apply_template",
+        "description": "Apply business template",
+        "params": {
+          "template_id": "string (required)",
+          "user_id": "string (optional)"
+        },
+        "response": {
+          "template_content": "string",
+          "placeholders": "array"
+        }
+      }
+    ]
+  },
+  
+  "tech_stack": {
+    "frontend": {
+      "framework": "Next.js 14.2.28",
+      "library": "React 18.2.0",
+      "language": "TypeScript 5.2.2",
+      "styling": "Tailwind CSS 3.3.3",
+      "ui_components": "Radix UI, shadcn/ui"
+    },
+    "backend": {
+      "runtime": "Node.js",
+      "framework": "Next.js API Routes",
+      "database": "PostgreSQL",
+      "orm": "Prisma 6.7.0",
+      "authentication": "NextAuth.js 4.24.11"
+    },
+    "chrome_extension": {
+      "manifest_version": 3,
+      "background": "Service Worker",
+      "content_scripts": "Text manipulation",
+      "popup": "React-based UI"
+    },
+    "ai_ml": {
+      "provider": "Abacus.AI",
+      "api": "LLM APIs",
+      "models": "GPT-class models"
+    },
+    "deployment": {
+      "platform": "Abacus.AI",
+      "url": "https://sfg-ai-prompt.abacusai.app",
+      "database": "Managed PostgreSQL",
+      "storage": "Abacus.AI cloud storage"
+    }
+  },
+  
+  "metrics": {
+    "usage": {
+      "corrections_per_day": "tracked",
+      "prompt_enhancements_per_day": "tracked",
+      "active_users": "tracked",
+      "extension_installs": "tracked"
+    },
+    "quality": {
+      "correction_accuracy": "95%+",
+      "user_satisfaction": "measured via reuse",
+      "processing_time": "< 3 seconds avg",
+      "error_rate": "< 2%"
+    },
+    "business": {
+      "user_retention": "tracked",
+      "feature_adoption": "tracked",
+      "template_usage": "tracked",
+      "premium_conversions": "future"
+    }
+  },
+  
+  "security": {
+    "https": "enforced",
+    "authentication": "NextAuth.js with JWT",
+    "password_hashing": "bcrypt (12 rounds)",
+    "session_management": "secure JWT tokens",
+    "rate_limiting": "planned",
+    "input_validation": "implemented",
+    "xss_protection": "implemented",
+    "csrf_protection": "NextAuth.js built-in"
+  },
+  
+  "future_enhancements": [
+    {
+      "feature": "SFG Business Integration",
+      "items": [
+        "NEXUS orchestration integration",
+        "MCP-COMMUNICATIONS integration",
+        "SharePoint document correction",
+        "Microsoft 365 add-in"
+      ],
+      "priority": "high"
+    },
+    {
+      "feature": "Advanced Features",
+      "items": [
+        "Batch document processing",
+        "Custom style guidelines",
+        "Team templates and sharing",
+        "Multi-language support"
+      ],
+      "priority": "medium"
+    },
+    {
+      "feature": "Analytics",
+      "items": [
+        "Usage dashboards",
+        "Quality analytics",
+        "User behavior insights",
+        "ROI metrics"
+      ],
+      "priority": "medium"
+    },
+    {
+      "feature": "Enterprise Features",
+      "items": [
+        "SSO integration (Google, Microsoft)",
+        "Team management",
+        "Usage reporting",
+        "Custom model fine-tuning"
+      ],
+      "priority": "high"
+    }
+  ]
+}

@@ -1,0 +1,431 @@
+
+{
+  "app_name": "SFG-SYNC",
+  "full_name": "SFG-SYNC Enterprise Resource Management Platform",
+  "version": "1.0.0",
+  "category": "sfg-aluminium-app",
+  "platform": "Next.js 14 + TypeScript + Prisma",
+  "status": "production",
+  "registered_at": "2025-11-05T05:34:52Z",
+  "registered_by": "Warren Payne",
+  
+  "description": "Comprehensive enterprise resource management platform for SFG Aluminium, providing end-to-end orchestration from customer enquiry to installation completion. Integrates AI-powered scheduling, real-time conflict resolution, IoT monitoring, and Microsoft 365 ecosystem integration.",
+  
+  "purpose": "Central coordination hub for SFG Aluminium's entire business operations, enabling seamless workflow automation, intelligent resource allocation, and real-time visibility across all departments.",
+  
+  "webhook_url": "https://sfg-sync.abacusai.app/api/nexus-webhook",
+  "webhook_events": [
+    "enquiry.created",
+    "quote.requested",
+    "order.approved",
+    "customer.registered",
+    "credit.check_required",
+    "invoice.due",
+    "payment.received",
+    "fabrication.scheduled",
+    "installation.scheduled",
+    "conflict.detected"
+  ],
+  "webhook_secret": "sfg-nexus-webhook-secret-2025",
+  
+  "message_handler_url": "https://sfg-sync.abacusai.app/api/messages/handle",
+  "supported_messages": {
+    "queries": [
+      "query.customer_data",
+      "query.quote_status",
+      "query.order_status",
+      "query.fabrication_status",
+      "query.installation_status",
+      "query.resource_availability"
+    ],
+    "actions": [
+      "action.create_quote",
+      "action.approve_order",
+      "action.schedule_fabrication",
+      "action.schedule_installation",
+      "action.resolve_conflict"
+    ]
+  },
+  
+  "github_webhook_url": "https://sfg-sync.abacusai.app/api/github-webhook",
+  
+  "capabilities": [
+    "Customer enquiry management",
+    "Quote generation with SFG margins (15% min, 25% target)",
+    "AI-powered scheduling with conflict detection",
+    "Real-time fabrication monitoring via IoT",
+    "Installation tracking with AR guidance",
+    "Credit checking via Experian (MCP-FINANCE)",
+    "Invoice processing via Xero",
+    "Document management via SharePoint",
+    "Microsoft 365 ecosystem integration",
+    "Cross-system data synchronization",
+    "Automated workflow orchestration",
+    "Tier-based approval routing",
+    "Performance analytics and insights",
+    "Mobile AR for installation teams",
+    "Real-time conflict resolution"
+  ],
+  
+  "workflows": [
+    {
+      "name": "Enquiry to Quote",
+      "description": "Full customer enquiry processing with automated quote generation",
+      "steps": [
+        "Receive customer enquiry",
+        "Check customer credit (if order > £10,000)",
+        "Create SharePoint project folder",
+        "Assign estimator based on workload",
+        "Calculate pricing with 15% minimum margin",
+        "Get approval if needed (tier-based)",
+        "Generate quote document",
+        "Send to customer via email",
+        "Track quote status"
+      ],
+      "triggers": ["enquiry.created"],
+      "outputs": ["quote_created", "customer_notified"]
+    },
+    {
+      "name": "Quote to Order",
+      "description": "Quote acceptance and order processing workflow",
+      "steps": [
+        "Receive quote acceptance",
+        "Verify customer credit",
+        "Create order record",
+        "Route for approval based on value and tier",
+        "Generate invoice in Xero",
+        "Update customer portal",
+        "Notify all stakeholders"
+      ],
+      "triggers": ["quote.accepted"],
+      "outputs": ["order_created", "invoice_generated"]
+    },
+    {
+      "name": "Order to Fabrication",
+      "description": "AI-powered fabrication scheduling with resource optimization",
+      "steps": [
+        "Receive approved order",
+        "Analyze fabrication requirements",
+        "Check team and equipment availability",
+        "Detect and resolve scheduling conflicts",
+        "Optimize production sequence",
+        "Reserve resources",
+        "Create fabrication schedule",
+        "Activate IoT monitoring",
+        "Notify fabrication team"
+      ],
+      "triggers": ["order.approved"],
+      "outputs": ["fabrication_scheduled", "iot_activated"]
+    },
+    {
+      "name": "Fabrication to Installation",
+      "description": "Coordinated transition from fabrication to installation",
+      "steps": [
+        "Monitor fabrication progress via IoT",
+        "Trigger installation scheduling when 80% complete",
+        "Check installation team availability",
+        "Optimize route planning",
+        "Prepare AR guidance for mobile app",
+        "Schedule installation",
+        "Notify customer",
+        "Notify installation team"
+      ],
+      "triggers": ["fabrication.progress_80"],
+      "outputs": ["installation_scheduled", "ar_prepared"]
+    },
+    {
+      "name": "Installation Completion",
+      "description": "Installation execution and completion workflow",
+      "steps": [
+        "Installation team uses AR guidance",
+        "Real-time progress tracking",
+        "Quality checks via mobile app",
+        "Customer sign-off",
+        "Update order status to complete",
+        "Trigger final invoice",
+        "Archive project documents",
+        "Customer satisfaction survey"
+      ],
+      "triggers": ["installation.started"],
+      "outputs": ["installation_complete", "project_closed"]
+    },
+    {
+      "name": "Conflict Resolution",
+      "description": "Automated conflict detection and resolution",
+      "steps": [
+        "Monitor schedules in real-time",
+        "Detect resource conflicts",
+        "Analyze impact and priority",
+        "Generate resolution options",
+        "Apply AI-recommended resolution",
+        "Notify affected teams",
+        "Update all schedules",
+        "Log resolution for learning"
+      ],
+      "triggers": ["conflict.detected"],
+      "outputs": ["conflict_resolved", "schedules_updated"]
+    }
+  ],
+  
+  "business_rules": [
+    {
+      "rule": "Minimum margin 15%",
+      "description": "All quotes must maintain at least 15% profit margin",
+      "condition": "margin >= 0.15",
+      "action": "Allow quote",
+      "escalation": "margin < 0.15 requires director approval"
+    },
+    {
+      "rule": "Target margin 25%",
+      "description": "Target profit margin for all quotes",
+      "condition": "margin >= 0.25",
+      "action": "Preferred pricing"
+    },
+    {
+      "rule": "Credit check for orders > £10,000",
+      "description": "Mandatory credit check via Experian for high-value orders",
+      "condition": "order_value > 10000",
+      "action": "Perform credit check via MCP-FINANCE",
+      "timeout": "24 hours"
+    },
+    {
+      "rule": "Tier-based approval - T1 Director",
+      "description": "Director approval limit",
+      "tier": "T1",
+      "limit": 1000000,
+      "action": "Auto-approve if value <= limit"
+    },
+    {
+      "rule": "Tier-based approval - T2 Senior Manager",
+      "description": "Senior Manager approval limit",
+      "tier": "T2",
+      "limit": 100000,
+      "action": "Auto-approve if value <= limit, escalate if higher"
+    },
+    {
+      "rule": "Tier-based approval - T3 Manager",
+      "description": "Manager approval limit",
+      "tier": "T3",
+      "limit": 25000,
+      "action": "Auto-approve if value <= limit, escalate if higher"
+    },
+    {
+      "rule": "Tier-based approval - T4 Supervisor",
+      "description": "Supervisor approval limit",
+      "tier": "T4",
+      "limit": 10000,
+      "action": "Auto-approve if value <= limit, escalate if higher"
+    },
+    {
+      "rule": "Tier-based approval - T5 Staff",
+      "description": "Staff approval limit",
+      "tier": "T5",
+      "limit": 1000,
+      "action": "Auto-approve if value <= limit, escalate if higher"
+    },
+    {
+      "rule": "Document stage progression",
+      "description": "Documents must follow proper stage sequence",
+      "stages": ["ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"],
+      "action": "Enforce sequential progression"
+    },
+    {
+      "rule": "Customer tier classification",
+      "description": "Customers classified by tier with specific colors and limits",
+      "tiers": [
+        {"name": "Platinum", "color": "Purple", "limit": 1000000},
+        {"name": "Sapphire", "color": "Blue", "limit": 100000},
+        {"name": "Steel", "color": "Gray", "limit": 25000},
+        {"name": "Green", "color": "Green", "limit": 10000},
+        {"name": "Crimson", "color": "Red", "limit": 1000}
+      ]
+    },
+    {
+      "rule": "Fabrication lead time",
+      "description": "Standard fabrication lead time",
+      "duration": "7 days",
+      "adjustable": true,
+      "factors": ["complexity", "team_availability", "material_availability"]
+    },
+    {
+      "rule": "Installation scheduling",
+      "description": "Installation must be scheduled after fabrication completion",
+      "condition": "fabrication_progress >= 80",
+      "lead_time": "5 days after fabrication",
+      "duration": "4-8 hours depending on project"
+    }
+  ],
+  
+  "integrations": [
+    {
+      "system": "NEXUS",
+      "type": "orchestration",
+      "purpose": "Central orchestration and workflow coordination",
+      "methods": ["webhooks", "messages", "api"],
+      "status": "active"
+    },
+    {
+      "system": "MCP-SALES",
+      "type": "mcp_server",
+      "purpose": "Sales tools and customer relationship management",
+      "tools": ["lead_management", "quote_generation", "customer_portal"],
+      "status": "active"
+    },
+    {
+      "system": "MCP-FINANCE",
+      "type": "mcp_server",
+      "purpose": "Financial operations and credit management",
+      "tools": ["xero_integration", "experian_credit_check", "invoice_processing", "payment_tracking"],
+      "status": "active"
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "type": "mcp_server",
+      "purpose": "Operations management and resource scheduling",
+      "tools": ["scheduling", "resource_allocation", "project_management"],
+      "status": "active"
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "type": "mcp_server",
+      "purpose": "Multi-channel communication management",
+      "tools": ["email", "sms", "whatsapp", "teams_chat"],
+      "status": "active"
+    },
+    {
+      "system": "MCP-DATA",
+      "type": "mcp_server",
+      "purpose": "Data analysis and reporting",
+      "tools": ["analytics", "reporting", "dashboards"],
+      "status": "active"
+    },
+    {
+      "system": "Xero",
+      "type": "external_api",
+      "purpose": "Accounting and invoicing",
+      "integration_method": "API via MCP-FINANCE",
+      "status": "active"
+    },
+    {
+      "system": "SharePoint",
+      "type": "external_api",
+      "purpose": "Document management and storage",
+      "integration_method": "Microsoft Graph API",
+      "status": "active"
+    },
+    {
+      "system": "Companies House",
+      "type": "external_api",
+      "purpose": "Company data and verification",
+      "integration_method": "REST API via MCP-FINANCE",
+      "status": "active"
+    },
+    {
+      "system": "Experian",
+      "type": "external_api",
+      "purpose": "Credit checking",
+      "integration_method": "API via MCP-FINANCE",
+      "status": "active"
+    },
+    {
+      "system": "IoT Sensors",
+      "type": "iot_devices",
+      "purpose": "Real-time fabrication monitoring",
+      "devices": ["machine_status", "quality_sensors", "progress_trackers"],
+      "status": "active"
+    },
+    {
+      "system": "Mobile AR App",
+      "type": "mobile_application",
+      "purpose": "Installation guidance and tracking",
+      "features": ["3d_models", "step_by_step_guidance", "progress_tracking"],
+      "status": "active"
+    }
+  ],
+  
+  "technical_stack": {
+    "framework": "Next.js 14",
+    "language": "TypeScript",
+    "database": "PostgreSQL with Prisma ORM",
+    "authentication": "NextAuth.js",
+    "ui": "React + Tailwind CSS + shadcn/ui",
+    "charts": "Recharts + Chart.js",
+    "state_management": "React Context + Zustand",
+    "api": "Next.js API Routes",
+    "deployment": "Abacus.AI Platform",
+    "monitoring": "Built-in logging + IoT integration"
+  },
+  
+  "key_features": {
+    "ai_powered": [
+      "Intelligent scheduling with conflict detection",
+      "Predictive resource allocation",
+      "Automated conflict resolution",
+      "Smart pricing recommendations"
+    ],
+    "real_time": [
+      "IoT fabrication monitoring",
+      "Live installation tracking",
+      "Real-time conflict alerts",
+      "Live dashboard updates"
+    ],
+    "automation": [
+      "Workflow orchestration",
+      "Document generation",
+      "Email notifications",
+      "Status updates"
+    ],
+    "integration": [
+      "Microsoft 365 ecosystem",
+      "Xero accounting",
+      "MCP server network",
+      "External APIs"
+    ],
+    "mobile": [
+      "AR installation guidance",
+      "Mobile app for field teams",
+      "Real-time updates",
+      "Offline capability"
+    ]
+  },
+  
+  "performance_metrics": {
+    "response_time": "< 200ms average",
+    "uptime": "99.9%",
+    "concurrent_users": "500+",
+    "data_refresh": "Real-time",
+    "webhook_processing": "< 1s",
+    "message_handling": "< 500ms"
+  },
+  
+  "security": {
+    "authentication": "NextAuth.js with JWT",
+    "authorization": "Role-based access control (RBAC)",
+    "data_encryption": "At rest and in transit",
+    "webhook_verification": "HMAC-SHA256 signature",
+    "api_security": "Bearer tokens",
+    "audit_logging": "Comprehensive activity logs"
+  },
+  
+  "monitoring": {
+    "health_checks": "Active",
+    "error_tracking": "Enabled",
+    "performance_monitoring": "Enabled",
+    "iot_monitoring": "Real-time",
+    "webhook_logs": "Comprehensive"
+  },
+  
+  "contact": {
+    "developer": "Warren Payne",
+    "organization": "SFG Aluminium",
+    "support_email": "support@sfg-aluminium.com",
+    "documentation": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio/tree/main/apps/sfg-sync"
+  },
+  
+  "repository": {
+    "url": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio",
+    "branch": "main",
+    "app_path": "/apps/sfg-sync",
+    "backup_included": true
+  }
+}

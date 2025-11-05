@@ -1,0 +1,240 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+  
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.0%;
+  }
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Warren Executive Theme Colors */
+.warren-primary {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+}
+
+.warren-secondary {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+}
+
+.warren-accent {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+/* SFG Aluminium Brand Colors */
+.sfg-gradient {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+}
+
+.sfg-card {
+  @apply bg-white dark:bg-warren-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-warren-gray-700 p-6 transition-colors;
+}
+
+.sfg-button {
+  @apply px-4 py-2 bg-warren-blue-600 dark:bg-warren-blue-700 text-white rounded-md hover:bg-warren-blue-700 dark:hover:bg-warren-blue-600 transition-colors;
+}
+
+.sfg-input {
+  @apply w-full px-3 py-2 border border-gray-300 dark:border-warren-gray-600 rounded-md bg-white dark:bg-warren-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-warren-blue-500 transition-colors;
+}
+
+/* Warren Executive Theme Utilities */
+.warren-card {
+  @apply bg-white dark:bg-warren-gray-800 border border-gray-200 dark:border-warren-gray-700 rounded-lg shadow-sm transition-colors;
+}
+
+.warren-input {
+  @apply border-gray-300 dark:border-warren-gray-600 bg-white dark:bg-warren-gray-800 text-gray-900 dark:text-gray-100 focus:border-warren-blue-500 focus:ring-warren-blue-500 transition-colors;
+}
+
+.warren-button-primary {
+  @apply bg-warren-blue-600 hover:bg-warren-blue-700 dark:bg-warren-blue-700 dark:hover:bg-warren-blue-600 text-white transition-colors;
+}
+
+.warren-button-secondary {
+  @apply bg-gray-100 hover:bg-gray-200 dark:bg-warren-gray-700 dark:hover:bg-warren-gray-600 text-gray-900 dark:text-gray-100 transition-colors;
+}
+
+/* Version Container Styles */
+.version-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.version-badge {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+}
+
+.version-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark .version-badge {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark .version-badge:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.changelog-dropdown {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 10px;
+  min-width: 300px;
+  max-width: 400px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.changelog-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dark .changelog-dropdown {
+  background: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.changelog-header {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px 10px 0 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dark .changelog-header {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+}
+
+.changelog-content {
+  padding: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.changelog-item {
+  padding: 8px 12px;
+  border-left: 3px solid #3b82f6;
+  margin: 8px 0;
+  background: #f8fafc;
+  border-radius: 0 6px 6px 0;
+}
+
+.dark .changelog-item {
+  background: #374151;
+  border-left-color: #60a5fa;
+}
+
+.changelog-version {
+  font-weight: 600;
+  color: #1e40af;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.dark .changelog-version {
+  color: #60a5fa;
+}
+
+.changelog-date {
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.dark .changelog-date {
+  color: #9ca3af;
+}
+
+.changelog-description {
+  font-size: 12px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.dark .changelog-description {
+  color: #d1d5db;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .version-container {
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .changelog-dropdown {
+    min-width: 280px;
+    max-width: calc(100vw - 40px);
+  }
+}

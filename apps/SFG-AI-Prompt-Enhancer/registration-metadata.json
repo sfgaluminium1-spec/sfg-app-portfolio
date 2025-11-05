@@ -1,0 +1,34 @@
+{
+  "app_name": "SFG-AI-Prompt-Enhancer",
+  "platform": "Next.js 14 + Chrome Extension",
+  "category": "utility-app",
+  "status": "production",
+  "version": "1.2.0",
+  "deployment_url": "https://sfg-ai-prompt.abacusai.app",
+  "source_code_location": "/home/ubuntu/intelligent_text_corrector",
+  "tech_stack": [
+    "Next.js 14",
+    "TypeScript",
+    "React 18",
+    "Tailwind CSS",
+    "NextAuth.js",
+    "Prisma ORM",
+    "PostgreSQL",
+    "Chrome Extension API",
+    "Abacus.AI APIs"
+  ],
+  "features": [
+    "Intelligent text correction",
+    "AI prompt enhancement",
+    "Right-click context menu",
+    "Password reset",
+    "User authentication",
+    "Correction history",
+    "Multiple rewrite styles",
+    "Chrome extension integration"
+  ],
+  "webhook_url": null,
+  "message_handler_url": null,
+  "registered_by": "Warren's DeepAgent",
+  "registration_date": "2025-11-05T15:02:49.232698"
+}

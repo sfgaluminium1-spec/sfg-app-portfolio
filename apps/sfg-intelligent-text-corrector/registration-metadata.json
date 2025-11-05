@@ -1,0 +1,489 @@
+
+{
+  "app_name": "SFG-IntelligentTextCorrector",
+  "display_name": "SFG Intelligent Text Corrector",
+  "version": "1.2.0",
+  "category": "productivity",
+  "tags": [
+    "text-correction",
+    "ai-enhancement",
+    "chrome-extension",
+    "productivity",
+    "llm",
+    "writing-assistant"
+  ],
+  "status": "production",
+  "registration_date": "2025-11-05",
+  "registered_by": "SFG Innovations",
+  
+  "deployment": {
+    "platform": "Abacus.AI",
+    "type": "hybrid",
+    "components": [
+      "Web Application (Next.js)",
+      "Chrome Extension",
+      "REST API"
+    ],
+    "production_url": "https://sfg-ai-prompt.abacusai.app",
+    "staging_url": null,
+    "repository": "private"
+  },
+  
+  "technical_details": {
+    "framework": "Next.js 14.2.28",
+    "language": "TypeScript 5.2.2",
+    "runtime": "Node.js",
+    "database": "PostgreSQL",
+    "orm": "Prisma 6.7.0",
+    "authentication": "NextAuth.js 4.24.11",
+    "llm_provider": "Abacus.AI",
+    "chrome_manifest_version": 3
+  },
+  
+  "api_endpoints": [
+    {
+      "path": "/api/correct",
+      "method": "POST",
+      "description": "Correct text with specified mode",
+      "authentication": "optional",
+      "rate_limit": "future",
+      "params": {
+        "text": "string (required)",
+        "mode": "string (required)",
+        "userId": "string (optional)"
+      },
+      "response": {
+        "corrected_text": "string",
+        "changes": "array",
+        "confidence": "number"
+      }
+    },
+    {
+      "path": "/api/prompt-enhance",
+      "method": "POST",
+      "description": "Enhance AI prompts for better results",
+      "authentication": "optional",
+      "params": {
+        "prompt": "string (required)",
+        "userId": "string (optional)"
+      },
+      "response": {
+        "enhanced_prompt": "string",
+        "improvements": "array",
+        "tips": "array"
+      }
+    },
+    {
+      "path": "/api/signup",
+      "method": "POST",
+      "description": "User registration",
+      "authentication": "none",
+      "params": {
+        "email": "string (required)",
+        "password": "string (required)"
+      },
+      "response": {
+        "success": "boolean",
+        "message": "string"
+      }
+    },
+    {
+      "path": "/api/auth/[...nextauth]",
+      "method": "POST/GET",
+      "description": "NextAuth.js authentication endpoints",
+      "authentication": "varies",
+      "providers": ["Credentials"]
+    },
+    {
+      "path": "/api/password-reset",
+      "method": "POST",
+      "description": "Password reset (request and reset)",
+      "authentication": "none",
+      "params": {
+        "action": "string (required)",
+        "email": "string (for request)",
+        "token": "string (for reset)",
+        "password": "string (for reset)"
+      },
+      "response": {
+        "success": "boolean",
+        "message": "string",
+        "token": "string (for request)"
+      }
+    },
+    {
+      "path": "/api/history",
+      "method": "GET",
+      "description": "Get user correction history",
+      "authentication": "required",
+      "params": {
+        "userId": "string (required)"
+      },
+      "response": {
+        "corrections": "array"
+      }
+    },
+    {
+      "path": "/api/templates",
+      "method": "GET",
+      "description": "Get available business templates",
+      "authentication": "optional",
+      "response": {
+        "templates": "array"
+      }
+    }
+  ],
+  
+  "webhook_configuration": {
+    "webhook_url": null,
+    "webhook_secret": null,
+    "webhook_events": [],
+    "status": "not_configured",
+    "future_events": [
+      "text.corrected",
+      "prompt.enhanced",
+      "user.registered",
+      "document.processed",
+      "template.created"
+    ],
+    "notes": "Webhook integration planned for SFG ecosystem integration. Will be configured when NEXUS orchestration is implemented."
+  },
+  
+  "message_handler_configuration": {
+    "message_handler_url": null,
+    "supported_messages": [],
+    "status": "not_configured",
+    "future_messages": [
+      "action.correct_text",
+      "action.enhance_prompt",
+      "query.correction_history",
+      "query.available_templates",
+      "action.apply_template"
+    ],
+    "notes": "Message handler planned for inter-app communication in SFG ecosystem. Will be implemented when other SFG apps need to request text corrections or enhancements."
+  },
+  
+  "chrome_extension": {
+    "version": "1.2.0",
+    "manifest_version": 3,
+    "distribution": {
+      "method": "direct_download",
+      "url": "https://sfg-ai-prompt.abacusai.app/intelligent-text-corrector-v1.2.0.zip",
+      "chrome_web_store": "pending"
+    },
+    "permissions": [
+      "contextMenus",
+      "activeTab",
+      "storage"
+    ],
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "context_menu_options": [
+      "Grammar Check",
+      "Punctuation Check",
+      "Simple Rewrite",
+      "Business Style Rewrite",
+      "Technical Rewrite",
+      "AI Prompt Enhance",
+      "Business Templates"
+    ]
+  },
+  
+  "database_schema": {
+    "orm": "Prisma",
+    "migrations": "managed",
+    "tables": [
+      {
+        "name": "User",
+        "purpose": "User accounts",
+        "key_fields": [
+          "id",
+          "email",
+          "password",
+          "createdAt"
+        ]
+      },
+      {
+        "name": "CorrectionHistory",
+        "purpose": "Store correction history",
+        "key_fields": [
+          "id",
+          "userId",
+          "originalText",
+          "correctedText",
+          "mode",
+          "timestamp"
+        ]
+      },
+      {
+        "name": "UserPreferences",
+        "purpose": "User settings",
+        "key_fields": [
+          "id",
+          "userId",
+          "preferences"
+        ]
+      },
+      {
+        "name": "Templates",
+        "purpose": "Business templates",
+        "key_fields": [
+          "id",
+          "name",
+          "category",
+          "content"
+        ]
+      }
+    ]
+  },
+  
+  "authentication": {
+    "provider": "NextAuth.js",
+    "strategies": [
+      {
+        "type": "Credentials",
+        "status": "active",
+        "details": "Email and password authentication with bcrypt hashing"
+      }
+    ],
+    "future_strategies": [
+      {
+        "type": "Google SSO",
+        "status": "planned",
+        "priority": "high"
+      },
+      {
+        "type": "Microsoft SSO",
+        "status": "planned",
+        "priority": "high"
+      }
+    ],
+    "session_management": "JWT tokens",
+    "password_requirements": {
+      "min_length": 8,
+      "hashing": "bcrypt (12 rounds)"
+    }
+  },
+  
+  "integrations": {
+    "current": [
+      {
+        "service": "Abacus.AI LLM APIs",
+        "type": "AI/ML",
+        "purpose": "Text correction and prompt enhancement",
+        "status": "active",
+        "authentication": "API key"
+      },
+      {
+        "service": "Chrome Browser APIs",
+        "type": "Browser Extension",
+        "purpose": "Context menu and content script integration",
+        "status": "active",
+        "apis": [
+          "contextMenus",
+          "runtime",
+          "storage",
+          "tabs"
+        ]
+      }
+    ],
+    "planned": [
+      {
+        "service": "NEXUS",
+        "type": "Orchestration",
+        "purpose": "Workflow orchestration and event-driven processing",
+        "status": "planned",
+        "priority": "high"
+      },
+      {
+        "service": "MCP-COMMUNICATIONS",
+        "type": "Business Integration",
+        "purpose": "Email and document enhancement",
+        "status": "planned",
+        "priority": "high"
+      },
+      {
+        "service": "SharePoint",
+        "type": "Document Storage",
+        "purpose": "Document correction in enterprise storage",
+        "status": "planned",
+        "priority": "medium"
+      },
+      {
+        "service": "Microsoft 365",
+        "type": "Office Suite",
+        "purpose": "Office document enhancement (Word, Outlook, Teams)",
+        "status": "planned",
+        "priority": "medium"
+      },
+      {
+        "service": "Google Analytics",
+        "type": "Analytics",
+        "purpose": "Usage tracking and analytics",
+        "status": "configured",
+        "priority": "medium",
+        "notes": "GA4 configured but Measurement ID needs to be set"
+      }
+    ]
+  },
+  
+  "environment_variables": {
+    "required": [
+      {
+        "name": "DATABASE_URL",
+        "description": "PostgreSQL connection string",
+        "example": "postgresql://user:pass@localhost:5432/dbname",
+        "sensitive": true
+      },
+      {
+        "name": "NEXTAUTH_SECRET",
+        "description": "NextAuth.js secret for JWT signing",
+        "example": "random-secret-string",
+        "sensitive": true
+      },
+      {
+        "name": "NEXTAUTH_URL",
+        "description": "Base URL of the application",
+        "example": "https://sfg-ai-prompt.abacusai.app",
+        "sensitive": false
+      },
+      {
+        "name": "ABACUSAI_API_KEY",
+        "description": "Abacus.AI API key for LLM access",
+        "example": "abacus-api-key",
+        "sensitive": true
+      }
+    ],
+    "optional": [
+      {
+        "name": "NEXT_PUBLIC_GA_MEASUREMENT_ID",
+        "description": "Google Analytics 4 Measurement ID",
+        "example": "G-XXXXXXXXXX",
+        "sensitive": false,
+        "notes": "Required for analytics tracking"
+      }
+    ]
+  },
+  
+  "monitoring": {
+    "application_logs": "enabled",
+    "error_tracking": "planned",
+    "performance_monitoring": "planned",
+    "uptime_monitoring": "planned",
+    "analytics": {
+      "google_analytics": "configured_pending_id",
+      "custom_analytics": "planned"
+    }
+  },
+  
+  "security": {
+    "https": "enforced",
+    "authentication": "NextAuth.js with JWT",
+    "password_hashing": "bcrypt (12 rounds)",
+    "session_management": "JWT tokens with expiration",
+    "rate_limiting": "planned",
+    "input_validation": "implemented",
+    "xss_protection": "implemented",
+    "csrf_protection": "NextAuth.js built-in",
+    "cors": "configured for extension",
+    "api_key_storage": "environment variables only"
+  },
+  
+  "compliance": {
+    "gdpr": "partially_compliant",
+    "data_retention": "90 days (configurable)",
+    "user_data_deletion": "manual via admin",
+    "privacy_policy": "required",
+    "terms_of_service": "required"
+  },
+  
+  "support": {
+    "documentation_url": "https://sfg-ai-prompt.abacusai.app",
+    "issue_tracker": "GitHub (private)",
+    "contact_method": "GitHub issues",
+    "sla": "none (internal tool)"
+  },
+  
+  "business_context": {
+    "target_users": [
+      "SFG Aluminium staff",
+      "SFG business partners",
+      "General productivity users"
+    ],
+    "use_cases": [
+      "Email correction and enhancement",
+      "Proposal and quote quality improvement",
+      "Technical documentation standardization",
+      "AI prompt optimization",
+      "Business communication templates"
+    ],
+    "value_proposition": "Enterprise-grade text correction and AI prompt enhancement accessible via right-click on any webpage, boosting productivity and communication quality.",
+    "competitive_advantages": [
+      "Chrome extension for universal accessibility",
+      "SFG branding and enterprise design",
+      "Multiple rewrite modes for different contexts",
+      "AI prompt enhancement for better AI interactions",
+      "Business templates for common documents"
+    ]
+  },
+  
+  "roadmap": {
+    "completed": [
+      "Core text correction functionality",
+      "AI prompt enhancement",
+      "Chrome extension with context menu",
+      "User authentication and management",
+      "Password reset flow",
+      "Modern glassmorphism UI",
+      "SFG branding integration",
+      "Correction history tracking",
+      "Google Analytics integration"
+    ],
+    "in_progress": [],
+    "planned": [
+      {
+        "feature": "NEXUS integration",
+        "priority": "high",
+        "timeline": "Q1 2026"
+      },
+      {
+        "feature": "MCP-COMMUNICATIONS integration",
+        "priority": "high",
+        "timeline": "Q1 2026"
+      },
+      {
+        "feature": "Chrome Web Store publication",
+        "priority": "high",
+        "timeline": "Q4 2025"
+      },
+      {
+        "feature": "SSO integration (Google, Microsoft)",
+        "priority": "high",
+        "timeline": "Q1 2026"
+      },
+      {
+        "feature": "Batch document processing",
+        "priority": "medium",
+        "timeline": "Q2 2026"
+      },
+      {
+        "feature": "SharePoint integration",
+        "priority": "medium",
+        "timeline": "Q2 2026"
+      },
+      {
+        "feature": "Usage analytics dashboard",
+        "priority": "medium",
+        "timeline": "Q2 2026"
+      },
+      {
+        "feature": "Multi-language support",
+        "priority": "low",
+        "timeline": "Q3 2026"
+      }
+    ]
+  },
+  
+  "notes": "This app is currently a standalone Chrome extension and web application. Future integration with the SFG ecosystem (NEXUS, MCP servers) will enable orchestrated workflows, webhook events, and inter-app messaging. The app is production-ready but webhook and message handler endpoints are not yet configured as they require the SFG ecosystem infrastructure to be in place."
+}

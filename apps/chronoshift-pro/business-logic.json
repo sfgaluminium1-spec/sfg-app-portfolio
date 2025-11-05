@@ -1,0 +1,692 @@
+{
+  "app_name": "chronoshift-pro",
+  "version": "2.3.0",
+  "last_updated": "2025-11-04",
+  "core_capabilities": {
+    "timesheet_management": {
+      "description": "Real-time timesheet entry with location verification",
+      "features": [
+        "GPS-based location tracking (mandatory)",
+        "Start/end time entry",
+        "Break time tracking",
+        "Automatic overtime calculation",
+        "Pay calculation based on employee rates",
+        "Notes and comments",
+        "Status tracking (pending/approved/rejected)",
+        "Voice dictation support",
+        "Offline entry with sync"
+      ],
+      "rules": {
+        "location_required": true,
+        "max_hours_per_day": 24,
+        "default_break_minutes": 30,
+        "overtime_threshold_weekly": 37.5,
+        "overtime_multiplier": 1.5
+      }
+    },
+    "supervisor_workflow": {
+      "description": "Multi-level approval system for timesheets",
+      "features": [
+        "View team timesheets",
+        "Approve/reject with notes",
+        "Bulk approval",
+        "Real-time notifications",
+        "Approval history tracking"
+      ],
+      "rules": {
+        "approval_required": true,
+        "sla_hours": 24,
+        "rejection_reason_required": true
+      }
+    },
+    "payroll_processing": {
+      "description": "Comprehensive payroll calculation and export",
+      "features": [
+        "Aggregate approved timesheets",
+        "Calculate regular and overtime pay",
+        "Generate payslips (PDF)",
+        "Export to BrightPay format",
+        "SharePoint backup integration",
+        "Teams notifications",
+        "Payroll summary reports"
+      ],
+      "rules": {
+        "only_approved_timesheets": true,
+        "brightpay_format": "CSV with specific columns",
+        "backup_required": true
+      }
+    },
+    "hr_compliance": {
+      "description": "Comprehensive audit logging and compliance tracking",
+      "features": [
+        "All actions logged with timestamp",
+        "User and IP address tracking",
+        "7-year retention period",
+        "Working Time Directive monitoring",
+        "UK GDPR compliance",
+        "Data export/deletion",
+        "Privacy policy and terms"
+      ],
+      "rules": {
+        "audit_log_required": true,
+        "retention_years": 7,
+        "gdpr_compliant": true
+      }
+    },
+    "integration_capabilities": {
+      "description": "External system integrations",
+      "features": [
+        "Microsoft Teams notifications",
+        "SharePoint document storage",
+        "BrightPay export",
+        "Azure AD authentication",
+        "NEXUS orchestration",
+        "MCP server connectivity"
+      ]
+    }
+  },
+  "business_workflows": {
+    "timesheet_entry_workflow": {
+      "name": "Daily Timesheet Entry",
+      "actors": [
+        "employee"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "action": "employee_login",
+          "description": "Employee logs into ChronoShift Pro",
+          "validation": "authenticated_user"
+        },
+        {
+          "step": 2,
+          "action": "capture_location",
+          "description": "System captures GPS coordinates",
+          "validation": "location_services_enabled",
+          "mandatory": true
+        },
+        {
+          "step": 3,
+          "action": "enter_times",
+          "description": "Employee enters start time, end time, break duration",
+          "validation": "valid_time_range"
+        },
+        {
+          "step": 4,
+          "action": "calculate_hours",
+          "description": "System calculates regular and overtime hours",
+          "formula": {
+            "total_hours": "(end_time - start_time - break_minutes) / 60",
+            "regular_hours": "min(total_hours, 7.5)",
+            "overtime_hours": "max(0, total_hours - 7.5)"
+          }
+        },
+        {
+          "step": 5,
+          "action": "calculate_pay",
+          "description": "System calculates pay based on employee rate",
+          "formula": {
+            "regular_pay": "regular_hours * base_rate",
+            "overtime_pay": "overtime_hours * overtime_rate",
+            "total_pay": "regular_pay + overtime_pay"
+          }
+        },
+        {
+          "step": 6,
+          "action": "submit_timesheet",
+          "description": "Employee submits timesheet",
+          "notification": "supervisor_notified"
+        }
+      ],
+      "outputs": [
+        "timesheet_record",
+        "supervisor_notification",
+        "audit_log_entry"
+      ]
+    },
+    "supervisor_approval_workflow": {
+      "name": "Supervisor Approval Process",
+      "actors": [
+        "supervisor"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "action": "view_pending_timesheets",
+          "description": "Supervisor views team's pending timesheets",
+          "filters": [
+            "by_employee",
+            "by_date",
+            "by_status"
+          ]
+        },
+        {
+          "step": 2,
+          "action": "review_details",
+          "description": "Supervisor reviews hours, location, notes",
+          "validations": [
+            "reasonable_hours",
+            "valid_location",
+            "no_conflicts"
+          ]
+        },
+        {
+          "step": 3,
+          "action": "make_decision",
+          "description": "Supervisor approves or rejects",
+          "options": [
+            "approve",
+            "reject_with_reason"
+          ],
+          "notification": "employee_notified"
+        }
+      ],
+      "outputs": [
+        "approval_decision",
+        "employee_notification",
+        "audit_log_entry",
+        "status_updated"
+      ]
+    },
+    "payroll_processing_workflow": {
+      "name": "Weekly Payroll Processing",
+      "actors": [
+        "admin"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "action": "select_period",
+          "description": "Admin selects date range for payroll",
+          "typical_period": "weekly"
+        },
+        {
+          "step": 2,
+          "action": "aggregate_timesheets",
+          "description": "System retrieves all approved timesheets",
+          "filter": "status = approved AND date IN range"
+        },
+        {
+          "step": 3,
+          "action": "calculate_totals",
+          "description": "System calculates per-employee totals",
+          "calculations": [
+            "total_regular_hours",
+            "total_overtime_hours",
+            "total_regular_pay",
+            "total_overtime_pay",
+            "total_pay"
+          ]
+        },
+        {
+          "step": 4,
+          "action": "generate_exports",
+          "description": "System generates payroll exports",
+          "formats": [
+            "brightpay_csv",
+            "pdf_payslips",
+            "excel_summary"
+          ]
+        },
+        {
+          "step": 5,
+          "action": "backup_to_sharepoint",
+          "description": "System backs up payroll data to SharePoint",
+          "location": "Documents/Payroll/{year}/{week_number}/"
+        },
+        {
+          "step": 6,
+          "action": "notify_completion",
+          "description": "System sends Teams notification to admin",
+          "notification_type": "teams_message"
+        }
+      ],
+      "outputs": [
+        "brightpay_csv_file",
+        "payslip_pdfs",
+        "sharepoint_backup",
+        "teams_notification",
+        "audit_log_entries"
+      ]
+    },
+    "nexus_orchestration_workflow": {
+      "name": "NEXUS Orchestrated Operations",
+      "description": "Handle events and messages from NEXUS",
+      "webhook_events": {
+        "employee.registered": {
+          "description": "New employee registered in SFG system",
+          "action": "Create employee record in ChronoShift Pro",
+          "response": {
+            "status": "created",
+            "employee_id": "uuid",
+            "actions": [
+              "employee_created",
+              "default_settings_applied"
+            ]
+          }
+        },
+        "employee.updated": {
+          "description": "Employee information updated",
+          "action": "Update employee record in ChronoShift Pro",
+          "response": {
+            "status": "updated",
+            "fields_updated": [
+              "array"
+            ]
+          }
+        },
+        "payroll.process_requested": {
+          "description": "NEXUS requests payroll processing",
+          "action": "Calculate payroll for specified period",
+          "response": {
+            "status": "processed",
+            "payroll_data": "object",
+            "total_payroll": "number"
+          }
+        },
+        "timesheet.bulk_import": {
+          "description": "Bulk import timesheets from external source",
+          "action": "Import and validate timesheets",
+          "response": {
+            "status": "completed",
+            "imported": "number",
+            "failed": "number",
+            "errors": [
+              "array"
+            ]
+          }
+        },
+        "compliance.audit_required": {
+          "description": "Compliance audit requested",
+          "action": "Generate compliance report",
+          "response": {
+            "status": "completed",
+            "audit_results": "object"
+          }
+        }
+      },
+      "message_handlers": {
+        "query.employee_data": {
+          "description": "Retrieve employee data",
+          "params": [
+            "employee_id",
+            "email",
+            "employee_number"
+          ],
+          "response": "employee_data_object"
+        },
+        "query.timesheet_summary": {
+          "description": "Get timesheet summary for employee/period",
+          "params": [
+            "employee_id",
+            "start_date",
+            "end_date",
+            "period"
+          ],
+          "response": "timesheet_summary_object"
+        },
+        "query.payroll_summary": {
+          "description": "Get payroll summary for period/department",
+          "params": [
+            "start_date",
+            "end_date",
+            "department"
+          ],
+          "response": "payroll_summary_object"
+        },
+        "action.approve_timesheet": {
+          "description": "Approve a timesheet",
+          "params": [
+            "timesheet_id",
+            "approved_by",
+            "notes"
+          ],
+          "response": "approval_confirmation"
+        },
+        "action.generate_payslip": {
+          "description": "Generate payslip for employee",
+          "params": [
+            "employee_id",
+            "start_date",
+            "end_date"
+          ],
+          "response": "payslip_data"
+        },
+        "action.export_payroll_data": {
+          "description": "Export payroll data",
+          "params": [
+            "start_date",
+            "end_date",
+            "format"
+          ],
+          "response": "export_url"
+        }
+      }
+    }
+  },
+  "business_rules": {
+    "timesheet_validation": [
+      {
+        "rule_id": "TR001",
+        "rule_name": "Mandatory Location",
+        "description": "All timesheets must include GPS coordinates",
+        "enforcement": "strict",
+        "validation": "location_latitude != null AND location_longitude != null",
+        "error_message": "Location is required for all timesheet entries"
+      },
+      {
+        "rule_id": "TR002",
+        "rule_name": "Reasonable Hours",
+        "description": "Total hours must be between 0 and 24 per day",
+        "enforcement": "strict",
+        "validation": "total_hours > 0 AND total_hours <= 24",
+        "error_message": "Total hours must be between 0 and 24"
+      },
+      {
+        "rule_id": "TR003",
+        "rule_name": "No Duplicate Entries",
+        "description": "Only one timesheet per employee per day",
+        "enforcement": "strict",
+        "validation": "COUNT(timesheets WHERE user_id = X AND date = Y) <= 1",
+        "error_message": "You already have a timesheet for this date"
+      },
+      {
+        "rule_id": "TR004",
+        "rule_name": "Overtime Calculation",
+        "description": "Overtime hours = max(0, total_hours - 7.5)",
+        "enforcement": "automatic",
+        "formula": "overtime_hours = max(0, total_hours - 7.5)"
+      },
+      {
+        "rule_id": "TR005",
+        "rule_name": "Break Time Limit",
+        "description": "Break time cannot exceed half the shift duration",
+        "enforcement": "warning",
+        "validation": "break_minutes <= (shift_duration_minutes / 2)",
+        "warning_message": "Break time seems unusually long for this shift"
+      }
+    ],
+    "approval_rules": [
+      {
+        "rule_id": "AR001",
+        "rule_name": "Supervisor Approval Required",
+        "description": "All timesheets must be approved by supervisor",
+        "enforcement": "strict",
+        "validation": "status = 'approved' requires supervisor_action"
+      },
+      {
+        "rule_id": "AR002",
+        "rule_name": "Rejection Requires Reason",
+        "description": "Rejected timesheets must have a reason",
+        "enforcement": "strict",
+        "validation": "status = 'rejected' requires notes != null"
+      },
+      {
+        "rule_id": "AR003",
+        "rule_name": "Approval SLA",
+        "description": "Timesheets should be approved within 24 hours",
+        "enforcement": "warning",
+        "validation": "approval_time - submission_time <= 24 hours",
+        "warning_message": "This timesheet is pending approval for over 24 hours"
+      }
+    ],
+    "payroll_rules": [
+      {
+        "rule_id": "PR001",
+        "rule_name": "Approved Timesheets Only",
+        "description": "Only approved timesheets included in payroll",
+        "enforcement": "strict",
+        "validation": "status = 'approved'"
+      },
+      {
+        "rule_id": "PR002",
+        "rule_name": "Regular Rate Calculation",
+        "description": "Regular pay = regular_hours * base_rate",
+        "enforcement": "automatic",
+        "formula": "regular_pay = regular_hours * base_rate"
+      },
+      {
+        "rule_id": "PR003",
+        "rule_name": "Overtime Rate Calculation",
+        "description": "Overtime pay = overtime_hours * (base_rate * 1.5)",
+        "enforcement": "automatic",
+        "formula": "overtime_pay = overtime_hours * (base_rate * 1.5)"
+      },
+      {
+        "rule_id": "PR004",
+        "rule_name": "Payroll Backup Required",
+        "description": "All payroll data must be backed up to SharePoint",
+        "enforcement": "strict",
+        "validation": "sharepoint_backup_completed = true"
+      }
+    ],
+    "compliance_rules": [
+      {
+        "rule_id": "CR001",
+        "rule_name": "Audit Log All Actions",
+        "description": "All user actions must be logged",
+        "enforcement": "strict",
+        "logged_fields": [
+          "action",
+          "user_id",
+          "timestamp",
+          "ip_address",
+          "details"
+        ]
+      },
+      {
+        "rule_id": "CR002",
+        "rule_name": "7-Year Retention",
+        "description": "Audit logs retained for 7 years (UK requirement)",
+        "enforcement": "strict",
+        "retention_period": "7 years"
+      },
+      {
+        "rule_id": "CR003",
+        "rule_name": "Working Time Directive",
+        "description": "Monitor 48-hour average working week",
+        "enforcement": "warning",
+        "validation": "AVG(weekly_hours) <= 48",
+        "warning_message": "Employee exceeds Working Time Directive limits"
+      },
+      {
+        "rule_id": "CR004",
+        "rule_name": "GDPR Compliance",
+        "description": "Employee data processed according to UK GDPR",
+        "enforcement": "strict",
+        "requirements": [
+          "consent",
+          "data_export",
+          "data_deletion",
+          "privacy_policy"
+        ]
+      }
+    ]
+  },
+  "integration_specifications": {
+    "nexus": {
+      "type": "bidirectional",
+      "protocols": [
+        "webhook",
+        "message_api"
+      ],
+      "webhook_endpoint": "/api/webhooks/nexus",
+      "message_endpoint": "/api/messages/handle",
+      "authentication": "hmac_signature",
+      "data_format": "json"
+    },
+    "microsoft_365": {
+      "type": "outbound",
+      "services": {
+        "teams": {
+          "purpose": "Notifications and alerts",
+          "api": "Microsoft Graph API",
+          "permissions": [
+            "ChannelMessage.Send",
+            "User.Read"
+          ]
+        },
+        "sharepoint": {
+          "purpose": "Document storage and backup",
+          "api": "Microsoft Graph API",
+          "permissions": [
+            "Files.ReadWrite.All",
+            "Sites.ReadWrite.All"
+          ]
+        },
+        "azure_ad": {
+          "purpose": "Authentication (optional)",
+          "api": "OAuth 2.0",
+          "permissions": [
+            "User.Read",
+            "profile",
+            "email"
+          ]
+        }
+      }
+    },
+    "brightpay": {
+      "type": "export",
+      "format": "CSV",
+      "columns": [
+        "Employee Number",
+        "Name",
+        "Regular Hours",
+        "Overtime Hours",
+        "Regular Pay",
+        "Overtime Pay",
+        "Total Pay"
+      ],
+      "export_path": "/api/export/brightpay"
+    }
+  },
+  "data_model": {
+    "user": {
+      "fields": [
+        "id",
+        "email",
+        "name",
+        "role",
+        "created_at",
+        "updated_at"
+      ],
+      "relations": [
+        "employeeData",
+        "timesheets",
+        "supervisor"
+      ]
+    },
+    "employee_data": {
+      "fields": [
+        "employeeNumber",
+        "firstName",
+        "lastName",
+        "department",
+        "position",
+        "mobileNumber",
+        "emergencyContact",
+        "emergencyPhone",
+        "hireDate",
+        "baseRate",
+        "overtimeRate"
+      ]
+    },
+    "timesheet": {
+      "fields": [
+        "id",
+        "userId",
+        "date",
+        "startTime",
+        "endTime",
+        "breakMinutes",
+        "regularHours",
+        "overtimeHours",
+        "regularPay",
+        "overtimePay",
+        "totalPay",
+        "notes",
+        "status",
+        "location",
+        "locationLatitude",
+        "locationLongitude",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "hr_compliance_log": {
+      "fields": [
+        "id",
+        "action",
+        "details",
+        "userId",
+        "ipAddress",
+        "timestamp"
+      ]
+    }
+  },
+  "api_endpoints": {
+    "webhooks": {
+      "nexus": {
+        "path": "/api/webhooks/nexus",
+        "method": "POST",
+        "description": "Receive events from NEXUS",
+        "authentication": "hmac_signature"
+      },
+      "github": {
+        "path": "/api/github-webhook",
+        "method": "POST",
+        "description": "Receive GitHub events for instructions",
+        "authentication": "hmac_signature"
+      }
+    },
+    "messages": {
+      "handle": {
+        "path": "/api/messages/handle",
+        "method": "POST",
+        "description": "Handle messages from NEXUS or other apps",
+        "authentication": "api_key"
+      }
+    },
+    "timesheets": {
+      "create": {
+        "path": "/api/timesheets",
+        "method": "POST",
+        "description": "Create new timesheet"
+      },
+      "list": {
+        "path": "/api/timesheets",
+        "method": "GET",
+        "description": "List timesheets with filters"
+      },
+      "update": {
+        "path": "/api/timesheets/[id]",
+        "method": "PATCH",
+        "description": "Update timesheet (approval status)"
+      }
+    },
+    "employees": {
+      "list": {
+        "path": "/api/employees",
+        "method": "GET",
+        "description": "List all employees"
+      },
+      "get": {
+        "path": "/api/employees/[id]",
+        "method": "GET",
+        "description": "Get employee details"
+      }
+    },
+    "exports": {
+      "brightpay": {
+        "path": "/api/export/brightpay",
+        "method": "GET",
+        "description": "Export payroll data to BrightPay format"
+      },
+      "payslips": {
+        "path": "/api/export/payslips",
+        "method": "GET",
+        "description": "Generate payslip PDFs"
+      }
+    }
+  }
+}

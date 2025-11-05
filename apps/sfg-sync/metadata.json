@@ -1,0 +1,242 @@
+
+{
+  "registration": {
+    "app_name": "SFG-SYNC",
+    "full_name": "SFG-SYNC Enterprise Resource Management Platform",
+    "version": "1.0.0",
+    "category": "sfg-aluminium-app",
+    "platform": "Next.js 14 + TypeScript + Prisma",
+    "status": "production",
+    "registered_at": "2025-11-05T05:52:00Z",
+    "registered_by": "Warren Payne"
+  },
+  
+  "endpoints": {
+    "webhook": {
+      "url": "https://sfg-sync.abacusai.app/api/nexus-webhook",
+      "method": "POST",
+      "authentication": "HMAC-SHA256",
+      "secret_env_var": "NEXUS_WEBHOOK_SECRET",
+      "timeout": 30,
+      "retry_policy": "exponential_backoff",
+      "max_retries": 3
+    },
+    "message_handler": {
+      "url": "https://sfg-sync.abacusai.app/api/messages/handle",
+      "method": "POST",
+      "authentication": "none",
+      "timeout": 30,
+      "retry_policy": "exponential_backoff",
+      "max_retries": 3
+    },
+    "github_webhook": {
+      "url": "https://sfg-sync.abacusai.app/api/github-webhook",
+      "method": "POST",
+      "authentication": "GitHub App",
+      "purpose": "Receive instructions from NEXUS"
+    },
+    "health_check": {
+      "url": "https://sfg-sync.abacusai.app/api/health",
+      "method": "GET",
+      "expected_response": 200,
+      "interval": 300
+    }
+  },
+  
+  "webhook_configuration": {
+    "events": [
+      "enquiry.created",
+      "quote.requested",
+      "order.approved",
+      "customer.registered",
+      "credit.check_required",
+      "invoice.due",
+      "payment.received",
+      "fabrication.scheduled",
+      "installation.scheduled",
+      "conflict.detected"
+    ],
+    "secret": "sfg-nexus-webhook-secret-2025",
+    "content_type": "application/json",
+    "delivery_format": {
+      "type": "string",
+      "data": "object",
+      "event_id": "string",
+      "timestamp": "ISO8601"
+    }
+  },
+  
+  "message_handler_configuration": {
+    "supported_messages": {
+      "queries": [
+        "query.customer_data",
+        "query.quote_status",
+        "query.order_status",
+        "query.fabrication_status",
+        "query.installation_status",
+        "query.resource_availability"
+      ],
+      "actions": [
+        "action.create_quote",
+        "action.approve_order",
+        "action.schedule_fabrication",
+        "action.schedule_installation",
+        "action.resolve_conflict"
+      ]
+    },
+    "request_format": {
+      "type": "string",
+      "params": "object",
+      "request_id": "string"
+    },
+    "response_format": {
+      "request_id": "string",
+      "status": "success|error",
+      "result": "object",
+      "timestamp": "ISO8601",
+      "processed_by": "string"
+    }
+  },
+  
+  "capabilities": {
+    "core": [
+      "Customer enquiry management",
+      "Quote generation with SFG margins",
+      "AI-powered scheduling",
+      "Real-time IoT monitoring",
+      "Installation tracking with AR",
+      "Credit checking",
+      "Invoice processing",
+      "Document management"
+    ],
+    "orchestration": [
+      "Webhook event processing",
+      "Message query handling",
+      "Message action execution",
+      "Cross-system synchronization",
+      "Workflow automation"
+    ],
+    "intelligence": [
+      "Conflict detection",
+      "Automatic resolution",
+      "Predictive scheduling",
+      "Smart pricing",
+      "Performance analytics"
+    ]
+  },
+  
+  "business_rules": {
+    "margins": {
+      "minimum": 0.15,
+      "target": 0.25,
+      "warning_threshold": 0.18
+    },
+    "approval_limits": {
+      "T1_Director": 1000000,
+      "T2_SeniorManager": 100000,
+      "T3_Manager": 25000,
+      "T4_Supervisor": 10000,
+      "T5_Staff": 1000
+    },
+    "credit_checks": {
+      "threshold": 10000,
+      "provider": "Experian",
+      "validity_days": 90,
+      "timeout_hours": 24
+    },
+    "document_stages": [
+      "ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"
+    ],
+    "customer_tiers": {
+      "Platinum": {"color": "Purple", "limit": 1000000},
+      "Sapphire": {"color": "Blue", "limit": 100000},
+      "Steel": {"color": "Gray", "limit": 25000},
+      "Green": {"color": "Green", "limit": 10000},
+      "Crimson": {"color": "Red", "limit": 1000}
+    }
+  },
+  
+  "integrations": {
+    "nexus": {
+      "type": "orchestration",
+      "methods": ["webhooks", "messages", "api"],
+      "status": "active"
+    },
+    "mcp_servers": {
+      "sales": {"status": "active"},
+      "finance": {"status": "active"},
+      "operations": {"status": "active"},
+      "communications": {"status": "active"},
+      "data": {"status": "active"}
+    },
+    "external_systems": {
+      "xero": {"via": "MCP-FINANCE", "status": "active"},
+      "sharepoint": {"via": "Microsoft Graph API", "status": "active"},
+      "companies_house": {"via": "MCP-FINANCE", "status": "active"},
+      "experian": {"via": "MCP-FINANCE", "status": "active"}
+    },
+    "iot_mobile": {
+      "iot_sensors": {"status": "active"},
+      "mobile_ar_app": {"status": "active"}
+    }
+  },
+  
+  "performance": {
+    "response_time_ms": 200,
+    "uptime_percentage": 99.9,
+    "concurrent_users": 500,
+    "webhook_processing_ms": 1000,
+    "message_handling_ms": 500,
+    "data_refresh": "real-time"
+  },
+  
+  "security": {
+    "authentication": "NextAuth.js with JWT",
+    "authorization": "Role-based access control (RBAC)",
+    "encryption": "At rest and in transit",
+    "webhook_verification": "HMAC-SHA256",
+    "api_security": "Bearer tokens",
+    "audit_logging": true
+  },
+  
+  "monitoring": {
+    "health_checks": true,
+    "error_tracking": true,
+    "performance_monitoring": true,
+    "iot_monitoring": "real-time",
+    "webhook_logs": "comprehensive",
+    "alert_channels": ["email", "teams", "dashboard"]
+  },
+  
+  "deployment": {
+    "platform": "Abacus.AI",
+    "url": "https://sfg-sync.abacusai.app",
+    "environment": "production",
+    "auto_scaling": true,
+    "backup_strategy": "Daily snapshots",
+    "disaster_recovery": "Multi-region"
+  },
+  
+  "documentation": {
+    "readme": "README.md",
+    "business_logic": "business-logic.json",
+    "api_docs": "Available on request",
+    "user_guides": "https://docs.sfg-aluminium.com/sfg-sync",
+    "developer_docs": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio/tree/main/apps/sfg-sync"
+  },
+  
+  "contact": {
+    "developer": "Warren Payne",
+    "organization": "SFG Aluminium",
+    "support_email": "support@sfg-aluminium.com",
+    "emergency_contact": "+44 20 1234 5678"
+  },
+  
+  "repository": {
+    "url": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio",
+    "branch": "main",
+    "app_path": "/apps/sfg-sync",
+    "backup_included": true,
+    "backup_file": "sfg-sync-codebase-backup.tar.gz"
+  }
+}

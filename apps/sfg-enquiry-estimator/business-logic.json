@@ -1,0 +1,718 @@
+{
+  "app_name": "SFG Enquiry & Estimator System",
+  "app_code": "sfg-enquiry-estimator",
+  "version": "1.0.0",
+  "deployed_url": "https://new-enq-spec.abacusai.app",
+  "category": "operations",
+  "description": "Internal enquiry management and estimator tool for SFG Aluminium Limited. Handles customer enquiries, credit assessment, automated number generation, compliance checking, and integration with Xero and SharePoint.",
+  "capabilities": [
+    "Enquiry Management - Create, track, and manage customer enquiries with automated number generation (ENQ-YYMMDD-XXX format)",
+    "Customer Management - Create customers, assess credit, set payment terms, track credit limits",
+    "Credit Assessment - Integrate with Companies House and Xero to assess customer creditworthiness",
+    "Payment Terms Calculation - Automatically calculate payment terms based on entity type, credit score, project value",
+    "Automated Number Generation - Sequential enquiry numbers that evolve through document lifecycle (ENQ \u2192 QUO \u2192 INV \u2192 PO \u2192 DEL)",
+    "Document Analysis - Upload and analyze building specifications and compliance documents",
+    "Compliance Checking - Check UK building regulations compliance (fire safety, structural, thermal, accessibility)",
+    "Specification Generation - Generate technical specifications for projects",
+    "Xero Integration - Sync customers, pull payment history, analyze credit reliability",
+    "SharePoint Integration - Document storage and retrieval",
+    "WhatsApp Integration - Receive and process enquiries via WhatsApp",
+    "Staff Tier System - Role-based access with approval limits (Junior \u00a31k \u2192 Director unlimited)",
+    "Customer Tier System - Credit tiers with color coding (Economy \u2192 Standard \u2192 Premium \u2192 Unlimited)",
+    "Real-time Statistics - Dashboard with enquiry stats, conversion rates, value tracking",
+    "Multi-channel Enquiry Entry - Manual, WhatsApp, email enquiry creation"
+  ],
+  "workflows": [
+    {
+      "name": "New Enquiry to Quote",
+      "description": "Complete workflow from initial customer enquiry to quote generation",
+      "steps": [
+        "Customer submits enquiry (manual, WhatsApp, or email)",
+        "System generates enquiry number (e.g., ENQ-251105-001)",
+        "Estimator logs customer and project details",
+        "If new customer: Check if customer exists, create customer record",
+        "If order value > \u00a310,000: Trigger credit check via Companies House",
+        "If existing customer: Pull Xero payment history for credit assessment",
+        "Calculate recommended payment terms based on entity type and credit score",
+        "Assign customer tier (Economy/Standard/Premium/Unlimited)",
+        "Estimator analyzes requirements and creates specification",
+        "Check building regulations compliance",
+        "Calculate pricing with minimum 15% margin",
+        "If value exceeds staff tier limit: Escalate for approval",
+        "Generate quote with QUO prefix (e.g., ENQ-251105-001 becomes QUO-251105-001)",
+        "Send quote to customer",
+        "Create SharePoint folder for project documents"
+      ],
+      "business_rules_applied": [
+        "minimum_margin_15_percent",
+        "credit_check_above_10k",
+        "tier_based_approval",
+        "automated_payment_terms"
+      ]
+    },
+    {
+      "name": "Credit Assessment Workflow",
+      "description": "Assess customer creditworthiness using multiple data sources",
+      "steps": [
+        "Extract company details from enquiry form",
+        "If limited company: Query Companies House API for company data",
+        "Analyze company age, filing history, accounts availability",
+        "If existing customer: Query Xero for invoice and payment history",
+        "Calculate Xero payment reliability score (0-100)",
+        "Analyze average days to pay, late payments, overdue invoices",
+        "Calculate base credit limit from Companies House factors",
+        "Apply Xero multiplier (0.4x to 1.5x based on payment history)",
+        "Determine risk level (Very High \u2192 High \u2192 Medium \u2192 Low \u2192 Very Low)",
+        "Assign customer tier based on final credit limit",
+        "Set payment terms (Cash on Delivery \u2192 7 days \u2192 30 days \u2192 60 days)",
+        "Record credit check in database",
+        "Sync customer to Xero if approved",
+        "Notify estimator of credit decision"
+      ],
+      "integrations_used": [
+        "Companies House API",
+        "Xero Accounting API",
+        "Internal credit scoring algorithm"
+      ]
+    },
+    {
+      "name": "Staff Approval Workflow",
+      "description": "Tier-based approval for quotes exceeding staff limits",
+      "steps": [
+        "Estimator creates quote with total value",
+        "System checks staff tier and approval limit",
+        "If value <= limit: Quote approved automatically",
+        "If value > limit: Escalate to next tier",
+        "Senior Estimator reviews and approves/rejects",
+        "If > Senior limit: Escalate to Manager",
+        "If > Manager limit: Escalate to Director",
+        "Director has unlimited approval authority",
+        "Approved quotes proceed to customer",
+        "Rejected quotes return to estimator with notes"
+      ],
+      "approval_limits": {
+        "junior": "\u00a31,000",
+        "standard": "\u00a35,000",
+        "senior": "\u00a315,000",
+        "manager": "\u00a350,000",
+        "director": "Unlimited"
+      }
+    },
+    {
+      "name": "Document Lifecycle Management",
+      "description": "Track documents through their lifecycle using enquiry number prefixes",
+      "steps": [
+        "New enquiry created: ENQ-251105-001",
+        "Quote generated: Same base number with QUO prefix \u2192 QUO-251105-001",
+        "Quote accepted by customer",
+        "Invoice raised: INV-251105-001",
+        "Customer sends purchase order: PO-251105-001",
+        "Goods delivered: DEL-251105-001",
+        "All documents linked by base number (251105-001)",
+        "Full traceability from enquiry to delivery"
+      ],
+      "document_types": [
+        "ENQ - Enquiry",
+        "QUO - Quotation",
+        "INV - Invoice",
+        "PO - Purchase Order",
+        "DEL - Delivery Note"
+      ]
+    },
+    {
+      "name": "Compliance Checking Workflow",
+      "description": "Verify building regulation compliance for projects",
+      "steps": [
+        "Estimator uploads project specifications",
+        "System analyzes building type, height, occupancy",
+        "Check fire safety requirements (Part B)",
+        "Check structural requirements (Part A)",
+        "Check thermal efficiency (Part L)",
+        "Check accessibility (Part M)",
+        "Check security requirements",
+        "Identify applicable approved documents",
+        "Flag any exemptions",
+        "Generate compliance report",
+        "Provide recommendations and value engineering suggestions",
+        "Create final technical specification"
+      ],
+      "regulations_checked": [
+        "Part A - Structure",
+        "Part B - Fire Safety",
+        "Part L - Conservation of Fuel and Power",
+        "Part M - Access to and Use of Buildings",
+        "Part N - Glazing Safety"
+      ]
+    }
+  ],
+  "business_rules": [
+    {
+      "rule_id": "margin_minimum",
+      "name": "Minimum Margin 15%",
+      "description": "All quotes must maintain a minimum 15% margin",
+      "condition": "margin >= 0.15",
+      "action": "Allow quote to proceed",
+      "violation_action": "Flag for director approval or reject"
+    },
+    {
+      "rule_id": "credit_check_threshold",
+      "name": "Credit Check for Orders > \u00a310,000",
+      "description": "Mandatory credit check for new customers with orders over \u00a310,000",
+      "condition": "order_value > 10000 AND customer_type = 'new'",
+      "action": "Perform credit check via Companies House and Xero",
+      "providers": [
+        "Companies House",
+        "Xero",
+        "Experian (if needed)"
+      ]
+    },
+    {
+      "rule_id": "tier_approval_limits",
+      "name": "Tier-Based Approval Limits",
+      "description": "Staff can only approve quotes within their tier limit",
+      "tiers": {
+        "junior": 1000,
+        "standard": 5000,
+        "senior": 15000,
+        "manager": 50000,
+        "director": "unlimited"
+      },
+      "condition": "quote_value <= staff_tier_limit",
+      "action": "Auto-approve",
+      "violation_action": "Escalate to next tier"
+    },
+    {
+      "rule_id": "customer_tiers",
+      "name": "Customer Credit Tiers",
+      "description": "Customers assigned tiers based on credit limit",
+      "tiers": {
+        "economy": {
+          "credit_range": "\u00a30 - \u00a32,500",
+          "color": "Gray",
+          "icon": "\ud83e\udd49",
+          "payment_terms": [
+            "cash_on_delivery",
+            "7_days"
+          ]
+        },
+        "standard": {
+          "credit_range": "\u00a32,501 - \u00a310,000",
+          "color": "Blue",
+          "icon": "\ud83e\udd48",
+          "payment_terms": [
+            "7_days",
+            "14_days",
+            "30_days"
+          ]
+        },
+        "premium": {
+          "credit_range": "\u00a310,001 - \u00a350,000",
+          "color": "Purple",
+          "icon": "\ud83e\udd47",
+          "payment_terms": [
+            "14_days",
+            "30_days",
+            "60_days"
+          ]
+        },
+        "unlimited": {
+          "credit_range": "\u00a350,001+",
+          "color": "Amber",
+          "icon": "\ud83d\udc8e",
+          "payment_terms": [
+            "30_days",
+            "60_days",
+            "90_days"
+          ]
+        }
+      }
+    },
+    {
+      "rule_id": "payment_terms_calculation",
+      "name": "Automated Payment Terms Calculation",
+      "description": "Calculate payment terms based on entity type, credit score, and project value",
+      "factors": [
+        "Entity Type: Limited > Partnership > Sole Trader",
+        "Credit Score: 800+ (excellent) \u2192 300- (poor)",
+        "Project Value: \u00a30-\u00a31k, \u00a31k-\u00a35k, \u00a35k-\u00a315k, \u00a315k+",
+        "Enquiry Type: Windows, Shutters, Curtain Wall, Powder Coating"
+      ],
+      "outputs": [
+        "Payment terms: cash_on_delivery, 7_days, 14_days, 30_days, 60_days",
+        "Credit limit: \u00a30 to unlimited",
+        "Risk level: very_high, high, medium, low, very_low"
+      ]
+    },
+    {
+      "rule_id": "xero_reliability_scoring",
+      "name": "Xero Payment Reliability Score",
+      "description": "Score customer payment behavior from Xero history",
+      "scoring_factors": [
+        "Total invoices paid (weight: 20%)",
+        "Late payments (weight: 30%)",
+        "Average days to pay (weight: 25%)",
+        "Current overdue invoices (weight: 25%)"
+      ],
+      "score_ranges": {
+        "90-100": "Excellent - Credit limit increase recommended",
+        "75-89": "Good - Standard credit terms",
+        "60-74": "Acceptable - Monitor closely",
+        "40-59": "Poor - Reduce credit limit",
+        "0-39": "Very Poor - Cash only"
+      },
+      "multipliers": {
+        "90+": "1.5x base credit limit",
+        "75-89": "1.25x base credit limit",
+        "60-74": "1.0x base credit limit",
+        "40-59": "0.7x base credit limit",
+        "0-39": "0.4x base credit limit"
+      }
+    },
+    {
+      "rule_id": "enquiry_number_format",
+      "name": "Enquiry Number Format and Lifecycle",
+      "description": "Sequential numbering with document type prefixes",
+      "format": "{BASE}-{TYPE}",
+      "example": "24001-ENQ",
+      "base_number": "Sequential starting from 24001",
+      "document_types": [
+        "ENQ - Enquiry",
+        "QUO - Quotation",
+        "INV - Invoice",
+        "PO - Purchase Order",
+        "DEL - Delivery Note"
+      ],
+      "rule": "Base number NEVER changes, only prefix changes as document progresses"
+    },
+    {
+      "rule_id": "whatsapp_enquiry_processing",
+      "name": "WhatsApp Enquiry Auto-Processing",
+      "description": "Extract enquiry data from WhatsApp messages",
+      "process": [
+        "Receive WhatsApp message via Twilio webhook",
+        "Extract customer name, contact, project details",
+        "Parse job type, location, requirements",
+        "Create enquiry record with 'whatsapp' source",
+        "Generate enquiry number",
+        "Send confirmation reply to customer",
+        "Notify estimator team"
+      ]
+    }
+  ],
+  "integrations": [
+    {
+      "system": "Xero Accounting",
+      "purpose": "Customer sync, invoice management, payment history analysis",
+      "api": "Xero Accounting API",
+      "endpoints_used": [
+        "/api.xro/2.0/Contacts",
+        "/api.xro/2.0/Invoices",
+        "/api.xro/2.0/Payments"
+      ],
+      "capabilities": [
+        "Create/update customer contacts",
+        "Pull invoice history",
+        "Analyze payment patterns",
+        "Calculate payment reliability score"
+      ]
+    },
+    {
+      "system": "Companies House",
+      "purpose": "Company data lookup and credit assessment",
+      "api": "Companies House REST API",
+      "endpoints_used": [
+        "/company/{company_number}",
+        "/company/{company_number}/officers",
+        "/company/{company_number}/filing-history"
+      ],
+      "capabilities": [
+        "Verify company registration",
+        "Get company age and status",
+        "Check filing history",
+        "Retrieve director information"
+      ]
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage and retrieval",
+      "capabilities": [
+        "Create project folders",
+        "Store enquiry documents",
+        "Share specifications with customers",
+        "Search credit limit documents"
+      ],
+      "sites_accessed": 13,
+      "document_types": [
+        "Customer enquiries",
+        "Technical specifications",
+        "Quotes and invoices",
+        "Credit limit documents",
+        "Compliance certificates"
+      ]
+    },
+    {
+      "system": "Twilio WhatsApp",
+      "purpose": "Receive customer enquiries via WhatsApp",
+      "api": "Twilio WhatsApp Business API",
+      "capabilities": [
+        "Receive inbound messages",
+        "Send confirmation replies",
+        "Extract enquiry data",
+        "Create enquiry records"
+      ]
+    },
+    {
+      "system": "NEXUS Orchestration",
+      "purpose": "Central SFG ecosystem orchestration",
+      "webhook_url": "https://new-enq-spec.abacusai.app/api/webhooks/nexus",
+      "message_handler_url": "https://new-enq-spec.abacusai.app/api/messages/handle",
+      "capabilities": [
+        "Receive event notifications",
+        "Respond to data queries",
+        "Perform actions on request",
+        "Participate in orchestrated workflows"
+      ]
+    },
+    {
+      "system": "MCP-SALES",
+      "purpose": "Sales tools and customer management",
+      "expected_usage": [
+        "Customer data sharing",
+        "Quote status updates",
+        "Lead conversion tracking"
+      ]
+    },
+    {
+      "system": "MCP-FINANCE",
+      "purpose": "Financial tools and credit checking",
+      "expected_usage": [
+        "Credit check requests",
+        "Payment terms approval",
+        "Invoice status updates"
+      ]
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "purpose": "Operations and fabrication scheduling",
+      "expected_usage": [
+        "Order handoff",
+        "Production scheduling",
+        "Delivery coordination"
+      ]
+    }
+  ],
+  "webhook_events": [
+    {
+      "event": "enquiry.created",
+      "description": "New customer enquiry created in external system",
+      "action": "Create enquiry record, assign estimator, generate number"
+    },
+    {
+      "event": "quote.requested",
+      "description": "Customer or system requests quote for existing enquiry",
+      "action": "Update enquiry status, flag for quote generation"
+    },
+    {
+      "event": "order.approved",
+      "description": "Customer has approved quote and order is confirmed",
+      "action": "Update enquiry to 'won', mark credit as approved, prepare for fabrication"
+    },
+    {
+      "event": "customer.registered",
+      "description": "New customer registered in external system",
+      "action": "Create or update customer record, trigger credit assessment"
+    },
+    {
+      "event": "credit.check_required",
+      "description": "External system requests credit check for customer",
+      "action": "Perform credit check, return credit limit and payment terms"
+    },
+    {
+      "event": "invoice.due",
+      "description": "Invoice is approaching or past due date",
+      "action": "Log notification, update customer payment tracking"
+    },
+    {
+      "event": "payment.received",
+      "description": "Customer payment received and recorded",
+      "action": "Update customer payment history, adjust credit if needed"
+    },
+    {
+      "event": "test.event",
+      "description": "Test event for webhook validation",
+      "action": "Acknowledge receipt and return success"
+    }
+  ],
+  "supported_messages": [
+    {
+      "type": "query.customer_data",
+      "description": "Request customer information including credit, tier, and recent enquiries",
+      "required_params": [
+        "customer_id OR email"
+      ],
+      "response": {
+        "customer_id": "string",
+        "name": "string",
+        "tier": "string",
+        "credit_limit": "number",
+        "payment_terms": "string",
+        "recent_enquiries": "array"
+      }
+    },
+    {
+      "type": "query.enquiry_status",
+      "description": "Request status of a specific enquiry",
+      "required_params": [
+        "enquiry_id OR enquiry_number"
+      ],
+      "response": {
+        "enquiry_number": "string",
+        "status": "string",
+        "customer_name": "string",
+        "estimated_value": "number",
+        "created_at": "datetime"
+      }
+    },
+    {
+      "type": "query.quote_status",
+      "description": "Request quote status (same as enquiry in this system)",
+      "required_params": [
+        "enquiry_id OR enquiry_number"
+      ],
+      "response": "Same as query.enquiry_status"
+    },
+    {
+      "type": "query.customer_credit",
+      "description": "Request detailed credit information for customer",
+      "required_params": [
+        "customer_id"
+      ],
+      "response": {
+        "credit_limit": "number",
+        "credit_score": "number",
+        "risk_level": "string",
+        "payment_terms": "string",
+        "credit_history": "array"
+      }
+    },
+    {
+      "type": "query.payment_history",
+      "description": "Request payment history from Xero",
+      "required_params": [
+        "customer_id"
+      ],
+      "response": {
+        "xero_contact_id": "string",
+        "payment_terms": "string",
+        "message": "string"
+      }
+    },
+    {
+      "type": "action.create_enquiry",
+      "description": "Create new enquiry from external system",
+      "required_params": [
+        "customer_name",
+        "job_type",
+        "location"
+      ],
+      "optional_params": [
+        "customer_id",
+        "contact_email",
+        "contact_phone",
+        "description",
+        "estimated_value"
+      ],
+      "response": {
+        "enquiry_id": "string",
+        "enquiry_number": "string",
+        "status": "string"
+      }
+    },
+    {
+      "type": "action.update_enquiry_status",
+      "description": "Update status of existing enquiry",
+      "required_params": [
+        "enquiry_id",
+        "status"
+      ],
+      "optional_params": [
+        "notes"
+      ],
+      "response": {
+        "enquiry_id": "string",
+        "status": "string",
+        "updated_at": "datetime"
+      }
+    },
+    {
+      "type": "action.approve_credit",
+      "description": "Approve credit limit for customer",
+      "required_params": [
+        "customer_id",
+        "credit_limit"
+      ],
+      "optional_params": [
+        "payment_terms",
+        "notes"
+      ],
+      "response": {
+        "customer_id": "string",
+        "tier": "string",
+        "credit_limit": "number",
+        "approved_at": "datetime"
+      }
+    }
+  ],
+  "data_models": {
+    "User": {
+      "description": "Staff members with roles and tier-based permissions",
+      "key_fields": [
+        "email (unique)",
+        "role (estimator, admin, contract_manager)",
+        "staffTier (junior, standard, senior, manager, director)",
+        "department"
+      ]
+    },
+    "Customer": {
+      "description": "Customer companies with credit and payment information",
+      "key_fields": [
+        "name",
+        "email (unique)",
+        "companyNumber",
+        "entityType (limited, independent, partnership, sole_trader)",
+        "tier (economy, standard, premium, unlimited)",
+        "creditLimit",
+        "creditScore",
+        "paymentTerms",
+        "riskLevel",
+        "xeroContactId"
+      ]
+    },
+    "Enquiry": {
+      "description": "Customer enquiries tracked through lifecycle",
+      "key_fields": [
+        "enquiryNumber (unique, format: BASE-TYPE)",
+        "customerId",
+        "customerName",
+        "jobType",
+        "location",
+        "status (new, in_progress, specified, quoted, won, lost)",
+        "estimatedValue",
+        "urgency",
+        "paymentTerms",
+        "creditApproved",
+        "createdVia (manual, whatsapp, email)"
+      ]
+    },
+    "CreditCheck": {
+      "description": "Credit assessments from various providers",
+      "key_fields": [
+        "customerId",
+        "checkType (companies_house, credit_bureau, manual)",
+        "score (0-999)",
+        "limit (recommended credit limit)",
+        "status",
+        "provider",
+        "riskFactors"
+      ]
+    },
+    "Specification": {
+      "description": "Technical specifications for projects",
+      "key_fields": [
+        "enquiryId",
+        "complianceType (full, hybrid, basic)",
+        "regulationsChecked",
+        "recommendations",
+        "finalSpec"
+      ]
+    }
+  },
+  "technical_stack": {
+    "framework": "Next.js 14",
+    "database": "PostgreSQL with Prisma ORM",
+    "frontend": "React with TypeScript",
+    "styling": "TailwindCSS + shadcn/ui components",
+    "authentication": "NextAuth.js with email/password",
+    "package_manager": "Yarn",
+    "hosting": "Abacus.AI Platform"
+  },
+  "api_endpoints": {
+    "enquiries": "/api/enquiries",
+    "customers": "/api/customers",
+    "credit_check": "/api/credit-check",
+    "payment_terms": "/api/payment-terms/calculate",
+    "specifications": "/api/specifications/generate",
+    "xero_auth": "/api/xero/auth",
+    "xero_contacts": "/api/xero/create-contact",
+    "xero_payment_history": "/api/xero/payment-history",
+    "whatsapp_webhook": "/api/whatsapp/webhook",
+    "nexus_webhook": "/api/webhooks/nexus",
+    "message_handler": "/api/messages/handle"
+  },
+  "user_roles": [
+    {
+      "role": "estimator",
+      "description": "Primary users who create enquiries, generate quotes, assess projects",
+      "permissions": [
+        "view_enquiries",
+        "create_enquiries",
+        "create_quotes",
+        "view_customers",
+        "basic_credit_check"
+      ]
+    },
+    {
+      "role": "admin",
+      "description": "System administrators with elevated access",
+      "permissions": [
+        "all_estimator_permissions",
+        "manage_users",
+        "view_reports",
+        "system_configuration",
+        "approve_large_quotes"
+      ]
+    },
+    {
+      "role": "contract_manager",
+      "description": "Contract management team",
+      "permissions": [
+        "view_enquiries",
+        "manage_contracts",
+        "approve_quotes",
+        "manage_customers",
+        "credit_approval"
+      ]
+    }
+  ],
+  "key_features": [
+    "Automated enquiry number generation with lifecycle tracking",
+    "Multi-source credit assessment (Companies House + Xero)",
+    "Intelligent payment terms calculation",
+    "Tier-based approval workflow",
+    "UK building regulations compliance checking",
+    "Real-time integration with Xero accounting",
+    "WhatsApp enquiry processing",
+    "SharePoint document management",
+    "Staff and customer tier systems with visual color coding",
+    "Comprehensive statistics dashboard",
+    "NEXUS orchestration integration"
+  ],
+  "future_enhancements": [
+    "Automated quote generation with AI",
+    "Integration with fabrication systems",
+    "Mobile app for field estimators",
+    "Advanced analytics and forecasting",
+    "Integration with CAD systems",
+    "Automated margin optimization",
+    "Customer portal for quote tracking"
+  ],
+  "registration_metadata": {
+    "registered_by": "Warren (DeepAgent Assistant)",
+    "registration_date": "2025-11-05",
+    "last_updated": "2025-11-05",
+    "status": "production",
+    "contact": "SFG Aluminium IT Team",
+    "documentation_url": "https://new-enq-spec.abacusai.app",
+    "github_repo": "sfgaluminium1-spec/sfg-app-portfolio"
+  }
+}

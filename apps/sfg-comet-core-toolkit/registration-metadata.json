@@ -1,0 +1,211 @@
+{
+  "appName": "sfg-comet-core-toolkit",
+  "displayName": "SFG COMET CORE Toolkit (SharePoint IA Toolkit)",
+  "version": "2.0.0",
+  "registrationDate": "2025-11-05",
+  "category": "sfg-aluminium-app",
+  "platform": "Next.js 14 + PostgreSQL + Microsoft Graph API",
+  "status": "production",
+  "deploymentUrl": "https://sfg-comet-core-toolkit.abacusai.app",
+  "repositoryUrl": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio",
+  "description": "SharePoint IA Toolkit & Knowledge Smelter v2.0 - Automated project lifecycle management, folder structure automation, data classification, and knowledge management for SFG Aluminium with real-time NEXUS orchestration",
+  "orchestration": {
+    "enabled": true,
+    "nexusIntegration": true,
+    "webhookUrl": "https://sfg-comet-core-toolkit.abacusai.app/api/webhooks/nexus",
+    "messageHandlerUrl": "https://sfg-comet-core-toolkit.abacusai.app/api/messages/handle",
+    "webhookSecret": {
+      "envVariable": "NEXUS_WEBHOOK_SECRET",
+      "required": true
+    }
+  },
+  "webhookEvents": [
+    "enquiry.created",
+    "quote.requested",
+    "order.approved",
+    "customer.registered",
+    "credit.check_required",
+    "invoice.due",
+    "payment.received",
+    "folder.create_required",
+    "document.move_required"
+  ],
+  "supportedMessageTypes": [
+    "query.customer_data",
+    "query.quote_status",
+    "query.order_status",
+    "query.folder_structure",
+    "query.document_list",
+    "action.create_quote",
+    "action.approve_order",
+    "action.send_invoice",
+    "action.create_folder",
+    "action.move_document"
+  ],
+  "integrations": [
+    {
+      "name": "Microsoft SharePoint",
+      "type": "api",
+      "purpose": "Document management, folder structure automation",
+      "status": "active",
+      "authentication": "OAuth 2.0 + Microsoft Graph API"
+    },
+    {
+      "name": "Xero",
+      "type": "api",
+      "purpose": "Accounting and invoicing",
+      "status": "configured",
+      "authentication": "OAuth 2.0"
+    },
+    {
+      "name": "PostgreSQL",
+      "type": "database",
+      "purpose": "Primary data store",
+      "status": "active"
+    },
+    {
+      "name": "NEXUS",
+      "type": "orchestration",
+      "purpose": "Real-time event handling and workflow coordination",
+      "status": "active",
+      "endpoints": {
+        "webhook": "/api/webhooks/nexus",
+        "messageHandler": "/api/messages/handle"
+      }
+    },
+    {
+      "name": "SFG Company Wiki",
+      "type": "mcp",
+      "purpose": "Knowledge synchronization",
+      "status": "active"
+    },
+    {
+      "name": "Google Analytics 4",
+      "type": "analytics",
+      "purpose": "User behavior tracking and insights",
+      "status": "configured"
+    }
+  ],
+  "businessRules": {
+    "margins": {
+      "minimum": 0.15,
+      "target": 0.25,
+      "warning_threshold": 0.18
+    },
+    "approvalLimits": {
+      "T1_Director": 1000000,
+      "T2_SeniorManager": 100000,
+      "T3_Manager": 25000,
+      "T4_Supervisor": 10000,
+      "T5_Staff": 1000
+    },
+    "creditChecks": {
+      "requiredAbove": 10000,
+      "validityDays": 90,
+      "provider": "Experian via MCP-FINANCE"
+    },
+    "documentStages": [
+      "ENQ",
+      "QUO",
+      "SENT",
+      "ACC",
+      "ORD",
+      "FAB",
+      "INS",
+      "INV",
+      "PAID"
+    ],
+    "customerTiers": {
+      "Platinum": "Purple",
+      "Sapphire": "Blue",
+      "Steel": "Gray",
+      "Green": "Green",
+      "Crimson": "Red"
+    }
+  },
+  "keyFeatures": [
+    "Real-time webhook event handling from NEXUS",
+    "Message-based orchestration with other SFG apps",
+    "Automated SharePoint folder creation (17-folder structure)",
+    "Sequential numbering system (ENQ/QUO/ORD/INV/DEL/PAID)",
+    "Data classification & archive (12 file types with retention rules)",
+    "Knowledge Smelter decision tracking",
+    "Drawing approval workflows",
+    "Customer tier management (5 tiers)",
+    "Security tier controls (T1/T2/T3)",
+    "Xero integration for accounting",
+    "Google Analytics 4 integration",
+    "FreeCommander desktop integration"
+  ],
+  "apiDocumentation": {
+    "webhookEndpoint": {
+      "url": "https://sfg-comet-core-toolkit.abacusai.app/api/webhooks/nexus",
+      "method": "POST",
+      "authentication": "HMAC-SHA256 signature",
+      "contentType": "application/json",
+      "signatureHeader": "X-Nexus-Signature",
+      "examplePayload": {
+        "type": "enquiry.created",
+        "data": {
+          "enquiry_id": "ENQ-2025-0001",
+          "customer": {
+            "id": "CUST001",
+            "name": "ABC Building Pty Ltd",
+            "tier": "Sapphire"
+          },
+          "items": [],
+          "estimated_value": 15750,
+          "priority": "normal"
+        },
+        "timestamp": "2025-11-05T05:30:00Z",
+        "request_id": "req_abc123"
+      }
+    },
+    "messageHandlerEndpoint": {
+      "url": "https://sfg-comet-core-toolkit.abacusai.app/api/messages/handle",
+      "method": "POST",
+      "authentication": "Bearer token or API key",
+      "contentType": "application/json",
+      "examplePayload": {
+        "type": "query.customer_data",
+        "params": {
+          "customer_id": "CUST001"
+        },
+        "request_id": "req_xyz789",
+        "sender": "sfg-customer-portal"
+      }
+    }
+  },
+  "environmentVariables": {
+    "required": [
+      "DATABASE_URL",
+      "NEXUS_WEBHOOK_SECRET",
+      "AZURE_AD_CLIENT_ID",
+      "AZURE_AD_CLIENT_SECRET",
+      "AZURE_AD_TENANT_ID"
+    ],
+    "optional": [
+      "XERO_CLIENT_ID",
+      "XERO_CLIENT_SECRET",
+      "NEXT_PUBLIC_GA_MEASUREMENT_ID"
+    ]
+  },
+  "deployment": {
+    "platform": "Abacus.AI",
+    "url": "https://sfg-comet-core-toolkit.abacusai.app",
+    "lastDeployed": "2025-11-05",
+    "buildStatus": "passing",
+    "healthCheckUrl": "https://sfg-comet-core-toolkit.abacusai.app/api/messages/handle",
+    "healthCheckMethod": "POST",
+    "healthCheckPayload": {
+      "type": "ping"
+    }
+  },
+  "contact": {
+    "owner": "Warren Heathcote",
+    "organization": "SFG Aluminium",
+    "email": "warren@sfgaluminium.com.au"
+  },
+  "registeredBy": "Comet (DeepAgent)",
+  "registrationIssueUrl": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/1"
+}

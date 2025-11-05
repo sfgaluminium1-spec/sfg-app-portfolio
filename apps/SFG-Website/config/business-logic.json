@@ -1,0 +1,369 @@
+
+{
+  "appName": "SFG-Website",
+  "description": "SFG Aluminium Ltd corporate website - lead generation, customer self-service, and brand presence",
+  "version": "1.8.2",
+  "platform": "Next.js 14 (App Router)",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "deployed_url": "https://sfg-website-2025.abacusai.app",
+  "webhook_url": "https://sfg-website-2025.abacusai.app/api/webhooks/nexus",
+  "message_handler_url": "https://sfg-website-2025.abacusai.app/api/messages/handle",
+  "capabilities": [
+    "Lead capture via contact forms",
+    "Quote request processing",
+    "Service inquiry management",
+    "Product catalog display (windows, doors, curtain walling, etc.)",
+    "Customer self-service portal",
+    "Real-time enquiry notifications",
+    "Multi-channel lead routing",
+    "Document generation (quotes, brochures)",
+    "Integration with CRM systems",
+    "Analytics and conversion tracking"
+  ],
+  "workflows": [
+    {
+      "name": "Contact Form Submission",
+      "steps": [
+        "Customer fills contact form",
+        "Form validation (email, phone, message)",
+        "Store lead in database",
+        "Send confirmation email to customer",
+        "Notify sales team",
+        "Create CRM record",
+        "Track conversion funnel"
+      ],
+      "triggers": ["form.submit"],
+      "outputs": ["lead.created", "email.sent", "crm.updated"]
+    },
+    {
+      "name": "Quote Request Processing",
+      "steps": [
+        "Customer submits quote request form",
+        "Validate product selection and specifications",
+        "Store request in database",
+        "Send webhook to NEXUS (quote.requested)",
+        "Await quote generation from Quote Generator app",
+        "Send quote PDF to customer",
+        "Create follow-up task for sales"
+      ],
+      "triggers": ["quote_form.submit"],
+      "outputs": ["quote.requested", "customer.notified"]
+    },
+    {
+      "name": "Service Inquiry",
+      "steps": [
+        "Customer submits service inquiry",
+        "Categorize inquiry type (installation, repair, maintenance)",
+        "Store in database",
+        "Route to appropriate team",
+        "Send acknowledgment to customer",
+        "Create service ticket"
+      ],
+      "triggers": ["service_form.submit"],
+      "outputs": ["service.inquiry_created", "ticket.created"]
+    },
+    {
+      "name": "Enquiry to NEXUS",
+      "steps": [
+        "Receive enquiry from any form",
+        "Validate and normalize data",
+        "Send webhook to NEXUS (enquiry.created)",
+        "NEXUS orchestrates downstream actions",
+        "Receive confirmation from NEXUS",
+        "Update customer with reference number"
+      ],
+      "triggers": ["enquiry.created"],
+      "outputs": ["nexus.notified", "customer.updated"]
+    }
+  ],
+  "businessRules": [
+    {
+      "rule": "Email validation required",
+      "condition": "valid_email_format",
+      "action": "Accept submission"
+    },
+    {
+      "rule": "Phone number formatting",
+      "condition": "UK_phone_format",
+      "action": "Normalize to E.164 format"
+    },
+    {
+      "rule": "Quote requests require product selection",
+      "condition": "product_selected",
+      "action": "Allow quote request"
+    },
+    {
+      "rule": "Lead categorization",
+      "condition": "enquiry_type",
+      "action": "Route to appropriate team (residential/commercial)"
+    },
+    {
+      "rule": "High-value enquiry flagging",
+      "condition": "estimated_value > £50,000",
+      "action": "Flag for director review"
+    },
+    {
+      "rule": "Response time SLA",
+      "condition": "enquiry_received",
+      "action": "Respond within 2 business hours"
+    },
+    {
+      "rule": "GDPR compliance",
+      "condition": "personal_data_collected",
+      "action": "Record consent, enable data deletion"
+    },
+    {
+      "rule": "Minimum margin requirement",
+      "condition": "margin >= 0.15",
+      "action": "Allow quote (15% minimum, 25% target)"
+    },
+    {
+      "rule": "Credit check threshold",
+      "condition": "order_value > 10000",
+      "action": "Require credit check via Experian (MCP-FINANCE)"
+    },
+    {
+      "rule": "Credit check validity",
+      "condition": "credit_check_age < 90_days",
+      "action": "Use existing check, otherwise request new one"
+    },
+    {
+      "rule": "Tier-based approval limits",
+      "condition": "value > tier_limit",
+      "action": "T1:£1M, T2:£100K, T3:£25K, T4:£10K, T5:£1K - escalate to higher tier"
+    },
+    {
+      "rule": "Document stage workflow",
+      "condition": "document_created",
+      "action": "Follow ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID"
+    },
+    {
+      "rule": "Customer tier assignment",
+      "condition": "customer_registered",
+      "action": "Assign tier: Platinum(Purple), Sapphire(Blue), Steel(Gray), Green(Green), Crimson(Red)"
+    },
+    {
+      "rule": "Margin warning threshold",
+      "condition": "margin < 0.18",
+      "action": "Warn sales team - below 18% warning threshold"
+    }
+  ],
+  "integrations": [
+    {
+      "system": "NEXUS",
+      "purpose": "Orchestration hub - sends enquiries for processing",
+      "methods": ["webhook", "api"],
+      "status": "required"
+    },
+    {
+      "system": "Database (PostgreSQL)",
+      "purpose": "Store enquiries, quotes, and customer data",
+      "methods": ["prisma_orm"],
+      "status": "active"
+    },
+    {
+      "system": "Email Service",
+      "purpose": "Customer notifications and internal alerts",
+      "methods": ["smtp", "api"],
+      "status": "active"
+    },
+    {
+      "system": "Analytics (GA4)",
+      "purpose": "Track conversions and user behavior",
+      "methods": ["gtag"],
+      "status": "planned"
+    },
+    {
+      "system": "MCP-SALES",
+      "purpose": "Access sales tools and CRM integration",
+      "methods": ["api"],
+      "status": "required"
+    },
+    {
+      "system": "MCP-FINANCE",
+      "purpose": "Credit checking via Experian, Xero accounting integration",
+      "methods": ["api"],
+      "status": "required"
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "purpose": "Production scheduling, installation tracking",
+      "methods": ["api"],
+      "status": "required"
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "purpose": "Send emails and SMS notifications",
+      "methods": ["api"],
+      "status": "required"
+    },
+    {
+      "system": "MCP-DATA",
+      "purpose": "Data analytics and reporting",
+      "methods": ["api"],
+      "status": "required"
+    },
+    {
+      "system": "Xero",
+      "purpose": "Accounting and invoicing",
+      "methods": ["api"],
+      "status": "planned"
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage and collaboration",
+      "methods": ["graph_api"],
+      "status": "planned"
+    },
+    {
+      "system": "Companies House",
+      "purpose": "Company data verification",
+      "methods": ["api"],
+      "status": "planned"
+    },
+    {
+      "system": "Experian",
+      "purpose": "Credit checking (via MCP-FINANCE)",
+      "methods": ["mcp"],
+      "status": "planned"
+    },
+    {
+      "system": "Cloud Storage (S3)",
+      "purpose": "Store uploaded documents and generated PDFs",
+      "methods": ["aws_sdk"],
+      "status": "active"
+    }
+  ],
+  "webhook_events": [
+    "enquiry.created",
+    "quote.requested",
+    "service.inquiry_created",
+    "contact.submitted",
+    "form.validation_failed",
+    "lead.qualified",
+    "customer.registered"
+  ],
+  "supported_messages": [
+    "query.enquiry_status",
+    "query.customer_enquiries",
+    "action.update_enquiry_status",
+    "action.send_quote_email",
+    "action.create_follow_up_task"
+  ],
+  "apiEndpoints": [
+    {
+      "path": "/api/contact",
+      "method": "POST",
+      "description": "Submit contact form",
+      "auth": "none",
+      "rate_limit": "10/minute"
+    },
+    {
+      "path": "/api/quote",
+      "method": "POST",
+      "description": "Submit quote request",
+      "auth": "none",
+      "rate_limit": "5/minute"
+    },
+    {
+      "path": "/api/service",
+      "method": "POST",
+      "description": "Submit service inquiry",
+      "auth": "none",
+      "rate_limit": "10/minute"
+    },
+    {
+      "path": "/api/webhooks/nexus",
+      "method": "POST",
+      "description": "Receive webhooks from NEXUS",
+      "auth": "hmac_signature",
+      "rate_limit": "1000/minute"
+    },
+    {
+      "path": "/api/messages/handle",
+      "method": "POST",
+      "description": "Handle messages from NEXUS or other apps",
+      "auth": "api_key",
+      "rate_limit": "1000/minute"
+    }
+  ],
+  "dataModels": [
+    {
+      "name": "ContactEnquiry",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "name", "type": "string", "required": true},
+        {"name": "email", "type": "string", "required": true},
+        {"name": "phone", "type": "string", "required": false},
+        {"name": "company", "type": "string", "required": false},
+        {"name": "message", "type": "string", "required": true},
+        {"name": "enquiry_type", "type": "enum", "values": ["general", "quote", "service"]},
+        {"name": "status", "type": "enum", "values": ["new", "contacted", "quoted", "converted", "closed"]},
+        {"name": "created_at", "type": "datetime"},
+        {"name": "updated_at", "type": "datetime"}
+      ]
+    },
+    {
+      "name": "QuoteRequest",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "customer_name", "type": "string", "required": true},
+        {"name": "email", "type": "string", "required": true},
+        {"name": "phone", "type": "string", "required": true},
+        {"name": "product_type", "type": "enum", "values": ["windows", "doors", "curtain_walling", "shopfronts", "balustrades"]},
+        {"name": "quantity", "type": "integer"},
+        {"name": "specifications", "type": "json"},
+        {"name": "estimated_value", "type": "decimal"},
+        {"name": "status", "type": "enum", "values": ["pending", "quoted", "accepted", "rejected"]},
+        {"name": "quote_reference", "type": "string"},
+        {"name": "created_at", "type": "datetime"}
+      ]
+    },
+    {
+      "name": "ServiceInquiry",
+      "fields": [
+        {"name": "id", "type": "string", "required": true},
+        {"name": "customer_name", "type": "string", "required": true},
+        {"name": "email", "type": "string", "required": true},
+        {"name": "phone", "type": "string", "required": true},
+        {"name": "service_type", "type": "enum", "values": ["installation", "repair", "maintenance", "consultation"]},
+        {"name": "urgency", "type": "enum", "values": ["routine", "urgent", "emergency"]},
+        {"name": "description", "type": "text"},
+        {"name": "preferred_date", "type": "date"},
+        {"name": "status", "type": "enum", "values": ["new", "scheduled", "in_progress", "completed"]},
+        {"name": "created_at", "type": "datetime"}
+      ]
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio",
+    "branch": "main",
+    "last_commit": "2025-11-05"
+  },
+  "dependencies": {
+    "runtime": [
+      "next@14.2.28",
+      "react@18.2.0",
+      "prisma@6.7.0",
+      "@radix-ui/react-*@latest",
+      "tailwindcss@3.3.3"
+    ],
+    "integrations": [
+      "nexus-client",
+      "aws-sdk-s3",
+      "nodemailer",
+      "google-analytics"
+    ]
+  },
+  "monitoring": {
+    "health_check_url": "https://sfg-website-2025.abacusai.app/api/health",
+    "uptime_requirement": "99.9%",
+    "response_time_target": "< 500ms"
+  },
+  "team": {
+    "owner": "Warren (SFG Director)",
+    "developers": ["DeepAgent", "Future Teams"],
+    "contact": "warren@sfgaluminium.co.uk"
+  }
+}

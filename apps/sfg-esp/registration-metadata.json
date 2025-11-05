@@ -1,0 +1,167 @@
+
+{
+  "app_name": "sfg-esp",
+  "full_name": "SFG Enquiry Spec Price Deliver",
+  "version": "2.0",
+  "registration_date": "2025-11-04T00:00:00Z",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  
+  "deployment": {
+    "url": "https://sfg-esp.abacusai.app",
+    "platform": "Abacus.AI",
+    "environment": "production"
+  },
+  
+  "endpoints": {
+    "webhook_url": "https://sfg-esp.abacusai.app/api/webhooks/nexus",
+    "message_handler_url": "https://sfg-esp.abacusai.app/api/messages/handle",
+    "health_check_url": "https://sfg-esp.abacusai.app/api/health"
+  },
+  
+  "webhook_configuration": {
+    "webhook_secret": "sfg-nexus-webhook-secret-2025",
+    "signature_header": "x-nexus-signature",
+    "signature_algorithm": "HMAC-SHA256",
+    "supported_events": [
+      "enquiry.created",
+      "quote.requested",
+      "order.approved",
+      "customer.registered",
+      "credit.check_required",
+      "invoice.due",
+      "payment.received",
+      "test.event"
+    ]
+  },
+  
+  "message_handler_configuration": {
+    "supported_message_types": [
+      "query.customer_data",
+      "query.quote_status",
+      "query.order_status",
+      "query.credit_status",
+      "query.enquiry_data",
+      "action.create_quote",
+      "action.approve_order",
+      "action.send_invoice",
+      "action.update_customer",
+      "test.ping"
+    ],
+    "response_format": "json",
+    "timeout_seconds": 30
+  },
+  
+  "capabilities": [
+    "Customer enquiry management",
+    "Quote generation with SFG margin calculations",
+    "Credit checking via Experian (MCP-FINANCE)",
+    "Invoice processing via Xero",
+    "Document management via SharePoint",
+    "Company data verification via Companies House",
+    "AI-powered regulatory intelligence",
+    "Real-time analytics and reporting",
+    "Customer portal for self-service",
+    "WhatsApp integration for customer communication",
+    "Automated workflow orchestration",
+    "Tier-based approval workflows"
+  ],
+  
+  "integration_points": [
+    {
+      "name": "Xero",
+      "type": "accounting",
+      "status": "active"
+    },
+    {
+      "name": "Companies House",
+      "type": "data_verification",
+      "status": "active"
+    },
+    {
+      "name": "MCP-SALES",
+      "type": "mcp_server",
+      "status": "available"
+    },
+    {
+      "name": "MCP-FINANCE",
+      "type": "mcp_server",
+      "status": "available"
+    },
+    {
+      "name": "MCP-OPERATIONS",
+      "type": "mcp_server",
+      "status": "available"
+    },
+    {
+      "name": "MCP-COMMUNICATIONS",
+      "type": "mcp_server",
+      "status": "available"
+    },
+    {
+      "name": "MCP-DATA",
+      "type": "mcp_server",
+      "status": "available"
+    },
+    {
+      "name": "NEXUS",
+      "type": "orchestration",
+      "status": "active"
+    }
+  ],
+  
+  "business_rules": {
+    "minimum_margin": 0.15,
+    "credit_check_threshold": 10000,
+    "credit_check_validity_days": 90,
+    "approval_tiers": [
+      { "tier": "T1", "role": "Director", "limit": 1000000 },
+      { "tier": "T2", "role": "Senior Manager", "limit": 100000 },
+      { "tier": "T3", "role": "Manager", "limit": 25000 },
+      { "tier": "T4", "role": "Supervisor", "limit": 10000 },
+      { "tier": "T5", "role": "Staff", "limit": 1000 }
+    ],
+    "customer_tiers": ["Platinum", "Sapphire", "Steel", "Green", "Crimson"],
+    "document_stages": ["ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"]
+  },
+  
+  "ai_features": [
+    "Regulatory intelligence for building regulations",
+    "Product identification from descriptions",
+    "Intelligent enquiry routing"
+  ],
+  
+  "security": {
+    "authentication": "NextAuth",
+    "authorization": "Role-based access control",
+    "webhook_verification": "HMAC-SHA256 signatures",
+    "https_only": true
+  },
+  
+  "monitoring": {
+    "analytics": "Google Analytics 4",
+    "error_tracking": "Application logs",
+    "uptime_monitoring": "Health check endpoint"
+  },
+  
+  "contact": {
+    "maintainer": "SFG Innovations",
+    "email": "warren@sfg-innovations.com",
+    "organization": "SFG Aluminium Limited"
+  },
+  
+  "repository": {
+    "type": "registered_in_portfolio",
+    "portfolio_repo": "sfgaluminium1-spec/sfg-app-portfolio",
+    "registration_issue": "pending"
+  },
+  
+  "notes": [
+    "Fully production-ready with comprehensive features",
+    "Active deployment at https://sfg-esp.abacusai.app",
+    "Integrated with NEXUS orchestration system",
+    "Webhook and message handler endpoints active and tested",
+    "Google Analytics 4 tracking configured",
+    "Ready for real-time orchestration and workflow automation"
+  ]
+}

@@ -1,0 +1,463 @@
+
+{
+  "app_name": "SFG-SYNC",
+  "version": "1.0.0",
+  "extracted_at": "2025-11-05T05:34:52Z",
+  "category": "sfg-aluminium-app",
+  
+  "overview": {
+    "description": "SFG-SYNC is the central enterprise resource management platform for SFG Aluminium, providing comprehensive orchestration of all business operations from initial customer enquiry through to final installation and payment. The platform integrates AI-powered scheduling, real-time IoT monitoring, conflict resolution, and seamless connectivity with Microsoft 365, Xero, and multiple MCP server tools.",
+    "business_value": "Enables end-to-end automation and visibility across the entire SFG Aluminium operation, reducing manual coordination, preventing scheduling conflicts, optimizing resource utilization, and ensuring consistent application of business rules and margins."
+  },
+  
+  "capabilities": {
+    "customer_management": {
+      "description": "Complete customer lifecycle management with tier-based classification",
+      "features": [
+        "Customer registration and onboarding",
+        "Tier assignment (Platinum, Sapphire, Steel, Green, Crimson)",
+        "Credit limit management",
+        "Payment history tracking",
+        "Automated credit checking via Experian",
+        "Customer portal access"
+      ],
+      "business_rules": [
+        "Tier determines approval limits and pricing flexibility",
+        "Credit checks required for orders > £10,000",
+        "Credit check results valid for 90 days",
+        "Outstanding balance monitored against credit limit"
+      ]
+    },
+    
+    "enquiry_management": {
+      "description": "Capture and process customer enquiries",
+      "features": [
+        "Multi-channel enquiry capture",
+        "Automatic SharePoint folder creation",
+        "Estimator assignment based on workload",
+        "Customer credit check initiation",
+        "Enquiry tracking and status updates"
+      ],
+      "workflow": [
+        "Receive enquiry from customer",
+        "Create project folder in SharePoint",
+        "Check customer tier and credit",
+        "Assign estimator",
+        "Notify sales team",
+        "Track enquiry status"
+      ]
+    },
+    
+    "quote_generation": {
+      "description": "Automated quote generation with SFG margin requirements",
+      "features": [
+        "Material and labor cost calculation",
+        "Automatic margin application (15% min, 25% target)",
+        "Tier-based approval routing",
+        "PDF quote document generation",
+        "Quote tracking and expiry management",
+        "Customer portal quote access"
+      ],
+      "business_rules": [
+        "Minimum margin: 15% (requires director approval if lower)",
+        "Target margin: 25%",
+        "Warning threshold: 18%",
+        "Quotes valid for 30 days",
+        "Approval required based on value and user tier"
+      ],
+      "calculations": {
+        "quote_amount": "total_cost * (1 + margin_percentage)",
+        "margin_check": "margin >= 0.15 for auto-approval",
+        "approval_routing": "if value > user_tier_limit then escalate"
+      }
+    },
+    
+    "approval_system": {
+      "description": "Tier-based approval workflow for quotes and orders",
+      "tiers": [
+        {"level": "T1", "role": "Director", "limit": 1000000},
+        {"level": "T2", "role": "Senior Manager", "limit": 100000},
+        {"level": "T3", "role": "Manager", "limit": 25000},
+        {"level": "T4", "role": "Supervisor", "limit": 10000},
+        {"level": "T5", "role": "Staff", "limit": 1000}
+      ],
+      "rules": [
+        "Auto-approve if value <= user's tier limit",
+        "Escalate to next tier if value > user's tier limit",
+        "Director (T1) has unlimited approval authority",
+        "All approvals logged with timestamp and approver"
+      ]
+    },
+    
+    "order_processing": {
+      "description": "Order creation and lifecycle management",
+      "stages": ["ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"],
+      "features": [
+        "Order creation from accepted quotes",
+        "Approval workflow execution",
+        "Invoice generation in Xero",
+        "Automatic scheduling initiation",
+        "Status tracking and updates",
+        "Customer notifications"
+      ],
+      "workflow": [
+        "Quote acceptance triggers order creation",
+        "Verify customer credit",
+        "Route for approval based on value",
+        "Generate invoice in Xero",
+        "Schedule fabrication",
+        "Update customer portal",
+        "Notify all stakeholders"
+      ]
+    },
+    
+    "ai_scheduling": {
+      "description": "AI-powered scheduling with conflict detection and resolution",
+      "features": [
+        "Intelligent resource allocation",
+        "Team availability analysis",
+        "Equipment utilization optimization",
+        "Real-time conflict detection",
+        "Automated conflict resolution",
+        "Schedule optimization",
+        "Capacity planning"
+      ],
+      "algorithms": {
+        "resource_allocation": "Considers team skills, availability, workload, and priority",
+        "conflict_detection": "Real-time monitoring of overlapping resource assignments",
+        "conflict_resolution": "AI-recommended solutions based on priority, impact, and constraints",
+        "optimization": "Maximizes utilization while minimizing conflicts and delays"
+      },
+      "business_rules": [
+        "Fabrication scheduled 7 days after order approval",
+        "Installation scheduled when fabrication reaches 80% completion",
+        "Minimum 5-day gap between fabrication and installation",
+        "Team assignments based on skills and availability",
+        "Equipment reservations prevent double-booking"
+      ]
+    },
+    
+    "fabrication_management": {
+      "description": "Real-time fabrication monitoring and tracking",
+      "features": [
+        "IoT sensor integration for real-time monitoring",
+        "Production progress tracking",
+        "Quality control checkpoints",
+        "Machine status monitoring",
+        "Material usage tracking",
+        "Team performance analytics"
+      ],
+      "iot_monitoring": {
+        "sensors": [
+          "Machine status (cutting, welding, finishing)",
+          "Quality control sensors",
+          "Progress tracking devices",
+          "Temperature and humidity sensors"
+        ],
+        "metrics": [
+          "Progress percentage",
+          "Machine utilization",
+          "Quality pass rate",
+          "Environmental conditions"
+        ],
+        "alerts": [
+          "Machine failures",
+          "Quality issues",
+          "Delays detected",
+          "Environmental anomalies"
+        ]
+      },
+      "workflow": [
+        "Receive fabrication schedule",
+        "Reserve equipment and materials",
+        "Activate IoT monitoring",
+        "Track progress in real-time",
+        "Perform quality checks",
+        "Update status continuously",
+        "Trigger installation scheduling at 80% completion"
+      ]
+    },
+    
+    "installation_management": {
+      "description": "Installation scheduling and execution with AR guidance",
+      "features": [
+        "Team assignment and scheduling",
+        "Route optimization",
+        "AR guidance preparation",
+        "Mobile app integration",
+        "Real-time progress tracking",
+        "Customer notifications",
+        "Quality sign-off"
+      ],
+      "ar_guidance": {
+        "description": "Augmented reality installation guidance for field teams",
+        "features": [
+          "3D model overlay on physical space",
+          "Step-by-step installation instructions",
+          "Measurement validation",
+          "Quality checkpoint guidance",
+          "Progress tracking"
+        ],
+        "benefits": [
+          "Reduced installation errors",
+          "Faster installation times",
+          "Improved quality consistency",
+          "Better training for new installers"
+        ]
+      },
+      "workflow": [
+        "Installation triggered at 80% fabrication completion",
+        "Check team availability",
+        "Optimize route to site",
+        "Prepare AR guidance",
+        "Notify customer",
+        "Execute installation with AR support",
+        "Perform quality checks",
+        "Obtain customer sign-off",
+        "Complete order"
+      ]
+    },
+    
+    "conflict_resolution": {
+      "description": "Automated detection and resolution of scheduling conflicts",
+      "types": [
+        "Resource conflicts (team double-booked)",
+        "Equipment conflicts (machine already reserved)",
+        "Timeline conflicts (overlapping schedules)",
+        "Dependency conflicts (prerequisite not met)"
+      ],
+      "resolution_strategies": [
+        "Reschedule lower-priority task",
+        "Assign alternative team/equipment",
+        "Adjust timeline",
+        "Split work across multiple teams",
+        "Expedite prerequisite tasks"
+      ],
+      "workflow": [
+        "Monitor schedules in real-time",
+        "Detect potential conflicts",
+        "Analyze impact and priority",
+        "Generate resolution options",
+        "Apply AI-recommended resolution",
+        "Notify affected teams",
+        "Update schedules",
+        "Log for learning and improvement"
+      ]
+    },
+    
+    "financial_integration": {
+      "description": "Integration with Xero and financial management",
+      "features": [
+        "Automatic invoice creation",
+        "Payment tracking",
+        "Credit checking via Experian",
+        "Outstanding balance monitoring",
+        "Payment reminders",
+        "Financial reporting"
+      ],
+      "xero_integration": {
+        "functions": [
+          "Create invoices automatically when orders approved",
+          "Update invoice status on payment",
+          "Track outstanding balances",
+          "Generate financial reports",
+          "Sync customer data"
+        ],
+        "integration_method": "Via MCP-FINANCE server"
+      },
+      "experian_integration": {
+        "functions": [
+          "Perform credit checks for orders > £10,000",
+          "Retrieve credit scores and limits",
+          "Monitor credit status",
+          "Flag high-risk customers"
+        ],
+        "integration_method": "Via MCP-FINANCE server",
+        "cache_duration": "90 days"
+      }
+    },
+    
+    "document_management": {
+      "description": "SharePoint integration for document storage and management",
+      "features": [
+        "Automatic folder creation for enquiries",
+        "Document stage tracking",
+        "Version control",
+        "Access control",
+        "Document templates",
+        "Archival and retrieval"
+      ],
+      "folder_structure": {
+        "root": "/SFG Projects",
+        "enquiry_folder": "/{year}/{enquiry_id}_{customer_name}",
+        "subfolders": [
+          "Enquiry Documents",
+          "Quotes",
+          "Orders",
+          "Fabrication",
+          "Installation",
+          "Invoices",
+          "Correspondence"
+        ]
+      },
+      "document_stages": ["ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"]
+    },
+    
+    "microsoft365_integration": {
+      "description": "Deep integration with Microsoft 365 ecosystem",
+      "integrations": [
+        {
+          "service": "SharePoint",
+          "purpose": "Document management",
+          "features": ["Folder creation", "Document storage", "Access control"]
+        },
+        {
+          "service": "Outlook",
+          "purpose": "Email communications",
+          "features": ["Automated emails", "Calendar integration", "Task management"]
+        },
+        {
+          "service": "Teams",
+          "purpose": "Team collaboration",
+          "features": ["Chat notifications", "Channel updates", "File sharing"]
+        },
+        {
+          "service": "OneDrive",
+          "purpose": "Personal file storage",
+          "features": ["User documents", "Mobile access", "Sync"]
+        }
+      ],
+      "integration_method": "Microsoft Graph API"
+    },
+    
+    "webhook_handling": {
+      "description": "Real-time event processing from NEXUS",
+      "endpoint": "https://sfg-sync.abacusai.app/api/nexus-webhook",
+      "events": [
+        "enquiry.created",
+        "quote.requested",
+        "order.approved",
+        "customer.registered",
+        "credit.check_required",
+        "invoice.due",
+        "payment.received",
+        "fabrication.scheduled",
+        "installation.scheduled",
+        "conflict.detected"
+      ],
+      "security": "HMAC-SHA256 signature verification",
+      "response_time": "< 1 second"
+    },
+    
+    "message_handling": {
+      "description": "Request-response message handling for NEXUS",
+      "endpoint": "https://sfg-sync.abacusai.app/api/messages/handle",
+      "supported_messages": {
+        "queries": [
+          "query.customer_data",
+          "query.quote_status",
+          "query.order_status",
+          "query.fabrication_status",
+          "query.installation_status",
+          "query.resource_availability"
+        ],
+        "actions": [
+          "action.create_quote",
+          "action.approve_order",
+          "action.schedule_fabrication",
+          "action.schedule_installation",
+          "action.resolve_conflict"
+        ]
+      },
+      "response_time": "< 500ms"
+    }
+  },
+  
+  "business_rules_summary": {
+    "margins": {
+      "minimum": 0.15,
+      "target": 0.25,
+      "warning_threshold": 0.18,
+      "enforcement": "Quotes below minimum require director approval"
+    },
+    "approval_limits": {
+      "T1_Director": 1000000,
+      "T2_Senior_Manager": 100000,
+      "T3_Manager": 25000,
+      "T4_Supervisor": 10000,
+      "T5_Staff": 1000
+    },
+    "credit_checks": {
+      "threshold": 10000,
+      "validity": "90 days",
+      "provider": "Experian via MCP-FINANCE"
+    },
+    "scheduling": {
+      "fabrication_lead_time": "7 days",
+      "installation_trigger": "80% fabrication completion",
+      "installation_gap": "5 days after fabrication"
+    },
+    "customer_tiers": [
+      {"name": "Platinum", "color": "Purple", "limit": 1000000},
+      {"name": "Sapphire", "color": "Blue", "limit": 100000},
+      {"name": "Steel", "color": "Gray", "limit": 25000},
+      {"name": "Green", "color": "Green", "limit": 10000},
+      {"name": "Crimson", "color": "Red", "limit": 1000}
+    ]
+  },
+  
+  "integrations_summary": [
+    {"system": "NEXUS", "purpose": "Orchestration", "status": "active"},
+    {"system": "MCP-SALES", "purpose": "Sales tools", "status": "active"},
+    {"system": "MCP-FINANCE", "purpose": "Finance tools", "status": "active"},
+    {"system": "MCP-OPERATIONS", "purpose": "Operations tools", "status": "active"},
+    {"system": "MCP-COMMUNICATIONS", "purpose": "Communications", "status": "active"},
+    {"system": "MCP-DATA", "purpose": "Analytics", "status": "active"},
+    {"system": "Xero", "purpose": "Accounting", "status": "active"},
+    {"system": "SharePoint", "purpose": "Documents", "status": "active"},
+    {"system": "Companies House", "purpose": "Company data", "status": "active"},
+    {"system": "Experian", "purpose": "Credit checking", "status": "active"}
+  ],
+  
+  "data_models": {
+    "customer": {
+      "fields": ["id", "name", "email", "phone", "tier", "credit_limit", "outstanding_balance", "approval_limit"],
+      "relationships": ["enquiries", "quotes", "orders", "invoices"]
+    },
+    "enquiry": {
+      "fields": ["id", "customer_id", "status", "created_at", "estimator", "value"],
+      "relationships": ["customer", "quotes"]
+    },
+    "quote": {
+      "fields": ["id", "enquiry_id", "quote_number", "status", "total_cost", "quote_amount", "margin", "created_at", "expires_at"],
+      "relationships": ["enquiry", "customer", "orders"]
+    },
+    "order": {
+      "fields": ["id", "quote_id", "order_number", "status", "stage", "total_amount", "created_at", "approved_at"],
+      "relationships": ["quote", "customer", "fabrication", "installation", "invoice"]
+    },
+    "fabrication": {
+      "fields": ["id", "order_id", "scheduled_date", "team", "progress", "iot_data", "status"],
+      "relationships": ["order", "iot_sensors"]
+    },
+    "installation": {
+      "fields": ["id", "order_id", "scheduled_date", "team", "location", "ar_guidance", "status"],
+      "relationships": ["order", "mobile_app"]
+    }
+  },
+  
+  "performance_characteristics": {
+    "response_times": {
+      "webhook_processing": "< 1s",
+      "message_handling": "< 500ms",
+      "dashboard_load": "< 2s",
+      "report_generation": "< 5s"
+    },
+    "scalability": {
+      "concurrent_users": "500+",
+      "daily_transactions": "10,000+",
+      "real_time_updates": "Yes",
+      "iot_devices": "100+"
+    }
+  }
+}

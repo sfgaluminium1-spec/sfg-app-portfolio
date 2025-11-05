@@ -1,0 +1,31 @@
+{
+  "app_name": "SFG-Aluminium-Unified-Dashboard",
+  "platform": "Next.js 14 / React / TypeScript",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "deployment_url": "https://sfg-unified-brain.abacusai.app",
+  "webhook_url": "https://sfg-unified-brain.abacusai.app/api/webhooks/nexus",
+  "webhook_events": [
+    "enquiry.created",
+    "quote.requested",
+    "order.approved",
+    "customer.registered",
+    "credit.check_required",
+    "invoice.due",
+    "payment.received"
+  ],
+  "webhook_secret": "sfg-aluminium-webhook-secret-2025",
+  "message_handler_url": "https://sfg-unified-brain.abacusai.app/api/messages/handle",
+  "supported_messages": [
+    "query.customer_data",
+    "query.quote_status",
+    "query.order_status",
+    "action.create_quote",
+    "action.approve_order",
+    "action.send_invoice",
+    "action.check_credit",
+    "query.production_schedule"
+  ],
+  "registered_at": "2025-11-05T05:40:58.730Z",
+  "contact": "Warren @ SFG Aluminium"
+}

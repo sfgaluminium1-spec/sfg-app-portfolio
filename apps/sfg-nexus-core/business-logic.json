@@ -1,0 +1,87 @@
+{
+  "app_name": "sfg-nexus-core",
+  "version": "1.2.3",
+  "capabilities": [
+    "Truth File System v1.2.3",
+    "Persistent Memory System",
+    "Satellite App Orchestration",
+    "BaseNumber Generation",
+    "Customer/Job/Quote Management",
+    "Approval Workflow Management",
+    "Finance Dashboard",
+    "Installation/Fabrication Scheduling",
+    "Document Lifecycle Management"
+  ],
+  "workflows": [
+    {
+      "name": "Satellite App Registration",
+      "steps": [
+        "Receive registration request",
+        "Review business logic",
+        "Approve/reject",
+        "Activate in ecosystem"
+      ]
+    },
+    {
+      "name": "Business Rule Management",
+      "steps": [
+        "Rule change requested",
+        "Create new version",
+        "Supersede old version",
+        "Notify all apps"
+      ]
+    },
+    {
+      "name": "Workflow Orchestration",
+      "steps": [
+        "Event triggered",
+        "Coordinate with apps",
+        "Enforce business rules",
+        "Log all actions"
+      ]
+    }
+  ],
+  "business_rules": [
+    {
+      "rule": "Minimum margin 15%",
+      "condition": "margin >= 0.15",
+      "action": "Allow quote"
+    },
+    {
+      "rule": "Credit check for orders > £10,000",
+      "condition": "order_value > 10000",
+      "action": "Perform credit check"
+    },
+    {
+      "rule": "Tier-based approval limits",
+      "condition": "value > tier_limit",
+      "action": "Escalate to higher tier"
+    }
+  ],
+  "integrations": [
+    {
+      "system": "GitHub",
+      "purpose": "Repository management"
+    },
+    {
+      "system": "Xero",
+      "purpose": "Accounting"
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage"
+    },
+    {
+      "system": "Companies House",
+      "purpose": "Company data"
+    },
+    {
+      "system": "Stripe",
+      "purpose": "Payments"
+    },
+    {
+      "system": "Abacus.AI",
+      "purpose": "AI/ML"
+    }
+  ]
+}

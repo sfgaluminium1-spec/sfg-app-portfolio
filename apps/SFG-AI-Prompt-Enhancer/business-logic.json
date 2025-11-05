@@ -1,0 +1,76 @@
+{
+  "capabilities": [
+    "Grammar and spelling correction",
+    "Punctuation checking",
+    "Text rewriting (Simple, Technical, Business styles)",
+    "AI prompt enhancement and optimization",
+    "Right-click context menu integration",
+    "Chrome extension for easy access",
+    "Password reset functionality",
+    "User authentication and session management"
+  ],
+  "workflows": [
+    {
+      "name": "Text Correction Flow",
+      "steps": [
+        "User selects text in any input field",
+        "Right-clicks to access SFG AI Tools menu",
+        "Chooses correction type (Grammar, Punctuation, Rewrite style)",
+        "AI processes text with selected mode",
+        "Corrected text replaces original",
+        "History is saved for user reference"
+      ]
+    },
+    {
+      "name": "AI Prompt Enhancement Flow",
+      "steps": [
+        "User enters prompt in text area",
+        "Clicks 'AI Prompt Enhance'",
+        "AI analyzes and optimizes prompt structure",
+        "Enhanced prompt is generated with improvements",
+        "User can copy or use enhanced version",
+        "Prompt variations can be generated"
+      ]
+    }
+  ],
+  "business_rules": [
+    {
+      "rule": "User authentication required",
+      "condition": "user_logged_in == true",
+      "action": "Allow access to correction and enhancement features"
+    },
+    {
+      "rule": "History tracking",
+      "condition": "correction_performed",
+      "action": "Save to user's correction history"
+    }
+  ],
+  "integrations": [
+    {
+      "system": "Abacus.AI LLM APIs",
+      "purpose": "Text correction and prompt enhancement"
+    },
+    {
+      "system": "Next.js Web Application",
+      "purpose": "Main web interface and API backend"
+    },
+    {
+      "system": "Chrome Extension",
+      "purpose": "Browser integration and right-click functionality"
+    },
+    {
+      "system": "PostgreSQL Database",
+      "purpose": "User data and correction history storage"
+    },
+    {
+      "system": "NextAuth.js",
+      "purpose": "Authentication and session management"
+    },
+    {
+      "system": "Google Analytics GA4",
+      "purpose": "Usage tracking and analytics"
+    }
+  ],
+  "webhook_events": [],
+  "supported_messages": []
+}

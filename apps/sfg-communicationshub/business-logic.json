@@ -1,0 +1,178 @@
+{
+  "app_name": "SFG-CommunicationsHub",
+  "app_version": "1.0.0",
+  "deployed_url": "https://sfgcomms-hub.abacusai.app",
+  "capabilities": [
+    "Centralized email account management (14 accounts across Exchange & Gmail)",
+    "Multi-client email configuration and management",
+    "Role-based access control (Admin: Warren/Yanika, Staff: team members)",
+    "AI-powered email triage (<5s processing time)",
+    "Real-time communication monitoring and analytics",
+    "WhatsApp Business integration for customer communications",
+    "Google Chat integration for team collaboration",
+    "Mobile app recommendations and configuration guides",
+    "Client-specific settings management (Outlook, Spark, Mailspring, Apple Mail, Gmail, Thunderbird)",
+    "System health monitoring and progress tracking",
+    "Authentication and session management via NextAuth.js"
+  ],
+  "workflows": [
+    {
+      "name": "Email Account Onboarding",
+      "steps": [
+        "Admin creates new email account entry",
+        "System validates email provider (Exchange/Gmail)",
+        "Account credentials configured",
+        "Client preferences set",
+        "Mobile app recommendations generated",
+        "Team members granted access based on role",
+        "Account added to dashboard"
+      ],
+      "trigger": "Admin action",
+      "outputs": [
+        "Account configured",
+        "Team notified",
+        "Client setup guide generated"
+      ]
+    },
+    {
+      "name": "Email Triage & Routing",
+      "steps": [
+        "Email received in monitored account",
+        "AI analyzes content, urgency, and category",
+        "Email tagged and prioritized",
+        "Appropriate team member notified",
+        "Response templates suggested",
+        "Follow-up scheduled if needed"
+      ],
+      "trigger": "Incoming email",
+      "outputs": [
+        "Email categorized",
+        "Team notified",
+        "Response drafted"
+      ]
+    },
+    {
+      "name": "Client Configuration",
+      "steps": [
+        "User selects email client (desktop/mobile)",
+        "System generates platform-specific configuration",
+        "Setup instructions displayed",
+        "Direct links to client downloads/app stores",
+        "Configuration validated",
+        "User confirms setup complete"
+      ],
+      "trigger": "User selects email client",
+      "outputs": [
+        "Client configured",
+        "Setup guide generated",
+        "Login credentials provided"
+      ]
+    },
+    {
+      "name": "WhatsApp Business Message Handling",
+      "steps": [
+        "Customer message received via WhatsApp Business",
+        "AI analyzes message intent",
+        "Message routed to appropriate department",
+        "Team member notified",
+        "Response sent via WhatsApp",
+        "Conversation logged in system"
+      ],
+      "trigger": "WhatsApp message received",
+      "outputs": [
+        "Message routed",
+        "Team notified",
+        "Response sent"
+      ]
+    }
+  ],
+  "business_rules": [
+    {
+      "rule": "Role-based access control",
+      "condition": "user.role == 'ADMIN'",
+      "action": "Grant full system access including user management, account configuration, and system settings"
+    },
+    {
+      "rule": "Email account limits",
+      "condition": "email_accounts.count <= 14",
+      "action": "Allow new account creation"
+    },
+    {
+      "rule": "AI triage performance",
+      "condition": "processing_time < 5000ms",
+      "action": "Process email immediately"
+    },
+    {
+      "rule": "Real-time updates",
+      "condition": "websocket_connected",
+      "action": "Push live updates to dashboard"
+    },
+    {
+      "rule": "Session security",
+      "condition": "session_valid && authenticated",
+      "action": "Allow dashboard access"
+    }
+  ],
+  "integrations": [
+    {
+      "system": "Microsoft 365 / Exchange",
+      "purpose": "Email account integration",
+      "status": "active"
+    },
+    {
+      "system": "Gmail / Google Workspace",
+      "purpose": "Email account integration",
+      "status": "active"
+    },
+    {
+      "system": "WhatsApp Business API",
+      "purpose": "Customer messaging",
+      "status": "planned"
+    },
+    {
+      "system": "Google Chat API",
+      "purpose": "Team collaboration",
+      "status": "planned"
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage and retrieval",
+      "status": "planned"
+    },
+    {
+      "system": "Xero",
+      "purpose": "Financial data sync for customer communications",
+      "status": "planned"
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "purpose": "Communication tools and templates",
+      "status": "planned"
+    },
+    {
+      "system": "NEXUS",
+      "purpose": "Orchestration and event coordination",
+      "status": "planned"
+    }
+  ],
+  "webhook_events": [
+    "communication.email_received",
+    "communication.email_sent",
+    "communication.whatsapp_received",
+    "communication.urgent_message",
+    "communication.account_added",
+    "communication.account_configured",
+    "customer.message_received",
+    "customer.enquiry_created",
+    "team.notification_required"
+  ],
+  "supported_messages": [
+    "query.email_account_status",
+    "query.communication_stats",
+    "query.team_availability",
+    "action.send_email",
+    "action.send_whatsapp",
+    "action.notify_team",
+    "action.create_communication_record"
+  ]
+}

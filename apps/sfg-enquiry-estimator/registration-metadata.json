@@ -1,0 +1,182 @@
+{
+  "app_name": "SFG Enquiry & Estimator System",
+  "app_code": "sfg-enquiry-estimator",
+  "version": "1.0.0",
+  "status": "production",
+  "category": "sfg-aluminium-app",
+  "platform": "Next.js + PostgreSQL",
+  "deployment": {
+    "url": "https://new-enq-spec.abacusai.app",
+    "environment": "production",
+    "hosting": "Abacus.AI Platform",
+    "database": "PostgreSQL (Hosted)",
+    "last_deployed": "2025-11-05"
+  },
+  "webhook_configuration": {
+    "webhook_url": "https://new-enq-spec.abacusai.app/api/webhooks/nexus",
+    "webhook_secret": "sfg-aluminium-webhook-secret-2025",
+    "webhook_events": [
+      "enquiry.created",
+      "quote.requested",
+      "order.approved",
+      "customer.registered",
+      "credit.check_required",
+      "invoice.due",
+      "payment.received",
+      "test.event"
+    ],
+    "signature_header": "X-Nexus-Signature",
+    "signature_algorithm": "HMAC-SHA256"
+  },
+  "message_handler_configuration": {
+    "message_handler_url": "https://new-enq-spec.abacusai.app/api/messages/handle",
+    "supported_messages": [
+      "query.customer_data",
+      "query.enquiry_status",
+      "query.quote_status",
+      "query.customer_credit",
+      "query.payment_history",
+      "action.create_enquiry",
+      "action.update_enquiry_status",
+      "action.approve_credit"
+    ],
+    "response_format": "JSON",
+    "timeout": "30 seconds"
+  },
+  "integration_points": [
+    {
+      "system": "NEXUS",
+      "type": "orchestration",
+      "direction": "bidirectional",
+      "endpoints": [
+        "/api/webhooks/nexus (inbound)",
+        "/api/messages/handle (inbound)"
+      ]
+    },
+    {
+      "system": "Xero",
+      "type": "accounting",
+      "direction": "bidirectional",
+      "endpoints": [
+        "/api/xero/auth",
+        "/api/xero/create-contact",
+        "/api/xero/payment-history"
+      ]
+    },
+    {
+      "system": "Companies House",
+      "type": "data_provider",
+      "direction": "outbound",
+      "endpoints": [
+        "/api/credit-check"
+      ]
+    },
+    {
+      "system": "SharePoint",
+      "type": "document_storage",
+      "direction": "bidirectional",
+      "endpoints": [
+        "Browser automation for document management"
+      ]
+    },
+    {
+      "system": "Twilio WhatsApp",
+      "type": "communication",
+      "direction": "inbound",
+      "endpoints": [
+        "/api/whatsapp/webhook"
+      ]
+    },
+    {
+      "system": "MCP-SALES",
+      "type": "mcp_server",
+      "direction": "bidirectional",
+      "expected_usage": [
+        "Customer data sharing",
+        "Quote status updates"
+      ]
+    },
+    {
+      "system": "MCP-FINANCE",
+      "type": "mcp_server",
+      "direction": "bidirectional",
+      "expected_usage": [
+        "Credit check requests",
+        "Payment terms approval"
+      ]
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "type": "mcp_server",
+      "direction": "bidirectional",
+      "expected_usage": [
+        "Order handoff",
+        "Production scheduling"
+      ]
+    }
+  ],
+  "capabilities_summary": {
+    "primary": [
+      "Enquiry Management",
+      "Customer Management",
+      "Credit Assessment",
+      "Payment Terms Calculation",
+      "Compliance Checking"
+    ],
+    "secondary": [
+      "Document Analysis",
+      "Specification Generation",
+      "WhatsApp Integration",
+      "Real-time Statistics",
+      "Tier-based Approvals"
+    ]
+  },
+  "business_rules_summary": [
+    "Minimum 15% margin on all quotes",
+    "Credit check required for orders > \u00a310,000",
+    "Tier-based approval limits (\u00a31k to unlimited)",
+    "Automated payment terms based on credit assessment",
+    "Sequential enquiry numbering with lifecycle tracking"
+  ],
+  "data_sovereignty": {
+    "customer_data": "PostgreSQL database (encrypted)",
+    "documents": "SharePoint (SFG tenant)",
+    "backups": "Daily automated backups",
+    "retention": "7 years per UK regulations"
+  },
+  "security": {
+    "authentication": "NextAuth.js with email/password",
+    "authorization": "Role-based access control",
+    "webhook_security": "HMAC signature verification",
+    "api_security": "Session-based authentication",
+    "data_encryption": "At rest and in transit"
+  },
+  "monitoring": {
+    "health_check_url": "https://new-enq-spec.abacusai.app",
+    "logging": "Server-side console logs",
+    "error_tracking": "Built-in error handling",
+    "uptime_target": "99.9%"
+  },
+  "support": {
+    "primary_contact": "SFG Aluminium IT Team",
+    "documentation": "Available in /registration directory",
+    "business_logic": "registration/business-logic.json",
+    "readme": "registration/README.md"
+  },
+  "registration": {
+    "registered_by": "Warren (DeepAgent Assistant)",
+    "registration_date": "2025-11-05T00:00:00Z",
+    "github_issue_url": "To be created",
+    "approval_status": "pending",
+    "github_directory": "/apps/sfg-enquiry-estimator/"
+  },
+  "labels": [
+    "registration",
+    "satellite-app",
+    "sfg-aluminium-app",
+    "operations",
+    "enquiry-management",
+    "credit-assessment",
+    "pending-approval"
+  ]
+}

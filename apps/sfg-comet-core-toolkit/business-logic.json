@@ -1,0 +1,488 @@
+{
+  "appName": "sfg-comet-core-toolkit",
+  "purpose": "SharePoint IA Toolkit & System Monitor - Automated project lifecycle management, folder structure automation, data classification, and knowledge management for SFG Aluminium",
+  "capabilities": [
+    "Enquiry & Project Lifecycle Management",
+    "Automated Numbering System (ENQ/QUO/ORD/INV/DEL/PAID)",
+    "SharePoint Folder Structure Automation",
+    "Data Classification & Archive System (12 file types)",
+    "Knowledge Smelter Decision Tracking",
+    "Drawing Approval Workflow",
+    "File Manager with Sync Status",
+    "Customer Tier Management (5 tiers)",
+    "Security Tier Controls (T1/T2/T3)",
+    "Staff Access Tiers",
+    "Xero Integration (ready)",
+    "Email Intake System (planned)",
+    "FreeCommander Desktop Integration"
+  ],
+  "workflows": [
+    {
+      "name": "Enquiry to Project Lifecycle",
+      "description": "Complete customer journey from initial enquiry through to paid invoice",
+      "steps": [
+        "Customer submits enquiry (ENQ status)",
+        "System assigns auto-number (e.g., 00123-ENQ-WH)",
+        "Staff creates quote (QUO status)",
+        "Customer accepts, becomes order (ORD status)",
+        "Invoice generated (INV status)",
+        "Goods delivered (DEL status)",
+        "Payment received (PAID status)",
+        "Project archived with complete audit trail"
+      ],
+      "triggers": [
+        "Customer enquiry form submission",
+        "Manual entry by staff",
+        "Email to enquiries@"
+      ],
+      "outputs": [
+        "Project number",
+        "SharePoint folder structure",
+        "Audit log entries"
+      ]
+    },
+    {
+      "name": "Automated Folder Creation",
+      "description": "Create standard 17-folder structure on SharePoint for each project",
+      "steps": [
+        "Project status changes (e.g., ENQ \u2192 QUO)",
+        "System validates SharePoint permissions",
+        "System creates site/library if needed",
+        "System creates canonical folder structure (01-17)",
+        "System creates month shortcuts",
+        "System sets folder permissions based on security tier",
+        "System logs creation in audit trail",
+        "System notifies relevant staff"
+      ],
+      "triggers": [
+        "Status change",
+        "Manual trigger",
+        "Scheduled batch creation"
+      ],
+      "outputs": [
+        "Folder paths",
+        "Permission settings",
+        "Notification sent"
+      ]
+    },
+    {
+      "name": "Data Classification & Archive",
+      "description": "Classify uploaded files and apply retention/compliance rules",
+      "steps": [
+        "User uploads file via UI or email",
+        "System detects file type (invoice, quote, drawing, etc.)",
+        "System applies classification rules",
+        "System determines retention period (1-10 years, permanent, lifetime)",
+        "System sets immutability flag if required",
+        "System moves file to correct SharePoint path",
+        "System creates metadata record in database",
+        "System updates audit log"
+      ],
+      "triggers": [
+        "File upload",
+        "Email attachment",
+        "Bulk import"
+      ],
+      "outputs": [
+        "Classification metadata",
+        "SharePoint path",
+        "Retention schedule"
+      ]
+    }
+  ],
+  "businessRules": [
+    {
+      "name": "Auto-Numbering Sequential Allocation",
+      "description": "All enquiries and projects must receive unique sequential numbers",
+      "condition": "IF new enquiry or project created",
+      "action": "THEN allocate next available number in sequence",
+      "priority": "high"
+    },
+    {
+      "name": "Status Progression Validation",
+      "description": "Projects can only progress forward, not backward (except for corrections)",
+      "condition": "IF user attempts to change status from higher to lower",
+      "action": "THEN block change and show error, unless user has Admin role",
+      "priority": "high"
+    },
+    {
+      "name": "Financial Record Immutability",
+      "description": "Invoices, POs, and delivery notes cannot be modified after creation",
+      "condition": "IF file type is INVOICE, PURCHASE_ORDER, or DELIVERY_NOTE AND file.createdAt > 24 hours ago",
+      "action": "THEN prevent modification, require new version upload instead",
+      "priority": "high"
+    },
+    {
+      "name": "Data Retention Compliance",
+      "description": "Files must be retained according to classification rules",
+      "condition": "IF file.retentionYears exceeded AND file.type allows deletion",
+      "action": "THEN move to archive, notify compliance officer, schedule deletion after 30 days",
+      "priority": "high"
+    }
+  ],
+  "integrations": [
+    {
+      "name": "Microsoft SharePoint",
+      "type": "api",
+      "description": "Read/write access to SharePoint sites, libraries, folders, and files via Microsoft Graph API",
+      "endpoint": "https://graph.microsoft.com/v1.0"
+    },
+    {
+      "name": "Xero Accounting",
+      "type": "api",
+      "description": "Synchronize customer contacts and invoice metadata with Xero accounting system",
+      "endpoint": "https://api.xero.com/api.xro/2.0"
+    },
+    {
+      "name": "PostgreSQL Database",
+      "type": "database",
+      "description": "Primary data store for enquiries, projects, documents, audit logs, decisions, and system state"
+    },
+    {
+      "name": "SFG COMET CORE (Nexus)",
+      "type": "mcp",
+      "description": "Orchestration and coordination with main SFG COMET CORE system via MCP protocol",
+      "endpoint": "https://sfg-comet-core.abacusai.app"
+    },
+    {
+      "name": "SFG Company Wiki",
+      "type": "mcp",
+      "description": "Knowledge synchronization with company wiki system",
+      "endpoint": "https://company-wiki-5g0kyk.abacusai.app"
+    }
+  ],
+  "dataModels": [
+    {
+      "name": "Enquiry",
+      "description": "Customer enquiry record with auto-numbering",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Unique UUID"
+        },
+        {
+          "name": "enquiryNumber",
+          "type": "string",
+          "required": true,
+          "description": "Auto-generated number"
+        },
+        {
+          "name": "baseNumber",
+          "type": "number",
+          "required": true,
+          "description": "Sequential 5-digit base"
+        },
+        {
+          "name": "customerName",
+          "type": "string",
+          "required": true,
+          "description": "Customer name"
+        },
+        {
+          "name": "shortDescription",
+          "type": "string",
+          "required": true,
+          "description": "Brief description"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": true,
+          "description": "ENQ/QUO/ORD/INV/DEL/PAID"
+        },
+        {
+          "name": "staffInitials",
+          "type": "string",
+          "required": true,
+          "description": "Staff member initials"
+        }
+      ]
+    },
+    {
+      "name": "Project",
+      "description": "Active project with lifecycle tracking",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Unique UUID"
+        },
+        {
+          "name": "projectNumber",
+          "type": "string",
+          "required": true,
+          "description": "Project identifier"
+        },
+        {
+          "name": "enquiryId",
+          "type": "string",
+          "required": false,
+          "description": "Link to original enquiry"
+        },
+        {
+          "name": "customerName",
+          "type": "string",
+          "required": true,
+          "description": "Customer name"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": true,
+          "description": "Current project status"
+        }
+      ]
+    },
+    {
+      "name": "Document",
+      "description": "File metadata and classification",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Unique UUID"
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "required": true,
+          "description": "Original filename"
+        },
+        {
+          "name": "fileType",
+          "type": "string",
+          "required": true,
+          "description": "Classification type"
+        },
+        {
+          "name": "retentionYears",
+          "type": "number",
+          "required": true,
+          "description": "Retention period"
+        },
+        {
+          "name": "isImmutable",
+          "type": "boolean",
+          "required": true,
+          "description": "Cannot be modified"
+        }
+      ]
+    }
+  ],
+  "apiEndpoints": [
+    {
+      "method": "GET",
+      "path": "/api/enquiries",
+      "description": "List all enquiries",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/enquiries",
+      "description": "Create new enquiry",
+      "authentication": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects",
+      "description": "List all projects",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects",
+      "description": "Create new project",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/data-archive",
+      "description": "Archive and classify file",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/folders",
+      "description": "Create new folder",
+      "authentication": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/webhooks/nexus",
+      "description": "NEXUS webhook endpoint - receives real-time events",
+      "authentication": "signature"
+    },
+    {
+      "method": "POST",
+      "path": "/api/messages/handle",
+      "description": "Message handler - responds to orchestration requests",
+      "authentication": true
+    }
+  ],
+  "webhookEvents": [
+    {
+      "event": "enquiry.created",
+      "description": "New customer enquiry received",
+      "handler": "Creates project folder, assigns estimator, sends notifications"
+    },
+    {
+      "event": "quote.requested",
+      "description": "Quote generation requested",
+      "handler": "Calculates pricing with SFG margins, checks approval requirements, generates quote"
+    },
+    {
+      "event": "order.approved",
+      "description": "Order has been approved",
+      "handler": "Schedules production, creates invoice in Xero, updates folder status, notifies teams"
+    },
+    {
+      "event": "customer.registered",
+      "description": "New customer registered in system",
+      "handler": "Creates customer folder, sets up tier permissions, sends welcome package"
+    },
+    {
+      "event": "credit.check_required",
+      "description": "Credit check needed for high-value order",
+      "handler": "Initiates credit check via MCP-FINANCE/Experian API"
+    },
+    {
+      "event": "invoice.due",
+      "description": "Invoice payment due notification",
+      "handler": "Sends payment reminder to customer"
+    },
+    {
+      "event": "payment.received",
+      "description": "Payment has been received",
+      "handler": "Updates invoice status, updates folder to PAID stage, sends confirmation"
+    },
+    {
+      "event": "folder.create_required",
+      "description": "SharePoint folder creation needed",
+      "handler": "Creates project folder structure with tier-based permissions"
+    },
+    {
+      "event": "document.move_required",
+      "description": "Document needs to be moved in SharePoint",
+      "handler": "Moves document and updates audit trail"
+    }
+  ],
+  "supportedMessages": [
+    {
+      "type": "query.customer_data",
+      "description": "Get customer information",
+      "params": [
+        "customer_id"
+      ],
+      "returns": "Customer details including tier, credit limit, outstanding balance"
+    },
+    {
+      "type": "query.quote_status",
+      "description": "Get quote status and details",
+      "params": [
+        "quote_id"
+      ],
+      "returns": "Quote status, amount, dates, estimator, document URL"
+    },
+    {
+      "type": "query.order_status",
+      "description": "Get order status and progress",
+      "params": [
+        "order_id"
+      ],
+      "returns": "Order status, stage, amounts, dates, progress percentage"
+    },
+    {
+      "type": "query.folder_structure",
+      "description": "Get SharePoint folder structure for project",
+      "params": [
+        "project_id",
+        "customer_id"
+      ],
+      "returns": "Folder paths, document counts, creation dates"
+    },
+    {
+      "type": "query.document_list",
+      "description": "Get list of documents in folder",
+      "params": [
+        "folder_path",
+        "project_id",
+        "document_type"
+      ],
+      "returns": "Document metadata, URLs, sizes, dates"
+    },
+    {
+      "type": "action.create_quote",
+      "description": "Create new quote",
+      "params": [
+        "enquiry_id",
+        "items",
+        "customer_id",
+        "special_requirements"
+      ],
+      "returns": "Quote ID, number, amount, margin, PDF URL"
+    },
+    {
+      "type": "action.approve_order",
+      "description": "Approve an order",
+      "params": [
+        "order_id",
+        "approved_by",
+        "approval_tier",
+        "notes"
+      ],
+      "returns": "Approval confirmation, production schedule"
+    },
+    {
+      "type": "action.send_invoice",
+      "description": "Send invoice to customer",
+      "params": [
+        "order_id",
+        "customer_email",
+        "cc_emails"
+      ],
+      "returns": "Invoice details, sent date"
+    },
+    {
+      "type": "action.create_folder",
+      "description": "Create SharePoint folder structure",
+      "params": [
+        "project_id",
+        "project_name",
+        "customer_name",
+        "tier",
+        "folder_type"
+      ],
+      "returns": "Folder paths, permissions applied"
+    },
+    {
+      "type": "action.move_document",
+      "description": "Move document in SharePoint",
+      "params": [
+        "document_id",
+        "source_path",
+        "destination_path",
+        "reason"
+      ],
+      "returns": "Move confirmation, new path"
+    }
+  ],
+  "nexusOrchestration": {
+    "enabled": true,
+    "webhook_url": "https://sfg-comet-core-toolkit.abacusai.app/api/webhooks/nexus",
+    "message_handler_url": "https://sfg-comet-core-toolkit.abacusai.app/api/messages/handle",
+    "webhook_secret_env": "NEXUS_WEBHOOK_SECRET",
+    "description": "Real-time event handling and orchestrated workflows with NEXUS and other SFG apps",
+    "capabilities": [
+      "Receives real-time events from NEXUS orchestration",
+      "Responds to data queries from other SFG apps",
+      "Executes actions requested by NEXUS",
+      "Participates in multi-app workflows",
+      "Provides SharePoint folder and document management services",
+      "Integrates with SFG business processes (enquiry \u2192 quote \u2192 order \u2192 invoice \u2192 paid)"
+    ]
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "app_name": "SFG-Aluminium-Unified-Dashboard",
+  "platform": "Next.js 14 / React / TypeScript",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "purpose": "Unified dashboard for SFG Aluminium business operations, integrating customer management, quotes, orders, invoicing, and AI-powered assistance",
+  "capabilities": [
+    "Unified business dashboard with real-time KPIs",
+    "Customer enquiry management",
+    "Quote generation with SFG pricing margins",
+    "Order tracking and management",
+    "Invoice processing and financial reporting",
+    "Credit checking integration",
+    "AI chatbot for customer support",
+    "Document management via SharePoint integration",
+    "Xero accounting integration",
+    "API hub for external integrations",
+    "System status monitoring",
+    "Analytics and reporting"
+  ],
+  "workflows": [
+    {
+      "name": "Enquiry to Quote",
+      "description": "Convert customer enquiry to formal quote",
+      "steps": [
+        "Receive customer enquiry via portal",
+        "Check customer credit (if order value > £10,000)",
+        "Calculate pricing with 15-25% margin",
+        "Get tier-based approval if needed",
+        "Generate professional quote document",
+        "Send to customer via email",
+        "Create SharePoint project folder",
+        "Track quote status (SENT → ACC)"
+      ]
+    },
+    {
+      "name": "Quote to Order",
+      "description": "Convert accepted quote to production order",
+      "steps": [
+        "Customer accepts quote",
+        "Perform final credit check",
+        "Get approval based on value tier",
+        "Create production order",
+        "Schedule fabrication",
+        "Generate invoice via Xero",
+        "Notify production team",
+        "Track order status (ORD → FAB → INS)"
+      ]
+    },
+    {
+      "name": "Invoice to Payment",
+      "description": "Invoice generation and payment tracking",
+      "steps": [
+        "Generate invoice in Xero",
+        "Send invoice to customer",
+        "Track payment status",
+        "Send payment reminders",
+        "Record payment received",
+        "Update customer balance",
+        "Mark order as complete (PAID)"
+      ]
+    },
+    {
+      "name": "Credit Check",
+      "description": "Automated credit checking for high-value orders",
+      "steps": [
+        "Detect order value > £10,000",
+        "Query Companies House for company data",
+        "Perform Experian credit check via MCP-FINANCE",
+        "Calculate credit limit",
+        "Store credit check result (valid 90 days)",
+        "Approve or escalate based on credit score"
+      ]
+    }
+  ],
+  "business_rules": [
+    {
+      "rule": "Minimum margin 15%",
+      "condition": "margin >= 0.15",
+      "action": "Allow quote generation",
+      "escalation": "Warn if margin < 18%"
+    },
+    {
+      "rule": "Credit check for orders > £10,000",
+      "condition": "order_value > 10000",
+      "action": "Perform credit check via Experian",
+      "validity": "90 days"
+    },
+    {
+      "rule": "Tier-based approval limits",
+      "tiers": [
+        {
+          "tier": "T1 (Director)",
+          "limit": 1000000
+        },
+        {
+          "tier": "T2 (Senior Manager)",
+          "limit": 100000
+        },
+        {
+          "tier": "T3 (Manager)",
+          "limit": 25000
+        },
+        {
+          "tier": "T4 (Supervisor)",
+          "limit": 10000
+        },
+        {
+          "tier": "T5 (Staff)",
+          "limit": 1000
+        }
+      ],
+      "condition": "order_value > tier_limit",
+      "action": "Escalate to higher tier for approval"
+    },
+    {
+      "rule": "Document stage progression",
+      "stages": "ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID",
+      "action": "Track document through lifecycle"
+    },
+    {
+      "rule": "Customer tier classification",
+      "tiers": [
+        {
+          "name": "Platinum",
+          "color": "Purple",
+          "benefits": "Highest priority, best rates"
+        },
+        {
+          "name": "Sapphire",
+          "color": "Blue",
+          "benefits": "High priority, good rates"
+        },
+        {
+          "name": "Steel",
+          "color": "Gray",
+          "benefits": "Standard priority"
+        },
+        {
+          "name": "Green",
+          "color": "Green",
+          "benefits": "New customer"
+        },
+        {
+          "name": "Crimson",
+          "color": "Red",
+          "benefits": "Requires attention"
+        }
+      ]
+    }
+  ],
+  "integrations": [
+    {
+      "system": "NEXUS",
+      "purpose": "Orchestration and event coordination",
+      "type": "hub",
+      "integration_type": "webhooks + messages"
+    },
+    {
+      "system": "Xero",
+      "purpose": "Accounting, invoicing, financial data",
+      "type": "external-api",
+      "integration_type": "REST API"
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage and management",
+      "type": "external-api",
+      "integration_type": "Graph API"
+    },
+    {
+      "system": "Companies House",
+      "purpose": "Company data lookup and verification",
+      "type": "external-api",
+      "integration_type": "REST API"
+    },
+    {
+      "system": "Experian",
+      "purpose": "Credit checking and risk assessment",
+      "type": "external-api",
+      "integration_type": "API via MCP-FINANCE"
+    },
+    {
+      "system": "MCP-SALES",
+      "purpose": "Sales tools and CRM integration",
+      "type": "mcp-server",
+      "integration_type": "MCP protocol"
+    },
+    {
+      "system": "MCP-FINANCE",
+      "purpose": "Finance tools and credit checking",
+      "type": "mcp-server",
+      "integration_type": "MCP protocol"
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "purpose": "Operations and production tools",
+      "type": "mcp-server",
+      "integration_type": "MCP protocol"
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "purpose": "Email and SMS communication",
+      "type": "mcp-server",
+      "integration_type": "MCP protocol"
+    },
+    {
+      "system": "MCP-DATA",
+      "purpose": "Data analysis and reporting",
+      "type": "mcp-server",
+      "integration_type": "MCP protocol"
+    }
+  ],
+  "webhook_events": [
+    "enquiry.created",
+    "quote.requested",
+    "order.approved",
+    "customer.registered",
+    "credit.check_required",
+    "invoice.due",
+    "payment.received"
+  ],
+  "supported_messages": [
+    "query.customer_data",
+    "query.quote_status",
+    "query.order_status",
+    "action.create_quote",
+    "action.approve_order",
+    "action.send_invoice",
+    "action.check_credit",
+    "query.production_schedule"
+  ],
+  "technical_stack": {
+    "framework": "Next.js 14 (App Router)",
+    "language": "TypeScript",
+    "ui": "React + Tailwind CSS + shadcn/ui",
+    "charts": "Chart.js + Recharts",
+    "database": "PostgreSQL via Prisma",
+    "authentication": "NextAuth.js",
+    "deployment": "Abacus.AI Platform"
+  }
+}

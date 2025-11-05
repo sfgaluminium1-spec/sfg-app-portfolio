@@ -1,0 +1,41 @@
+{
+  "app_name": "SFG-CommunicationsHub",
+  "display_name": "SFG Communications Hub",
+  "version": "1.0.0",
+  "platform": "Next.js 14.2.28 + PostgreSQL + Prisma",
+  "category": "sfg-aluminium-app",
+  "subcategory": "communications",
+  "status": "production",
+  "deployed_url": "https://sfgcomms-hub.abacusai.app",
+  "webhook_url": "https://sfgcomms-hub.abacusai.app/api/webhooks/nexus",
+  "message_handler_url": "https://sfgcomms-hub.abacusai.app/api/messages/handle",
+  "webhook_secret": "sfg-comms-hub-webhook-secret-2025",
+  "webhook_events": [
+    "communication.email_received",
+    "communication.email_sent",
+    "communication.whatsapp_received",
+    "communication.urgent_message",
+    "communication.account_added",
+    "communication.account_configured",
+    "customer.message_received",
+    "customer.enquiry_created",
+    "team.notification_required"
+  ],
+  "supported_messages": [
+    "query.email_account_status",
+    "query.communication_stats",
+    "query.team_availability",
+    "action.send_email",
+    "action.send_whatsapp",
+    "action.notify_team",
+    "action.create_communication_record"
+  ],
+  "authentication": "NextAuth.js with email/password",
+  "database": "PostgreSQL with Prisma ORM",
+  "admin_users": [
+    "warren@SFG-innovations.com",
+    "yanika@sfgaluminium.co.uk"
+  ],
+  "registration_date": "2025-11-05T05:10:06.817225",
+  "registered_by": "DeepAgent - Comet"
+}
