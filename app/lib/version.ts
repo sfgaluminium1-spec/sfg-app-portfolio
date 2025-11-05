@@ -1,8 +1,8 @@
 
 export const VERSION_INFO = {
-  version: '1.8.0',
+  version: '1.8.1',
   buildDate: '2025-11-05',
-  status: 'Fully Registered in SFG App Portfolio with Webhook & Message Handlers',
+  status: 'Complete SFG Aluminium App Registration - Issue #43',
   scope: '180+ Page Website with Microfrontends Host',
   features: [
     'NEXUS Orchestration Integration Complete',

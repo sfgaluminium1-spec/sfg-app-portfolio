@@ -1,11 +1,59 @@
 
 # SFG Aluminium Ltd Website Version Log
 
-## Current Version: 1.8.0
+## Current Version: 1.8.1
 **Release Date:** November 5, 2025  
-**Status:** Fully Registered in SFG App Portfolio with Webhook & Message Handlers  
+**Status:** Complete SFG Aluminium App Registration - Issue #43 Created  
 
 ### Version History
+
+#### v1.8.1 (November 5, 2025) - COMPLETE REGISTRATION IMPLEMENTATION
+- **🎉 COMPLETE SFG ALUMINIUM APP REGISTRATION IMPLEMENTED**
+- **GITHUB ISSUE CREATED:** #43 - https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/43
+- **REGISTRATION STATUS:** Successfully registered with all required components
+- **UPDATED FILES:**
+  - `business-logic.json` - Enhanced with all SFG-specific business rules
+  - `registration-metadata.json` - Complete metadata with webhook/message handler URLs
+  - `README.md` - Comprehensive app documentation with all workflows and integrations
+- **SFG BUSINESS RULES INTEGRATED:**
+  - Minimum margin requirement (15% minimum, 25% target)
+  - Credit check threshold (orders > £10,000 require Experian check)
+  - Credit check validity (90 days)
+  - Tier-based approval limits (T1:£1M, T2:£100K, T3:£25K, T4:£10K, T5:£1K)
+  - Document stage workflow (ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID)
+  - Customer tier assignment (Platinum, Sapphire, Steel, Green, Crimson)
+  - Margin warning threshold (18%)
+- **INTEGRATION POINTS EXPANDED:**
+  - NEXUS (orchestration hub) - Required
+  - MCP-SALES (CRM integration) - Required
+  - MCP-FINANCE (Experian, Xero) - Required
+  - MCP-OPERATIONS (production, installation) - Required
+  - MCP-COMMUNICATIONS (email, SMS) - Required
+  - MCP-DATA (analytics, reporting) - Required
+  - Xero (accounting) - Planned
+  - SharePoint (documents) - Planned
+  - Companies House (company data) - Planned
+  - Experian (credit checks via MCP-FINANCE) - Planned
+- **WEBHOOK ENDPOINT:** https://sfg-website-2025.abacusai.app/api/webhooks/nexus
+  - Signature verification: HMAC SHA-256
+  - Events: enquiry.created, quote.requested, order.approved, customer.registered, credit.check_required, invoice.due, payment.received
+  - Health check: GET endpoint returns service status
+- **MESSAGE HANDLER:** https://sfg-website-2025.abacusai.app/api/messages/handle
+  - Authentication: API key (X-API-Key header)
+  - Messages: query.enquiry_status, query.customer_enquiries, action.update_enquiry_status, action.send_quote_email, action.create_follow_up_task
+  - Health check: GET endpoint returns supported message types
+- **REGISTRATION SCRIPT:**
+  - `register-app.js` - Corrected GitHub App authentication
+  - Uses @octokit/auth-app for proper token generation
+  - Successfully created issue #43 with comprehensive details
+  - Local backup: `registration-backup.json`
+- **NEXT STEPS:**
+  - NEXUS will review registration within 24 hours
+  - NEXUS will test webhook endpoint with test event
+  - NEXUS will test message handler with test message
+  - Upon approval, issue receives `approved` label and `pending-approval` removed
+  - Real-time orchestration begins
+- **STATUS:** ✅ Complete Registration - Awaiting NEXUS Review & Testing
 
 #### v1.8.0 (November 5, 2025)
 - **NEXUS ORCHESTRATION INTEGRATION COMPLETE** - Real-time communication infrastructure

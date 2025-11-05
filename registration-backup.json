@@ -1,8 +1,10 @@
 {
-  "issue_number": 40,
-  "issue_url": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/40",
-  "created_at": "2025-11-05 14:59:57+00:00",
-  "business_logic": {
+  "issueNumber": 43,
+  "issueUrl": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio/issues/43",
+  "registrationDate": "2025-11-05T16:16:28.558Z",
+  "appName": "SFG-Website",
+  "version": "1.7.0",
+  "businessLogic": {
     "appName": "SFG-Website",
     "description": "SFG Aluminium Ltd corporate website - lead generation, customer self-service, and brand presence",
     "version": "1.7.0",
@@ -124,7 +126,7 @@
       },
       {
         "rule": "High-value enquiry flagging",
-        "condition": "estimated_value > \u00a350,000",
+        "condition": "estimated_value > £50,000",
         "action": "Flag for director review"
       },
       {
@@ -136,6 +138,41 @@
         "rule": "GDPR compliance",
         "condition": "personal_data_collected",
         "action": "Record consent, enable data deletion"
+      },
+      {
+        "rule": "Minimum margin requirement",
+        "condition": "margin >= 0.15",
+        "action": "Allow quote (15% minimum, 25% target)"
+      },
+      {
+        "rule": "Credit check threshold",
+        "condition": "order_value > 10000",
+        "action": "Require credit check via Experian (MCP-FINANCE)"
+      },
+      {
+        "rule": "Credit check validity",
+        "condition": "credit_check_age < 90_days",
+        "action": "Use existing check, otherwise request new one"
+      },
+      {
+        "rule": "Tier-based approval limits",
+        "condition": "value > tier_limit",
+        "action": "T1:£1M, T2:£100K, T3:£25K, T4:£10K, T5:£1K - escalate to higher tier"
+      },
+      {
+        "rule": "Document stage workflow",
+        "condition": "document_created",
+        "action": "Follow ENQ → QUO → SENT → ACC → ORD → FAB → INS → INV → PAID"
+      },
+      {
+        "rule": "Customer tier assignment",
+        "condition": "customer_registered",
+        "action": "Assign tier: Platinum(Purple), Sapphire(Blue), Steel(Gray), Green(Green), Crimson(Red)"
+      },
+      {
+        "rule": "Margin warning threshold",
+        "condition": "margin < 0.18",
+        "action": "Warn sales team - below 18% warning threshold"
       }
     ],
     "integrations": [
@@ -145,14 +182,16 @@
         "methods": [
           "webhook",
           "api"
-        ]
+        ],
+        "status": "required"
       },
       {
         "system": "Database (PostgreSQL)",
         "purpose": "Store enquiries, quotes, and customer data",
         "methods": [
           "prisma_orm"
-        ]
+        ],
+        "status": "active"
       },
       {
         "system": "Email Service",
@@ -160,35 +199,96 @@
         "methods": [
           "smtp",
           "api"
-        ]
+        ],
+        "status": "active"
       },
       {
         "system": "Analytics (GA4)",
         "purpose": "Track conversions and user behavior",
         "methods": [
           "gtag"
-        ]
+        ],
+        "status": "planned"
       },
       {
         "system": "MCP-SALES",
-        "purpose": "Access sales tools and CRM",
+        "purpose": "Access sales tools and CRM integration",
         "methods": [
           "api"
-        ]
+        ],
+        "status": "required"
+      },
+      {
+        "system": "MCP-FINANCE",
+        "purpose": "Credit checking via Experian, Xero accounting integration",
+        "methods": [
+          "api"
+        ],
+        "status": "required"
+      },
+      {
+        "system": "MCP-OPERATIONS",
+        "purpose": "Production scheduling, installation tracking",
+        "methods": [
+          "api"
+        ],
+        "status": "required"
       },
       {
         "system": "MCP-COMMUNICATIONS",
         "purpose": "Send emails and SMS notifications",
         "methods": [
           "api"
-        ]
+        ],
+        "status": "required"
+      },
+      {
+        "system": "MCP-DATA",
+        "purpose": "Data analytics and reporting",
+        "methods": [
+          "api"
+        ],
+        "status": "required"
+      },
+      {
+        "system": "Xero",
+        "purpose": "Accounting and invoicing",
+        "methods": [
+          "api"
+        ],
+        "status": "planned"
+      },
+      {
+        "system": "SharePoint",
+        "purpose": "Document storage and collaboration",
+        "methods": [
+          "graph_api"
+        ],
+        "status": "planned"
+      },
+      {
+        "system": "Companies House",
+        "purpose": "Company data verification",
+        "methods": [
+          "api"
+        ],
+        "status": "planned"
+      },
+      {
+        "system": "Experian",
+        "purpose": "Credit checking (via MCP-FINANCE)",
+        "methods": [
+          "mcp"
+        ],
+        "status": "planned"
       },
       {
         "system": "Cloud Storage (S3)",
         "purpose": "Store uploaded documents and generated PDFs",
         "methods": [
           "aws_sdk"
-        ]
+        ],
+        "status": "active"
       }
     ],
     "webhook_events": [
