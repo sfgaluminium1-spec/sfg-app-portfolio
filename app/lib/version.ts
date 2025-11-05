@@ -1,45 +1,40 @@
+export const VERSION = '1.8.3';
+export const VERSION_DATE = 'November 5, 2025';
+export const VERSION_STATUS = 'GitHub Upload & Registration Complete';
 
 export const VERSION_INFO = {
-  version: '1.8.2',
-  buildDate: '2025-11-05',
-  status: 'Unified Data Structure & Comprehensive Inventory',
-  scope: '180+ Page Website with Microfrontends Host',
+  version: VERSION,
+  date: VERSION_DATE,
+  status: VERSION_STATUS,
+  scope: '180+ pages',
+  buildTime: new Date().toISOString(),
+  buildDate: VERSION_DATE,
   features: [
-    'NEXUS Orchestration Integration Complete',
-    'Webhook Endpoint for Real-Time Events',
-    'Message Handler for Inter-App Communication',
-    'Health Check & Monitoring Endpoints',
-    'GitHub Issue #40 - App Registration Complete',
-    'Google Analytics 4 (GA4) Integrated',
-    'Autonomous App Registration Complete',
-    'Registered in SFG App Portfolio',
-    'Satellite App Registration System',
+    'Satellite Registration System',
     'GitHub Autonomous Integration',
-    'Business Logic Extraction Framework',
-    'Real-Time Orchestration Ready',
-    'Webhook & Message Handler System',
-    'Comprehensive Chat History Documented',
-    'Complete Project Evolution Timeline',
-    'Advanced Video Hero Background',
-    'Warren Executive Theme Integration',
-    'Scroll-Triggered Animations',
-    'PPM (Pre-Planned Maintenance) Services',
-    'Interactive Micro-Animations',
-    'Accessibility Compliant Video',
-    'Microsoft 365 SharePoint Integration',
-    'Progressive Enhancement',
-    'UK Building Regulations Compliance',
-    'GDPR Compliant',
-    'SEO Optimized'
-  ]
-} as const;
+    'Webhook Handlers',
+    'Message Handlers',
+    'Data Infrastructure',
+    'Business Logic Documentation',
+    'MCP Server Integration',
+    'NEXUS Orchestration',
+    'Lead Generation Forms',
+    'Quote Request System',
+    'Service Inquiry Management',
+    'Customer Self-Service Portal',
+    'Real-time Notifications',
+    'Document Generation',
+    'Analytics Integration',
+    'GDPR Compliance',
+    'Multi-tier Approval System',
+    'Credit Check Integration',
+    'Customer Tier Management',
+    'Cloud Storage (S3)',
+  ],
+};
 
 export function getVersionDisplay(): string {
-  return `v${VERSION_INFO.version} - ${VERSION_INFO.status}`;
+  return `v${VERSION} - ${VERSION_STATUS}`;
 }
 
-export function updateVersion(): void {
-  console.log(`🔄 SFG Aluminium Ltd Website ${getVersionDisplay()}`);
-  console.log(`📅 Build Date: ${VERSION_INFO.buildDate}`);
-  console.log(`🎯 Scope: ${VERSION_INFO.scope}`);
-}
+export default VERSION_INFO;
