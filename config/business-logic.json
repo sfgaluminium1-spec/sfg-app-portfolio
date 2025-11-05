@@ -2,7 +2,7 @@
 {
   "appName": "SFG-Website",
   "description": "SFG Aluminium Ltd corporate website - lead generation, customer self-service, and brand presence",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "platform": "Next.js 14 (App Router)",
   "category": "sfg-aluminium-app",
   "status": "production",

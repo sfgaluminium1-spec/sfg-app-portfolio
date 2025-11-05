@@ -1,0 +1,47 @@
+
+{
+  "id": "ENQ-20251105-001",
+  "type": "contact_enquiry",
+  "customer": {
+    "name": "John Smith",
+    "email": "john.smith@example.com",
+    "phone": "+44 20 1234 5678",
+    "company": "Example Ltd"
+  },
+  "enquiry": {
+    "type": "general",
+    "subject": "Product Inquiry",
+    "message": "I'm interested in your aluminium windows for a commercial project.",
+    "product_interest": ["windows", "doors"],
+    "project_type": "commercial",
+    "estimated_value": 50000,
+    "urgency": "medium"
+  },
+  "status": {
+    "current": "new",
+    "history": [
+      {
+        "status": "new",
+        "timestamp": "2025-11-05T10:00:00Z",
+        "by": "system"
+      }
+    ]
+  },
+  "metadata": {
+    "source": "website_contact_form",
+    "ip_address": "192.168.1.1",
+    "user_agent": "Mozilla/5.0...",
+    "referrer": "https://google.com",
+    "created_at": "2025-11-05T10:00:00Z",
+    "updated_at": "2025-11-05T10:00:00Z"
+  },
+  "gdpr": {
+    "consent_given": true,
+    "consent_timestamp": "2025-11-05T10:00:00Z",
+    "marketing_consent": false,
+    "data_retention_days": 730
+  },
+  "assigned_to": null,
+  "nexus_reference": "NEX-20251105-001",
+  "notes": []
+}

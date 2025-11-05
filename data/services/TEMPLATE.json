@@ -1,0 +1,57 @@
+
+{
+  "id": "SRV-20251105-001",
+  "type": "service_inquiry",
+  "customer": {
+    "name": "Robert Johnson",
+    "email": "robert.johnson@example.com",
+    "phone": "+44 20 5555 1234",
+    "company": null,
+    "address": {
+      "line1": "45 Oak Avenue",
+      "line2": "Apartment 3B",
+      "city": "Manchester",
+      "postcode": "M1 1AB",
+      "country": "UK"
+    }
+  },
+  "service": {
+    "type": "repair",
+    "category": "window_maintenance",
+    "urgency": "routine",
+    "description": "Window handle broken, needs replacement",
+    "preferred_date": "2025-11-15",
+    "preferred_time": "morning",
+    "site_access": "customer_present"
+  },
+  "existing_installation": {
+    "product_type": "windows",
+    "installation_date": "2020-03-15",
+    "warranty_status": "expired",
+    "original_order_ref": "ORD-2020-123"
+  },
+  "estimated_cost": 150,
+  "status": {
+    "current": "new",
+    "history": [
+      {
+        "status": "new",
+        "timestamp": "2025-11-05T12:00:00Z",
+        "by": "system"
+      }
+    ]
+  },
+  "scheduling": {
+    "scheduled_date": null,
+    "scheduled_time": null,
+    "engineer_assigned": null,
+    "estimated_duration_hours": 1
+  },
+  "metadata": {
+    "source": "website_service_form",
+    "created_at": "2025-11-05T12:00:00Z",
+    "updated_at": "2025-11-05T12:00:00Z"
+  },
+  "nexus_reference": "NEX-20251105-003",
+  "notes": []
+}
