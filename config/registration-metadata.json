@@ -1,0 +1,59 @@
+
+{
+  "appName": "SFG-Website",
+  "displayName": "SFG Aluminium Ltd Website",
+  "version": "1.7.0",
+  "registrationDate": "2025-11-05",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "platform": "Next.js 14.2.28",
+  "deployment": {
+    "url": "https://sfg-website-2025.abacusai.app",
+    "environment": "production",
+    "hosting": "Abacus.AI Platform",
+    "uptime_target": "99.9%"
+  },
+  "communication": {
+    "webhook_url": "https://sfg-website-2025.abacusai.app/api/webhooks/nexus",
+    "webhook_secret": "sfg-webhook-secret-2025",
+    "webhook_events": [
+      "enquiry.created",
+      "quote.requested",
+      "order.approved",
+      "customer.registered",
+      "credit.check_required",
+      "invoice.due",
+      "payment.received"
+    ],
+    "message_handler_url": "https://sfg-website-2025.abacusai.app/api/messages/handle",
+    "message_api_key": "sfg-nexus-api-key-2025",
+    "supported_messages": [
+      "query.enquiry_status",
+      "query.customer_enquiries",
+      "action.update_enquiry_status",
+      "action.send_quote_email",
+      "action.create_follow_up_task"
+    ]
+  },
+  "health_check": {
+    "url": "https://sfg-website-2025.abacusai.app/api/health",
+    "interval": "5m",
+    "timeout": "10s"
+  },
+  "team": {
+    "owner": "Warren",
+    "contact": "warren@sfgaluminium.co.uk",
+    "developers": ["DeepAgent"],
+    "support": "dev-team@sfgaluminium.co.uk"
+  },
+  "repository": {
+    "url": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio",
+    "branch": "main",
+    "app_directory": "apps/SFG-Website"
+  },
+  "documentation": {
+    "readme": "README.md",
+    "business_logic": "business-logic.json",
+    "api_docs": "https://sfg-website-2025.abacusai.app/api-docs"
+  }
+}
