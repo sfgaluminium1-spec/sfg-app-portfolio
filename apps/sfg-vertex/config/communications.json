@@ -3,91 +3,91 @@
     {
       "name": "Enquiry Acknowledgement",
       "subject": "Thank you for your enquiry - SFG Aluminium",
-      "description": "Sent automatically when new enquiry is received"
+      "description": "Automatically sent when a new enquiry is received to acknowledge receipt"
     },
     {
       "name": "Quotation Ready",
-      "subject": "Your quotation is ready - REF: {quotation_id}",
-      "description": "Sent when quotation is approved and ready to send to customer"
+      "subject": "Your Quotation is Ready - {project_name}",
+      "description": "Sent when quotation is approved and ready to be delivered to customer"
     },
     {
       "name": "Project Kickoff",
-      "subject": "Project kickoff - {project_name}",
-      "description": "Sent to project team when new project is created"
+      "subject": "Project {project_id} - Kickoff Notification",
+      "description": "Sent to project team members when a new project is created"
     },
     {
       "name": "Milestone Completed",
-      "subject": "Project milestone completed - {milestone_name}",
-      "description": "Sent to stakeholders when project milestone is reached"
+      "subject": "Project Update - {milestone_name} Completed",
+      "description": "Sent to stakeholders when a project milestone is completed"
     },
     {
       "name": "Drawing Ready for Review",
-      "subject": "Technical drawing ready for review - {drawing_id}",
-      "description": "Sent to engineering team when CAD drawing is generated"
+      "subject": "Technical Drawing Ready - {drawing_id}",
+      "description": "Sent to engineering team when a new drawing is generated"
     },
     {
       "name": "Quotation Follow-up",
-      "subject": "Follow-up: Your quotation - REF: {quotation_id}",
-      "description": "Automated follow-up sent 7 days after quotation is sent"
+      "subject": "Following up on your quotation - SFG Aluminium",
+      "description": "Automatically sent 7 days after quotation delivery if no response"
     }
   ],
   "internal_notifications": [
     {
       "type": "slack",
       "channel": "#sales",
-      "trigger": "New enquiry received or quotation generated"
+      "trigger": "New enquiry created, quotation generated, quotation approved"
     },
     {
       "type": "slack",
       "channel": "#engineering",
-      "trigger": "New drawing request or technical specification uploaded"
+      "trigger": "New drawing generated, specification uploaded, technical issue"
     },
     {
       "type": "slack",
       "channel": "#operations",
-      "trigger": "Project milestone update or fabrication status change"
+      "trigger": "Project milestone completed, fabrication started, installation scheduled"
     },
     {
       "type": "email",
       "channel": "management@sfgaluminium.com",
-      "trigger": "Quotation approval request or critical project alert"
+      "trigger": "Quotation requires approval, critical alert, budget threshold exceeded"
     },
     {
       "type": "dashboard",
-      "channel": "Real-time Dashboard",
-      "trigger": "Live updates for all metrics and KPIs"
+      "channel": "real-time-metrics",
+      "trigger": "All events update dashboard widgets and metrics in real-time"
     }
   ],
   "dashboard_widgets": [
     {
       "name": "Active Enquiries",
       "type": "metric",
-      "description": "Total number of active enquiries in the system"
+      "description": "Count of enquiries currently being processed"
     },
     {
       "name": "Pending Quotations",
       "type": "metric",
-      "description": "Quotations awaiting approval or customer response"
+      "description": "Number of quotations awaiting approval or customer response"
     },
     {
       "name": "Active Projects",
       "type": "metric",
-      "description": "Currently active projects with progress tracking"
+      "description": "Number of projects currently in progress"
     },
     {
       "name": "Monthly Revenue",
       "type": "chart",
-      "description": "Revenue trends over time with forecasting"
+      "description": "Revenue trend chart showing monthly performance"
     },
     {
       "name": "Project Timeline",
       "type": "chart",
-      "description": "Gantt chart showing all project timelines"
+      "description": "Gantt chart showing all active project timelines"
     },
     {
       "name": "Conversion Rate",
       "type": "metric",
-      "description": "Enquiry to quotation to project conversion rates"
+      "description": "Percentage of enquiries converted to projects"
     },
     {
       "name": "Recent Activity",
@@ -97,54 +97,54 @@
     {
       "name": "Critical Alerts",
       "type": "alert",
-      "description": "Time-sensitive alerts requiring immediate action"
+      "description": "High-priority notifications requiring immediate action"
     },
     {
       "name": "Workflow Status",
       "type": "table",
-      "description": "Status of all automated workflows and processing jobs"
+      "description": "Status of autonomous workflows and document processing"
     },
     {
       "name": "Document Processing Queue",
       "type": "metric",
-      "description": "Number of documents in processing queue"
+      "description": "Number of documents awaiting OCR and AI processing"
     }
   ],
   "message_handlers": [
     {
       "event": "enquiry.created",
       "handler": "handle_enquiry_created",
-      "description": "New enquiry created in SFG Vertex system"
+      "description": "New enquiry has been created and logged in the system"
     },
     {
       "event": "quotation.generated",
       "handler": "handle_quotation_generated",
-      "description": "New quotation generated and ready for review"
+      "description": "Quotation has been generated and is ready for internal review"
     },
     {
       "event": "quotation.approved",
       "handler": "handle_quotation_approved",
-      "description": "Quotation approved by management and sent to customer"
+      "description": "Quotation has been approved and sent to customer"
     },
     {
       "event": "project.created",
       "handler": "handle_project_created",
-      "description": "New project created from approved quotation"
+      "description": "New project has been created from approved quotation"
     },
     {
       "event": "drawing.generated",
       "handler": "handle_drawing_generated",
-      "description": "CAD drawing generated and ready for review"
+      "description": "Technical drawing has been generated and is ready for review"
     },
     {
       "event": "workflow.automation_complete",
       "handler": "handle_workflow_automation_complete",
-      "description": "Automated workflow completed successfully"
+      "description": "Autonomous workflow has completed processing"
     },
     {
       "event": "alert.critical",
       "handler": "handle_alert_critical",
-      "description": "Critical alert requiring immediate attention"
+      "description": "Critical system alert requiring immediate attention"
     }
   ]
 }
