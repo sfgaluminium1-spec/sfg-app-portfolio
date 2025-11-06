@@ -1,0 +1,62 @@
+{
+  "appName": "SFG-Mail-Matrix",
+  "version": "1.0.0",
+  "category": "sfg-aluminium-app",
+  "description": "Enterprise Communication Platform with AI-Powered Email Management for Aluminum Manufacturing. Integrates Microsoft 365, Abacus.ai, and Warren Executive Theme for complete email orchestration, automation, and analytics.",
+  "capabilities": [
+    "AI-powered email classification and routing",
+    "Automated response generation using Abacus.ai",
+    "Microsoft 365 Single Sign-On with Multi-Factor Authentication",
+    "Real-time email monitoring and dashboard analytics",
+    "Quote request tracking and management",
+    "Team collaboration and communication hub",
+    "GDPR-compliant audit trails and compliance reporting",
+    "Web3 integration for decentralized identity management",
+    "Predictive analytics for email trends and patterns",
+    "Automated 90-day API key rotation for security"
+  ],
+  "workflows": [
+    {
+      "name": "Email Classification and Routing",
+      "description": "Automatically classify incoming emails and route to appropriate teams",
+      "steps": [
+        "Receive email via Microsoft 365 webhook",
+        "Classify email using Abacus.ai ML model",
+        "Extract key entities (customer, quote request, etc.)",
+        "Route to appropriate department queue",
+        "Notify assigned team members"
+      ]
+    },
+    {
+      "name": "Quote Request Processing",
+      "description": "Process quote requests from emails and generate responses",
+      "steps": [
+        "Detect quote request in email",
+        "Extract specifications and requirements",
+        "Create quote request in system",
+        "Generate AI-assisted response draft",
+        "Route to sales team for approval",
+        "Send quote to customer"
+      ]
+    },
+    {
+      "name": "Compliance Monitoring",
+      "description": "Monitor and ensure GDPR and SOX compliance",
+      "steps": [
+        "Log all email access and actions",
+        "Track data retention policies",
+        "Generate compliance reports",
+        "Alert on policy violations",
+        "Archive emails per retention schedule"
+      ]
+    }
+  ],
+  "integrations": [
+    "NEXUS",
+    "MCP-SALES",
+    "MCP-FINANCE",
+    "MCP-OPERATIONS",
+    "MCP-COMMUNICATIONS"
+  ],
+  "extracted_at": "2025-11-06T20:55:06.937883Z"
+}
