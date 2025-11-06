@@ -1,0 +1,75 @@
+{
+  "email_templates": [
+    {
+      "name": "Welcome Email",
+      "subject": "Welcome to SFG Chrome Extension",
+      "description": "Sent to new users after successful signup"
+    },
+    {
+      "name": "Integration Request Confirmation",
+      "subject": "Your SFG App Integration Request Received",
+      "description": "Sent to developers after submitting integration request"
+    },
+    {
+      "name": "Contact Form Acknowledgment",
+      "subject": "We've Received Your Inquiry",
+      "description": "Sent to visitors after submitting contact form"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#marketing-leads",
+      "trigger": "New contact form submission"
+    },
+    {
+      "type": "slack",
+      "channel": "#app-ecosystem",
+      "trigger": "New app integration request"
+    },
+    {
+      "type": "email",
+      "channel": "admin@sfg-innovations.com",
+      "trigger": "New user signup (daily digest)"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "User Signups",
+      "type": "metric",
+      "description": "Total new user registrations (daily/weekly/monthly)"
+    },
+    {
+      "name": "Conversion Rate",
+      "type": "chart",
+      "description": "Visitor-to-signup conversion rate over time"
+    },
+    {
+      "name": "Integration Requests",
+      "type": "table",
+      "description": "List of pending app integration requests"
+    },
+    {
+      "name": "Contact Form Leads",
+      "type": "table",
+      "description": "Recent contact form submissions requiring follow-up"
+    }
+  ],
+  "message_handlers": [
+    {
+      "event": "user.signup.completed",
+      "handler": "handle_user_signup_completed",
+      "description": "Triggered when a new user successfully signs up"
+    },
+    {
+      "event": "integration.request.submitted",
+      "handler": "handle_integration_request_submitted",
+      "description": "Triggered when a developer submits an app integration request"
+    },
+    {
+      "event": "contact.form.submitted",
+      "handler": "handle_contact_form_submitted",
+      "description": "Triggered when a visitor submits the contact form"
+    }
+  ]
+}
