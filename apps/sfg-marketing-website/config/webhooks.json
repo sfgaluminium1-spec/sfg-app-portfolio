@@ -1,0 +1,65 @@
+{
+  "incoming_webhooks": [
+    {
+      "event": "nexus.app.registered",
+      "description": "Notification when a new app is registered in the SFG ecosystem",
+      "payload_example": {
+        "app_id": "app-123",
+        "app_name": "New SFG App",
+        "category": "productivity",
+        "status": "pending_approval"
+      }
+    },
+    {
+      "event": "analytics.report.generated",
+      "description": "Periodic analytics reports from NEXUS",
+      "payload_example": {
+        "period": "weekly",
+        "metrics": {
+          "visitors": 1500,
+          "signups": 45,
+          "conversions": 12
+        }
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "user.signup.completed",
+      "description": "Triggered when a new user successfully signs up",
+      "payload_example": {
+        "user_id": "user-123",
+        "email": "user@example.com",
+        "signup_date": "2025-11-06T00:00:00Z",
+        "source": "marketing_website"
+      }
+    },
+    {
+      "event": "integration.request.submitted",
+      "description": "Triggered when a developer submits an app integration request",
+      "payload_example": {
+        "request_id": "req-456",
+        "developer_email": "dev@company.com",
+        "app_name": "Proposed App",
+        "app_description": "Description of the proposed integration",
+        "submitted_at": "2025-11-06T00:00:00Z"
+      }
+    },
+    {
+      "event": "contact.form.submitted",
+      "description": "Triggered when a visitor submits the contact form",
+      "payload_example": {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "message": "Interested in enterprise features",
+        "submitted_at": "2025-11-06T00:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-chrome.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification",
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff": "exponential"
+  }
+}
