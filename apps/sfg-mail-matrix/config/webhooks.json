@@ -1,0 +1,92 @@
+{
+  "incoming_webhooks": [
+    {
+      "event": "nexus.task.assigned",
+      "description": "Receive task assignments from NEXUS orchestration",
+      "payload_example": {
+        "task_id": "task_12345",
+        "email_id": "email_67890",
+        "assigned_to": "warren@sfg-aluminium.co.uk",
+        "priority": "high",
+        "due_date": "2025-11-10"
+      }
+    },
+    {
+      "event": "mcp.sales.quote_requested",
+      "description": "Receive quote request notification from MCP-SALES",
+      "payload_example": {
+        "quote_id": "Q2025-001",
+        "customer_email": "customer@example.com",
+        "specifications": {
+          "material": "6063-T6",
+          "quantity": 1000
+        },
+        "requested_by": "sales_team"
+      }
+    },
+    {
+      "event": "mcp.operations.order_confirmed",
+      "description": "Receive order confirmation from MCP-OPERATIONS",
+      "payload_example": {
+        "order_id": "ORD-2025-123",
+        "customer_email": "customer@example.com",
+        "confirmation_required": true
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "email.classified",
+      "description": "Send classified email data to NEXUS for orchestration",
+      "payload_example": {
+        "email_id": "email_67890",
+        "classification": "quote_request",
+        "priority": "high",
+        "customer_email": "customer@example.com",
+        "extracted_data": {
+          "product": "aluminum_profile",
+          "quantity": 1000
+        },
+        "suggested_assignee": "sales_team"
+      }
+    },
+    {
+      "event": "quote.generated",
+      "description": "Notify NEXUS when quote is generated and ready",
+      "payload_example": {
+        "quote_id": "Q2025-001",
+        "email_id": "email_67890",
+        "customer_email": "customer@example.com",
+        "total_amount": 50000.0,
+        "status": "pending_approval"
+      }
+    },
+    {
+      "event": "compliance.alert",
+      "description": "Send compliance alerts to NEXUS for action",
+      "payload_example": {
+        "alert_id": "alert_12345",
+        "type": "gdpr_violation",
+        "severity": "high",
+        "description": "Unauthorized email access detected",
+        "affected_emails": [
+          "email_111",
+          "email_222"
+        ]
+      }
+    },
+    {
+      "event": "analytics.report_ready",
+      "description": "Notify NEXUS when analytics report is generated",
+      "payload_example": {
+        "report_id": "RPT-2025-11",
+        "report_type": "monthly_email_analytics",
+        "period": "2025-11",
+        "insights_count": 15,
+        "download_url": "https://sfg-mail-matrix.abacusai.app/reports/RPT-2025-11"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-mail-matrix.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification"
+}
