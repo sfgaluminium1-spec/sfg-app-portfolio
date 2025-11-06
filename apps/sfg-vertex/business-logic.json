@@ -2,75 +2,75 @@
   "appName": "SFG Vertex",
   "version": "1.0.0",
   "category": "sfg-aluminium-app",
-  "description": "Comprehensive project management platform for SFG Aluminium integrating enquiry tracking, quotation generation, professional CAD drawing, autonomous workflow automation, and real-time business intelligence dashboard for curtain wall, window, and door systems.",
+  "description": "Comprehensive project management system for SFG Aluminium, integrating enquiry management, quotation generation, professional CAD drawing tools, autonomous workflow automation, and real-time business intelligence.",
   "capabilities": [
-    "Enquiry Management - Track customer enquiries with full lifecycle management",
-    "Quotation Generation - Create, manage and track quotations with multi-stage approval workflows",
-    "Professional CAD Drawing - AutoCAD-style interface with full drawing tools, layers, and DWG export",
-    "Autonomous Workflow Engine - AI-powered automation for document processing, OCR, and workflow orchestration",
-    "Project Tracking - Real-time project status tracking with Gantt charts and milestone management",
-    "Business Intelligence Dashboard - Live metrics, KPIs, and analytics with interactive visualizations",
-    "Document Management - Centralized repository for specifications, drawings, and cutting lists",
-    "Terminology Dictionary - Industry-specific terminology and standardization system",
-    "AutoCAD Integration - Direct integration with AutoCAD and NanoCAD via COM interface",
-    "Logikal Integration - Bridge to Logikal for advanced curtain wall design and calculations",
-    "Email Automation - Automated email notifications for enquiries, quotations, and project updates",
-    "Multi-user Authentication - Role-based access control with NextAuth integration"
+    "Enquiry Management - Full lifecycle customer enquiry tracking and processing",
+    "Quotation Generation - Multi-stage approval workflow with automated calculations",
+    "Professional CAD Drawing - AutoCAD-style interface with DWG export capabilities",
+    "Autonomous Workflow Engine - AI-powered document processing and automation",
+    "Project Tracking - Real-time status monitoring with Gantt chart visualization",
+    "Business Intelligence Dashboard - Live metrics, KPIs, and performance analytics",
+    "Document Management - Centralized specification and drawing repository",
+    "Terminology Dictionary - Industry-specific standardization and reference",
+    "AutoCAD Integration - Direct COM interface for automated drawing generation",
+    "Logikal Integration - Curtain wall design system integration bridge",
+    "Email Automation - Automated notification and communication workflows",
+    "Multi-user Authentication - Role-based access control with NextAuth.js"
   ],
   "workflows": [
     {
       "name": "Enquiry to Quotation Workflow",
-      "description": "Complete lifecycle from customer enquiry to approved quotation",
+      "description": "End-to-end process from customer enquiry to approved quotation",
       "steps": [
-        "Receive customer enquiry via form or email",
-        "Parse and extract key information (customer, project details, requirements)",
-        "Create enquiry record in database",
-        "Trigger notification to sales team",
-        "Generate preliminary quotation",
-        "Internal review and approval",
-        "Send quotation to customer",
-        "Track quotation status and follow-ups"
+        "Customer enquiry received (email/web form)",
+        "Enquiry logged in system with auto-generated ID",
+        "Information extraction and parsing (OCR/NLP)",
+        "Quotation generation with cost calculations",
+        "Internal approval workflow (multi-stage)",
+        "Final quotation review and editing",
+        "Customer communication and delivery",
+        "Follow-up tracking and conversion monitoring"
       ]
     },
     {
       "name": "Drawing Automation Workflow",
-      "description": "Automated generation of technical drawings from project specifications",
+      "description": "Automated technical drawing generation from specifications",
       "steps": [
-        "Upload project specification document",
-        "OCR processing to extract dimensions and requirements",
-        "Generate AutoCAD/FreeCAD parametric model",
-        "Apply SFG standards and templates",
-        "Create fabrication and installation drawings",
-        "Export to DWG format",
-        "Store in document repository",
-        "Link to project and quotation"
+        "Document upload (specifications, sketches, Logikal files)",
+        "OCR processing and data extraction",
+        "Parametric model generation in FreeCAD",
+        "SFG curtain wall standards application",
+        "AutoCAD/nanoCAD dimensioning and annotation",
+        "DWG export with proper layers and formatting",
+        "Quality validation and review",
+        "Delivery to engineering team and customer"
       ]
     },
     {
       "name": "Project Tracking Workflow",
-      "description": "End-to-end project management from order to delivery",
+      "description": "Project lifecycle management from quotation to completion",
       "steps": [
-        "Convert quotation to project on approval",
-        "Create project timeline with milestones",
-        "Assign team members and resources",
-        "Track fabrication progress",
-        "Monitor quality control checkpoints",
-        "Schedule installation",
-        "Update real-time dashboard",
-        "Generate completion report"
+        "Project creation from approved quotation",
+        "Timeline and milestone definition",
+        "Resource allocation and scheduling",
+        "Real-time status updates and tracking",
+        "Milestone completion notifications",
+        "Issue tracking and resolution",
+        "Dashboard metric updates",
+        "Project completion and handover"
       ]
     },
     {
       "name": "Autonomous Document Processing",
-      "description": "AI-powered processing of incoming documents and emails",
+      "description": "AI-powered document classification and workflow automation",
       "steps": [
-        "Receive document via email or upload",
-        "Classify document type (enquiry, spec, drawing, invoice)",
-        "Extract structured data using OCR and NLP",
-        "Create appropriate database records",
-        "Trigger relevant workflows",
-        "Send notifications to stakeholders",
-        "Archive in document management system"
+        "Document received (email attachment/upload)",
+        "AI classification (enquiry/specification/invoice/etc)",
+        "OCR and NLP extraction of structured data",
+        "Automated record creation in relevant module",
+        "Workflow triggering based on document type",
+        "Stakeholder notification",
+        "Dashboard and reporting updates"
       ]
     }
   ],
@@ -85,5 +85,5 @@
     "FreeCAD",
     "Logikal"
   ],
-  "extracted_at": "2025-11-05T22:41:42.764215Z"
+  "extracted_at": "2025-11-06T20:16:35.620547Z"
 }
