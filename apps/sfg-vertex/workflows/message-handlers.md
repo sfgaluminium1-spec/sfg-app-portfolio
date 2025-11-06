@@ -7,18 +7,21 @@
 
 #### `enquiry.received`
 
-**Description:** New customer enquiry received from email or web form
+**Description:** New customer enquiry received from external sources (email, web form, partner systems)
 
 **Payload:**
 ```json
 {
   "enquiry_id": "ENQ-2025-001",
-  "customer_name": "ABC Construction Ltd",
-  "customer_email": "contact@abcconstruction.com",
-  "project_name": "High-rise Curtain Wall Project",
-  "requirements": "200 sqm curtain wall system with thermal break",
-  "deadline": "2025-12-31",
   "source": "email",
+  "customer_name": "ABC Construction",
+  "contact_email": "contact@abcconstruction.com",
+  "project_description": "Curtain wall for office building",
+  "urgency": "high",
+  "attachments": [
+    "specification.pdf",
+    "sketch.jpg"
+  ],
   "timestamp": "2025-11-05T10:30:00Z"
 }
 ```
@@ -29,18 +32,17 @@
 
 #### `quotation.approval_requested`
 
-**Description:** Request for quotation approval from management
+**Description:** Quotation requires approval from management before sending to customer
 
 **Payload:**
 ```json
 {
-  "quotation_id": "QUO-2025-045",
+  "quotation_id": "QUOT-2025-045",
   "enquiry_id": "ENQ-2025-001",
-  "amount": 150000.0,
-  "currency": "GBP",
-  "prepared_by": "sales@sfgaluminium.com",
-  "approval_level": "manager",
-  "timestamp": "2025-11-05T14:00:00Z"
+  "total_amount": 150000.0,
+  "approver": "warren@sfgaluminium.com",
+  "submitted_by": "sales@sfgaluminium.com",
+  "deadline": "2025-11-07T17:00:00Z"
 }
 ```
 
@@ -50,17 +52,16 @@
 
 #### `project.milestone_update`
 
-**Description:** Update project milestone status from external systems
+**Description:** Project milestone status update from external systems (ERP, manufacturing)
 
 **Payload:**
 ```json
 {
-  "project_id": "PRJ-2025-012",
-  "milestone": "fabrication_complete",
+  "project_id": "PROJ-2025-023",
+  "milestone": "Fabrication Complete",
   "status": "completed",
-  "completion_date": "2025-11-05",
-  "notes": "All panels fabricated and QC passed",
-  "timestamp": "2025-11-05T16:00:00Z"
+  "completion_date": "2025-11-05T14:30:00Z",
+  "next_milestone": "Installation"
 }
 ```
 
@@ -70,17 +71,17 @@
 
 #### `document.uploaded`
 
-**Description:** New document uploaded for processing
+**Description:** New document uploaded for processing (specifications, drawings, certifications)
 
 **Payload:**
 ```json
 {
-  "document_id": "DOC-2025-234",
-  "document_type": "specification",
-  "file_url": "https://storage.sfg.com/specs/spec-001.pdf",
-  "uploaded_by": "user@sfgaluminium.com",
-  "project_id": "PRJ-2025-012",
-  "timestamp": "2025-11-05T11:00:00Z"
+  "document_id": "DOC-2025-178",
+  "type": "specification",
+  "filename": "curtain_wall_spec_v2.pdf",
+  "uploaded_by": "engineering@sfgaluminium.com",
+  "project_id": "PROJ-2025-023",
+  "requires_ocr": true
 }
 ```
 
@@ -90,16 +91,17 @@
 
 #### `logikal.calculation_complete`
 
-**Description:** Logikal calculation results ready for import
+**Description:** Logikal curtain wall calculation results available for import
 
 **Payload:**
 ```json
 {
-  "calculation_id": "CALC-2025-089",
-  "project_id": "PRJ-2025-012",
-  "results_url": "https://logikal.sfg.com/results/calc-089.json",
-  "bill_of_materials": [],
-  "timestamp": "2025-11-05T13:30:00Z"
+  "calculation_id": "LOG-2025-089",
+  "project_id": "PROJ-2025-023",
+  "results_file": "logikal_export.xml",
+  "total_area": 450.5,
+  "total_cost": 125000.0,
+  "material_list": "attached"
 }
 ```
 
@@ -114,136 +116,138 @@
 
 #### `enquiry.created`
 
-**Description:** New enquiry created in SFG Vertex system
+**Description:** New enquiry has been created and logged in the system
 
 **Payload:**
 ```json
 {
   "enquiry_id": "ENQ-2025-001",
-  "customer_name": "ABC Construction Ltd",
-  "project_name": "High-rise Curtain Wall Project",
-  "estimated_value": 150000.0,
+  "customer_name": "ABC Construction",
+  "status": "new",
+  "assigned_to": "sales@sfgaluminium.com",
   "priority": "high",
   "created_at": "2025-11-05T10:30:00Z"
 }
 ```
 
-**Trigger:** New enquiry created in SFG Vertex system
+**Trigger:** New enquiry has been created and logged in the system
 
 ---
 
 #### `quotation.generated`
 
-**Description:** New quotation generated and ready for review
+**Description:** Quotation has been generated and is ready for internal review
 
 **Payload:**
 ```json
 {
-  "quotation_id": "QUO-2025-045",
+  "quotation_id": "QUOT-2025-045",
   "enquiry_id": "ENQ-2025-001",
   "total_amount": 150000.0,
-  "line_items": [],
-  "pdf_url": "https://vertex.sfg.com/quotations/QUO-2025-045.pdf",
-  "created_at": "2025-11-05T12:00:00Z"
+  "status": "pending_approval",
+  "generated_at": "2025-11-05T11:15:00Z"
 }
 ```
 
-**Trigger:** New quotation generated and ready for review
+**Trigger:** Quotation has been generated and is ready for internal review
 
 ---
 
 #### `quotation.approved`
 
-**Description:** Quotation approved by management and sent to customer
+**Description:** Quotation has been approved and sent to customer
 
 **Payload:**
 ```json
 {
-  "quotation_id": "QUO-2025-045",
-  "approved_by": "manager@sfgaluminium.com",
-  "approved_at": "2025-11-05T14:30:00Z",
-  "sent_to_customer": true
+  "quotation_id": "QUOT-2025-045",
+  "approved_by": "warren@sfgaluminium.com",
+  "sent_to": "contact@abcconstruction.com",
+  "valid_until": "2025-12-05",
+  "approved_at": "2025-11-05T15:30:00Z"
 }
 ```
 
-**Trigger:** Quotation approved by management and sent to customer
+**Trigger:** Quotation has been approved and sent to customer
 
 ---
 
 #### `project.created`
 
-**Description:** New project created from approved quotation
+**Description:** New project has been created from approved quotation
 
 **Payload:**
 ```json
 {
-  "project_id": "PRJ-2025-012",
-  "quotation_id": "QUO-2025-045",
-  "project_name": "High-rise Curtain Wall Project",
+  "project_id": "PROJ-2025-023",
+  "quotation_id": "QUOT-2025-045",
+  "customer_name": "ABC Construction",
   "start_date": "2025-11-10",
-  "estimated_completion": "2025-12-31",
-  "project_manager": "pm@sfgaluminium.com"
+  "expected_completion": "2025-12-20",
+  "created_at": "2025-11-05T16:00:00Z"
 }
 ```
 
-**Trigger:** New project created from approved quotation
+**Trigger:** New project has been created from approved quotation
 
 ---
 
 #### `drawing.generated`
 
-**Description:** CAD drawing generated and ready for review
+**Description:** Technical drawing has been generated and is ready for review
 
 **Payload:**
 ```json
 {
-  "drawing_id": "DRW-2025-156",
-  "project_id": "PRJ-2025-012",
+  "drawing_id": "DWG-2025-156",
+  "project_id": "PROJ-2025-023",
   "drawing_type": "fabrication",
-  "format": "DWG",
-  "file_url": "https://vertex.sfg.com/drawings/DRW-2025-156.dwg",
-  "created_at": "2025-11-05T15:00:00Z"
+  "format": "dwg",
+  "file_url": "https://sfg-vertex.abacusai.app/drawings/DWG-2025-156.dwg",
+  "generated_at": "2025-11-05T17:30:00Z"
 }
 ```
 
-**Trigger:** CAD drawing generated and ready for review
+**Trigger:** Technical drawing has been generated and is ready for review
 
 ---
 
 #### `workflow.automation_complete`
 
-**Description:** Automated workflow completed successfully
+**Description:** Autonomous workflow has completed processing
 
 **Payload:**
 ```json
 {
-  "workflow_id": "WF-2025-789",
+  "workflow_id": "WF-2025-234",
   "workflow_type": "document_processing",
   "status": "completed",
-  "processed_items": 12,
-  "completion_time": "2025-11-05T16:45:00Z"
+  "records_created": 5,
+  "notifications_sent": 3,
+  "completed_at": "2025-11-05T18:00:00Z"
 }
 ```
 
-**Trigger:** Automated workflow completed successfully
+**Trigger:** Autonomous workflow has completed processing
 
 ---
 
 #### `alert.critical`
 
-**Description:** Critical alert requiring immediate attention
+**Description:** Critical system alert requiring immediate attention
 
 **Payload:**
 ```json
 {
-  "alert_type": "project_delay",
-  "project_id": "PRJ-2025-012",
+  "alert_id": "ALERT-2025-012",
   "severity": "critical",
-  "message": "Project milestone delayed by 5 days",
-  "timestamp": "2025-11-05T17:00:00Z"
+  "message": "Quotation deadline approaching with no response",
+  "quotation_id": "QUOT-2025-042",
+  "action_required": "Follow up with customer",
+  "created_at": "2025-11-05T19:00:00Z"
 }
 ```
 
-**Trigger:** Critical alert requiring immediate attention
+**Trigger:** Critical system alert requiring immediate attention
 
 ---
