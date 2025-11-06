@@ -1,0 +1,333 @@
+{
+  "app_name": "SFG-ADM",
+  "full_name": "SFG Application Deployment Manager",
+  "version": "1.0.0",
+  "category": "sfg-aluminium-app",
+  "platform": "Next.js 14 + TypeScript",
+  "status": "production",
+  "description": "Centralized Application Deployment Manager for SFG Aluminium. Serves as the NEXUS hub for all SFG applications, providing one-press deployments, project management, team coordination, and analytics.",
+  "deployment_urls": {
+    "development": "https://3454ca85d.preview.abacusai.app/",
+    "production": "https://sfg-adm.abacusai.app/",
+    "webhook": "https://sfg-adm.abacusai.app/api/webhooks/nexus",
+    "message_handler": "https://sfg-adm.abacusai.app/api/messages/handle"
+  },
+  "repository": {
+    "platform": "GitHub",
+    "owner": "sfgaluminium1-spec",
+    "repo": "sfg-app-portfolio",
+    "app_folder": "/apps/sfg-adm"
+  },
+  "webhook_configuration": {
+    "webhook_url": "https://sfg-adm.abacusai.app/api/webhooks/nexus",
+    "webhook_secret": "sfg-adm-webhook-secret-2025",
+    "signature_method": "HMAC SHA-256",
+    "signature_header": "X-Nexus-Signature",
+    "supported_events": [
+      "enquiry.created",
+      "quote.requested",
+      "order.approved",
+      "customer.registered",
+      "credit.check_required",
+      "invoice.due",
+      "payment.received",
+      "app.registered",
+      "deployment.requested",
+      "test.event"
+    ]
+  },
+  "message_handler_configuration": {
+    "message_handler_url": "https://sfg-adm.abacusai.app/api/messages/handle",
+    "supported_messages": [
+      "query.app_status",
+      "query.deployment_status",
+      "query.app_list",
+      "query.project_status",
+      "query.team_workload",
+      "action.create_deployment",
+      "action.update_app_status",
+      "action.register_app",
+      "action.schedule_deployment",
+      "health.check"
+    ],
+    "response_format": {
+      "request_id": "string",
+      "status": "success|error",
+      "result": "object",
+      "timestamp": "ISO8601"
+    }
+  },
+  "capabilities": [
+    "Application Portfolio Management",
+    "One-Press Multi-Platform Deployment",
+    "Project Creation and Tracking",
+    "Team Management and Organization",
+    "Time Tracking and Analytics",
+    "Performance Monitoring",
+    "GitHub App Integration",
+    "Webhook Event Handling",
+    "Message-Based Communication",
+    "Deployment Orchestration",
+    "Version Control",
+    "Health Monitoring"
+  ],
+  "workflows": [
+    {
+      "name": "Satellite App Registration",
+      "trigger": "External app requests registration",
+      "steps": [
+        "Validate app metadata",
+        "Create GitHub issue",
+        "Store in database",
+        "Test webhook endpoint",
+        "Test message handler",
+        "Approve and activate",
+        "Send confirmation"
+      ],
+      "business_rules": [
+        "Apps must be prefixed with 'SFG-'",
+        "Webhook and message handler required for SFG Aluminium apps",
+        "Business logic documentation required"
+      ]
+    },
+    {
+      "name": "One-Press Deployment",
+      "trigger": "User clicks Deploy button",
+      "steps": [
+        "Select application",
+        "Choose platforms",
+        "Configure settings",
+        "Validate configuration",
+        "Execute deployment",
+        "Monitor status",
+        "Health check",
+        "Update registry",
+        "Notify stakeholders"
+      ],
+      "business_rules": [
+        "Only production-ready apps",
+        "All tests must pass",
+        "Valid domain configuration",
+        "Environment variables set",
+        "Backup available"
+      ]
+    },
+    {
+      "name": "Credit Check Process",
+      "trigger": "Order value > £10,000",
+      "steps": [
+        "Receive credit check event",
+        "Request from Experian (MCP-FINANCE)",
+        "Store result",
+        "Update customer tier",
+        "Notify sales team",
+        "Log audit trail"
+      ],
+      "business_rules": [
+        "Required for orders > £10,000",
+        "Valid for 90 days",
+        "Failed checks require director approval"
+      ]
+    },
+    {
+      "name": "Quote Generation",
+      "trigger": "Quote request event",
+      "steps": [
+        "Calculate pricing",
+        "Apply tier discount",
+        "Check margin (min 15%)",
+        "Require approval if < 18%",
+        "Generate document",
+        "Create SharePoint entry",
+        "Send to customer",
+        "Log in Xero"
+      ],
+      "business_rules": [
+        "Minimum margin: 15%",
+        "Target margin: 25%",
+        "Warning threshold: 18%",
+        "Tier-based approval limits"
+      ]
+    }
+  ],
+  "business_rules": {
+    "margins": {
+      "minimum": 0.15,
+      "target": 0.25,
+      "warning": 0.18
+    },
+    "approval_limits": {
+      "T1_Director": 1000000,
+      "T2_SeniorManager": 100000,
+      "T3_Manager": 25000,
+      "T4_Supervisor": 10000,
+      "T5_Staff": 1000
+    },
+    "customer_tiers": [
+      {
+        "tier": "Platinum",
+        "color": "purple",
+        "discount": 0.1
+      },
+      {
+        "tier": "Sapphire",
+        "color": "blue",
+        "discount": 0.07
+      },
+      {
+        "tier": "Steel",
+        "color": "gray",
+        "discount": 0.05
+      },
+      {
+        "tier": "Green",
+        "color": "green",
+        "discount": 0.03
+      },
+      {
+        "tier": "Crimson",
+        "color": "red",
+        "discount": 0
+      }
+    ],
+    "document_stages": [
+      "ENQ",
+      "QUO",
+      "SENT",
+      "ACC",
+      "ORD",
+      "FAB",
+      "INS",
+      "INV",
+      "PAID"
+    ],
+    "credit_check": {
+      "threshold": 10000,
+      "provider": "Experian",
+      "validity_days": 90
+    }
+  },
+  "integrations": {
+    "internal": [
+      {
+        "system": "NEXUS",
+        "purpose": "Central orchestrator for all SFG apps",
+        "type": "Webhooks + Message Handler"
+      },
+      {
+        "system": "MCP-SALES",
+        "purpose": "Sales tools and automation",
+        "type": "API"
+      },
+      {
+        "system": "MCP-FINANCE",
+        "purpose": "Finance tools and services (Experian, Xero)",
+        "type": "API"
+      },
+      {
+        "system": "MCP-OPERATIONS",
+        "purpose": "Operations management",
+        "type": "API"
+      },
+      {
+        "system": "MCP-COMMUNICATIONS",
+        "purpose": "Communication services",
+        "type": "API"
+      },
+      {
+        "system": "MCP-DATA",
+        "purpose": "Data management and analytics",
+        "type": "API"
+      }
+    ],
+    "external": [
+      {
+        "system": "Xero",
+        "purpose": "Accounting and invoicing",
+        "type": "API"
+      },
+      {
+        "system": "Experian",
+        "purpose": "Credit checking",
+        "type": "API (via MCP-FINANCE)"
+      },
+      {
+        "system": "SharePoint",
+        "purpose": "Document management",
+        "type": "API"
+      },
+      {
+        "system": "Companies House",
+        "purpose": "Company data lookup",
+        "type": "API"
+      },
+      {
+        "system": "GitHub",
+        "purpose": "Code repository and app registration",
+        "type": "GitHub App"
+      }
+    ]
+  },
+  "technology_stack": {
+    "frontend": {
+      "framework": "Next.js 14",
+      "language": "TypeScript",
+      "ui": "React 18 + Tailwind CSS + Shadcn UI + Warren Theme",
+      "state": "React Query + Zustand",
+      "forms": "React Hook Form + Zod",
+      "charts": "Recharts + Chart.js"
+    },
+    "backend": {
+      "runtime": "Node.js",
+      "api": "Next.js API Routes",
+      "database": "PostgreSQL",
+      "orm": "Prisma",
+      "auth": "NextAuth.js",
+      "storage": "AWS S3"
+    },
+    "integrations": {
+      "github": "GitHub App + Octokit",
+      "webhooks": "HMAC signature verification",
+      "messaging": "In-memory (future: Redis/RabbitMQ)"
+    },
+    "deployment": {
+      "platform": "Abacus AI",
+      "domain": "sfg-adm.abacusai.app",
+      "ssl": "Automatic HTTPS"
+    }
+  },
+  "security": {
+    "authentication": "NextAuth.js with email/password",
+    "authorization": "Role-based access control (RBAC)",
+    "api_security": [
+      "Webhook signature verification (HMAC SHA-256)",
+      "Rate limiting",
+      "CORS configuration",
+      "Environment variable protection"
+    ],
+    "data_security": [
+      "Encrypted passwords (bcrypt)",
+      "Secure database connections (SSL)",
+      "Audit logging",
+      "Input validation and sanitization"
+    ]
+  },
+  "health_check": {
+    "webhook_endpoint": "GET /api/webhooks/nexus",
+    "message_handler_endpoint": "GET /api/messages/handle",
+    "expected_response": {
+      "status": "healthy",
+      "service": "string",
+      "version": "string",
+      "timestamp": "ISO8601"
+    }
+  },
+  "metadata": {
+    "created_by": "Warren (Comet)",
+    "organization": "SFG Aluminium",
+    "created_at": "2025-11-05T00:00:00Z",
+    "updated_at": "2025-11-05T00:00:00Z",
+    "registration_date": "2025-11-05T00:00:00Z",
+    "last_deployment": "2025-11-05T00:00:00Z"
+  }
+}
