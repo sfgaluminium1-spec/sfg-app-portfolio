@@ -1,0 +1,183 @@
+{
+  "app_name": "SFG-Analysis",
+  "full_name": "SFG Storage Analysis & Optimization Platform",
+  "version": "2.0.0",
+  "category": "sfg-aluminium-app",
+  "description": "Enterprise-grade SharePoint and local storage analysis platform with AI-powered insights and full orchestration capabilities",
+  "url": "https://sfg-analysis.abacusai.app",
+  "webhook_url": "https://sfg-analysis.abacusai.app/api/webhooks/nexus",
+  "message_handler_url": "https://sfg-analysis.abacusai.app/api/messages/handle",
+  "capabilities": [
+    "SharePoint Analysis - Deep scanning with real-time metrics",
+    "Local Drive Analysis - Multi-platform support",
+    "AI-Powered Insights - Pattern recognition & forecasting",
+    "Safety-First Cleanup - Automated backups & rollback",
+    "Document Lifecycle Management - Automated routing & retention",
+    "Integration Orchestration - Xero, Logikal, SharePoint",
+    "Cost Monitoring - Real-time tracking & alerts",
+    "Audit & Compliance - Complete audit trail"
+  ],
+  "workflows": [
+    {
+      "name": "Enquiry to Quote Workflow",
+      "description": "Automatically sync quotes to Logikal and prepare project folders",
+      "triggers": "quote.approved event",
+      "steps": [
+        "Sync quote to Logikal",
+        "Create project folder in SharePoint",
+        "Set up document structure",
+        "Apply storage allocation plan",
+        "Initialize document workflow tracking"
+      ],
+      "outputs": "Project folder ready for document management"
+    },
+    {
+      "name": "Project Completion Workflow",
+      "description": "Archive project files and apply retention policies",
+      "triggers": "project.completed event",
+      "steps": [
+        "Analyze all project files",
+        "Generate completion report",
+        "Archive to cold storage (7-year retention)",
+        "Calculate cost savings",
+        "Update storage metrics"
+      ],
+      "outputs": "Project archived with cost savings report"
+    },
+    {
+      "name": "Invoice Sync Workflow",
+      "description": "Sync invoices from Xero to SharePoint",
+      "triggers": "invoice.generated event",
+      "steps": [
+        "Download invoice PDF from Xero",
+        "Upload to SharePoint project folder",
+        "Update document metadata",
+        "Track storage usage",
+        "Confirm sync completion"
+      ],
+      "outputs": "Invoice synced to SharePoint with metadata"
+    }
+  ],
+  "business_rules": [
+    {
+      "name": "Storage Cost Threshold Monitoring",
+      "description": "Monitor storage costs and alert when thresholds are exceeded",
+      "priority": "high",
+      "condition": "Storage cost exceeds budget threshold",
+      "action": "Generate alert, create recommendations, notify stakeholders"
+    },
+    {
+      "name": "Document Retention Policy Enforcement",
+      "description": "Enforce retention policies based on project status",
+      "priority": "high",
+      "condition": "Project completed for 7 years",
+      "action": "Archive to long-term cold storage"
+    },
+    {
+      "name": "Automated Backup Before Cleanup",
+      "description": "Always backup files before cleanup operations",
+      "priority": "critical",
+      "condition": "Cleanup operation requested",
+      "action": "Create backup, execute cleanup, enable 30-day rollback"
+    }
+  ],
+  "integrations": [
+    "NEXUS - Orchestration Hub",
+    "MCP-SALES - Sales Tools",
+    "MCP-FINANCE - Finance Tools",
+    "MCP-OPERATIONS - Operations Tools",
+    "MCP-COMMUNICATIONS - Communications Tools",
+    "MCP-DATA - Data Tools",
+    "Xero - Accounting & Invoicing",
+    "SharePoint - Document Storage",
+    "Logikal - CAD/Quote System",
+    "Companies House - Company Data"
+  ],
+  "api_endpoints": [
+    {
+      "method": "POST",
+      "endpoint": "/api/webhooks/nexus",
+      "purpose": "Receive webhook events from NEXUS and other apps",
+      "auth_required": true
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/messages/handle",
+      "purpose": "Handle synchronous message requests",
+      "auth_required": true
+    },
+    {
+      "method": "POST",
+      "endpoint": "/api/analysis/sharepoint",
+      "purpose": "Trigger SharePoint storage analysis",
+      "auth_required": true
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/storage/status",
+      "purpose": "Get current storage metrics and status",
+      "auth_required": true
+    }
+  ],
+  "data_models": [
+    {
+      "name": "StorageAnalysis",
+      "description": "Storage analysis results with metrics and recommendations",
+      "key_fields": [
+        "id",
+        "site_url",
+        "total_size_gb",
+        "potential_savings_gb",
+        "cost_impact_gbp",
+        "analysis_date"
+      ]
+    },
+    {
+      "name": "CleanupOperation",
+      "description": "Cleanup operation tracking with backup and rollback info",
+      "key_fields": [
+        "id",
+        "files_processed",
+        "space_reclaimed_gb",
+        "backup_location",
+        "rollback_deadline"
+      ]
+    },
+    {
+      "name": "DocumentLifecycle",
+      "description": "Document workflow stage tracking",
+      "key_fields": [
+        "document_id",
+        "current_stage",
+        "previous_stage",
+        "stage_changed_date",
+        "assigned_to"
+      ]
+    }
+  ],
+  "event_subscriptions": [
+    "project.created",
+    "project.completed",
+    "invoice.generated",
+    "document.uploaded",
+    "quote.approved",
+    "storage.threshold_exceeded"
+  ],
+  "events_published": [
+    "storage.analysis.completed",
+    "storage.cleanup.executed",
+    "storage.cost.threshold_exceeded",
+    "document.lifecycle.stage_changed",
+    "integration.sync.completed",
+    "integration.sync.failed"
+  ],
+  "message_types_supported": [
+    "query.storage_status",
+    "query.cost_forecast",
+    "query.cleanup_recommendations",
+    "action.analyze_sharepoint",
+    "action.execute_cleanup",
+    "action.sync_to_xero",
+    "action.sync_to_logikal"
+  ]
+}
