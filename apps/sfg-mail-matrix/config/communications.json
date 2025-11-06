@@ -1,0 +1,95 @@
+{
+  "email_templates": [
+    {
+      "name": "Quote Response Template",
+      "subject": "Re: Quote Request - Aluminum Profiles",
+      "description": "Automated response for quote requests with AI-generated content"
+    },
+    {
+      "name": "Order Confirmation Template",
+      "subject": "Order Confirmed - Order #{{order_id}}",
+      "description": "Confirmation email sent when order is processed"
+    },
+    {
+      "name": "Compliance Alert Template",
+      "subject": "\u26a0\ufe0f Compliance Alert - Action Required",
+      "description": "Internal alert for compliance violations"
+    },
+    {
+      "name": "Weekly Analytics Summary",
+      "subject": "\ud83d\udcca Weekly Email Analytics - {{week_ending}}",
+      "description": "Weekly summary of email metrics and insights"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "teams",
+      "channel": "sales-alerts",
+      "trigger": "High-priority quote request received"
+    },
+    {
+      "type": "teams",
+      "channel": "compliance-alerts",
+      "trigger": "GDPR or SOX compliance violation detected"
+    },
+    {
+      "type": "slack",
+      "channel": "email-monitoring",
+      "trigger": "Email classification confidence below threshold"
+    },
+    {
+      "type": "email",
+      "channel": "admin@sfg-aluminium.co.uk",
+      "trigger": "System error or API failure"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Email Volume Metrics",
+      "type": "metric",
+      "description": "Real-time email volume and classification rates"
+    },
+    {
+      "name": "Quote Request Pipeline",
+      "type": "chart",
+      "description": "Visual pipeline of quote requests by status"
+    },
+    {
+      "name": "AI Classification Accuracy",
+      "type": "metric",
+      "description": "ML model accuracy and confidence scores"
+    },
+    {
+      "name": "Compliance Status",
+      "type": "alert",
+      "description": "Real-time compliance monitoring and alerts"
+    },
+    {
+      "name": "Team Performance",
+      "type": "table",
+      "description": "Email response times and resolution rates by team"
+    }
+  ],
+  "message_handlers": [
+    {
+      "event": "email.classified",
+      "handler": "handle_email_classified",
+      "description": "Send classified email data to NEXUS for orchestration"
+    },
+    {
+      "event": "quote.generated",
+      "handler": "handle_quote_generated",
+      "description": "Notify NEXUS when quote is generated and ready"
+    },
+    {
+      "event": "compliance.alert",
+      "handler": "handle_compliance_alert",
+      "description": "Send compliance alerts to NEXUS for action"
+    },
+    {
+      "event": "analytics.report_ready",
+      "handler": "handle_analytics_report_ready",
+      "description": "Notify NEXUS when analytics report is generated"
+    }
+  ]
+}
