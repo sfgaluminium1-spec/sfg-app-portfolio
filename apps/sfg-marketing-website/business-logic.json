@@ -1,0 +1,70 @@
+{
+  "appName": "SFG Chrome Extension Marketing Website",
+  "version": "1.2.0",
+  "category": "marketing",
+  "description": "Professional marketing website promoting the SFG Chrome Extension with AI-powered features, mobile notes, and app ecosystem integration. Built with Next.js 14, featuring authentication, partnership sections, and comprehensive feature showcase.",
+  "deploymentUrl": "https://sfg-chrome.abacusai.app",
+  "repositoryUrl": "https://github.com/sfgaluminium1-spec/sfg-app-portfolio",
+  "capabilities": [
+    "Chrome Extension Promotion - Feature showcase and benefits",
+    "AI-AutoStack Partnership - Advertising and cross-promotion",
+    "Mobile App Promotion - iPhone and Android notes app",
+    "App Ecosystem Dashboard - Third-party app integration requests",
+    "User Authentication - Email/password with NextAuth and Prisma",
+    "Contact Form - Lead generation and inquiries",
+    "Pricing Display - Subscription tiers and features",
+    "Version Management - Update tracking with changelog",
+    "Analytics Integration - Google Analytics 4 ready"
+  ],
+  "workflows": [
+    {
+      "name": "User Registration Flow",
+      "description": "New users sign up and access premium features",
+      "steps": [
+        "User visits marketing site",
+        "User signs up via email/password",
+        "Account created in PostgreSQL database",
+        "User receives confirmation",
+        "User can access protected features"
+      ]
+    },
+    {
+      "name": "App Ecosystem Integration Request",
+      "description": "Third-party developers request integration with SFG ecosystem",
+      "steps": [
+        "Developer fills out integration form",
+        "Request submitted to /api/app-invitation",
+        "Request stored in database",
+        "Admin reviews integration request",
+        "Developer receives approval/feedback"
+      ]
+    },
+    {
+      "name": "Lead Generation",
+      "description": "Potential customers submit inquiries via contact form",
+      "steps": [
+        "User fills out contact form",
+        "Form data validated",
+        "Lead information captured",
+        "Notification sent to sales team",
+        "Follow-up initiated"
+      ]
+    }
+  ],
+  "technology_stack": {
+    "framework": "Next.js 14",
+    "language": "TypeScript",
+    "styling": "Tailwind CSS + Warren Executive Theme",
+    "authentication": "NextAuth.js",
+    "database": "PostgreSQL + Prisma",
+    "hosting": "Abacus.AI"
+  },
+  "integrations": [
+    "NEXUS",
+    "MCP-SALES",
+    "MCP-COMMUNICATIONS",
+    "Google Analytics 4",
+    "AI-AutoStack Partnership"
+  ],
+  "extracted_at": "2025-11-06T10:59:56.880749Z"
+}
