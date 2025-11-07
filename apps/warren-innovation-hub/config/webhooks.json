@@ -1,0 +1,156 @@
+{
+  "incoming_webhooks": [
+    {
+      "event": "enquiry.created",
+      "description": "New business enquiry received from NEXUS orchestration",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "source": "sfg-website",
+        "customer_name": "John Doe",
+        "email": "john@example.com",
+        "enquiry_type": "executive_services",
+        "priority": "high",
+        "created_at": "2025-11-05T10:30:00Z"
+      }
+    },
+    {
+      "event": "financial.update",
+      "description": "Financial data update from Xero integration",
+      "payload_example": {
+        "update_type": "invoice_paid",
+        "invoice_id": "INV-2025-123",
+        "amount": 15000.0,
+        "currency": "GBP",
+        "customer": "SFG Aluminium Ltd",
+        "payment_date": "2025-11-05T14:00:00Z"
+      }
+    },
+    {
+      "event": "wellness.booking",
+      "description": "New wellness appointment booking for Yanika's services",
+      "payload_example": {
+        "booking_id": "BOOK-2025-456",
+        "client_name": "Sarah Ahmed",
+        "service": "AI Dermatology Consultation",
+        "scheduled_date": "2025-11-08T15:00:00Z",
+        "location": "Dubai",
+        "status": "confirmed"
+      }
+    },
+    {
+      "event": "instagram.engagement",
+      "description": "Significant engagement spike on Instagram posts",
+      "payload_example": {
+        "post_id": "IG-2025-789",
+        "engagement_type": "surge",
+        "likes": 1500,
+        "comments": 230,
+        "shares": 85,
+        "reach": 12000,
+        "timestamp": "2025-11-05T18:00:00Z"
+      }
+    },
+    {
+      "event": "sharepoint.update",
+      "description": "SharePoint document library updated",
+      "payload_example": {
+        "library_name": "Warren's Personal Suite",
+        "update_type": "document_added",
+        "document_name": "Q4-Strategy-Report.pdf",
+        "added_by": "warren@sfg-innovations.com",
+        "timestamp": "2025-11-05T09:00:00Z"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "executive.decision",
+      "description": "Strategic decision made in executive dashboard requiring cross-app action",
+      "payload_example": {
+        "decision_id": "DEC-2025-001",
+        "decision_type": "investment_approval",
+        "amount": 250000.0,
+        "category": "cryptocurrency",
+        "approved_by": "warren@sfg-innovations.com",
+        "requires_action": [
+          "mcp-finance",
+          "mcp-communications"
+        ],
+        "timestamp": "2025-11-05T11:00:00Z"
+      }
+    },
+    {
+      "event": "wellness.insight",
+      "description": "AI dermatology insights for client wellness tracking",
+      "payload_example": {
+        "client_id": "CLI-2025-123",
+        "insight_type": "skin_analysis",
+        "recommendations": [
+          "Hydration boost",
+          "SPF 50+",
+          "Vitamin C serum"
+        ],
+        "follow_up_date": "2025-12-05",
+        "confidence_score": 0.94,
+        "timestamp": "2025-11-05T16:00:00Z"
+      }
+    },
+    {
+      "event": "campaign.performance",
+      "description": "Marketing campaign performance milestone reached",
+      "payload_example": {
+        "campaign_id": "CAMP-2025-SUMMER",
+        "milestone": "10k_reach",
+        "metrics": {
+          "reach": 10500,
+          "engagement_rate": 8.5,
+          "roi": 320.0
+        },
+        "next_action": "scale_up",
+        "timestamp": "2025-11-05T20:00:00Z"
+      }
+    },
+    {
+      "event": "financial.alert",
+      "description": "Critical financial threshold or anomaly detected",
+      "payload_example": {
+        "alert_type": "cash_flow_low",
+        "current_balance": 45000.0,
+        "threshold": 50000.0,
+        "severity": "medium",
+        "recommended_action": "transfer_funds",
+        "timestamp": "2025-11-05T08:00:00Z"
+      }
+    },
+    {
+      "event": "content.published",
+      "description": "Multi-platform content successfully published",
+      "payload_example": {
+        "content_id": "CONT-2025-789",
+        "platforms": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "content_type": "wellness_tips",
+        "engagement_target": 5000,
+        "publish_time": "2025-11-05T12:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://warren-innovation-hub.abacusai.app/api/webhooks/nexus",
+  "security": {
+    "method": "HMAC-SHA256",
+    "header": "X-NEXUS-Signature",
+    "secret_env": "NEXUS_WEBHOOK_SECRET"
+  },
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff": "exponential",
+    "timeout_seconds": 30
+  },
+  "rate_limits": {
+    "incoming": "1000 per hour",
+    "outgoing": "500 per hour"
+  }
+}
