@@ -284,7 +284,7 @@ export function Microsoft365Setup() {
                 </ol>
                 <Button asChild className="mt-3" size="sm">
                   <a 
-                    href="https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/1e965d6a-b617-439c-b0b2-3c07895ef160"
+                    href="https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/%7E/CallAnAPI/appId/1e965d6a-b617-439c-b0b2-3c07895ef160"
                     target="_blank"
                     rel="noopener"
                   >
