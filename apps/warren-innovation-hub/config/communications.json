@@ -1,0 +1,137 @@
+{
+  "email_templates": [
+    {
+      "name": "Executive Summary Report",
+      "subject": "Weekly Executive Summary - Warren Innovation Hub",
+      "description": "Weekly digest of key metrics, decisions, and insights for Warren"
+    },
+    {
+      "name": "Wellness Consultation Confirmation",
+      "subject": "Your AI Dermatology Consultation is Confirmed",
+      "description": "Confirmation email for Yanika's wellness clients with appointment details"
+    },
+    {
+      "name": "Financial Alert Notification",
+      "subject": "Financial Alert: Action Required",
+      "description": "Critical financial alerts requiring immediate attention"
+    },
+    {
+      "name": "Campaign Performance Report",
+      "subject": "Marketing Campaign Update - Performance Insights",
+      "description": "Automated campaign performance reports for marketing team"
+    },
+    {
+      "name": "SharePoint Activity Digest",
+      "subject": "SharePoint Activity Summary",
+      "description": "Daily summary of document updates and library activities"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#executive-alerts",
+      "trigger": "High-priority executive decisions or financial alerts"
+    },
+    {
+      "type": "teams",
+      "channel": "Wellness Operations",
+      "trigger": "New wellness bookings or client consultations"
+    },
+    {
+      "type": "slack",
+      "channel": "#marketing-insights",
+      "trigger": "Campaign milestones or engagement spikes"
+    },
+    {
+      "type": "email",
+      "channel": "warren@sfg-innovations.com",
+      "trigger": "Critical system alerts or integration failures"
+    },
+    {
+      "type": "whatsapp",
+      "channel": "Yanika Wellness Team",
+      "trigger": "Urgent client booking changes or cancellations"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Executive Metrics Overview",
+      "type": "metric",
+      "description": "Real-time display of key executive KPIs (revenue, ROI, innovation score)"
+    },
+    {
+      "name": "Financial Performance Chart",
+      "type": "chart",
+      "description": "Interactive chart showing Xero financial data trends"
+    },
+    {
+      "name": "Wellness Score Tracker",
+      "type": "progress",
+      "description": "Yanika's wellness score with progress indicators"
+    },
+    {
+      "name": "Instagram Engagement Feed",
+      "type": "table",
+      "description": "Live feed of Instagram post performance and engagement metrics"
+    },
+    {
+      "name": "SharePoint Activity Stream",
+      "type": "timeline",
+      "description": "Real-time stream of SharePoint document activities"
+    },
+    {
+      "name": "Investment Portfolio Status",
+      "type": "chart",
+      "description": "Cryptocurrency and investment portfolio performance visualization"
+    },
+    {
+      "name": "Campaign ROI Calculator",
+      "type": "calculator",
+      "description": "Interactive ROI calculator for marketing campaigns"
+    },
+    {
+      "name": "AI Chat Insights",
+      "type": "alert",
+      "description": "AI-generated insights and recommendations from chat interactions"
+    }
+  ],
+  "message_handlers": [
+    {
+      "event": "executive.decision",
+      "handler": "handle_executive_decision",
+      "description": "Strategic decision made in executive dashboard requiring cross-app action",
+      "priority": "medium"
+    },
+    {
+      "event": "wellness.insight",
+      "handler": "handle_wellness_insight",
+      "description": "AI dermatology insights for client wellness tracking",
+      "priority": "medium"
+    },
+    {
+      "event": "campaign.performance",
+      "handler": "handle_campaign_performance",
+      "description": "Marketing campaign performance milestone reached",
+      "priority": "medium"
+    },
+    {
+      "event": "financial.alert",
+      "handler": "handle_financial_alert",
+      "description": "Critical financial threshold or anomaly detected",
+      "priority": "high"
+    },
+    {
+      "event": "content.published",
+      "handler": "handle_content_published",
+      "description": "Multi-platform content successfully published",
+      "priority": "medium"
+    }
+  ],
+  "notification_channels": {
+    "slack": "#executive-alerts, #marketing-insights",
+    "teams": "Wellness Operations",
+    "email": "warren@sfg-innovations.com",
+    "whatsapp": "Yanika Wellness Team",
+    "sms": "Emergency alerts only"
+  }
+}
