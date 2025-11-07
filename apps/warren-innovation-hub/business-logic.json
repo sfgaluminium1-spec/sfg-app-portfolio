@@ -1,0 +1,156 @@
+{
+  "appName": "Warren Heathcote AI & Aluminium Innovation Hub",
+  "version": "3.0.0",
+  "category": "executive-innovation-hub",
+  "description": "Premier executive command center integrating strategic leadership, AI-driven business intelligence, luxury lifestyle management, creative wellness initiatives, and comprehensive SharePoint/Xero integration. Features dual-persona architecture for Warren's Executive Suite and Yanika's Creative Oasis.",
+  "platform": "Abacus.AI (Next.js 14.2.28 + TypeScript)",
+  "deployment_url": "https://sfg-heathcote-hub.abacusai.app",
+  "capabilities": [
+    "Executive dashboard with real-time business intelligence",
+    "AI-powered chat assistant for strategic insights (dual-persona support)",
+    "Dual-persona management (Warren Executive + Yanika Creative Oasis)",
+    "SharePoint library management with futuristic UI and analytics",
+    "Xero financial integration with real-time analytics and invoice generation",
+    "Power BI dashboard integration for advanced business intelligence",
+    "Luxury lifestyle & motorsport tracking for executive management",
+    "Investment & cryptocurrency portfolio management with market tracking",
+    "Creative wellness & beauty management (Dubai-themed)",
+    "AI Dermatology chatbot for personalized skincare advice (Dubai climate-specific)",
+    "Instagram marketing analytics & campaign management (@yanika.heathcote)",
+    "Content updates & scheduling system for multi-platform publishing",
+    "Dubai wellness hub with family & travel moments tracking",
+    "Multi-platform social media console with engagement metrics",
+    "Companies House integration for business intelligence"
+  ],
+  "workflows": [
+    {
+      "name": "Executive Dashboard Access",
+      "description": "Warren accesses his executive command center with real-time business metrics",
+      "steps": [
+        "User authentication and persona detection",
+        "Load executive dashboard with diamond gold theme",
+        "Fetch real-time data from SharePoint, Xero, Power BI",
+        "Display innovation metrics, motorsport tracking, investment portfolio",
+        "Enable AI chat assistant for strategic insights"
+      ]
+    },
+    {
+      "name": "Creative Wellness Management",
+      "description": "Yanika manages her Dubai wellness business and creative projects",
+      "steps": [
+        "User authentication and persona detection",
+        "Load creative oasis dashboard with Dubai pink-purple theme",
+        "Display wellness score, creative projects, family events",
+        "Access AI dermatology assistant for client consultations",
+        "Track Instagram campaigns and content scheduling"
+      ]
+    },
+    {
+      "name": "SharePoint Integration",
+      "description": "Seamless document access and analytics from embedded SharePoint",
+      "steps": [
+        "Detect iframe embedding environment",
+        "Load SharePoint library grid with category filters",
+        "Enable real-time document search and navigation",
+        "Track usage analytics and user engagement",
+        "Sync updates with SharePoint backend"
+      ]
+    },
+    {
+      "name": "Xero Financial Analytics",
+      "description": "Real-time financial data visualization and invoice generation",
+      "steps": [
+        "Authenticate with Xero API",
+        "Fetch financial data (revenue, expenses, cash flow)",
+        "Generate visual dashboards with charts",
+        "Enable invoice creation and tracking",
+        "Sync with Power BI for advanced analytics"
+      ]
+    },
+    {
+      "name": "AI-Powered Dermatology Consultation",
+      "description": "Yanika provides AI-assisted skincare consultations for Dubai clients",
+      "steps": [
+        "Client initiates chat in dermatology section",
+        "AI analyzes skin concerns and Dubai climate factors",
+        "Provide personalized product recommendations",
+        "Schedule follow-up treatments via WhatsApp",
+        "Track client wellness progress over time"
+      ]
+    },
+    {
+      "name": "Marketing Campaign Management",
+      "description": "Track and optimize Instagram marketing campaigns",
+      "steps": [
+        "Access marketing analytics dashboard",
+        "View campaign performance metrics (ROI, engagement)",
+        "Analyze Instagram profile insights (@yanika.heathcote)",
+        "Update content calendar and schedule posts",
+        "Generate campaign reports and optimization suggestions"
+      ]
+    }
+  ],
+  "integrations": [
+    "NEXUS (SFG Orchestration)",
+    "MCP-SALES (Lead Management)",
+    "MCP-FINANCE (Financial Analytics)",
+    "MCP-OPERATIONS (Business Intelligence)",
+    "MCP-COMMUNICATIONS (Email & Notifications)",
+    "SharePoint (Document Management)",
+    "Xero (Financial Integration)",
+    "Power BI (Advanced Analytics)",
+    "Instagram API (Social Media)",
+    "Abacus.AI (AI Services)",
+    "Companies House (Business Data)"
+  ],
+  "business_rules": [
+    {
+      "name": "Dual-Persona Access Control",
+      "priority": "high",
+      "description": "Enforce separate access and data isolation for Warren and Yanika personas"
+    },
+    {
+      "name": "SharePoint Iframe Optimization",
+      "priority": "high",
+      "description": "Detect and optimize UI when embedded in SharePoint iframe"
+    },
+    {
+      "name": "Real-Time Data Synchronization",
+      "priority": "medium",
+      "description": "Ensure financial and wellness data syncs in real-time with external systems"
+    },
+    {
+      "name": "AI Response Personalization",
+      "priority": "medium",
+      "description": "AI chat assistant adapts responses based on Warren/Yanika persona"
+    },
+    {
+      "name": "Dubai Climate Awareness",
+      "priority": "high",
+      "description": "AI dermatology recommendations account for Dubai's extreme climate"
+    }
+  ],
+  "api_endpoints": [
+    "POST /api/chat - AI chatbot conversations",
+    "GET /api/xero/* - Xero financial data endpoints",
+    "GET /api/sharepoint/analytics - SharePoint usage analytics",
+    "GET /api/instagram/analytics - Instagram engagement metrics",
+    "GET /api/campaigns - Marketing campaign data",
+    "POST /api/updates - Content update management",
+    "POST /api/webhooks/nexus - NEXUS orchestration webhook"
+  ],
+  "data_models": [
+    "User (authentication and personas)",
+    "ChatSession (AI conversation tracking)",
+    "ChatMessage (message history)",
+    "ExecutiveDashboard (Warren's metrics)",
+    "CreativeWellnessHub (Yanika's data)",
+    "SharePointLibrary (document metadata)",
+    "XeroFinancialData (financial records)",
+    "MarketingCampaign (campaign tracking)",
+    "WellnessBooking (client appointments)",
+    "InstagramPost (social media content)"
+  ],
+  "extracted_at": "2025-11-07T00:50:37.194613Z",
+  "registration_version": "3.0.0"
+}
