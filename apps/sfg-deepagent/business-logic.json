@@ -1,0 +1,536 @@
+
+{
+  "app_name": "SFG-DeepAgent",
+  "full_name": "SFG Aluminium AI Assistant (DeepAgent)",
+  "version": "1.0",
+  "platform": "Abacus.AI DeepAgent",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "deployment_model": "on-demand-conversational",
+  
+  "purpose": "Advanced AI assistant for SFG Aluminium Limited providing intelligent automation, data analysis, research, document processing, and application development support across all business operations.",
+  
+  "capabilities": [
+    "Customer enquiry processing and intelligent analysis",
+    "Quote generation assistance with margin verification (15% minimum)",
+    "Document processing and analysis (PDFs, contracts, specifications)",
+    "Data analysis and reporting with visualization",
+    "Market research and competitive intelligence",
+    "Company research via Companies House API",
+    "Building regulations compliance checking (Part L, K, B4, M)",
+    "Workflow automation and integration orchestration",
+    "Web application development for SFG-specific needs",
+    "Natural language understanding and intent recognition",
+    "Real-time information gathering via web search",
+    "Code generation and technical implementation",
+    "Report generation and business intelligence",
+    "Integration with MCP servers (SALES, FINANCE, OPERATIONS, COMMUNICATIONS, DATA)",
+    "GitHub repository access and code management",
+    "Multi-system data synchronization",
+    "AI-powered recommendations and optimization suggestions"
+  ],
+  
+  "workflows": [
+    {
+      "name": "Intelligent Enquiry Analysis",
+      "description": "Comprehensive analysis of customer enquiries with research and recommendations",
+      "steps": [
+        "Extract key information from enquiry text (project type, budget, timeline)",
+        "Research customer company via Companies House API",
+        "Identify aluminium products and specifications",
+        "Check relevant building regulations (Part L, K, B4, M)",
+        "Assess project complexity and risk factors",
+        "Recommend pricing strategy with target margin",
+        "Suggest appropriate estimator assignment",
+        "Generate comprehensive analysis report"
+      ],
+      "automation_level": "ai-assisted",
+      "approval_required": false,
+      "average_completion_time": "5-10 minutes"
+    },
+    {
+      "name": "Quote Review & Optimization",
+      "description": "Automated review of quotes with margin validation and optimization",
+      "steps": [
+        "Validate margin calculations (minimum 15%)",
+        "Compare pricing against historical project data",
+        "Research competitor pricing via web search",
+        "Check for compliance requirements",
+        "Identify cost optimization opportunities",
+        "Recommend margin improvements",
+        "Validate approval tier requirements",
+        "Generate detailed review report with recommendations"
+      ],
+      "automation_level": "fully-automated",
+      "approval_required": false,
+      "average_completion_time": "2-5 minutes"
+    },
+    {
+      "name": "Document Intelligence",
+      "description": "Automated document processing, analysis, and data extraction",
+      "steps": [
+        "Parse document content (PDF, Word, images)",
+        "Extract structured data (dates, amounts, specifications)",
+        "Identify key information and requirements",
+        "Summarize content and generate key points",
+        "Check for compliance requirements and standards",
+        "Flag important clauses, terms, or risks",
+        "Generate structured output in JSON format",
+        "Provide actionable recommendations"
+      ],
+      "automation_level": "fully-automated",
+      "approval_required": false,
+      "average_completion_time": "1-3 minutes"
+    },
+    {
+      "name": "Market & Competitive Research",
+      "description": "Comprehensive market research and competitive intelligence gathering",
+      "steps": [
+        "Define research scope and key questions",
+        "Gather information from web sources and databases",
+        "Analyze competitor offerings and pricing",
+        "Review industry trends and market conditions",
+        "Compile findings and data points",
+        "Generate insights and recommendations",
+        "Create comprehensive research report",
+        "Provide strategic recommendations"
+      ],
+      "automation_level": "ai-assisted",
+      "approval_required": false,
+      "average_completion_time": "10-30 minutes"
+    },
+    {
+      "name": "Custom Application Development",
+      "description": "End-to-end development of custom web applications for SFG needs",
+      "steps": [
+        "Gather requirements and specifications through conversation",
+        "Design application architecture and data models",
+        "Develop frontend code (React/Next.js)",
+        "Develop backend code (Python/Node.js/API routes)",
+        "Integrate with required APIs and services",
+        "Implement authentication and security",
+        "Test functionality and fix issues",
+        "Deploy to Abacus.AI or external platform",
+        "Generate comprehensive documentation",
+        "Provide usage training and support"
+      ],
+      "automation_level": "ai-assisted-with-human-review",
+      "approval_required": true,
+      "average_completion_time": "2-8 hours"
+    },
+    {
+      "name": "Data Analysis & Reporting",
+      "description": "Advanced data analysis with insights and visualizations",
+      "steps": [
+        "Import and validate data from various sources",
+        "Clean and prepare data for analysis",
+        "Perform statistical analysis and calculations",
+        "Identify trends, patterns, and anomalies",
+        "Generate visualizations (charts, graphs, dashboards)",
+        "Calculate key performance metrics",
+        "Generate insights and recommendations",
+        "Create comprehensive report with findings"
+      ],
+      "automation_level": "ai-assisted",
+      "approval_required": false,
+      "average_completion_time": "10-60 minutes"
+    },
+    {
+      "name": "Workflow Automation Setup",
+      "description": "Design and implement automated workflows across systems",
+      "steps": [
+        "Identify workflow requirements and pain points",
+        "Map current process and bottlenecks",
+        "Design optimized automated workflow",
+        "Implement integrations with required systems",
+        "Set up trigger conditions and actions",
+        "Configure error handling and notifications",
+        "Test workflow with sample data",
+        "Deploy and monitor performance",
+        "Document workflow and provide training"
+      ],
+      "automation_level": "ai-assisted-with-human-review",
+      "approval_required": true,
+      "average_completion_time": "2-10 minutes per workflow"
+    }
+  ],
+  
+  "business_rules": [
+    {
+      "rule": "Minimum margin 15%",
+      "condition": "margin >= 0.15",
+      "action": "Approve quote",
+      "exception": "Flag for director approval if margin < 15%",
+      "deepagent_role": "Validate margin in quote analysis, alert if below threshold"
+    },
+    {
+      "rule": "Credit check for orders > £10,000",
+      "condition": "order_value > 10000",
+      "action": "Verify credit check exists and is valid (< 90 days)",
+      "exception": "Waived for Platinum/Sapphire tier customers with excellent history",
+      "deepagent_role": "Check credit status, recommend credit check if needed"
+    },
+    {
+      "rule": "Tier-based approval limits",
+      "tiers": [
+        { "tier": "T1 (Director)", "limit": 1000000 },
+        { "tier": "T2 (Senior Manager)", "limit": 100000 },
+        { "tier": "T3 (Manager)", "limit": 25000 },
+        { "tier": "T4 (Supervisor)", "limit": 10000 },
+        { "tier": "T5 (Staff)", "limit": 1000 }
+      ],
+      "action": "Identify appropriate approval tier, recommend escalation if needed",
+      "deepagent_role": "Determine required approval level, suggest approval path"
+    },
+    {
+      "rule": "Customer tier classification",
+      "tiers": [
+        { "tier": "Platinum", "color": "Purple", "criteria": "Annual spend > £500k, 5+ years, excellent payment history" },
+        { "tier": "Sapphire", "color": "Blue", "criteria": "Annual spend > £100k, 2+ years, good payment history" },
+        { "tier": "Steel", "color": "Gray", "criteria": "New customers, annual spend < £100k" },
+        { "tier": "Green", "color": "Green", "criteria": "Pre-approved, fast-track processing" },
+        { "tier": "Crimson", "color": "Red", "criteria": "High risk, payment issues, requires approval for all quotes" }
+      ],
+      "deepagent_role": "Analyze customer history, recommend tier classification or changes"
+    },
+    {
+      "rule": "Document stage progression",
+      "stages": ["ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"],
+      "action": "Track document through all stages, identify bottlenecks",
+      "deepagent_role": "Monitor progress, alert on delays, recommend next actions"
+    },
+    {
+      "rule": "Building regulations compliance",
+      "regulations": ["Part L (Energy efficiency)", "Part K (Protection from falling)", "Part B4 (Fire safety)", "Part M (Accessibility)"],
+      "action": "Verify compliance for all projects, recommend approval pathway",
+      "deepagent_role": "Research applicable regulations, check compliance, provide guidance"
+    }
+  ],
+  
+  "integrations": [
+    {
+      "system": "Abacus.AI Platform",
+      "purpose": "Core AI capabilities, LLM access, platform services",
+      "api": "Abacus.AI SDK",
+      "status": "active",
+      "capabilities": ["LLM inference", "Data processing", "Model training", "Deployment"]
+    },
+    {
+      "system": "MCP-SALES",
+      "purpose": "Sales tools and CRM integration",
+      "api": "MCP Server Protocol",
+      "status": "available",
+      "capabilities": ["Customer management", "Sales pipeline", "Contact management"]
+    },
+    {
+      "system": "MCP-FINANCE",
+      "purpose": "Finance tools including Experian credit checking",
+      "api": "MCP Server Protocol",
+      "status": "available",
+      "capabilities": ["Credit checks", "Financial analysis", "Xero integration"]
+    },
+    {
+      "system": "MCP-OPERATIONS",
+      "purpose": "Operations and production management",
+      "api": "MCP Server Protocol",
+      "status": "available",
+      "capabilities": ["Production scheduling", "Resource management", "Project tracking"]
+    },
+    {
+      "system": "MCP-COMMUNICATIONS",
+      "purpose": "Email, SMS, and communication tools",
+      "api": "MCP Server Protocol",
+      "status": "available",
+      "capabilities": ["Email sending", "SMS", "Notifications", "Templates"]
+    },
+    {
+      "system": "MCP-DATA",
+      "purpose": "Data analysis and reporting",
+      "api": "MCP Server Protocol",
+      "status": "available",
+      "capabilities": ["Data queries", "Analytics", "Reporting", "Visualizations"]
+    },
+    {
+      "system": "GitHub",
+      "purpose": "Code repository access and version control",
+      "api": "GitHub REST API + Git",
+      "status": "active",
+      "capabilities": ["Repository access", "Code management", "Pull requests", "Issues"]
+    },
+    {
+      "system": "Companies House",
+      "purpose": "Company data verification and research",
+      "api": "Companies House API",
+      "status": "available",
+      "capabilities": ["Company lookup", "Director information", "Financial data"]
+    },
+    {
+      "system": "Web Search",
+      "purpose": "Real-time information gathering and research",
+      "api": "Search engines",
+      "status": "active",
+      "capabilities": ["Web search", "Content scraping", "Research", "Data gathering"]
+    },
+    {
+      "system": "Xero",
+      "purpose": "Accounting and invoicing (via MCP-FINANCE)",
+      "api": "Xero API",
+      "status": "available",
+      "capabilities": ["Invoice management", "Financial data", "Customer accounts"]
+    },
+    {
+      "system": "SharePoint",
+      "purpose": "Document storage and project folders (planned)",
+      "api": "Microsoft Graph API",
+      "status": "planned",
+      "capabilities": ["Document management", "Folder creation", "File operations"]
+    },
+    {
+      "system": "NEXUS",
+      "purpose": "Orchestration and workflow automation",
+      "api": "Webhooks + Message Handler (planned)",
+      "status": "planned",
+      "capabilities": ["Event handling", "Workflow orchestration", "Task distribution"]
+    }
+  ],
+  
+  "webhook_events": [
+    {
+      "event": "enquiry.needs_analysis",
+      "description": "Complex enquiry requiring AI analysis and research",
+      "action": "Analyze requirements, research company and regulations, provide recommendations",
+      "status": "planned"
+    },
+    {
+      "event": "quote.needs_review",
+      "description": "Quote requires margin validation or compliance review",
+      "action": "Review pricing, check margins, validate compliance, suggest improvements",
+      "status": "planned"
+    },
+    {
+      "event": "document.needs_processing",
+      "description": "Document uploaded requiring intelligent analysis",
+      "action": "Parse document, extract data, summarize, identify key information",
+      "status": "planned"
+    },
+    {
+      "event": "research.requested",
+      "description": "Research task assigned to DeepAgent",
+      "action": "Gather information, analyze data, generate comprehensive research report",
+      "status": "planned"
+    },
+    {
+      "event": "data.needs_analysis",
+      "description": "Data analysis task requested",
+      "action": "Analyze dataset, generate insights, create visualizations and reports",
+      "status": "planned"
+    },
+    {
+      "event": "application.build_requested",
+      "description": "Custom application development needed",
+      "action": "Design, develop, test, and deploy web application with documentation",
+      "status": "planned"
+    },
+    {
+      "event": "workflow.automation_needed",
+      "description": "Workflow automation task assigned",
+      "action": "Design automation, implement integrations, test and deploy",
+      "status": "planned"
+    }
+  ],
+  
+  "supported_messages": [
+    {
+      "type": "query.analyze_enquiry",
+      "description": "Analyze customer enquiry with research and recommendations",
+      "params": ["enquiry_text", "customer_info", "optional: company_number"],
+      "returns": "Comprehensive analysis including project details, compliance requirements, recommendations",
+      "status": "planned"
+    },
+    {
+      "type": "query.research_company",
+      "description": "Research company information via Companies House and web",
+      "params": ["company_number or company_name", "optional: research_depth"],
+      "returns": "Company details, financial status, directors, history, risk assessment",
+      "status": "planned"
+    },
+    {
+      "type": "query.check_compliance",
+      "description": "Check building regulations compliance for project",
+      "params": ["project_type", "building_height", "location", "specifications"],
+      "returns": "Applicable regulations, compliance status, approval pathway recommendations",
+      "status": "planned"
+    },
+    {
+      "type": "query.analyze_document",
+      "description": "Analyze uploaded document and extract information",
+      "params": ["document_url or document_path", "optional: analysis_focus"],
+      "returns": "Structured data, summary, key points, compliance notes",
+      "status": "planned"
+    },
+    {
+      "type": "query.market_research",
+      "description": "Perform market research on topic or competitor",
+      "params": ["research_topic", "optional: specific_questions"],
+      "returns": "Comprehensive research report with data, insights, recommendations",
+      "status": "planned"
+    },
+    {
+      "type": "action.generate_report",
+      "description": "Generate analysis report based on data",
+      "params": ["report_type", "data or data_source", "optional: format"],
+      "returns": "Formatted report with analysis, visualizations, recommendations",
+      "status": "planned"
+    },
+    {
+      "type": "action.create_application",
+      "description": "Build custom web application",
+      "params": ["requirements", "features", "integrations", "optional: design_preferences"],
+      "returns": "Deployed application URL, source code, documentation",
+      "status": "planned"
+    },
+    {
+      "type": "action.automate_workflow",
+      "description": "Set up workflow automation",
+      "params": ["workflow_description", "systems_involved", "trigger_conditions"],
+      "returns": "Workflow configuration, integration details, testing results",
+      "status": "planned"
+    },
+    {
+      "type": "action.analyze_data",
+      "description": "Analyze dataset and generate insights",
+      "params": ["data_source", "analysis_type", "optional: specific_metrics"],
+      "returns": "Analysis results, visualizations, insights, recommendations",
+      "status": "planned"
+    }
+  ],
+  
+  "ai_features": [
+    {
+      "feature": "Natural Language Understanding",
+      "description": "Advanced understanding of customer requests and business context",
+      "model": "Abacus.AI LLM (GPT-4 class)",
+      "status": "active",
+      "capabilities": ["Intent recognition", "Entity extraction", "Context understanding", "Conversation management"]
+    },
+    {
+      "feature": "Document Intelligence",
+      "description": "Intelligent document parsing, analysis, and data extraction",
+      "model": "Abacus.AI LLM + specialized parsers",
+      "status": "active",
+      "capabilities": ["PDF parsing", "Text extraction", "Summarization", "Data structuring"]
+    },
+    {
+      "feature": "Research & Analysis",
+      "description": "Comprehensive research with web search and synthesis",
+      "model": "Abacus.AI LLM + web search",
+      "status": "active",
+      "capabilities": ["Information gathering", "Source evaluation", "Synthesis", "Report generation"]
+    },
+    {
+      "feature": "Code Generation",
+      "description": "AI-powered code generation for applications and automations",
+      "model": "Abacus.AI LLM (code-specialized)",
+      "status": "active",
+      "capabilities": ["Full-stack development", "API integration", "Database design", "Testing"]
+    },
+    {
+      "feature": "Predictive Analytics",
+      "description": "AI-powered predictions and forecasting (planned)",
+      "model": "Abacus.AI ML models",
+      "status": "planned",
+      "capabilities": ["Sales forecasting", "Churn prediction", "Risk assessment", "Trend prediction"]
+    }
+  ],
+  
+  "security_features": [
+    "Operates within Abacus.AI secure environment",
+    "User authentication via Abacus.AI platform",
+    "Role-based access control for sensitive operations",
+    "Audit logging of all actions and decisions",
+    "No persistent storage of sensitive customer data",
+    "Secure API communication (HTTPS only)",
+    "Environment variable protection for secrets",
+    "GDPR and UK data protection compliance",
+    "Webhook signature verification (HMAC-SHA256) - planned",
+    "Request rate limiting and DDoS protection - planned"
+  ],
+  
+  "performance_metrics": [
+    {
+      "metric": "Simple query response time",
+      "target": "< 5 seconds",
+      "current": "2-3 seconds"
+    },
+    {
+      "metric": "Document analysis time",
+      "target": "< 60 seconds",
+      "current": "20-40 seconds"
+    },
+    {
+      "metric": "Market research completion",
+      "target": "< 120 seconds",
+      "current": "60-90 seconds"
+    },
+    {
+      "metric": "Report generation time",
+      "target": "< 180 seconds",
+      "current": "90-120 seconds"
+    },
+    {
+      "metric": "Application development time",
+      "target": "< 8 hours",
+      "current": "2-6 hours depending on complexity"
+    }
+  ],
+  
+  "future_enhancements": [
+    "Deploy persistent webhook service for NEXUS orchestration",
+    "Implement queue-based task processing for async operations",
+    "Add predictive analytics for sales and operations forecasting",
+    "Develop customer churn prediction models",
+    "Implement automated pricing optimization",
+    "Add 3D model analysis for curtain walling projects",
+    "Integrate BIM (Building Information Modeling) capabilities",
+    "Develop automated CAD drawing generation",
+    "Add AR/VR visualization support",
+    "Implement real-time collaboration features",
+    "Add voice interface for hands-free operation",
+    "Develop mobile companion app"
+  ],
+  
+  "technical_stack": {
+    "ai_platform": "Abacus.AI DeepAgent",
+    "llm": "Advanced language models (GPT-4 class)",
+    "programming_languages": ["Python", "TypeScript", "JavaScript"],
+    "web_frameworks": ["React", "Next.js", "FastAPI", "Express.js"],
+    "styling": ["TailwindCSS", "shadcn/ui", "Material-UI"],
+    "data_processing": ["pandas", "numpy", "matplotlib", "seaborn"],
+    "document_processing": ["PyPDF2", "pdf-parse", "OCR tools"],
+    "integration": ["REST APIs", "Webhooks", "MCP Protocol", "GraphQL"],
+    "version_control": ["Git", "GitHub"],
+    "deployment": "Abacus.AI Platform"
+  },
+  
+  "deployment_architecture": {
+    "current": "On-demand conversational AI via Abacus.AI platform",
+    "planned": "Hybrid: Conversational + persistent webhook service for orchestration",
+    "webhook_service": {
+      "framework": "FastAPI or Node.js Express",
+      "hosting": "Abacus.AI Platform or cloud service",
+      "endpoints": [
+        "/api/webhooks/nexus - Receive events from NEXUS",
+        "/api/messages/handle - Handle message requests",
+        "/api/health - Health check endpoint",
+        "/api/status - Status and metrics endpoint"
+      ],
+      "processing": "Background task queue for async operations",
+      "scaling": "Elastic scaling based on load"
+    }
+  },
+  
+  "registration_date": "2025-11-05",
+  "last_updated": "2025-11-05",
+  "maintained_by": "Abacus.AI / SFG Innovations",
+  "contact": "warren@sfg-innovations.com"
+}
