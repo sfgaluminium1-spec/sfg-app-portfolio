@@ -1,0 +1,1227 @@
+{
+  "app_metadata": {
+    "app_name": "ChronoShift Pro",
+    "app_id": "chronoshift-pro",
+    "version": "2.3.0",
+    "build_date": "2025-11-06",
+    "status": "production",
+    "nexus_integration": "approved",
+    "deployment": {
+      "production_url": "https://chronoshift-pro.abacusai.app",
+      "webhook_url": "https://chronoshift-pro.abacusai.app/api/webhooks/nexus",
+      "message_handler_url": "https://chronoshift-pro.abacusai.app/api/messages/handle",
+      "health_check_url": "https://chronoshift-pro.abacusai.app/api/health"
+    }
+  },
+  "business_logic_summary": {
+    "domain": "HR & Payroll Management",
+    "industry": "Manufacturing (Aluminium)",
+    "compliance_framework": "UK Employment Law",
+    "primary_functions": [
+      "Timesheet management with geolocation tracking",
+      "Automated payroll calculations",
+      "Supervisor approval workflows",
+      "UK employment compliance enforcement",
+      "Microsoft 365 integration (Teams, SharePoint, Office 365)",
+      "Offline-first Progressive Web App (PWA)",
+      "Real-time NEXUS ecosystem integration"
+    ]
+  },
+  "core_business_rules": {
+    "timesheet_rules": {
+      "mandatory_fields": [
+        "employee_id",
+        "date",
+        "clock_in_time",
+        "clock_out_time",
+        "location_latitude",
+        "location_longitude",
+        "break_duration"
+      ],
+      "validation_rules": {
+        "minimum_shift_duration": "1 hour",
+        "maximum_shift_duration": "12 hours",
+        "required_break_after": "6 hours",
+        "minimum_break_duration": "30 minutes",
+        "location_accuracy_required": "50 meters",
+        "geofencing": {
+          "enabled": true,
+          "radius": "500 meters from SFG premises",
+          "coordinates": {
+            "latitude": 51.5074,
+            "longitude": -0.1278
+          }
+        }
+      },
+      "approval_workflow": {
+        "levels": [
+          {
+            "role": "EMPLOYEE",
+            "action": "submit",
+            "status_transition": "draft \u2192 submitted"
+          },
+          {
+            "role": "SUPERVISOR",
+            "action": "approve/reject",
+            "status_transition": "submitted \u2192 approved/rejected",
+            "conditions": [
+              "verify_hours_worked",
+              "verify_location_compliance",
+              "verify_break_compliance"
+            ]
+          },
+          {
+            "role": "ADMIN",
+            "action": "process_payroll",
+            "status_transition": "approved \u2192 processed"
+          }
+        ],
+        "sla": {
+          "supervisor_approval": "48 hours",
+          "admin_processing": "weekly_payroll_cycle"
+        }
+      }
+    },
+    "payroll_calculations": {
+      "pay_periods": [
+        "weekly",
+        "fortnightly",
+        "monthly"
+      ],
+      "rate_types": {
+        "standard": {
+          "description": "Standard hourly rate",
+          "calculation": "hours_worked * hourly_rate"
+        },
+        "overtime": {
+          "description": "Overtime rate (1.5x standard)",
+          "trigger": "hours_worked > 40_per_week",
+          "calculation": "overtime_hours * (hourly_rate * 1.5)"
+        },
+        "double_time": {
+          "description": "Double time rate (2x standard)",
+          "trigger": "weekend_work OR public_holiday",
+          "calculation": "double_time_hours * (hourly_rate * 2)"
+        },
+        "night_shift": {
+          "description": "Night shift premium (1.25x standard)",
+          "trigger": "work_time_between_22:00_and_06:00",
+          "calculation": "night_hours * (hourly_rate * 1.25)"
+        }
+      },
+      "deductions": {
+        "types": [
+          "income_tax",
+          "national_insurance",
+          "pension_contribution",
+          "student_loan",
+          "court_orders"
+        ],
+        "calculation_order": [
+          "gross_pay",
+          "pension_contribution",
+          "taxable_pay",
+          "income_tax",
+          "national_insurance",
+          "other_deductions",
+          "net_pay"
+        ]
+      },
+      "uk_compliance": {
+        "minimum_wage": {
+          "apprentice": "\u00a36.40/hour",
+          "under_18": "\u00a36.40/hour",
+          "age_18_20": "\u00a38.60/hour",
+          "age_21_22": "\u00a311.44/hour",
+          "age_23_plus": "\u00a311.44/hour (National Living Wage)"
+        },
+        "working_time_regulations": {
+          "maximum_weekly_hours": 48,
+          "rest_break_entitlement": "20 minutes after 6 hours",
+          "daily_rest": "11 consecutive hours per 24 hours",
+          "weekly_rest": "24 consecutive hours per 7 days"
+        }
+      }
+    },
+    "hr_compliance": {
+      "data_retention": {
+        "payroll_records": "7 years (UK tax law)",
+        "timesheets": "7 years",
+        "employee_records": "6 years after leaving",
+        "accident_reports": "3 years",
+        "gdpr_requests": "immediate_deletion_within_30_days"
+      },
+      "audit_logging": {
+        "logged_actions": [
+          "timesheet_submission",
+          "timesheet_approval",
+          "timesheet_rejection",
+          "payroll_processing",
+          "employee_data_access",
+          "employee_data_modification",
+          "report_generation",
+          "export_operations",
+          "nexus_events",
+          "nexus_messages"
+        ],
+        "log_fields": [
+          "timestamp",
+          "user_id",
+          "action_type",
+          "entity_type",
+          "entity_id",
+          "ip_address",
+          "user_agent",
+          "changes_made"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "ADMIN",
+            "permissions": [
+              "view_all_data",
+              "modify_all_data",
+              "process_payroll",
+              "generate_reports",
+              "manage_users",
+              "view_compliance_logs",
+              "configure_integrations"
+            ]
+          },
+          {
+            "role": "SUPERVISOR",
+            "permissions": [
+              "view_team_timesheets",
+              "approve_timesheets",
+              "reject_timesheets",
+              "view_team_reports",
+              "add_notes_to_timesheets"
+            ]
+          },
+          {
+            "role": "EMPLOYEE",
+            "permissions": [
+              "view_own_timesheets",
+              "submit_timesheets",
+              "view_own_payslips",
+              "view_company_rules",
+              "request_holiday"
+            ]
+          }
+        ]
+      }
+    },
+    "microsoft365_integration": {
+      "authentication": {
+        "method": "OAuth 2.0",
+        "scopes": [
+          "User.Read",
+          "Files.ReadWrite",
+          "Sites.ReadWrite.All",
+          "ChannelMessage.Send"
+        ]
+      },
+      "teams_integration": {
+        "features": [
+          "Automatic approval notifications to supervisors",
+          "Timesheet submission alerts",
+          "Payroll processing notifications",
+          "Deadline reminders"
+        ],
+        "channel_structure": {
+          "default_channel": "#payroll-notifications",
+          "supervisor_channel": "#supervisor-approvals",
+          "admin_channel": "#payroll-admin"
+        }
+      },
+      "sharepoint_integration": {
+        "features": [
+          "Automatic document upload (payslips, reports)",
+          "Version control for payroll documents",
+          "Secure document sharing",
+          "Compliance document archival"
+        ],
+        "site_structure": {
+          "root_site": "SFG Aluminium",
+          "document_library": "Payroll Documents",
+          "folders": [
+            "Payslips/{year}/{month}",
+            "Reports/{year}/{month}",
+            "Compliance/{year}",
+            "Timesheets/{year}/{week}"
+          ]
+        }
+      }
+    },
+    "nexus_integration": {
+      "webhook_endpoint": {
+        "url": "/api/webhooks/nexus",
+        "method": "POST",
+        "authentication": "HMAC-SHA256 signature verification",
+        "supported_events": [
+          {
+            "event": "employee.registered",
+            "description": "New employee created in another SFG app",
+            "action": "Sync employee to ChronoShift Pro",
+            "handler": "handleEmployeeRegistered"
+          },
+          {
+            "event": "employee.updated",
+            "description": "Employee information updated in another app",
+            "action": "Update employee record in ChronoShift Pro",
+            "handler": "handleEmployeeUpdated"
+          },
+          {
+            "event": "payroll.process_requested",
+            "description": "External system requests payroll processing",
+            "action": "Trigger payroll calculation and generation",
+            "handler": "handlePayrollProcessRequested"
+          },
+          {
+            "event": "timesheet.bulk_import",
+            "description": "Bulk import timesheets from external source",
+            "action": "Validate and import timesheets",
+            "handler": "handleTimesheetBulkImport"
+          },
+          {
+            "event": "compliance.audit_required",
+            "description": "Compliance audit requested by NEXUS",
+            "action": "Generate compliance report",
+            "handler": "handleComplianceAudit"
+          },
+          {
+            "event": "test.event",
+            "description": "Test event for connectivity",
+            "action": "Acknowledge and log",
+            "handler": "handleTestEvent"
+          }
+        ]
+      },
+      "message_handler": {
+        "url": "/api/messages/handle",
+        "method": "POST",
+        "authentication": "None (internal network)",
+        "supported_messages": [
+          {
+            "type": "query.employee_data",
+            "description": "Retrieve employee details",
+            "params": [
+              "employee_id"
+            ],
+            "returns": "Employee object with user info",
+            "handler": "getEmployeeData"
+          },
+          {
+            "type": "query.timesheet_summary",
+            "description": "Get timesheet summary for period",
+            "params": [
+              "employee_id",
+              "period",
+              "start_date",
+              "end_date"
+            ],
+            "returns": "Timesheet summary with hours and earnings",
+            "handler": "getTimesheetSummary"
+          },
+          {
+            "type": "query.payroll_summary",
+            "description": "Calculate payroll totals for period",
+            "params": [
+              "period",
+              "start_date",
+              "end_date"
+            ],
+            "returns": "Payroll totals and employee count",
+            "handler": "getPayrollSummary"
+          },
+          {
+            "type": "action.approve_timesheet",
+            "description": "Approve a specific timesheet",
+            "params": [
+              "timesheet_id",
+              "approver_id"
+            ],
+            "returns": "Updated timesheet status",
+            "handler": "approveTimesheet"
+          },
+          {
+            "type": "action.generate_payslip",
+            "description": "Generate payslip for employee",
+            "params": [
+              "employee_id",
+              "period",
+              "start_date",
+              "end_date"
+            ],
+            "returns": "Payslip data",
+            "handler": "generatePayslip"
+          },
+          {
+            "type": "action.export_payroll_data",
+            "description": "Export payroll data for period",
+            "params": [
+              "format",
+              "start_date",
+              "end_date"
+            ],
+            "returns": "Download URL",
+            "handler": "exportPayrollData"
+          },
+          {
+            "type": "test.message",
+            "description": "Test message for connectivity",
+            "params": [],
+            "returns": "Service status and capabilities",
+            "handler": "handleTestMessage"
+          }
+        ]
+      },
+      "security": {
+        "webhook_signature": {
+          "algorithm": "HMAC-SHA256",
+          "header": "X-Nexus-Signature",
+          "secret": "${NEXUS_WEBHOOK_SECRET}",
+          "verification": "timing_safe_equal"
+        },
+        "logging": {
+          "all_events_logged": true,
+          "log_table": "HRComplianceLog",
+          "retention": "7 years",
+          "fields": [
+            "timestamp",
+            "event_type",
+            "request_id",
+            "ip_address",
+            "payload_hash"
+          ]
+        }
+      }
+    }
+  },
+  "api_endpoints": {
+    "authentication": [
+      {
+        "path": "/api/auth/[...nextauth]",
+        "method": "GET, POST",
+        "description": "NextAuth.js authentication endpoints",
+        "authentication": "None (public)",
+        "returns": "Session tokens"
+      },
+      {
+        "path": "/api/signup",
+        "method": "POST",
+        "description": "Employee registration",
+        "authentication": "None (public)",
+        "body": {
+          "email": "string",
+          "password": "string",
+          "firstName": "string",
+          "lastName": "string",
+          "employeeId": "string"
+        },
+        "returns": "User object"
+      }
+    ],
+    "timesheets": [
+      {
+        "path": "/api/timesheets",
+        "method": "GET, POST",
+        "description": "Get all timesheets or create new",
+        "authentication": "Required (session)",
+        "query_params": {
+          "employeeId": "string (optional)",
+          "status": "string (optional)",
+          "startDate": "date (optional)",
+          "endDate": "date (optional)"
+        },
+        "body": {
+          "employeeId": "string",
+          "date": "date",
+          "clockIn": "datetime",
+          "clockOut": "datetime",
+          "breakMinutes": "number",
+          "locationLat": "number",
+          "locationLng": "number"
+        },
+        "returns": "Timesheet object(s)"
+      },
+      {
+        "path": "/api/timesheets/[id]",
+        "method": "GET, PUT, DELETE",
+        "description": "Get, update, or delete specific timesheet",
+        "authentication": "Required (session)",
+        "returns": "Timesheet object"
+      },
+      {
+        "path": "/api/timesheets/[id]/approve",
+        "method": "POST",
+        "description": "Approve or reject timesheet",
+        "authentication": "Required (SUPERVISOR or ADMIN)",
+        "body": {
+          "status": "APPROVED | REJECTED",
+          "notes": "string (optional)"
+        },
+        "returns": "Updated timesheet"
+      },
+      {
+        "path": "/api/timesheets/approvals",
+        "method": "GET",
+        "description": "Get pending approvals for supervisor",
+        "authentication": "Required (SUPERVISOR or ADMIN)",
+        "returns": "Array of pending timesheets"
+      },
+      {
+        "path": "/api/timesheets/geolocation",
+        "method": "POST",
+        "description": "Validate geolocation for timesheet",
+        "authentication": "Required (session)",
+        "body": {
+          "latitude": "number",
+          "longitude": "number"
+        },
+        "returns": "Validation result"
+      },
+      {
+        "path": "/api/timesheets/hybrid",
+        "method": "POST",
+        "description": "Submit hybrid timesheet (multiple entries)",
+        "authentication": "Required (session)",
+        "body": {
+          "entries": "Array<TimesheetEntry>"
+        },
+        "returns": "Array of created timesheets"
+      },
+      {
+        "path": "/api/timesheets/offline-sync",
+        "method": "POST",
+        "description": "Sync offline timesheets",
+        "authentication": "Required (session)",
+        "body": {
+          "timesheets": "Array<TimesheetData>"
+        },
+        "returns": "Sync status"
+      }
+    ],
+    "employees": [
+      {
+        "path": "/api/employees",
+        "method": "GET, POST",
+        "description": "Get all employees or create new",
+        "authentication": "Required (ADMIN)",
+        "returns": "Employee object(s)"
+      }
+    ],
+    "export": [
+      {
+        "path": "/api/export/timesheets",
+        "method": "POST",
+        "description": "Export timesheets to Excel/PDF",
+        "authentication": "Required (ADMIN or SUPERVISOR)",
+        "body": {
+          "format": "excel | pdf",
+          "startDate": "date",
+          "endDate": "date",
+          "employeeIds": "Array<string> (optional)"
+        },
+        "returns": "File download"
+      }
+    ],
+    "notifications": [
+      {
+        "path": "/api/notifications",
+        "method": "GET",
+        "description": "Get user notifications",
+        "authentication": "Required (session)",
+        "returns": "Array of notifications"
+      },
+      {
+        "path": "/api/notifications/approval",
+        "method": "POST",
+        "description": "Send approval notification",
+        "authentication": "Required (ADMIN)",
+        "body": {
+          "timesheetId": "string",
+          "recipientId": "string"
+        },
+        "returns": "Success status"
+      }
+    ],
+    "microsoft365": [
+      {
+        "path": "/api/microsoft365/config",
+        "method": "GET, POST",
+        "description": "Get or update Microsoft 365 configuration",
+        "authentication": "Required (ADMIN)",
+        "returns": "Configuration object"
+      },
+      {
+        "path": "/api/microsoft365/webhook",
+        "method": "POST",
+        "description": "Microsoft 365 webhook endpoint",
+        "authentication": "Webhook signature",
+        "returns": "Acknowledgment"
+      }
+    ],
+    "nexus": [
+      {
+        "path": "/api/webhooks/nexus",
+        "method": "GET, POST",
+        "description": "NEXUS webhook endpoint for ecosystem events",
+        "authentication": "HMAC-SHA256 signature",
+        "body": {
+          "type": "string (event type)",
+          "data": "object",
+          "event_id": "string"
+        },
+        "returns": {
+          "status": "acknowledged",
+          "event_type": "string",
+          "event_id": "string",
+          "processed_at": "timestamp"
+        }
+      },
+      {
+        "path": "/api/messages/handle",
+        "method": "GET, POST",
+        "description": "NEXUS message handler for synchronous requests",
+        "authentication": "None (internal)",
+        "body": {
+          "type": "string (message type)",
+          "params": "object",
+          "request_id": "string"
+        },
+        "returns": {
+          "request_id": "string",
+          "status": "success | error",
+          "result": "object",
+          "timestamp": "timestamp"
+        }
+      },
+      {
+        "path": "/api/github-webhook",
+        "method": "GET, POST",
+        "description": "GitHub webhook for ecosystem updates",
+        "authentication": "HMAC-SHA256 signature",
+        "returns": "Acknowledgment"
+      }
+    ],
+    "admin": [
+      {
+        "path": "/api/admin/users",
+        "method": "GET, POST, PUT, DELETE",
+        "description": "Manage system users",
+        "authentication": "Required (ADMIN)",
+        "returns": "User object(s)"
+      },
+      {
+        "path": "/api/admin/users/[id]/status",
+        "method": "POST",
+        "description": "Activate/deactivate user",
+        "authentication": "Required (ADMIN)",
+        "returns": "Updated user"
+      },
+      {
+        "path": "/api/admin/users/[id]/unlock",
+        "method": "POST",
+        "description": "Unlock locked user account",
+        "authentication": "Required (ADMIN)",
+        "returns": "Updated user"
+      },
+      {
+        "path": "/api/admin/audit-logs",
+        "method": "GET",
+        "description": "Get compliance audit logs",
+        "authentication": "Required (ADMIN)",
+        "query_params": {
+          "startDate": "date (optional)",
+          "endDate": "date (optional)",
+          "actionType": "string (optional)"
+        },
+        "returns": "Array of audit logs"
+      },
+      {
+        "path": "/api/admin/audit-logs/export",
+        "method": "POST",
+        "description": "Export audit logs",
+        "authentication": "Required (ADMIN)",
+        "returns": "File download"
+      },
+      {
+        "path": "/api/admin/security-settings",
+        "method": "GET, POST",
+        "description": "Manage security settings",
+        "authentication": "Required (ADMIN)",
+        "returns": "Security configuration"
+      }
+    ],
+    "supervisor": [
+      {
+        "path": "/api/supervisor/stats",
+        "method": "GET",
+        "description": "Get supervisor dashboard statistics",
+        "authentication": "Required (SUPERVISOR or ADMIN)",
+        "returns": "Statistics object"
+      }
+    ],
+    "utilities": [
+      {
+        "path": "/api/sync",
+        "method": "POST",
+        "description": "Manual data synchronization",
+        "authentication": "Required (ADMIN)",
+        "returns": "Sync status"
+      },
+      {
+        "path": "/api/test-email",
+        "method": "POST",
+        "description": "Test email configuration",
+        "authentication": "Required (ADMIN)",
+        "body": {
+          "recipient": "string"
+        },
+        "returns": "Test result"
+      },
+      {
+        "path": "/api/health",
+        "method": "GET",
+        "description": "Health check endpoint",
+        "authentication": "None",
+        "returns": {
+          "status": "healthy",
+          "version": "2.3.0",
+          "database": "connected",
+          "microsoft365": "connected"
+        }
+      }
+    ]
+  },
+  "database_schema": {
+    "models": [
+      {
+        "name": "User",
+        "description": "User authentication and profile",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "primary_key": true
+          },
+          {
+            "name": "email",
+            "type": "String",
+            "unique": true
+          },
+          {
+            "name": "password",
+            "type": "String",
+            "hashed": true
+          },
+          {
+            "name": "firstName",
+            "type": "String"
+          },
+          {
+            "name": "lastName",
+            "type": "String"
+          },
+          {
+            "name": "role",
+            "type": "UserRole",
+            "enum": [
+              "ADMIN",
+              "SUPERVISOR",
+              "EMPLOYEE"
+            ]
+          },
+          {
+            "name": "isActive",
+            "type": "Boolean",
+            "default": true
+          },
+          {
+            "name": "lastLogin",
+            "type": "DateTime",
+            "nullable": true
+          },
+          {
+            "name": "failedLoginAttempts",
+            "type": "Int",
+            "default": 0
+          },
+          {
+            "name": "accountLocked",
+            "type": "Boolean",
+            "default": false
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime"
+          }
+        ],
+        "relations": [
+          {
+            "name": "employee",
+            "model": "Employee",
+            "type": "one-to-one"
+          },
+          {
+            "name": "timesheets",
+            "model": "Timesheet",
+            "type": "one-to-many"
+          }
+        ]
+      },
+      {
+        "name": "Employee",
+        "description": "Extended employee information",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "primary_key": true
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "unique": true
+          },
+          {
+            "name": "employeeId",
+            "type": "String",
+            "unique": true
+          },
+          {
+            "name": "department",
+            "type": "String"
+          },
+          {
+            "name": "position",
+            "type": "String"
+          },
+          {
+            "name": "hourlyRate",
+            "type": "Decimal"
+          },
+          {
+            "name": "startDate",
+            "type": "DateTime"
+          },
+          {
+            "name": "supervisorId",
+            "type": "String",
+            "nullable": true
+          },
+          {
+            "name": "niNumber",
+            "type": "String"
+          },
+          {
+            "name": "taxCode",
+            "type": "String"
+          },
+          {
+            "name": "bankDetails",
+            "type": "Json"
+          },
+          {
+            "name": "contactInfo",
+            "type": "Json"
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime"
+          }
+        ],
+        "relations": [
+          {
+            "name": "user",
+            "model": "User",
+            "type": "one-to-one"
+          },
+          {
+            "name": "supervisor",
+            "model": "User",
+            "type": "many-to-one"
+          }
+        ]
+      },
+      {
+        "name": "Timesheet",
+        "description": "Timesheet entries with geolocation",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "primary_key": true
+          },
+          {
+            "name": "userId",
+            "type": "String"
+          },
+          {
+            "name": "employeeId",
+            "type": "String"
+          },
+          {
+            "name": "date",
+            "type": "DateTime"
+          },
+          {
+            "name": "clockIn",
+            "type": "DateTime"
+          },
+          {
+            "name": "clockOut",
+            "type": "DateTime"
+          },
+          {
+            "name": "breakMinutes",
+            "type": "Int"
+          },
+          {
+            "name": "totalHours",
+            "type": "Decimal"
+          },
+          {
+            "name": "regularHours",
+            "type": "Decimal"
+          },
+          {
+            "name": "overtimeHours",
+            "type": "Decimal"
+          },
+          {
+            "name": "locationLat",
+            "type": "Decimal"
+          },
+          {
+            "name": "locationLng",
+            "type": "Decimal"
+          },
+          {
+            "name": "locationAccuracy",
+            "type": "Decimal"
+          },
+          {
+            "name": "status",
+            "type": "TimesheetStatus",
+            "enum": [
+              "DRAFT",
+              "SUBMITTED",
+              "APPROVED",
+              "REJECTED",
+              "PROCESSED"
+            ]
+          },
+          {
+            "name": "approvedBy",
+            "type": "String",
+            "nullable": true
+          },
+          {
+            "name": "approvedAt",
+            "type": "DateTime",
+            "nullable": true
+          },
+          {
+            "name": "notes",
+            "type": "String",
+            "nullable": true
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime"
+          }
+        ],
+        "relations": [
+          {
+            "name": "user",
+            "model": "User",
+            "type": "many-to-one"
+          },
+          {
+            "name": "approver",
+            "model": "User",
+            "type": "many-to-one"
+          }
+        ]
+      },
+      {
+        "name": "HRComplianceLog",
+        "description": "Audit trail for compliance (7-year retention)",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "primary_key": true
+          },
+          {
+            "name": "timestamp",
+            "type": "DateTime"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "nullable": true
+          },
+          {
+            "name": "action",
+            "type": "String"
+          },
+          {
+            "name": "entityType",
+            "type": "String"
+          },
+          {
+            "name": "entityId",
+            "type": "String",
+            "nullable": true
+          },
+          {
+            "name": "details",
+            "type": "Json"
+          },
+          {
+            "name": "ipAddress",
+            "type": "String",
+            "nullable": true
+          },
+          {
+            "name": "userAgent",
+            "type": "String",
+            "nullable": true
+          }
+        ],
+        "indexes": [
+          {
+            "fields": [
+              "timestamp"
+            ]
+          },
+          {
+            "fields": [
+              "userId"
+            ]
+          },
+          {
+            "fields": [
+              "action"
+            ]
+          },
+          {
+            "fields": [
+              "entityType"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "technology_stack": {
+    "frontend": {
+      "framework": "Next.js 14.2.28 (App Router)",
+      "language": "TypeScript 5.2.2",
+      "ui_library": "React 18.2.0",
+      "styling": "Tailwind CSS 3.3.3",
+      "component_library": "shadcn/ui (Radix UI primitives)",
+      "state_management": "React Context + Zustand",
+      "forms": "React Hook Form + Zod validation",
+      "charts": "Recharts, Chart.js, Plotly.js"
+    },
+    "backend": {
+      "framework": "Next.js API Routes",
+      "language": "TypeScript 5.2.2",
+      "orm": "Prisma 6.7.0",
+      "database": "PostgreSQL",
+      "authentication": "NextAuth.js 4.24.11",
+      "password_hashing": "bcryptjs"
+    },
+    "integrations": {
+      "microsoft365": {
+        "library": "Microsoft Graph API",
+        "services": [
+          "Teams",
+          "SharePoint",
+          "Office 365"
+        ],
+        "authentication": "OAuth 2.0"
+      },
+      "geolocation": "Browser Geolocation API + Mapbox",
+      "file_generation": "ExcelJS, jsPDF",
+      "notifications": "React Hot Toast"
+    },
+    "pwa": {
+      "service_worker": "Custom SW with offline sync",
+      "manifest": "PWA manifest with app icons",
+      "offline_storage": "IndexedDB",
+      "install_prompt": "Custom install UI"
+    },
+    "deployment": {
+      "platform": "Abacus.AI",
+      "hosting": "Production: chronoshift-pro.abacusai.app",
+      "ssl": "Automatic HTTPS",
+      "environment": "Production"
+    }
+  },
+  "key_features": {
+    "timesheet_management": {
+      "geolocation_tracking": "Mandatory GPS tracking with 50m accuracy requirement",
+      "geofencing": "500m radius validation around SFG premises",
+      "offline_mode": "IndexedDB storage with automatic sync when online",
+      "voice_dictation": "Voice-to-text for mobile timesheet entry",
+      "hybrid_entry": "Support for multiple shift entries in one form",
+      "automatic_calculations": "Auto-calculate total hours, breaks, overtime",
+      "mobile_optimized": "Touch-friendly UI with large buttons and swipe gestures"
+    },
+    "approval_workflow": {
+      "multi_level": "Employee \u2192 Supervisor \u2192 Admin",
+      "notifications": "Real-time notifications via Teams/Email",
+      "bulk_approval": "Approve multiple timesheets at once",
+      "rejection_notes": "Require notes when rejecting",
+      "sla_tracking": "Track approval times against SLA",
+      "delegation": "Supervisors can delegate approval authority"
+    },
+    "payroll_processing": {
+      "automated_calculations": "Standard, overtime, double-time, night shift",
+      "uk_compliance": "PAYE, NI, pension auto-deduction",
+      "payslip_generation": "Automated PDF payslips",
+      "brightpay_export": "Direct export to BrightPay format",
+      "sharepoint_upload": "Auto-upload to SharePoint",
+      "email_distribution": "Secure payslip email delivery"
+    },
+    "compliance_enforcement": {
+      "working_time_directive": "Automatic 48-hour week enforcement",
+      "break_compliance": "Mandatory breaks after 6 hours",
+      "minimum_wage": "Automatic minimum wage validation",
+      "audit_trail": "7-year audit log retention",
+      "gdpr_compliance": "Data deletion on request, 30-day SLA",
+      "right_to_work": "Document storage and expiry tracking"
+    },
+    "microsoft365_integration": {
+      "teams_notifications": "Approval requests, deadline reminders",
+      "sharepoint_storage": "Payslips, reports, compliance docs",
+      "sso": "Single sign-on with Microsoft accounts",
+      "calendar_sync": "Holiday requests sync to Outlook",
+      "power_automate": "Custom workflow triggers"
+    },
+    "mobile_pwa": {
+      "installable": "Add to home screen on iOS/Android",
+      "offline_first": "Full functionality without internet",
+      "push_notifications": "Browser push notifications",
+      "dark_mode": "System-aware dark mode",
+      "haptic_feedback": "Vibration feedback on actions",
+      "biometric_auth": "Face ID/Touch ID support"
+    },
+    "nexus_ecosystem": {
+      "real_time_sync": "Webhook-based employee sync",
+      "cross_app_queries": "Other apps can query HR data",
+      "orchestrated_workflows": "Participate in multi-app workflows",
+      "compliance_automation": "Automated audit triggers from NEXUS",
+      "centralized_logging": "All events logged to compliance system"
+    }
+  },
+  "security_features": {
+    "authentication": {
+      "method": "NextAuth.js with database sessions",
+      "password_policy": "Minimum 8 characters, bcrypt hashing",
+      "session_timeout": "24 hours inactivity",
+      "account_lockout": "5 failed attempts, 30-minute lockout",
+      "password_reset": "Email-based secure reset flow"
+    },
+    "authorization": {
+      "role_based_access": "ADMIN, SUPERVISOR, EMPLOYEE",
+      "row_level_security": "Users see only their data",
+      "api_route_protection": "Middleware on all protected routes",
+      "supervisor_hierarchy": "Supervisors see only their team"
+    },
+    "data_protection": {
+      "encryption_at_rest": "Database encryption",
+      "encryption_in_transit": "HTTPS only",
+      "sensitive_field_hashing": "Passwords, bank details",
+      "gdpr_compliance": "Data deletion, export on request",
+      "audit_logging": "All data access logged"
+    },
+    "webhook_security": {
+      "signature_verification": "HMAC-SHA256",
+      "timing_safe_comparison": "Prevent timing attacks",
+      "request_validation": "Schema validation on all payloads",
+      "ip_whitelisting": "Optional IP restriction",
+      "rate_limiting": "Prevent abuse"
+    }
+  },
+  "deployment_information": {
+    "current_version": "2.3.0",
+    "build_date": "2025-11-06",
+    "production_url": "https://chronoshift-pro.abacusai.app",
+    "status": "Production Ready",
+    "nexus_integration_status": "Approved",
+    "last_updated": "2025-11-06T21:00:00Z",
+    "environment_variables": [
+      "DATABASE_URL",
+      "NEXTAUTH_URL",
+      "NEXTAUTH_SECRET",
+      "MICROSOFT_CLIENT_ID",
+      "MICROSOFT_CLIENT_SECRET",
+      "MICROSOFT_TENANT_ID",
+      "NEXUS_WEBHOOK_SECRET",
+      "GITHUB_WEBHOOK_SECRET"
+    ]
+  },
+  "integration_points": {
+    "can_provide_to_ecosystem": [
+      "Employee master data",
+      "Timesheet data (hours worked, location, status)",
+      "Payroll calculations (gross, net, deductions)",
+      "Labor cost data for projects",
+      "Employee availability status",
+      "Compliance audit reports",
+      "Holiday/absence data"
+    ],
+    "can_receive_from_ecosystem": [
+      "Employee registrations from HR systems",
+      "Project assignments from project management apps",
+      "Cost center data from finance systems",
+      "Compliance audit triggers",
+      "Bulk timesheet imports",
+      "Payroll processing requests"
+    ],
+    "real_time_capabilities": [
+      "Employee status updates (via webhook)",
+      "Instant payroll queries (via message handler)",
+      "Cross-app timesheet approvals",
+      "Real-time labor cost calculations",
+      "Immediate compliance checks"
+    ]
+  },
+  "future_enhancements": [
+    "Biometric clock-in/out (fingerprint, face recognition)",
+    "AI-powered timesheet fraud detection",
+    "Predictive labor cost forecasting",
+    "Integration with physical access control systems",
+    "Real-time GPS tracking for field workers",
+    "Blockchain-based immutable audit trail",
+    "Advanced analytics dashboard with ML insights",
+    "Multi-currency support for international operations"
+  ],
+  "support_contact": {
+    "app_owner": "Warren Heathcote",
+    "company": "SFG Aluminium Ltd",
+    "email": "warren@sfgaluminium.co.uk",
+    "support_hours": "Monday-Friday, 9:00-17:00 GMT",
+    "documentation_url": "https://chronoshift-pro.abacusai.app/docs",
+    "health_check_url": "https://chronoshift-pro.abacusai.app/api/health"
+  }
+}
