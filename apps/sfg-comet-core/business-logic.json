@@ -1,144 +1,106 @@
 {
+  "appName": "SFG COMET CORE",
+  "version": "1.2.0",
+  "category": "core-hub",
+  "description": "SFG COMET CORE is the central orchestration hub for SFG Aluminium's business operations, serving as the primary desktop and document management system. Built with Next.js 14, TypeScript, and PostgreSQL, it integrates with five specialized MCP (Model Context Protocol) servers via AgentPass.ai for Sales, Finance, Operations, Communications, and Data management. The system features a RAG (Retrieval-Augmented Generation) Truth System powered by ChromaDB and PostgreSQL, storing all business rules and logic in a vector database for AI-queryable intelligence. COMET CORE manages the complete project lifecycle through six stages (New Enquiry, Viability Check, Pre-Production, Production, Final Inspection, Invoicing) with automated document numbering, anti-drift protection, and comprehensive audit logging. It provides real-time credit checking via Companies House and Experian integration, tier-based staff permissions (Tier 1-3 access control), and seamless integration with external systems including Xero accounting, Microsoft Graph for SharePoint/Outlook, Gmail, and Twilio SMS. The application serves as the single source of truth for all SFG Aluminium operations, orchestrating data flow between satellite applications and maintaining centralized business intelligence.",
   "capabilities": [
-    "Project management with 6-stage workflow (ENQ\u2192QUO\u2192ORD\u2192INV\u2192DEL\u2192PAID)",
-    "Customer credit checking via Companies House API",
-    "Document management with AWS S3 cloud storage",
-    "RAG truth system with AI-queryable business rules",
-    "User management with 5-tier role-based access control",
-    "Activity logging and comprehensive audit trails",
-    "Approval workflows with tier-based authority",
-    "Notification system for project events",
-    "Dashboard and analytics",
-    "MCP (Multi-Channel Processor) orchestration"
+    "Complete project lifecycle management with 6-stage workflow (New Enquiry \u2192 Viability Check \u2192 Pre-Production \u2192 Production \u2192 Final Inspection \u2192 Invoicing)",
+    "Automated document numbering system with anti-drift protection and verification (format: ENQ-YYYY-###, VC-YYYY-###, etc.)",
+    "Real-time credit checking and scoring via Companies House API with AI-powered financial analysis and automated alerts",
+    "RAG Truth System with ChromaDB vector database storing all business rules, logic, and operational intelligence for AI-queryable insights",
+    "MCP orchestration layer integrating 5 specialized servers (Sales, Finance, Operations, Communications, Data) via AgentPass.ai",
+    "Tier-based staff permissions and approval workflows (Tier 1: Sales, Tier 2: Management, Tier 3: Executive)",
+    "Comprehensive document management with S3 cloud storage, version control, and audit logging for all file operations",
+    "Real-time activity feed and notification system with Slack/Teams integration for team collaboration and updates",
+    "External API integrations (Xero accounting, Microsoft Graph SharePoint/Outlook, Gmail, Twilio SMS) with centralized credential vault",
+    "Advanced analytics dashboard with project metrics, conversion rates, stage duration analysis, and financial KPIs"
   ],
   "workflows": [
     {
-      "name": "Project Lifecycle",
+      "name": "New Enquiry to Quote Workflow",
+      "description": "Complete workflow from initial customer enquiry through credit check, viability assessment, and quote generation",
       "steps": [
-        "ENQ - Receive customer enquiry",
-        "QUO - Generate and send quote",
-        "ORD - Confirm customer order",
-        "INV - Generate and send invoice",
-        "DEL - Create delivery note and dispatch",
-        "PAID - Receive payment and close project"
+        "Customer submits enquiry via email, phone, or web form",
+        "COMET CORE creates New Enquiry record with auto-generated ENQ-YYYY-### number",
+        "System triggers Companies House credit check and AI scoring",
+        "Credit results stored in RAG Truth System for future reference",
+        "Viability Check stage initiated with technical assessment",
+        "Quote generated with pricing, terms, and delivery timeline",
+        "Quote sent to customer via email with tracking",
+        "Status updates pushed to NEXUS and MCP-SALES"
       ]
     },
     {
-      "name": "Credit Checking",
+      "name": "Project Approval and Production Workflow",
+      "description": "Multi-tier approval workflow from quote acceptance through production initiation",
       "steps": [
-        "Extract company number",
-        "Query Companies House API",
-        "Calculate traditional credit score",
-        "Calculate AI-enhanced credit score",
-        "Determine risk tier and credit limit",
-        "Store result in database"
+        "Customer accepts quote, triggering approval workflow",
+        "Tier 2 manager reviews and approves Pre-Production stage",
+        "Project details synchronized with Xero for financial tracking",
+        "Production team receives notification via Slack/Teams",
+        "Production stage initiated with material orders and scheduling",
+        "Real-time progress updates captured in activity feed",
+        "Document attachments stored in S3 with version control",
+        "All changes logged in audit trail for compliance"
       ]
     },
     {
-      "name": "Document Management",
+      "name": "Credit Check and Risk Assessment Workflow",
+      "description": "Automated credit checking with AI-powered risk scoring and decision support",
       "steps": [
-        "User uploads document",
-        "Validate file type and size",
-        "Upload to AWS S3 cloud storage",
-        "Store S3 key in PostgreSQL database",
-        "Generate signed URL for download",
-        "Track document version history"
+        "Credit check triggered from New Enquiry or manually by staff",
+        "Companies House API queried for company financial data",
+        "AI scoring engine analyzes financial health (Healthy/Moderate/Poor)",
+        "Credit results stored in PostgreSQL and ChromaDB vector DB",
+        "Risk assessment summary generated with recommendations",
+        "Alert notifications sent to sales team if risk detected",
+        "Credit history tracked over time for repeat customers",
+        "Results accessible via RAG system for future queries"
       ]
     },
     {
-      "name": "Approval Workflow",
+      "name": "Document Management and Audit Workflow",
+      "description": "Comprehensive document lifecycle with version control and audit logging",
       "steps": [
-        "User submits approval request",
-        "System determines required tier based on amount",
-        "Notify approvers in required tier",
-        "Approver reviews and approves/rejects",
-        "System updates project status",
-        "Send confirmation notification"
+        "User uploads document via drag-and-drop interface",
+        "File validated for type, size, and security",
+        "Document uploaded to AWS S3 with encrypted storage",
+        "Metadata stored in PostgreSQL (filename, size, uploaded_by, timestamp)",
+        "Document linked to specific project and stage",
+        "Access controlled based on user tier permissions",
+        "All document operations logged in audit trail",
+        "Automatic notifications sent to relevant team members"
       ]
-    }
-  ],
-  "business_rules": [
-    {
-      "rule": "5-tier staff permission system",
-      "condition": "User tier determines approval authority",
-      "action": "T1: Unlimited, T2: \u00a350k, T3: \u00a315k, T4: \u00a35k, T5: \u00a31k"
     },
     {
-      "rule": "5-tier customer credit system",
-      "condition": "Customer tier based on credit limit",
-      "action": "Platinum: \u00a350k+, Sapphire: \u00a315-50k, Steel: \u00a35-15k, Green: \u00a31-5k, Crimson: \u00a30-1k"
-    },
-    {
-      "rule": "Sequential base number system",
-      "condition": "All projects get sequential base number",
-      "action": "Format: {BASE_NUMBER}-{STAGE} (e.g., 24001-ENQ)"
-    },
-    {
-      "rule": "Credit check for high-value orders",
-      "condition": "order_value > \u00a310,000",
-      "action": "Perform credit check before order approval"
-    },
-    {
-      "rule": "Minimum margin requirement",
-      "condition": "margin >= 0.15",
-      "action": "Require 15% minimum margin on all quotes"
-    },
-    {
-      "rule": "Tier-based approval escalation",
-      "condition": "value > user_tier_limit",
-      "action": "Escalate to higher tier for approval"
+      "name": "MCP Orchestration and Data Synchronization Workflow",
+      "description": "Real-time data synchronization across 5 MCP servers via AgentPass.ai",
+      "steps": [
+        "COMET CORE receives data update from user action",
+        "Update validated against business rules in RAG Truth System",
+        "Event payload constructed with full context",
+        "Webhook sent to NEXUS orchestration layer",
+        "NEXUS routes event to relevant MCP servers (Sales, Finance, etc.)",
+        "MCP servers process event and return confirmation",
+        "COMET CORE updates local database with synchronized data",
+        "Success/failure logged with retry logic for failed webhooks"
+      ]
     }
   ],
   "integrations": [
-    {
-      "system": "Companies House",
-      "purpose": "Company data and credit checking"
-    },
-    {
-      "system": "AWS S3",
-      "purpose": "Cloud document storage"
-    },
-    {
-      "system": "PostgreSQL",
-      "purpose": "Primary database"
-    },
-    {
-      "system": "ChromaDB",
-      "purpose": "Vector database for RAG system"
-    },
-    {
-      "system": "Xero",
-      "purpose": "Accounting and invoicing (pending OAuth)"
-    },
-    {
-      "system": "Microsoft Graph",
-      "purpose": "Email, calendar, SharePoint (pending OAuth)"
-    },
-    {
-      "system": "Twilio",
-      "purpose": "SMS notifications (configured)"
-    },
-    {
-      "system": "Abacus.AI LLM APIs",
-      "purpose": "AI-powered features"
-    }
+    "NEXUS",
+    "MCP-SALES",
+    "MCP-FINANCE",
+    "MCP-OPERATIONS",
+    "MCP-COMMUNICATIONS",
+    "MCP-DATA",
+    "AgentPass.ai",
+    "Xero",
+    "Microsoft Graph",
+    "Companies House",
+    "Experian",
+    "Gmail",
+    "Twilio"
   ],
-  "webhook_events": [
-    "project.created",
-    "project.status_changed",
-    "document.uploaded",
-    "approval.requested",
-    "approval.approved",
-    "approval.rejected",
-    "payment.received",
-    "credit_check.completed"
-  ],
-  "supported_messages": [
-    "query.project_status",
-    "query.customer_data",
-    "query.credit_check",
-    "action.create_project",
-    "action.update_status",
-    "action.request_approval"
-  ]
+  "extracted_at": "2025-11-10T21:21:58.587214Z"
 }
