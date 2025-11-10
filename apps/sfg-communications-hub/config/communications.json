@@ -1,0 +1,142 @@
+{
+  "email_templates": [
+    {
+      "name": "New Account Welcome",
+      "subject": "Welcome to SFG Communications Hub",
+      "description": "Sent when new user account is created"
+    },
+    {
+      "name": "Email Client Setup Instructions",
+      "subject": "Your Email Client Configuration for {account}",
+      "description": "Sent with client-specific setup instructions"
+    },
+    {
+      "name": "System Health Alert",
+      "subject": "\u26a0\ufe0f SFG Comms Hub: Account Health Alert",
+      "description": "Sent to admins when email account health degrades"
+    },
+    {
+      "name": "Daily Processing Report",
+      "subject": "\ud83d\udcca Daily Email Processing Summary - {date}",
+      "description": "Daily report of email processing metrics"
+    },
+    {
+      "name": "High Priority Email Notification",
+      "subject": "\ud83d\udd34 High Priority Email Requires Attention",
+      "description": "Sent when AI classifies email as high priority"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#sfg-operations",
+      "trigger": "When AI triage classifies email as high priority"
+    },
+    {
+      "type": "slack",
+      "channel": "#sfg-tech",
+      "trigger": "When email account health check fails"
+    },
+    {
+      "type": "email",
+      "channel": "warren@SFG-innovations.com",
+      "trigger": "When system error rate exceeds 5%"
+    },
+    {
+      "type": "teams",
+      "channel": "SFG Communications Team",
+      "trigger": "When new email account is added"
+    },
+    {
+      "type": "slack",
+      "channel": "#sfg-alerts",
+      "trigger": "When WebSocket connection drops"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Email Processing Stats",
+      "type": "metric",
+      "description": "Real-time count of emails processed today with success rate"
+    },
+    {
+      "name": "Active Email Accounts",
+      "type": "table",
+      "description": "Grid showing all 14 email accounts with status, last sync, and health"
+    },
+    {
+      "name": "Email Client Configurations",
+      "type": "table",
+      "description": "Shows configured clients per account with platform and status"
+    },
+    {
+      "name": "AI Triage Performance",
+      "type": "chart",
+      "description": "Line chart of AI classification speed and accuracy over time"
+    },
+    {
+      "name": "System Health Monitor",
+      "type": "alert",
+      "description": "Live system status with database, API, and email sync health"
+    },
+    {
+      "name": "Implementation Progress",
+      "type": "metric",
+      "description": "Overall project completion percentage with milestone tracking"
+    },
+    {
+      "name": "Recent Email Activity",
+      "type": "table",
+      "description": "Last 20 emails processed with classification and routing info"
+    },
+    {
+      "name": "Mobile Setup Guide",
+      "type": "accordion",
+      "description": "Platform-specific mobile app recommendations and setup instructions"
+    },
+    {
+      "name": "Architecture Visualization",
+      "type": "diagram",
+      "description": "System architecture diagram showing integrations and data flow"
+    }
+  ],
+  "message_handlers": [
+    {
+      "event": "email.triaged",
+      "handler": "handle_email_triaged",
+      "description": "Email has been classified by AI and is ready for routing"
+    },
+    {
+      "event": "account.health.alert",
+      "handler": "handle_account_health_alert",
+      "description": "Email account health check failed or degraded"
+    },
+    {
+      "event": "system.metrics.updated",
+      "handler": "handle_system_metrics_updated",
+      "description": "Periodic system metrics broadcast for analytics"
+    },
+    {
+      "event": "user.onboarded",
+      "handler": "handle_user_onboarded",
+      "description": "New user account created and granted access"
+    },
+    {
+      "event": "workflow.completed",
+      "handler": "handle_workflow_completed",
+      "description": "Implementation workflow step completed"
+    }
+  ],
+  "supported_email_clients": [
+    "Mailspring Pro (Primary)",
+    "Microsoft Outlook",
+    "Spark",
+    "Apple Mail",
+    "Gmail App",
+    "Mozilla Thunderbird"
+  ],
+  "mobile_platforms": [
+    "iOS (iPhone/iPad)",
+    "Android (Phone/Tablet)"
+  ]
+}
