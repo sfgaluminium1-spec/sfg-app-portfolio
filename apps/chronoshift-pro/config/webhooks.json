@@ -1,0 +1,28 @@
+{
+  "app_name": "ChronoShift Pro",
+  "app_slug": "chronoshift-pro",
+  "version": "2.3.1",
+  "webhook_endpoint": "https://chronoshift-pro.abacusai.app/api/webhooks/nexus",
+  "message_handler_endpoint": "https://chronoshift-pro.abacusai.app/api/messages/handle",
+  "security": "HMAC-SHA256",
+  "incoming_webhooks": [
+    {
+      "event": "employee.registered",
+      "description": "New employee registration from HR system"
+    },
+    {
+      "event": "payroll.process_requested",
+      "description": "Payroll processing request from finance"
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "timesheet.submitted",
+      "description": "Employee submitted timesheet"
+    },
+    {
+      "event": "payroll.data_ready",
+      "description": "Payroll data ready for export"
+    }
+  ]
+}
