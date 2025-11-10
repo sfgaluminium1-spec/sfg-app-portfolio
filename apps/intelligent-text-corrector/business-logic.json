@@ -1,0 +1,76 @@
+{
+  "appName": "SFG Intelligent Text Corrector",
+  "version": "1.2.0",
+  "category": "productivity",
+  "description": "The SFG Intelligent Text Corrector is an enterprise-grade Chrome extension and web application that provides AI-powered text correction, grammar checking, and prompt enhancement capabilities. Designed for professionals who demand accuracy and efficiency, it seamlessly integrates into daily workflows through browser right-click context menus and a comprehensive web dashboard. The platform leverages advanced language models to deliver real-time corrections, style improvements, and intelligent prompt optimization for business communications, technical documentation, and creative content creation.",
+  "capabilities": [
+    "Real-time grammar and spelling correction with contextual suggestions",
+    "AI-powered prompt enhancement and optimization for better LLM interactions",
+    "Multiple writing style transformations (Simple, Business, Technical)",
+    "Punctuation checking and automated formatting improvements",
+    "Chrome extension with right-click context menu integration",
+    "Web-based dashboard for correction history and analytics",
+    "User authentication and personalized correction preferences",
+    "Business template library for standardized communications",
+    "Multi-language support with localized corrections",
+    "Batch processing capabilities for large document corrections"
+  ],
+  "workflows": [
+    {
+      "name": "Text Correction Workflow",
+      "description": "User selects text in browser, chooses correction mode from context menu, receives AI-corrected text",
+      "steps": [
+        "User highlights text in any web form or input field",
+        "Right-click opens SFG AI Tools context menu",
+        "Select correction mode (Grammar, Punctuation, Simple Rewrite, Business Style, Technical Style)",
+        "Extension sends text to API with selected mode",
+        "AI processes text and returns corrections",
+        "Corrected text replaces original selection automatically"
+      ]
+    },
+    {
+      "name": "Prompt Enhancement Workflow",
+      "description": "User enhances AI prompts for better LLM responses using dedicated enhancement mode",
+      "steps": [
+        "User writes initial prompt in any text field",
+        "Right-click and select 'AI Prompt Enhance' from SFG AI Tools menu",
+        "Extension analyzes prompt structure and intent",
+        "AI generates enhanced version with better clarity and specificity",
+        "User reviews enhanced prompt and can accept or modify",
+        "Enhanced prompt replaces original for immediate use"
+      ]
+    },
+    {
+      "name": "Business Template Application",
+      "description": "User applies pre-configured business communication templates for standardized messaging",
+      "steps": [
+        "User right-clicks in editable field",
+        "Selects 'Business Templates' from context menu",
+        "Browse available templates (emails, reports, proposals)",
+        "Select template matching communication need",
+        "Template populates field with customizable placeholders",
+        "User fills in specific details to complete document"
+      ]
+    },
+    {
+      "name": "Correction History Management",
+      "description": "System tracks and displays user correction history for learning and reference",
+      "steps": [
+        "Every correction is automatically saved with timestamp",
+        "User accesses web dashboard to view correction history",
+        "Filter history by date range, correction type, or text content",
+        "Review original text, corrected version, and correction mode used",
+        "Export history data for analysis or reporting",
+        "System provides insights on common errors and improvement trends"
+      ]
+    }
+  ],
+  "integrations": [
+    "NEXUS",
+    "MCP-COMMUNICATIONS",
+    "MCP-OPERATIONS",
+    "Abacus.AI LLM APIs",
+    "Chrome Extension Store"
+  ],
+  "extracted_at": "2025-11-10T21:39:33.689010Z"
+}
