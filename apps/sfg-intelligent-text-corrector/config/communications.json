@@ -1,0 +1,78 @@
+{
+  "email_templates": [
+    {
+      "name": "correction_complete",
+      "subject": "Your Text Correction is Ready - SFG AI",
+      "description": "Sent when a text correction is completed and ready for review"
+    },
+    {
+      "name": "prompt_enhanced",
+      "subject": "Your AI Prompt Has Been Enhanced - SFG AI",
+      "description": "Sent when an AI prompt enhancement is completed"
+    },
+    {
+      "name": "daily_usage_report",
+      "subject": "Your Daily SFG AI Usage Report",
+      "description": "Daily summary email with usage statistics and corrections made"
+    },
+    {
+      "name": "chrome_extension_install_confirmation",
+      "subject": "Welcome to SFG Intelligent Text Corrector",
+      "description": "Welcome email sent after Chrome extension installation with quick start guide"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#sfg-ai-alerts",
+      "trigger": "When correction volume exceeds 500/hour or API errors exceed 5%"
+    },
+    {
+      "type": "slack",
+      "channel": "#sfg-product-analytics",
+      "trigger": "Daily summary at 9 AM with usage metrics and user engagement stats"
+    },
+    {
+      "type": "email",
+      "channel": "warren@SFG-innovations.com",
+      "trigger": "When critical system errors occur or Chrome Web Store review updates"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "corrections_today",
+      "type": "metric",
+      "description": "Total number of text corrections processed today with hourly trend"
+    },
+    {
+      "name": "prompts_enhanced_today",
+      "type": "metric",
+      "description": "Total number of AI prompts enhanced today with success rate"
+    },
+    {
+      "name": "active_users",
+      "type": "metric",
+      "description": "Number of active users in the last 24 hours across web and extension"
+    },
+    {
+      "name": "correction_types_chart",
+      "type": "chart",
+      "description": "Pie chart showing distribution of correction types (Grammar, Punctuation, Rewrite, etc.)"
+    },
+    {
+      "name": "response_time_graph",
+      "type": "chart",
+      "description": "Line graph showing average API response times over the last 7 days"
+    },
+    {
+      "name": "recent_corrections_table",
+      "type": "table",
+      "description": "Table of recent corrections with user, mode, timestamp, and status"
+    },
+    {
+      "name": "system_health_alert",
+      "type": "alert",
+      "description": "Real-time alerts for system downtime, API failures, or performance degradation"
+    }
+  ]
+}
