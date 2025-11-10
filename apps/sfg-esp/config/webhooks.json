@@ -1,0 +1,318 @@
+
+{
+  "app_name": "SFG Enquiry & Specification Processor",
+  "app_slug": "sfg-esp",
+  "version": "1.0.0",
+  "description": "Webhook configuration for SFG ESP enquiry processing, credit checks, regulatory compliance, and Xero integration",
+  "incoming_webhooks": [
+    {
+      "event": "enquiry.received",
+      "description": "Triggered when a new enquiry is received from Communications Hub, website contact form, or email",
+      "source": ["sfg-communications-hub", "sfg-website", "sfg-mail-matrix"],
+      "priority": "high",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_name": "ABC Construction Ltd",
+        "customer_email": "contact@abc-construction.co.uk",
+        "customer_phone": "+44 20 1234 5678",
+        "enquiry_type": "quote_request",
+        "product_category": "aluminium_windows",
+        "message": "Quote for 12 windows for new build project",
+        "source": "website_form",
+        "timestamp": "2025-11-10T09:30:00Z"
+      }
+    },
+    {
+      "event": "specification.uploaded",
+      "description": "Triggered when customer uploads technical specifications via Customer Portal",
+      "source": ["sfg-customer-portal"],
+      "priority": "high",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_id": "CUST-12345",
+        "file_url": "https://sfg-esp.abacusai.app/uploads/spec-2025-001.pdf",
+        "file_type": "pdf",
+        "file_size_mb": 2.5,
+        "timestamp": "2025-11-10T10:00:00Z"
+      }
+    },
+    {
+      "event": "nexus.task.assigned",
+      "description": "Triggered when NEXUS orchestrator assigns an enquiry processing task to ESP",
+      "source": ["sfg-nexus-core"],
+      "priority": "critical",
+      "payload_example": {
+        "task_id": "TASK-2025-100",
+        "task_type": "process_enquiry",
+        "enquiry_id": "ENQ-2025-001",
+        "assigned_by": "nexus-orchestrator",
+        "priority": "high",
+        "deadline": "2025-11-10T17:00:00Z",
+        "timestamp": "2025-11-10T09:35:00Z"
+      }
+    },
+    {
+      "event": "credit.check.completed",
+      "description": "Triggered when credit check service completes customer credit assessment",
+      "source": ["companies-house-api", "sfg-credit-checker"],
+      "priority": "medium",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_id": "CUST-12345",
+        "credit_rating": "B",
+        "credit_limit": 50000,
+        "risk_level": "low",
+        "recommendations": "Approve with standard terms",
+        "timestamp": "2025-11-10T10:15:00Z"
+      }
+    },
+    {
+      "event": "regulatory.analysis.completed",
+      "description": "Triggered when regulatory intelligence module completes compliance analysis",
+      "source": ["sfg-regulatory-ai"],
+      "priority": "medium",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "building_height": 15.5,
+        "building_type": "residential_new_build",
+        "compliance_requirements": ["Part B Fire Safety", "Part L Energy Efficiency"],
+        "approval_pathway": "Building_Control_Approval",
+        "estimated_compliance_cost": 2500,
+        "timestamp": "2025-11-10T10:30:00Z"
+      }
+    },
+    {
+      "event": "pricing.updated",
+      "description": "Triggered when pricing data is updated in Xero or pricing engine",
+      "source": ["xero-api", "sfg-pricing-engine"],
+      "priority": "low",
+      "payload_example": {
+        "product_id": "ALU-WIN-001",
+        "product_name": "Standard Aluminium Window",
+        "old_price": 350.00,
+        "new_price": 365.00,
+        "currency": "GBP",
+        "effective_date": "2025-11-15",
+        "timestamp": "2025-11-10T08:00:00Z"
+      }
+    },
+    {
+      "event": "customer.updated",
+      "description": "Triggered when customer details are updated in Xero or CRM",
+      "source": ["xero-api", "sfg-crm"],
+      "priority": "low",
+      "payload_example": {
+        "customer_id": "CUST-12345",
+        "xero_contact_id": "550e8400-e29b-41d4-a716-446655440000",
+        "updates": {
+          "phone": "+44 20 9876 5432",
+          "address": "New Business Park, London"
+        },
+        "timestamp": "2025-11-10T11:00:00Z"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "enquiry.processed",
+      "description": "Emitted when ESP successfully processes an enquiry and extracts key information",
+      "recipients": ["sfg-nexus-core", "sfg-enquiry-estimator"],
+      "priority": "high",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_id": "CUST-12345",
+        "processing_status": "completed",
+        "extracted_data": {
+          "product_type": "aluminium_windows",
+          "quantity": 12,
+          "building_type": "residential_new_build",
+          "delivery_location": "London, UK"
+        },
+        "processing_time_seconds": 45,
+        "timestamp": "2025-11-10T09:40:00Z"
+      }
+    },
+    {
+      "event": "specification.extracted",
+      "description": "Emitted when ESP extracts technical specifications from uploaded files",
+      "recipients": ["sfg-nexus-core", "sfg-enquiry-estimator"],
+      "priority": "high",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "specification_data": {
+          "window_dimensions": [
+            {"width_mm": 1200, "height_mm": 1500, "quantity": 8},
+            {"width_mm": 900, "height_mm": 1200, "quantity": 4}
+          ],
+          "glass_type": "double_glazed",
+          "frame_color": "anthracite_grey",
+          "hardware": "standard_locks"
+        },
+        "extraction_confidence": 0.95,
+        "timestamp": "2025-11-10T10:05:00Z"
+      }
+    },
+    {
+      "event": "quote.requested",
+      "description": "Emitted when ESP determines a quotation is ready to be generated",
+      "recipients": ["sfg-nexus-core", "sfg-enquiry-estimator"],
+      "priority": "critical",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_id": "CUST-12345",
+        "quote_type": "standard",
+        "urgency": "normal",
+        "required_by": "2025-11-15T17:00:00Z",
+        "credit_approved": true,
+        "regulatory_compliant": true,
+        "timestamp": "2025-11-10T10:35:00Z"
+      }
+    },
+    {
+      "event": "customer.acknowledged",
+      "description": "Emitted when ESP sends acknowledgment email to customer",
+      "recipients": ["sfg-nexus-core", "sfg-communications-hub"],
+      "priority": "medium",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_email": "contact@abc-construction.co.uk",
+        "acknowledgment_sent": true,
+        "estimated_response_time": "24_hours",
+        "timestamp": "2025-11-10T09:32:00Z"
+      }
+    },
+    {
+      "event": "credit.check.initiated",
+      "description": "Emitted when ESP initiates credit check for new or existing customer",
+      "recipients": ["sfg-nexus-core", "sfg-credit-checker"],
+      "priority": "medium",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_id": "CUST-12345",
+        "customer_name": "ABC Construction Ltd",
+        "company_number": "12345678",
+        "check_type": "standard",
+        "timestamp": "2025-11-10T10:10:00Z"
+      }
+    },
+    {
+      "event": "regulatory.analysis.initiated",
+      "description": "Emitted when ESP initiates regulatory compliance analysis",
+      "recipients": ["sfg-nexus-core", "sfg-regulatory-ai"],
+      "priority": "medium",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "building_info": {
+          "height_meters": 15.5,
+          "type": "residential_new_build",
+          "location": "London",
+          "storeys": 5
+        },
+        "products": ["aluminium_windows", "aluminium_doors"],
+        "timestamp": "2025-11-10T10:20:00Z"
+      }
+    },
+    {
+      "event": "xero.contact.created",
+      "description": "Emitted when ESP creates new contact in Xero accounting system",
+      "recipients": ["sfg-nexus-core", "xero-api"],
+      "priority": "low",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_id": "CUST-12345",
+        "xero_contact_id": "550e8400-e29b-41d4-a716-446655440000",
+        "contact_name": "ABC Construction Ltd",
+        "timestamp": "2025-11-10T09:45:00Z"
+      }
+    },
+    {
+      "event": "enquiry.error",
+      "description": "Emitted when ESP encounters an error processing an enquiry",
+      "recipients": ["sfg-nexus-core", "sfg-alerts"],
+      "priority": "critical",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "error_type": "specification_extraction_failed",
+        "error_message": "Unable to extract dimensions from PDF",
+        "retry_possible": true,
+        "manual_intervention_required": false,
+        "timestamp": "2025-11-10T10:08:00Z"
+      }
+    },
+    {
+      "event": "metrics.updated",
+      "description": "Emitted when ESP updates key performance metrics for dashboards",
+      "recipients": ["sfg-nexus-core", "sfg-aluminium-unified-dashboard"],
+      "priority": "low",
+      "payload_example": {
+        "metric_type": "enquiry_processing",
+        "metrics": {
+          "enquiries_processed_today": 47,
+          "average_processing_time_seconds": 52,
+          "quotes_requested_today": 35,
+          "credit_checks_completed": 28
+        },
+        "timestamp": "2025-11-10T12:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": {
+    "url": "https://sfg-esp.abacusai.app/api/webhooks/nexus",
+    "method": "POST",
+    "authentication": {
+      "type": "HMAC-SHA256",
+      "header": "X-SFG-Signature",
+      "secret_key_location": "environment_variable:WEBHOOK_SECRET"
+    },
+    "headers": {
+      "Content-Type": "application/json",
+      "X-SFG-App": "sfg-esp",
+      "X-SFG-Version": "1.0.0"
+    }
+  },
+  "security": {
+    "signature_verification": "HMAC-SHA256",
+    "signature_header": "X-SFG-Signature",
+    "timestamp_validation": true,
+    "max_age_seconds": 300,
+    "ip_whitelist": [
+      "sfg-nexus.abacusai.app",
+      "sfg-communications-hub.abacusai.app"
+    ],
+    "rate_limiting": {
+      "enabled": true,
+      "max_requests_per_minute": 100,
+      "burst_capacity": 150
+    }
+  },
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff_strategy": "exponential",
+    "initial_delay_seconds": 1,
+    "max_delay_seconds": 60,
+    "timeout_seconds": 30,
+    "retry_on_status_codes": [500, 502, 503, 504, 408]
+  },
+  "rate_limits": {
+    "incoming": {
+      "requests_per_hour": 1000,
+      "burst_capacity": 150
+    },
+    "outgoing": {
+      "requests_per_hour": 500,
+      "burst_capacity": 100
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics_endpoint": "https://sfg-esp.abacusai.app/api/metrics/webhooks",
+    "alert_on_failure_rate": 0.05,
+    "alert_on_latency_ms": 5000,
+    "dashboard_widget": "webhook_performance"
+  },
+  "testing": {
+    "test_endpoint": "https://sfg-esp.abacusai.app/api/webhooks/test",
+    "sample_payloads_available": true,
+    "postman_collection": "https://sfg-esp.abacusai.app/api/docs/webhooks.postman.json"
+  }
+}
