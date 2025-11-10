@@ -233,43 +233,108 @@
     }
   ],
   
-  "webhook_events": [
-    {
-      "event": "enquiry.created",
-      "description": "New enquiry received from customer",
-      "action": "Create enquiry record, assign to estimator, send notification"
-    },
-    {
-      "event": "quote.requested",
-      "description": "Quote generation requested by NEXUS or other app",
-      "action": "Calculate pricing, generate quote document, return quote details"
-    },
-    {
-      "event": "order.approved",
-      "description": "Order approved by customer or internal approver",
-      "action": "Update status, create invoice, notify teams, schedule production"
-    },
-    {
-      "event": "customer.registered",
-      "description": "New customer registered in system",
-      "action": "Create customer record, perform initial credit check if needed"
-    },
-    {
-      "event": "credit.check_required",
-      "description": "Credit check requested for customer",
-      "action": "Query MCP-FINANCE for Experian credit check, store results"
-    },
-    {
-      "event": "invoice.due",
-      "description": "Invoice payment due reminder",
-      "action": "Send reminder to customer, update status"
-    },
-    {
-      "event": "payment.received",
-      "description": "Payment received from customer",
-      "action": "Update invoice status, send confirmation, update customer account"
-    }
-  ],
+  "webhook_events": {
+    "incoming": [
+      {
+        "event": "enquiry.received",
+        "description": "New enquiry received from Communications Hub, website, or email",
+        "source": ["sfg-communications-hub", "sfg-website", "sfg-mail-matrix"],
+        "action": "Create enquiry record, send acknowledgment, initiate processing"
+      },
+      {
+        "event": "specification.uploaded",
+        "description": "Customer uploads technical specifications via Customer Portal",
+        "source": ["sfg-customer-portal"],
+        "action": "Extract specifications using AI, validate data, prepare for quote"
+      },
+      {
+        "event": "nexus.task.assigned",
+        "description": "NEXUS orchestrator assigns enquiry processing task",
+        "source": ["sfg-nexus-core"],
+        "action": "Execute assigned task, update status, emit completion webhook"
+      },
+      {
+        "event": "credit.check.completed",
+        "description": "Credit check service completes customer assessment",
+        "source": ["companies-house-api", "sfg-credit-checker"],
+        "action": "Update customer credit status, proceed with quote if approved"
+      },
+      {
+        "event": "regulatory.analysis.completed",
+        "description": "Regulatory intelligence module completes compliance analysis",
+        "source": ["sfg-regulatory-ai"],
+        "action": "Add compliance requirements to quote, notify technical team"
+      },
+      {
+        "event": "pricing.updated",
+        "description": "Pricing data updated in Xero or pricing engine",
+        "source": ["xero-api", "sfg-pricing-engine"],
+        "action": "Update product pricing cache, recalculate affected quotes"
+      },
+      {
+        "event": "customer.updated",
+        "description": "Customer details updated in Xero or CRM",
+        "source": ["xero-api", "sfg-crm"],
+        "action": "Synchronize customer data, update related records"
+      }
+    ],
+    "outgoing": [
+      {
+        "event": "enquiry.processed",
+        "description": "ESP successfully processes enquiry and extracts key information",
+        "recipients": ["sfg-nexus-core", "sfg-enquiry-estimator"],
+        "payload_includes": "extracted product data, customer info, processing status"
+      },
+      {
+        "event": "specification.extracted",
+        "description": "ESP extracts technical specifications from uploaded files",
+        "recipients": ["sfg-nexus-core", "sfg-enquiry-estimator"],
+        "payload_includes": "dimensions, glass type, frame color, hardware, confidence score"
+      },
+      {
+        "event": "quote.requested",
+        "description": "ESP determines quotation is ready to be generated",
+        "recipients": ["sfg-nexus-core", "sfg-enquiry-estimator"],
+        "payload_includes": "enquiry details, credit status, regulatory compliance, urgency"
+      },
+      {
+        "event": "customer.acknowledged",
+        "description": "ESP sends acknowledgment email to customer",
+        "recipients": ["sfg-nexus-core", "sfg-communications-hub"],
+        "payload_includes": "customer email, estimated response time, acknowledgment status"
+      },
+      {
+        "event": "credit.check.initiated",
+        "description": "ESP initiates credit check for customer",
+        "recipients": ["sfg-nexus-core", "sfg-credit-checker"],
+        "payload_includes": "customer details, company number, check type"
+      },
+      {
+        "event": "regulatory.analysis.initiated",
+        "description": "ESP initiates regulatory compliance analysis",
+        "recipients": ["sfg-nexus-core", "sfg-regulatory-ai"],
+        "payload_includes": "building info, product types, location"
+      },
+      {
+        "event": "xero.contact.created",
+        "description": "ESP creates new contact in Xero accounting system",
+        "recipients": ["sfg-nexus-core", "xero-api"],
+        "payload_includes": "customer details, xero contact ID"
+      },
+      {
+        "event": "enquiry.error",
+        "description": "ESP encounters error processing enquiry",
+        "recipients": ["sfg-nexus-core", "sfg-alerts"],
+        "payload_includes": "error type, error message, retry info, manual review flag"
+      },
+      {
+        "event": "metrics.updated",
+        "description": "ESP updates key performance metrics for dashboards",
+        "recipients": ["sfg-nexus-core", "sfg-aluminium-unified-dashboard"],
+        "payload_includes": "enquiry counts, processing times, conversion rates"
+      }
+    ]
+  },
   
   "supported_messages": [
     {
@@ -432,7 +497,23 @@
   },
   
   "registration_date": "2025-11-04",
-  "last_updated": "2025-11-04",
+  "last_updated": "2025-11-10",
+  "webhook_configuration": {
+    "endpoint": "https://sfg-esp.abacusai.app/api/webhooks/nexus",
+    "security": "HMAC-SHA256 signature verification",
+    "rate_limiting": "100 requests/minute incoming, 50/minute outgoing",
+    "retry_policy": "Max 3 retries, exponential backoff",
+    "monitoring": "Real-time metrics, dashboard widgets, alerting",
+    "documentation": "/registration/workflows/message-handlers.md"
+  },
+  "communication_configuration": {
+    "email_templates": 7,
+    "notification_channels": ["email", "slack", "teams"],
+    "dashboard_widgets": 7,
+    "escalation_rules": "Automated based on priority and error type",
+    "audit_logging": "90 days retention",
+    "documentation": "/registration/config/communications.json"
+  },
   "maintained_by": "SFG Innovations",
   "contact": "warren@sfg-innovations.com"
 }
