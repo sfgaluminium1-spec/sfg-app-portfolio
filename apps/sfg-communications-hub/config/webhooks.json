@@ -1,0 +1,126 @@
+{
+  "incoming_webhooks": [
+    {
+      "event": "email.received",
+      "description": "Webhook triggered when new email arrives in monitored account",
+      "payload_example": {
+        "email_id": "msg_123456",
+        "account": "info@sfgaluminium.com.au",
+        "from": "customer@example.com",
+        "subject": "Quote request for aluminium doors",
+        "received_at": "2025-11-10T10:30:00Z",
+        "body_preview": "Hi, I would like a quote for..."
+      }
+    },
+    {
+      "event": "user.authenticated",
+      "description": "User successfully logged in to the communications hub",
+      "payload_example": {
+        "user_id": "user_001",
+        "email": "warren@SFG-innovations.com",
+        "role": "admin",
+        "login_at": "2025-11-10T09:00:00Z"
+      }
+    },
+    {
+      "event": "account.sync.requested",
+      "description": "Manual email sync requested by user",
+      "payload_example": {
+        "account_id": "acc_123",
+        "email": "projects@sfgaluminium.com.au",
+        "requested_by": "warren@SFG-innovations.com",
+        "requested_at": "2025-11-10T11:00:00Z"
+      }
+    },
+    {
+      "event": "client.config.downloaded",
+      "description": "User downloaded email client configuration",
+      "payload_example": {
+        "account_id": "acc_123",
+        "client": "mailspring",
+        "platform": "windows",
+        "downloaded_by": "staff@sfgaluminium.com.au",
+        "downloaded_at": "2025-11-10T12:00:00Z"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "email.triaged",
+      "description": "Email has been classified by AI and is ready for routing",
+      "payload_example": {
+        "email_id": "msg_123456",
+        "account": "info@sfgaluminium.com.au",
+        "classification": {
+          "department": "sales",
+          "priority": "high",
+          "category": "quote_request",
+          "confidence": 0.95
+        },
+        "routing": {
+          "assigned_to": "sales_team",
+          "sla_deadline": "2025-11-11T10:30:00Z"
+        },
+        "triaged_at": "2025-11-10T10:30:05Z"
+      }
+    },
+    {
+      "event": "account.health.alert",
+      "description": "Email account health check failed or degraded",
+      "payload_example": {
+        "account_id": "acc_123",
+        "email": "accounts@sfgaluminium.com.au",
+        "status": "degraded",
+        "error": "IMAP connection timeout",
+        "last_sync": "2025-11-10T09:45:00Z",
+        "alert_severity": "warning"
+      }
+    },
+    {
+      "event": "system.metrics.updated",
+      "description": "Periodic system metrics broadcast for analytics",
+      "payload_example": {
+        "timestamp": "2025-11-10T11:00:00Z",
+        "metrics": {
+          "emails_processed_today": 247,
+          "success_rate": 98.2,
+          "average_triage_time": 3.8,
+          "active_accounts": 14,
+          "configured_clients": 28
+        }
+      }
+    },
+    {
+      "event": "user.onboarded",
+      "description": "New user account created and granted access",
+      "payload_example": {
+        "user_id": "user_005",
+        "email": "new.staff@sfgaluminium.com.au",
+        "role": "user",
+        "created_by": "warren@SFG-innovations.com",
+        "created_at": "2025-11-10T08:30:00Z"
+      }
+    },
+    {
+      "event": "workflow.completed",
+      "description": "Implementation workflow step completed",
+      "payload_example": {
+        "workflow": "Email Account Onboarding",
+        "step": "Account validated and synced",
+        "progress_percentage": 94,
+        "completed_at": "2025-11-10T10:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-communications-hub.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification",
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff": "exponential",
+    "timeout_seconds": 30
+  },
+  "rate_limits": {
+    "incoming": "1000/hour",
+    "outgoing": "500/hour"
+  }
+}
