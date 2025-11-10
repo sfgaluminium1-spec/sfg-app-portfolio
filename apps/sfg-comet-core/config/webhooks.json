@@ -1,0 +1,169 @@
+{
+  "app_name": "SFG COMET CORE",
+  "app_slug": "sfg-comet-core",
+  "version": "1.2.0",
+  "incoming_webhooks": [
+    [
+      {
+        "event": "customer.updated",
+        "description": "Customer information updated from external CRM system (MCP-SALES), sync customer data to COMET CORE database",
+        "payload_example": {
+          "event_type": "customer.updated",
+          "customer_id": "CUST-2025-123",
+          "customer_name": "Acme Construction Ltd",
+          "email": "contact@acme.com",
+          "phone": "+44 1234 567890",
+          "credit_limit": 50000,
+          "updated_at": "2025-11-10T10:30:00Z",
+          "updated_by": "MCP-SALES"
+        }
+      },
+      {
+        "event": "quote.accepted",
+        "description": "Customer accepted quote via external system, trigger Pre-Production workflow in COMET CORE",
+        "payload_example": {
+          "event_type": "quote.accepted",
+          "enquiry_number": "ENQ-2025-045",
+          "quote_number": "QUO-2025-045",
+          "customer_id": "CUST-2025-123",
+          "quote_value": 25000,
+          "accepted_at": "2025-11-10T11:00:00Z",
+          "accepted_by": "customer@acme.com"
+        }
+      },
+      {
+        "event": "invoice.paid",
+        "description": "Invoice payment received from Xero accounting system, update project status to Completed",
+        "payload_example": {
+          "event_type": "invoice.paid",
+          "invoice_number": "INV-2025-045",
+          "enquiry_number": "ENQ-2025-045",
+          "amount_paid": 25000,
+          "payment_date": "2025-11-10T15:00:00Z",
+          "payment_method": "Bank Transfer",
+          "xero_invoice_id": "abc123-def456"
+        }
+      },
+      {
+        "event": "project.milestone_reached",
+        "description": "Project milestone reached from MCP-OPERATIONS, update project progress and notify team",
+        "payload_example": {
+          "event_type": "project.milestone_reached",
+          "enquiry_number": "ENQ-2025-045",
+          "milestone": "Material Ordered",
+          "milestone_date": "2025-11-10T09:00:00Z",
+          "next_milestone": "Production Start",
+          "progress_percentage": 40
+        }
+      },
+      {
+        "event": "document.external_update",
+        "description": "Document updated in SharePoint via Microsoft Graph, sync to COMET CORE document library",
+        "payload_example": {
+          "event_type": "document.external_update",
+          "document_id": "DOC-2025-789",
+          "document_name": "Technical_Spec_V2.pdf",
+          "sharepoint_url": "https://sfgaluminium.sharepoint.com/sites/comet-core/docs/DOC-2025-789",
+          "updated_by": "warren@sfgaluminium.com",
+          "updated_at": "2025-11-10T14:30:00Z"
+        }
+      }
+    ]
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "enquiry.created",
+      "description": "New enquiry created in COMET CORE, notify NEXUS and MCP-SALES for CRM synchronization",
+      "payload_example": {
+        "event_type": "enquiry.created",
+        "enquiry_number": "ENQ-2025-046",
+        "customer_name": "Beta Industries Ltd",
+        "customer_email": "info@beta.com",
+        "product_description": "Aluminium window frames - 50 units",
+        "estimated_value": 15000,
+        "created_at": "2025-11-10T16:00:00Z",
+        "created_by": "john.doe@sfgaluminium.com",
+        "stage": "New Enquiry"
+      }
+    },
+    {
+      "event": "credit_check.completed",
+      "description": "Credit check completed with AI scoring, send results to NEXUS and MCP-FINANCE for risk assessment",
+      "payload_example": {
+        "event_type": "credit_check.completed",
+        "enquiry_number": "ENQ-2025-046",
+        "company_name": "Beta Industries Ltd",
+        "company_number": "12345678",
+        "credit_score": "Healthy",
+        "financial_summary": "Strong cash flow, low debt ratio",
+        "recommendation": "Approve up to \u00a350,000 credit",
+        "checked_at": "2025-11-10T16:05:00Z"
+      }
+    },
+    {
+      "event": "project.stage_changed",
+      "description": "Project moved to new stage, notify all MCP servers and update NEXUS orchestration state",
+      "payload_example": {
+        "event_type": "project.stage_changed",
+        "enquiry_number": "ENQ-2025-046",
+        "previous_stage": "Viability Check",
+        "new_stage": "Pre-Production",
+        "changed_by": "manager@sfgaluminium.com",
+        "changed_at": "2025-11-10T17:00:00Z",
+        "reason": "Quote accepted by customer"
+      }
+    },
+    {
+      "event": "document.uploaded",
+      "description": "Document uploaded to COMET CORE, sync to SharePoint and notify relevant team members",
+      "payload_example": {
+        "event_type": "document.uploaded",
+        "document_id": "DOC-2025-790",
+        "document_name": "Customer_PO.pdf",
+        "enquiry_number": "ENQ-2025-046",
+        "uploaded_by": "sales@sfgaluminium.com",
+        "uploaded_at": "2025-11-10T17:15:00Z",
+        "file_size": 2048000,
+        "s3_key": "uploads/2025/11/ENQ-2025-046/Customer_PO.pdf"
+      }
+    },
+    {
+      "event": "approval.required",
+      "description": "Project requires manager/executive approval, send notification to NEXUS for workflow routing",
+      "payload_example": {
+        "event_type": "approval.required",
+        "enquiry_number": "ENQ-2025-046",
+        "approval_type": "Production Start",
+        "required_tier": 2,
+        "requested_by": "sales@sfgaluminium.com",
+        "requested_at": "2025-11-10T17:30:00Z",
+        "reason": "Project value exceeds Tier 1 approval limit"
+      }
+    },
+    {
+      "event": "alert.critical",
+      "description": "Critical system alert (credit risk, overdue project, etc.), immediate notification to all systems",
+      "payload_example": {
+        "event_type": "alert.critical",
+        "alert_type": "Credit Risk Detected",
+        "enquiry_number": "ENQ-2025-047",
+        "customer_name": "Risky Customer Ltd",
+        "severity": "HIGH",
+        "message": "Companies House shows declining financial health",
+        "action_required": "Review credit terms before proceeding",
+        "created_at": "2025-11-10T18:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-comet-core.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification",
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff": "exponential",
+    "timeout_seconds": 30
+  },
+  "rate_limits": {
+    "incoming": "1000/hour",
+    "outgoing": "500/hour"
+  }
+}
