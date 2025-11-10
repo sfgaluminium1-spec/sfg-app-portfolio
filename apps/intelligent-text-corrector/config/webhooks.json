@@ -1,0 +1,95 @@
+{
+  "app_name": "SFG Intelligent Text Corrector",
+  "app_slug": "intelligent-text-corrector",
+  "version": "1.2.0",
+  "incoming_webhooks": [
+    {
+      "event": "user.preferences.updated",
+      "description": "Receives notification when user preferences are changed via NEXUS admin panel",
+      "payload_example": {
+        "user_id": "user_123",
+        "preferences": {
+          "default_correction_mode": "business",
+          "auto_apply_corrections": true,
+          "language": "en-US"
+        },
+        "updated_at": "2025-11-10T10:00:00Z"
+      }
+    },
+    {
+      "event": "template.library.updated",
+      "description": "Receives notification when business template library is updated centrally",
+      "payload_example": {
+        "template_id": "tmpl_456",
+        "template_name": "Professional Email Response",
+        "category": "email",
+        "content": "Dear [Name],...",
+        "updated_by": "admin_user",
+        "updated_at": "2025-11-10T10:00:00Z"
+      }
+    },
+    {
+      "event": "correction.quality.alert",
+      "description": "Receives alerts about correction quality issues from NEXUS monitoring",
+      "payload_example": {
+        "alert_type": "low_quality_output",
+        "correction_id": "corr_789",
+        "user_feedback": "incorrect suggestion",
+        "severity": "medium",
+        "timestamp": "2025-11-10T10:00:00Z"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "correction.completed",
+      "description": "Sent when text correction is successfully completed",
+      "payload_example": {
+        "correction_id": "corr_123",
+        "user_id": "user_456",
+        "original_text": "This is sample text with erors",
+        "corrected_text": "This is sample text with errors",
+        "correction_mode": "grammar",
+        "timestamp": "2025-11-10T10:00:00Z",
+        "processing_time_ms": 245
+      }
+    },
+    {
+      "event": "prompt.enhanced",
+      "description": "Sent when AI prompt enhancement is completed",
+      "payload_example": {
+        "enhancement_id": "enh_789",
+        "user_id": "user_456",
+        "original_prompt": "write about dogs",
+        "enhanced_prompt": "Write a comprehensive, 500-word article about domestic dog breeds, focusing on temperament, care requirements, and suitability for different living environments",
+        "timestamp": "2025-11-10T10:00:00Z",
+        "quality_score": 0.92
+      }
+    },
+    {
+      "event": "user.usage.threshold",
+      "description": "Sent when user reaches usage threshold or quota limits",
+      "payload_example": {
+        "user_id": "user_456",
+        "threshold_type": "daily_corrections",
+        "current_usage": 95,
+        "limit": 100,
+        "period": "daily",
+        "timestamp": "2025-11-10T10:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-ai-prompt.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification with secret key rotation",
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff": "exponential",
+    "initial_delay_seconds": 1,
+    "max_delay_seconds": 30,
+    "timeout_seconds": 30
+  },
+  "rate_limits": {
+    "incoming": "1000/hour per endpoint",
+    "outgoing": "500/hour per destination"
+  }
+}
