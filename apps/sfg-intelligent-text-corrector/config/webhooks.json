@@ -1,0 +1,114 @@
+{
+  "app_name": "SFG Intelligent Text Corrector",
+  "app_slug": "sfg-intelligent-text-corrector",
+  "version": "1.2.0",
+  "incoming_webhooks": [
+    {
+      "event": "nexus.task.assigned",
+      "description": "When NEXUS assigns a text correction or AI prompt enhancement task to this app",
+      "payload_example": {
+        "task_id": "task_12345",
+        "task_type": "text_correction",
+        "text": "Sample text to correct or enhance",
+        "mode": "grammar_check",
+        "user_id": "user_123",
+        "timestamp": "2025-11-10T12:00:00Z"
+      }
+    },
+    {
+      "event": "user.text.submitted",
+      "description": "When a user submits text for correction through the web app or Chrome extension",
+      "payload_example": {
+        "user_id": "user_123",
+        "text": "Sample text with potential errors",
+        "correction_mode": "grammar_check",
+        "source": "chrome_extension",
+        "timestamp": "2025-11-10T12:00:00Z"
+      }
+    },
+    {
+      "event": "prompt.enhancement.requested",
+      "description": "When an AI prompt enhancement is requested via NEXUS or direct submission",
+      "payload_example": {
+        "user_id": "user_123",
+        "original_prompt": "Write a blog post",
+        "enhancement_type": "structure_and_clarity",
+        "context": "business_communication",
+        "timestamp": "2025-11-10T12:00:00Z"
+      }
+    },
+    {
+      "event": "template.requested",
+      "description": "When a business template is requested from the template library",
+      "payload_example": {
+        "user_id": "user_123",
+        "template_category": "business",
+        "template_name": "meeting_minutes",
+        "timestamp": "2025-11-10T12:00:00Z"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "text.corrected",
+      "description": "When text has been successfully corrected and is ready for delivery",
+      "payload_example": {
+        "correction_id": "corr_12345",
+        "original_text": "Sample text with errors",
+        "corrected_text": "Sample text without errors",
+        "corrections_made": 5,
+        "correction_mode": "grammar_check",
+        "user_id": "user_123",
+        "timestamp": "2025-11-10T12:01:00Z"
+      }
+    },
+    {
+      "event": "prompt.enhanced",
+      "description": "When an AI prompt has been successfully enhanced",
+      "payload_example": {
+        "enhancement_id": "enh_12345",
+        "original_prompt": "Write a blog post",
+        "enhanced_prompt": "Write a comprehensive 1500-word blog post about...",
+        "improvements": [
+          "Added structure",
+          "Clarified objective"
+        ],
+        "user_id": "user_123",
+        "timestamp": "2025-11-10T12:01:00Z"
+      }
+    },
+    {
+      "event": "correction.failed",
+      "description": "When text correction or prompt enhancement fails",
+      "payload_example": {
+        "task_id": "task_12345",
+        "error_type": "api_timeout",
+        "error_message": "LLM API request timed out",
+        "user_id": "user_123",
+        "timestamp": "2025-11-10T12:01:00Z"
+      }
+    },
+    {
+      "event": "usage.metrics.updated",
+      "description": "Periodic updates of usage metrics for dashboard widgets",
+      "payload_example": {
+        "total_corrections_today": 150,
+        "total_prompts_enhanced_today": 45,
+        "active_users_today": 23,
+        "average_response_time": "1.8s",
+        "timestamp": "2025-11-10T12:00:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://sfg-ai-prompt.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification",
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff": "exponential",
+    "timeout_seconds": 30
+  },
+  "rate_limits": {
+    "incoming": "1000/hour",
+    "outgoing": "500/hour"
+  }
+}
