@@ -1,0 +1,392 @@
+{
+  "app_name": "SFG-SYNC",
+  "app_slug": "sfg-sync",
+  "version": "2.0.0",
+  "email_templates": [
+    {
+      "name": "Customer Guardian AI - 48h Progress Update",
+      "template_id": "customer_progress_update",
+      "subject": "Your SFG Project Update - {{project_name}}",
+      "description": "Automated 48-hour progress update sent to customers with current status, completed milestones, next steps, and timeline",
+      "frequency": "Every 48 hours (for active projects)",
+      "personalization": [
+        "Customer name",
+        "Project name",
+        "Tier-specific content",
+        "Progress percentage",
+        "Milestone completions",
+        "Next steps"
+      ],
+      "triggers": [
+        "48-hour timer",
+        "Major milestone completion",
+        "Issue detection"
+      ],
+      "tone": "Professional, transparent, proactive"
+    },
+    {
+      "name": "Schedule Created Notification",
+      "template_id": "schedule_created",
+      "subject": "Project Schedule Confirmed - {{order_id}}",
+      "description": "Notification sent when initial schedule is created for an order",
+      "recipients": [
+        "Customer",
+        "Project Manager",
+        "Operations Team"
+      ],
+      "content": [
+        "Fabrication timeline",
+        "Installation timeline (if S&I)",
+        "Key milestones",
+        "Delivery date",
+        "Next steps"
+      ]
+    },
+    {
+      "name": "Schedule Update Notification",
+      "template_id": "schedule_updated",
+      "subject": "Project Schedule Updated - {{order_id}}",
+      "description": "Notification sent when schedule is modified",
+      "recipients": [
+        "Customer",
+        "Project Manager",
+        "Affected Teams"
+      ],
+      "content": [
+        "What changed",
+        "Reason for change",
+        "New timeline",
+        "Impact assessment",
+        "Next steps"
+      ]
+    },
+    {
+      "name": "Delay Alert",
+      "template_id": "delay_alert",
+      "subject": "Important: Project Delay Notification - {{order_id}}",
+      "description": "Urgent notification when project delay is detected",
+      "recipients": [
+        "Customer",
+        "Project Manager",
+        "Operations Manager"
+      ],
+      "content": [
+        "Delay description",
+        "Delay duration",
+        "Root cause",
+        "Mitigation plan",
+        "Revised timeline",
+        "Contact details"
+      ],
+      "priority": "HIGH"
+    },
+    {
+      "name": "Conflict Alert (Internal)",
+      "template_id": "conflict_alert_internal",
+      "subject": "Scheduling Conflict Detected - {{conflict_id}}",
+      "description": "Internal alert when scheduling conflict is identified",
+      "recipients": [
+        "Operations Team",
+        "Resource Manager",
+        "Affected Project Managers"
+      ],
+      "content": [
+        "Conflict type",
+        "Affected projects",
+        "Severity",
+        "Resolution options",
+        "Action required"
+      ]
+    },
+    {
+      "name": "Milestone Completion",
+      "template_id": "milestone_completed",
+      "subject": "Milestone Achieved: {{milestone_name}} - {{order_id}}",
+      "description": "Notification when project milestone is completed",
+      "recipients": [
+        "Customer",
+        "Project Manager"
+      ],
+      "content": [
+        "Milestone description",
+        "Completion date",
+        "Quality status",
+        "Next milestone",
+        "Updated timeline"
+      ]
+    },
+    {
+      "name": "Installation Confirmation",
+      "template_id": "installation_confirmation",
+      "subject": "Installation Scheduled - {{order_id}}",
+      "description": "Confirmation email sent when installation date is scheduled",
+      "recipients": [
+        "Customer",
+        "Installation Team"
+      ],
+      "content": [
+        "Installation date",
+        "Installation duration",
+        "Site requirements",
+        "Preparation checklist",
+        "Contact details"
+      ]
+    },
+    {
+      "name": "Project Completion",
+      "template_id": "project_completed",
+      "subject": "Project Completed - Thank You! {{order_id}}",
+      "description": "Final email sent when project is completed and handed over",
+      "recipients": [
+        "Customer"
+      ],
+      "content": [
+        "Completion confirmation",
+        "Quality sign-off",
+        "Warranty information",
+        "After-sales contact",
+        "Feedback request",
+        "Referral incentive"
+      ]
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#sfg-sync-alerts",
+      "triggers": [
+        "Critical conflict detected",
+        "Schedule optimization completed",
+        "Customer Guardian AI issue",
+        "System error"
+      ],
+      "format": "Rich message with action buttons"
+    },
+    {
+      "type": "slack",
+      "channel": "#project-updates",
+      "triggers": [
+        "Milestone completed",
+        "Schedule created",
+        "Schedule updated",
+        "Delay detected"
+      ],
+      "format": "Summary message with link to dashboard"
+    },
+    {
+      "type": "teams",
+      "channel": "SFG Operations",
+      "triggers": [
+        "High-priority conflict",
+        "Project delay >3 days",
+        "Resource constraint critical"
+      ],
+      "format": "Adaptive card with contextual actions"
+    },
+    {
+      "type": "email",
+      "recipients": [
+        "operations@sfg.com"
+      ],
+      "triggers": [
+        "Daily performance summary",
+        "Weekly KPI report",
+        "Monthly trend analysis"
+      ],
+      "format": "HTML email with embedded charts"
+    },
+    {
+      "type": "sms",
+      "recipients": [
+        "On-call manager"
+      ],
+      "triggers": [
+        "Critical system failure",
+        "Emergency escalation",
+        "Customer escalation"
+      ],
+      "format": "Plain text with priority indicator"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Active Projects",
+      "type": "metric",
+      "description": "Count of currently active projects being scheduled",
+      "refresh_rate": "Real-time",
+      "data_source": "ScheduleItem table"
+    },
+    {
+      "name": "On-Time Delivery Rate",
+      "type": "gauge",
+      "description": "Percentage of projects delivered on time",
+      "target": "92%+",
+      "refresh_rate": "Hourly",
+      "data_source": "Order completion data"
+    },
+    {
+      "name": "Resource Utilization",
+      "type": "chart",
+      "chart_type": "line",
+      "description": "Real-time resource utilization across personnel, equipment, materials",
+      "refresh_rate": "Every 15 minutes",
+      "data_source": "ResourceAllocation table"
+    },
+    {
+      "name": "Active Conflicts",
+      "type": "alert",
+      "description": "Count and severity of active scheduling conflicts requiring resolution",
+      "refresh_rate": "Real-time",
+      "data_source": "Conflict table",
+      "alert_threshold": ">5 active conflicts"
+    },
+    {
+      "name": "Customer Updates Sent",
+      "type": "metric",
+      "description": "Count of Customer Guardian AI updates sent today/this week",
+      "refresh_rate": "Hourly",
+      "data_source": "CustomerUpdate table"
+    },
+    {
+      "name": "Schedule Optimization Savings",
+      "type": "metric",
+      "description": "Total days saved through AI schedule optimization",
+      "refresh_rate": "Daily",
+      "data_source": "Optimization logs"
+    },
+    {
+      "name": "Critical Path Timeline",
+      "type": "gantt",
+      "description": "Interactive Gantt chart showing critical path for all active projects",
+      "refresh_rate": "Real-time",
+      "data_source": "ScheduleItem, CriticalPath tables"
+    },
+    {
+      "name": "Upcoming Milestones",
+      "type": "table",
+      "description": "List of project milestones due in the next 7 days",
+      "refresh_rate": "Hourly",
+      "data_source": "ScheduleItem table"
+    },
+    {
+      "name": "Performance KPIs",
+      "type": "scorecard",
+      "description": "Grid of key performance indicators (lead time, OTD, utilization, quality)",
+      "refresh_rate": "Hourly",
+      "data_source": "PerformanceMetric table"
+    },
+    {
+      "name": "AI Model Performance",
+      "type": "chart",
+      "chart_type": "bar",
+      "description": "Accuracy metrics for AI models (schedule optimization, conflict detection, bottleneck prediction)",
+      "refresh_rate": "Daily",
+      "data_source": "Prediction table"
+    }
+  ],
+  "notification_preferences": {
+    "customer_tier_based": {
+      "premier": {
+        "channels": [
+          "Email",
+          "SMS",
+          "WhatsApp",
+          "Customer Portal"
+        ],
+        "frequency": "Every 48 hours + immediate alerts",
+        "response_time": "<2 hours"
+      },
+      "preferred": {
+        "channels": [
+          "Email",
+          "Customer Portal"
+        ],
+        "frequency": "Every 48 hours + critical alerts",
+        "response_time": "<4 hours"
+      },
+      "standard": {
+        "channels": [
+          "Email",
+          "Customer Portal"
+        ],
+        "frequency": "Every 48 hours",
+        "response_time": "<8 hours"
+      }
+    },
+    "internal_team_based": {
+      "operations_manager": {
+        "channels": [
+          "Slack",
+          "Email",
+          "SMS (critical)"
+        ],
+        "events": [
+          "All conflicts",
+          "All delays",
+          "Critical issues"
+        ]
+      },
+      "project_manager": {
+        "channels": [
+          "Slack",
+          "Email"
+        ],
+        "events": [
+          "Project-specific updates",
+          "Milestones",
+          "Delays"
+        ]
+      },
+      "resource_manager": {
+        "channels": [
+          "Slack",
+          "Email"
+        ],
+        "events": [
+          "Resource conflicts",
+          "Capacity alerts",
+          "Allocation changes"
+        ]
+      },
+      "executive": {
+        "channels": [
+          "Email"
+        ],
+        "events": [
+          "Daily summary",
+          "Weekly KPI report",
+          "Critical escalations"
+        ]
+      }
+    }
+  },
+  "personalization_engine": {
+    "customer_factors": [
+      "Name",
+      "Company",
+      "Project type",
+      "Tier",
+      "Communication preferences",
+      "History"
+    ],
+    "content_factors": [
+      "Project phase",
+      "Progress percentage",
+      "Milestones completed",
+      "Issues active",
+      "Next steps"
+    ],
+    "ai_generation": {
+      "provider": "Abacus.AI NLP",
+      "model": "GPT-based",
+      "customization": "Tone, length, detail level based on customer tier and preferences"
+    }
+  },
+  "compliance_privacy": {
+    "gdpr_compliant": true,
+    "data_retention": "Email logs: 7 years, Customer communications: 2 years",
+    "opt_out": "Customers can opt out of non-critical updates",
+    "unsubscribe": "One-click unsubscribe in all emails",
+    "data_protection": "Encrypted storage, access controls, audit logging"
+  }
+}
