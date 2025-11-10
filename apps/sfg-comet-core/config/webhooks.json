@@ -3,72 +3,70 @@
   "app_slug": "sfg-comet-core",
   "version": "1.2.0",
   "incoming_webhooks": [
-    [
-      {
-        "event": "customer.updated",
-        "description": "Customer information updated from external CRM system (MCP-SALES), sync customer data to COMET CORE database",
-        "payload_example": {
-          "event_type": "customer.updated",
-          "customer_id": "CUST-2025-123",
-          "customer_name": "Acme Construction Ltd",
-          "email": "contact@acme.com",
-          "phone": "+44 1234 567890",
-          "credit_limit": 50000,
-          "updated_at": "2025-11-10T10:30:00Z",
-          "updated_by": "MCP-SALES"
-        }
-      },
-      {
-        "event": "quote.accepted",
-        "description": "Customer accepted quote via external system, trigger Pre-Production workflow in COMET CORE",
-        "payload_example": {
-          "event_type": "quote.accepted",
-          "enquiry_number": "ENQ-2025-045",
-          "quote_number": "QUO-2025-045",
-          "customer_id": "CUST-2025-123",
-          "quote_value": 25000,
-          "accepted_at": "2025-11-10T11:00:00Z",
-          "accepted_by": "customer@acme.com"
-        }
-      },
-      {
-        "event": "invoice.paid",
-        "description": "Invoice payment received from Xero accounting system, update project status to Completed",
-        "payload_example": {
-          "event_type": "invoice.paid",
-          "invoice_number": "INV-2025-045",
-          "enquiry_number": "ENQ-2025-045",
-          "amount_paid": 25000,
-          "payment_date": "2025-11-10T15:00:00Z",
-          "payment_method": "Bank Transfer",
-          "xero_invoice_id": "abc123-def456"
-        }
-      },
-      {
-        "event": "project.milestone_reached",
-        "description": "Project milestone reached from MCP-OPERATIONS, update project progress and notify team",
-        "payload_example": {
-          "event_type": "project.milestone_reached",
-          "enquiry_number": "ENQ-2025-045",
-          "milestone": "Material Ordered",
-          "milestone_date": "2025-11-10T09:00:00Z",
-          "next_milestone": "Production Start",
-          "progress_percentage": 40
-        }
-      },
-      {
-        "event": "document.external_update",
-        "description": "Document updated in SharePoint via Microsoft Graph, sync to COMET CORE document library",
-        "payload_example": {
-          "event_type": "document.external_update",
-          "document_id": "DOC-2025-789",
-          "document_name": "Technical_Spec_V2.pdf",
-          "sharepoint_url": "https://sfgaluminium.sharepoint.com/sites/comet-core/docs/DOC-2025-789",
-          "updated_by": "warren@sfgaluminium.com",
-          "updated_at": "2025-11-10T14:30:00Z"
-        }
+    {
+      "event": "customer.updated",
+      "description": "Customer information updated from external CRM system (MCP-SALES), sync customer data to COMET CORE database",
+      "payload_example": {
+        "event_type": "customer.updated",
+        "customer_id": "CUST-2025-123",
+        "customer_name": "Acme Construction Ltd",
+        "email": "contact@acme.com",
+        "phone": "+44 1234 567890",
+        "credit_limit": 50000,
+        "updated_at": "2025-11-10T10:30:00Z",
+        "updated_by": "MCP-SALES"
       }
-    ]
+    },
+    {
+      "event": "quote.accepted",
+      "description": "Customer accepted quote via external system, trigger Pre-Production workflow in COMET CORE",
+      "payload_example": {
+        "event_type": "quote.accepted",
+        "enquiry_number": "ENQ-2025-045",
+        "quote_number": "QUO-2025-045",
+        "customer_id": "CUST-2025-123",
+        "quote_value": 25000,
+        "accepted_at": "2025-11-10T11:00:00Z",
+        "accepted_by": "customer@acme.com"
+      }
+    },
+    {
+      "event": "invoice.paid",
+      "description": "Invoice payment received from Xero accounting system, update project status to Completed",
+      "payload_example": {
+        "event_type": "invoice.paid",
+        "invoice_number": "INV-2025-045",
+        "enquiry_number": "ENQ-2025-045",
+        "amount_paid": 25000,
+        "payment_date": "2025-11-10T15:00:00Z",
+        "payment_method": "Bank Transfer",
+        "xero_invoice_id": "abc123-def456"
+      }
+    },
+    {
+      "event": "project.milestone_reached",
+      "description": "Project milestone reached from MCP-OPERATIONS, update project progress and notify team",
+      "payload_example": {
+        "event_type": "project.milestone_reached",
+        "enquiry_number": "ENQ-2025-045",
+        "milestone": "Material Ordered",
+        "milestone_date": "2025-11-10T09:00:00Z",
+        "next_milestone": "Production Start",
+        "progress_percentage": 40
+      }
+    },
+    {
+      "event": "document.external_update",
+      "description": "Document updated in SharePoint via Microsoft Graph, sync to COMET CORE document library",
+      "payload_example": {
+        "event_type": "document.external_update",
+        "document_id": "DOC-2025-789",
+        "document_name": "Technical_Spec_V2.pdf",
+        "sharepoint_url": "https://sfgaluminium.sharepoint.com/sites/comet-core/docs/DOC-2025-789",
+        "updated_by": "warren@sfgaluminium.com",
+        "updated_at": "2025-11-10T14:30:00Z"
+      }
+    }
   ],
   "outgoing_webhooks": [
     {
