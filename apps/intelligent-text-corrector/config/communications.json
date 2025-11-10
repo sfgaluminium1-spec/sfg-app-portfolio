@@ -1,0 +1,78 @@
+{
+  "email_templates": [
+    {
+      "name": "Correction Summary Report",
+      "subject": "Your Daily Text Correction Summary - {{date}}",
+      "description": "Daily automated email showing user's correction statistics and insights"
+    },
+    {
+      "name": "Welcome Email",
+      "subject": "Welcome to SFG Intelligent Text Corrector",
+      "description": "Sent to new users upon successful registration with setup instructions"
+    },
+    {
+      "name": "Password Reset Confirmation",
+      "subject": "Password Reset Successful - SFG Text Corrector",
+      "description": "Sent after user successfully resets their password"
+    },
+    {
+      "name": "Usage Limit Warning",
+      "subject": "Approaching Usage Limit - SFG Text Corrector",
+      "description": "Sent when user reaches 80% of their correction quota"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#sfg-text-corrector-alerts",
+      "trigger": "High error rate detected in correction API (>5% failures)"
+    },
+    {
+      "type": "slack",
+      "channel": "#sfg-text-corrector-alerts",
+      "trigger": "New user signup requiring admin approval"
+    },
+    {
+      "type": "email",
+      "channel": "admin@sfg-innovations.com",
+      "trigger": "System health check failure or API downtime"
+    },
+    {
+      "type": "teams",
+      "channel": "SFG Operations",
+      "trigger": "Daily usage summary and performance metrics"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Daily Corrections Counter",
+      "type": "metric",
+      "description": "Displays total number of corrections performed today across all users"
+    },
+    {
+      "name": "Correction Mode Distribution",
+      "type": "chart",
+      "description": "Pie chart showing percentage breakdown of Grammar, Punctuation, Rewrite modes used"
+    },
+    {
+      "name": "Active Users Table",
+      "type": "table",
+      "description": "List of currently active users with their recent correction activity"
+    },
+    {
+      "name": "API Response Time",
+      "type": "metric",
+      "description": "Average API response time in milliseconds for correction requests"
+    },
+    {
+      "name": "Error Rate Alert",
+      "type": "alert",
+      "description": "Visual alert when correction error rate exceeds 3% threshold"
+    },
+    {
+      "name": "User Growth Trend",
+      "type": "chart",
+      "description": "Line graph showing new user registrations over time"
+    }
+  ]
+}
