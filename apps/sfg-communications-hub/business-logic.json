@@ -1,0 +1,136 @@
+{
+  "appName": "SFG Communications Hub",
+  "appSlug": "sfg-communications-hub",
+  "version": "1.2.3",
+  "category": "communications",
+  "status": "production",
+  "deployment_url": "https://sfgcomms-hub.abacusai.app",
+  "description": "Enterprise-grade email and communications management platform with AI-powered triage, multi-client support, role-based access, and real-time analytics for SFG Aluminium operations",
+  "capabilities": [
+    "Unified email account management (Exchange, Gmail, IMAP)",
+    "AI-powered email triage and classification (<5s processing)",
+    "Multi-client support (Outlook, Spark, Mailspring Pro, Gmail, Apple Mail, Thunderbird)",
+    "Role-based access control (Admin/User permissions)",
+    "Real-time email processing analytics and metrics",
+    "Mobile app recommendations and setup guides (iOS/Android)",
+    "Email client configuration management",
+    "System health monitoring and diagnostics",
+    "Progress tracking and implementation roadmap visualization",
+    "WhatsApp Business integration (future)",
+    "Google Chat integration (future)",
+    "MS Office 365 and Gmail OAuth authentication (future)",
+    "Email signature management across clients",
+    "Department-based email routing and classification"
+  ],
+  "workflows": [
+    {
+      "name": "Email Account Onboarding",
+      "description": "Add new email accounts to the communications hub with automated configuration",
+      "steps": [
+        "Admin accesses Email Accounts dashboard",
+        "Enters account credentials (email, password, server details)",
+        "System validates connection and tests authentication",
+        "Account added to database with sync status",
+        "Email client configurations generated automatically",
+        "Staff notified of new account availability"
+      ]
+    },
+    {
+      "name": "Email Client Configuration",
+      "description": "Generate platform-specific configurations for email clients",
+      "steps": [
+        "User selects email account",
+        "Chooses preferred email client (Mailspring, Outlook, etc.)",
+        "System generates client-specific configuration",
+        "Downloads config file or provides setup instructions",
+        "User imports config into email client",
+        "Connection verified via health check"
+      ]
+    },
+    {
+      "name": "AI Email Triage",
+      "description": "Automatically classify and route incoming emails",
+      "steps": [
+        "Email received in monitored account",
+        "AI analyzes subject, sender, content",
+        "Email classified by department (Sales, Operations, Finance, HR)",
+        "Priority level assigned (High, Medium, Low)",
+        "Routing rules applied based on classification",
+        "Notification sent to appropriate team",
+        "Email logged in analytics dashboard"
+      ]
+    },
+    {
+      "name": "Real-time Monitoring",
+      "description": "Track email processing and system health in real-time",
+      "steps": [
+        "WebSocket connection established with dashboard",
+        "System broadcasts email processing events",
+        "Dashboard displays live stats (processed count, success rate)",
+        "Health checks run every 30 seconds",
+        "Alerts triggered for errors or degraded performance",
+        "Admin notified of critical issues"
+      ]
+    },
+    {
+      "name": "Mobile Setup Assistance",
+      "description": "Guide users through mobile email client setup",
+      "steps": [
+        "User accesses Mobile Guide tab",
+        "Selects device type (iOS, Android, Tablet)",
+        "Views platform-specific recommendations",
+        "Follows step-by-step setup instructions",
+        "Downloads recommended apps (Outlook, Spark, Gmail)",
+        "Configures account with provided credentials",
+        "Tests connectivity and syncs emails"
+      ]
+    }
+  ],
+  "integrations": [
+    "NEXUS",
+    "MCP-SALES",
+    "MCP-FINANCE",
+    "MCP-OPERATIONS",
+    "MCP-COMMUNICATIONS",
+    "MS-OFFICE-365",
+    "GMAIL-API",
+    "WHATSAPP-BUSINESS",
+    "GOOGLE-CHAT",
+    "SHAREPOINT",
+    "XERO"
+  ],
+  "authentication": {
+    "type": "nextauth",
+    "provider": "credentials",
+    "future_oauth": [
+      "microsoft",
+      "google"
+    ]
+  },
+  "database": {
+    "type": "postgresql",
+    "orm": "prisma",
+    "models": [
+      "User",
+      "EmailAccount",
+      "EmailClient",
+      "EmailClientConfig",
+      "SystemProgress"
+    ]
+  },
+  "api_endpoints": {
+    "health": "/api/health",
+    "email_accounts": "/api/email-accounts",
+    "email_clients": "/api/email-clients",
+    "messages": "/api/messages",
+    "webhooks": "/api/webhooks/nexus",
+    "realtime": "/api/ws"
+  },
+  "extracted_at": "2025-11-10T15:46:23.320030Z",
+  "completion_status": "92%",
+  "admin_contact": {
+    "name": "Warren Heathcote",
+    "email": "warren@SFG-innovations.com",
+    "role": "Project Owner"
+  }
+}
