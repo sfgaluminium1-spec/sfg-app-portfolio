@@ -1,0 +1,376 @@
+{
+  "app_name": "SFG-SYNC",
+  "app_slug": "sfg-sync",
+  "version": "2.0.0",
+  "incoming_webhooks": [
+    {
+      "event": "enquiry.created",
+      "description": "New customer enquiry received, initiate preliminary timeline estimation",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "customer_id": "CUST-123",
+        "project_type": "supply_and_install",
+        "estimated_value": 50000,
+        "urgency": "standard"
+      },
+      "processing_time": "< 5 seconds",
+      "actions": [
+        "Create preliminary schedule",
+        "Estimate resource requirements",
+        "Flag capacity constraints"
+      ]
+    },
+    {
+      "event": "enquiry.approved",
+      "description": "Enquiry approved and converted to quotation, prepare detailed schedule",
+      "payload_example": {
+        "enquiry_id": "ENQ-2025-001",
+        "quotation_id": "QUO-2025-001",
+        "customer_id": "CUST-123",
+        "project_requirements": {}
+      },
+      "processing_time": "< 30 seconds",
+      "actions": [
+        "Generate detailed schedule",
+        "Allocate tentative resources",
+        "Calculate critical path"
+      ]
+    },
+    {
+      "event": "order.created",
+      "description": "New order created from approved quote, finalize schedule and initiate Customer Guardian AI",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "quotation_id": "QUO-2025-001",
+        "customer_id": "CUST-123",
+        "order_type": "supply_and_install",
+        "total_value": 50000,
+        "deposit_paid": true
+      },
+      "processing_time": "< 1 minute",
+      "actions": [
+        "Finalize fabrication schedule",
+        "Finalize installation schedule (if S&I)",
+        "Allocate confirmed resources",
+        "Create schedule dependencies",
+        "Initialize Customer Guardian AI cycle (48h)",
+        "Publish schedule.created event"
+      ]
+    },
+    {
+      "event": "order.approved",
+      "description": "Order approved for production, release schedules to teams",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "approved_by": "manager@sfg.com",
+        "production_release_date": "2025-11-15"
+      },
+      "processing_time": "< 10 seconds",
+      "actions": [
+        "Release schedules to production",
+        "Notify teams",
+        "Start real-time monitoring",
+        "Publish schedule.released event"
+      ]
+    },
+    {
+      "event": "order.updated",
+      "description": "Order details changed, recalculate schedules and detect conflicts",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "changes": {
+          "delivery_date": "2025-12-20",
+          "specifications": {}
+        }
+      },
+      "processing_time": "< 30 seconds",
+      "actions": [
+        "Recalculate schedules",
+        "Detect conflicts",
+        "Run optimization",
+        "Notify affected teams",
+        "Publish schedule.updated event"
+      ]
+    },
+    {
+      "event": "payment.received",
+      "description": "Payment milestone reached, update project status and customer tier",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "payment_type": "deposit|progress|final",
+        "amount": 15000,
+        "payment_date": "2025-11-10"
+      },
+      "processing_time": "< 5 seconds",
+      "actions": [
+        "Update project status",
+        "Adjust customer tier if applicable",
+        "Trigger milestone notification"
+      ]
+    },
+    {
+      "event": "fabrication.started",
+      "description": "Fabrication commenced, start real-time progress tracking",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "fabrication_task_id": "FAB-2025-001",
+        "start_date": "2025-11-15",
+        "assigned_team": "Team A"
+      },
+      "processing_time": "< 5 seconds",
+      "actions": [
+        "Start progress tracking",
+        "Monitor for delays",
+        "Update schedule status",
+        "Publish milestone.started event"
+      ]
+    },
+    {
+      "event": "fabrication.completed",
+      "description": "Fabrication finished, update schedule and trigger logistics planning",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "fabrication_task_id": "FAB-2025-001",
+        "completion_date": "2025-11-25",
+        "quality_passed": true
+      },
+      "processing_time": "< 10 seconds",
+      "actions": [
+        "Update schedule status",
+        "Trigger logistics planning",
+        "Schedule quality inspection",
+        "Publish milestone.completed event"
+      ]
+    },
+    {
+      "event": "installation.scheduled",
+      "description": "Installation date confirmed with customer, finalize installation resources",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "installation_task_id": "INS-2025-001",
+        "scheduled_date": "2025-12-01",
+        "customer_confirmed": true
+      },
+      "processing_time": "< 10 seconds",
+      "actions": [
+        "Finalize installation resources",
+        "Notify installation team",
+        "Update customer",
+        "Publish installation.confirmed event"
+      ]
+    },
+    {
+      "event": "installation.completed",
+      "description": "Installation finished, update project status and trigger final handover",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "installation_task_id": "INS-2025-001",
+        "completion_date": "2025-12-05",
+        "customer_signed_off": true
+      },
+      "processing_time": "< 10 seconds",
+      "actions": [
+        "Update project status",
+        "Trigger final handover",
+        "Schedule warranty registration",
+        "Publish project.completed event"
+      ]
+    },
+    {
+      "event": "nexus.task.assigned",
+      "description": "NEXUS assigned a task to SFG-SYNC, execute the task",
+      "payload_example": {
+        "task_id": "TASK-2025-001",
+        "task_type": "create_schedule|update_schedule|resolve_conflict",
+        "params": {}
+      },
+      "processing_time": "< 1 minute",
+      "actions": [
+        "Execute task",
+        "Return results",
+        "Publish task.completed event"
+      ]
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "schedule.created",
+      "description": "New schedule created for an order",
+      "payload_example": {
+        "schedule_id": "SCH-2025-001",
+        "order_id": "ORD-2025-001",
+        "fabrication_start": "2025-11-15",
+        "fabrication_end": "2025-11-25",
+        "installation_start": "2025-12-01",
+        "installation_end": "2025-12-05",
+        "total_duration_days": 20
+      },
+      "recipients": [
+        "NEXUS",
+        "MCP-OPERATIONS",
+        "Communications-Hub"
+      ]
+    },
+    {
+      "event": "schedule.updated",
+      "description": "Schedule modified due to changes or optimization",
+      "payload_example": {
+        "schedule_id": "SCH-2025-001",
+        "order_id": "ORD-2025-001",
+        "changes": {
+          "fabrication_end": "2025-11-27",
+          "reason": "Material delay"
+        }
+      },
+      "recipients": [
+        "NEXUS",
+        "MCP-OPERATIONS",
+        "Communications-Hub"
+      ]
+    },
+    {
+      "event": "schedule.optimized",
+      "description": "Schedule optimized by AI, improved efficiency or reduced lead time",
+      "payload_example": {
+        "schedule_id": "SCH-2025-001",
+        "order_id": "ORD-2025-001",
+        "improvements": {
+          "lead_time_reduction_days": 2,
+          "resource_utilization_increase": "5%"
+        }
+      },
+      "recipients": [
+        "NEXUS",
+        "Performance-Dashboard"
+      ]
+    },
+    {
+      "event": "conflict.detected",
+      "description": "Scheduling conflict identified (resource, deadline, dependency)",
+      "payload_example": {
+        "conflict_id": "CONF-2025-001",
+        "conflict_type": "resource_double_booking",
+        "affected_orders": [
+          "ORD-2025-001",
+          "ORD-2025-002"
+        ],
+        "severity": "high",
+        "detected_at": "2025-11-10T14:30:00Z"
+      },
+      "recipients": [
+        "NEXUS",
+        "MCP-OPERATIONS",
+        "Alert-System"
+      ]
+    },
+    {
+      "event": "conflict.resolved",
+      "description": "Scheduling conflict resolved (automated or manual)",
+      "payload_example": {
+        "conflict_id": "CONF-2025-001",
+        "resolution_type": "automatic_reschedule",
+        "resolution_time_minutes": 45,
+        "affected_orders_updated": [
+          "ORD-2025-001",
+          "ORD-2025-002"
+        ]
+      },
+      "recipients": [
+        "NEXUS",
+        "MCP-OPERATIONS"
+      ]
+    },
+    {
+      "event": "milestone.completed",
+      "description": "Project milestone reached (fabrication, delivery, installation)",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "milestone_type": "fabrication_completed",
+        "completion_date": "2025-11-25",
+        "on_time": true
+      },
+      "recipients": [
+        "NEXUS",
+        "Communications-Hub",
+        "Customer-Portal"
+      ]
+    },
+    {
+      "event": "delay.detected",
+      "description": "Project delay identified, exceeding tolerance threshold",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "delay_type": "fabrication_delay",
+        "delay_days": 3,
+        "reason": "Material shortage",
+        "impact": "Delivery date pushed to 2025-12-08"
+      },
+      "recipients": [
+        "NEXUS",
+        "MCP-OPERATIONS",
+        "Communications-Hub",
+        "Alert-System"
+      ]
+    },
+    {
+      "event": "customer.update_sent",
+      "description": "48-hour Customer Guardian AI update sent to customer",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "customer_id": "CUST-123",
+        "update_type": "progress_report",
+        "channel": "email",
+        "sent_at": "2025-11-10T09:00:00Z",
+        "next_update_at": "2025-11-12T09:00:00Z"
+      },
+      "recipients": [
+        "NEXUS",
+        "Communications-Hub",
+        "Analytics"
+      ]
+    },
+    {
+      "event": "resource.allocated",
+      "description": "Resources allocated to a project (personnel, equipment, materials)",
+      "payload_example": {
+        "order_id": "ORD-2025-001",
+        "resource_type": "personnel",
+        "resource_id": "EMP-456",
+        "allocation_start": "2025-11-15",
+        "allocation_end": "2025-11-25"
+      },
+      "recipients": [
+        "NEXUS",
+        "MCP-OPERATIONS",
+        "Resource-Management"
+      ]
+    },
+    {
+      "event": "performance.metrics_updated",
+      "description": "KPIs and performance metrics updated in real-time",
+      "payload_example": {
+        "metric_type": "on_time_delivery_rate",
+        "current_value": "93.5%",
+        "previous_value": "92.8%",
+        "trend": "improving",
+        "updated_at": "2025-11-10T16:00:00Z"
+      },
+      "recipients": [
+        "NEXUS",
+        "Performance-Dashboard",
+        "Analytics"
+      ]
+    }
+  ],
+  "webhook_endpoint": "https://sfg-sync.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification",
+  "retry_policy": {
+    "max_retries": 3,
+    "backoff": "exponential",
+    "timeout_seconds": 30
+  },
+  "rate_limits": {
+    "incoming": "1000/hour",
+    "outgoing": "500/hour"
+  }
+}
