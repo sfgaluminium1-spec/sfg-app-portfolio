@@ -1,0 +1,93 @@
+{
+  "email_templates": [
+    {
+      "name": "New Enquiry Confirmation",
+      "subject": "Your Enquiry #{enquiry_number} - SFG Aluminium",
+      "description": "Sent to customer when new enquiry is created, includes enquiry details and next steps"
+    },
+    {
+      "name": "Quote Ready Notification",
+      "subject": "Your Quote is Ready - #{quote_number}",
+      "description": "Sent to customer when quote is generated, includes PDF attachment and acceptance link"
+    },
+    {
+      "name": "Credit Check Alert",
+      "subject": "Credit Check Alert - {customer_name}",
+      "description": "Sent to sales team when credit check reveals risk, includes AI scoring and recommendations"
+    },
+    {
+      "name": "Approval Request",
+      "subject": "Approval Required - {enquiry_number}",
+      "description": "Sent to managers/executives when project requires tier-based approval"
+    },
+    {
+      "name": "Project Milestone Update",
+      "subject": "Project Update - {enquiry_number}",
+      "description": "Sent to customer and internal team when project reaches key milestones"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#sfg-sales",
+      "trigger": "New enquiry created, quote accepted, or credit check completed"
+    },
+    {
+      "type": "teams",
+      "channel": "SFG Management",
+      "trigger": "Approval required, project stage changed, or critical alert raised"
+    },
+    {
+      "type": "email",
+      "channel": "operations@sfgaluminium.com",
+      "trigger": "Production stage started or final inspection required"
+    },
+    {
+      "type": "sms",
+      "channel": "Executive Team",
+      "trigger": "Critical system alert or high-value project approval needed"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Active Projects by Stage",
+      "type": "chart",
+      "description": "Horizontal bar chart showing count of projects in each of the 6 stages"
+    },
+    {
+      "name": "Total Project Value",
+      "type": "metric",
+      "description": "Sum of estimated value across all active projects with trend indicator"
+    },
+    {
+      "name": "Recent Credit Checks",
+      "type": "table",
+      "description": "Last 10 credit checks with company name, score, and recommendation"
+    },
+    {
+      "name": "Approval Queue",
+      "type": "alert",
+      "description": "List of projects awaiting manager/executive approval with tier requirements"
+    },
+    {
+      "name": "Conversion Rate",
+      "type": "metric",
+      "description": "Percentage of enquiries converted to quotes and quotes accepted by customers"
+    },
+    {
+      "name": "Average Stage Duration",
+      "type": "chart",
+      "description": "Line chart showing average days spent in each project stage over time"
+    },
+    {
+      "name": "Recent Activity Feed",
+      "type": "table",
+      "description": "Real-time feed of all system activities (uploads, stage changes, approvals, etc.)"
+    },
+    {
+      "name": "MCP Integration Health",
+      "type": "alert",
+      "description": "Status of all 5 MCP server connections with last sync time and error count"
+    }
+  ]
+}
