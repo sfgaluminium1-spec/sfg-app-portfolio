@@ -1,0 +1,38 @@
+{
+  "email_templates": [
+    {
+      "name": "Timesheet Submitted",
+      "subject": "New Timesheet - Action Required"
+    },
+    {
+      "name": "Timesheet Approved",
+      "subject": "Your Timesheet Approved"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "teams",
+      "channel": "#payroll",
+      "trigger": "Timesheet submission"
+    },
+    {
+      "type": "email",
+      "channel": "admin",
+      "trigger": "Compliance alert"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Pending Approvals",
+      "type": "metric"
+    },
+    {
+      "name": "Weekly Hours",
+      "type": "chart"
+    },
+    {
+      "name": "Employee Status",
+      "type": "table"
+    }
+  ]
+}
