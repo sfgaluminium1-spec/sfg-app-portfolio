@@ -1,0 +1,354 @@
+
+{
+  "app_name": "SFG Enquiry & Specification Processor",
+  "app_slug": "sfg-esp",
+  "version": "1.0.0",
+  "description": "Communication templates, notifications, and dashboard widgets for SFG ESP",
+  "email_templates": [
+    {
+      "id": "enquiry_acknowledgment",
+      "name": "Enquiry Acknowledgment",
+      "subject": "Thank you for your enquiry - SFG Innovations",
+      "description": "Sent immediately when customer submits enquiry via website or email",
+      "trigger": "enquiry.received",
+      "recipients": ["customer"],
+      "priority": "high",
+      "variables": [
+        "customer_name",
+        "enquiry_id",
+        "enquiry_date",
+        "estimated_response_time",
+        "contact_person"
+      ],
+      "template_preview": "Dear {{customer_name}},\n\nThank you for your enquiry (Ref: {{enquiry_id}}). We have received your request and one of our technical specialists will review it and respond within {{estimated_response_time}}.\n\nYour enquiry details:\n- Reference: {{enquiry_id}}\n- Received: {{enquiry_date}}\n- Contact: {{contact_person}}\n\nBest regards,\nSFG Innovations Team"
+    },
+    {
+      "id": "specification_request",
+      "name": "Specification Request",
+      "subject": "Additional specifications needed - {{enquiry_id}}",
+      "description": "Sent when ESP needs additional technical specifications from customer",
+      "trigger": "specification.required",
+      "recipients": ["customer"],
+      "priority": "high",
+      "variables": [
+        "customer_name",
+        "enquiry_id",
+        "missing_specifications",
+        "upload_link",
+        "deadline"
+      ],
+      "template_preview": "Dear {{customer_name}},\n\nTo provide you with an accurate quotation for {{enquiry_id}}, we need additional specifications:\n\n{{missing_specifications}}\n\nPlease upload the required files here: {{upload_link}}\n\nDeadline: {{deadline}}\n\nThank you for your cooperation."
+    },
+    {
+      "id": "quote_ready_notification",
+      "name": "Quote Ready Notification",
+      "subject": "Your quotation is ready - {{enquiry_id}}",
+      "description": "Sent when quotation has been generated and is ready for customer review",
+      "trigger": "quote.generated",
+      "recipients": ["customer"],
+      "priority": "critical",
+      "variables": [
+        "customer_name",
+        "enquiry_id",
+        "quote_number",
+        "quote_total",
+        "quote_validity_days",
+        "quote_link"
+      ],
+      "template_preview": "Dear {{customer_name}},\n\nYour quotation is ready!\n\nReference: {{enquiry_id}}\nQuote Number: {{quote_number}}\nTotal: £{{quote_total}} (exc VAT)\nValid for: {{quote_validity_days}} days\n\nView and download: {{quote_link}}\n\nWe look forward to working with you."
+    },
+    {
+      "id": "credit_check_required",
+      "name": "Credit Check Required",
+      "subject": "Credit check required for {{customer_name}}",
+      "description": "Internal notification to finance team when credit check is needed",
+      "trigger": "credit.check.initiated",
+      "recipients": ["finance_team"],
+      "priority": "medium",
+      "variables": [
+        "customer_name",
+        "customer_id",
+        "company_number",
+        "enquiry_id",
+        "requested_credit_limit"
+      ],
+      "template_preview": "CREDIT CHECK REQUIRED\n\nCustomer: {{customer_name}} ({{customer_id}})\nCompany Number: {{company_number}}\nEnquiry: {{enquiry_id}}\nRequested Credit Limit: £{{requested_credit_limit}}\n\nPlease complete credit assessment."
+    },
+    {
+      "id": "regulatory_alert",
+      "name": "Regulatory Compliance Alert",
+      "subject": "Regulatory requirements identified - {{enquiry_id}}",
+      "description": "Internal notification when regulatory compliance requirements are identified",
+      "trigger": "regulatory.analysis.completed",
+      "recipients": ["sales_team", "technical_team"],
+      "priority": "high",
+      "variables": [
+        "enquiry_id",
+        "customer_name",
+        "building_height",
+        "compliance_requirements",
+        "approval_pathway",
+        "estimated_cost"
+      ],
+      "template_preview": "REGULATORY REQUIREMENTS IDENTIFIED\n\nEnquiry: {{enquiry_id}}\nCustomer: {{customer_name}}\nBuilding Height: {{building_height}}m\n\nCompliance Requirements:\n{{compliance_requirements}}\n\nApproval Pathway: {{approval_pathway}}\nEstimated Compliance Cost: £{{estimated_cost}}\n\nPlease review and advise customer."
+    },
+    {
+      "id": "xero_sync_error",
+      "name": "Xero Sync Error",
+      "subject": "Xero synchronization error - {{enquiry_id}}",
+      "description": "Internal alert when Xero integration fails",
+      "trigger": "xero.sync.error",
+      "recipients": ["it_team", "finance_team"],
+      "priority": "critical",
+      "variables": [
+        "enquiry_id",
+        "customer_name",
+        "error_message",
+        "error_timestamp",
+        "retry_attempted"
+      ],
+      "template_preview": "XERO SYNC ERROR\n\nEnquiry: {{enquiry_id}}\nCustomer: {{customer_name}}\nError: {{error_message}}\nTimestamp: {{error_timestamp}}\nRetry Attempted: {{retry_attempted}}\n\nPlease investigate immediately."
+    },
+    {
+      "id": "daily_summary",
+      "name": "Daily Enquiry Summary",
+      "subject": "SFG ESP - Daily Summary {{date}}",
+      "description": "Daily summary of enquiry processing activity",
+      "trigger": "scheduled.daily",
+      "recipients": ["management_team"],
+      "priority": "low",
+      "variables": [
+        "date",
+        "enquiries_received",
+        "enquiries_processed",
+        "quotes_generated",
+        "average_processing_time",
+        "credit_checks_completed"
+      ],
+      "template_preview": "DAILY ENQUIRY SUMMARY - {{date}}\n\nEnquiries Received: {{enquiries_received}}\nEnquiries Processed: {{enquiries_processed}}\nQuotes Generated: {{quotes_generated}}\nAverage Processing Time: {{average_processing_time}} minutes\nCredit Checks Completed: {{credit_checks_completed}}\n\nView detailed report: [Dashboard Link]"
+    }
+  ],
+  "internal_notifications": [
+    {
+      "id": "slack_enquiry_received",
+      "type": "slack",
+      "channel": "#enquiries",
+      "trigger": "enquiry.received",
+      "priority": "medium",
+      "message_template": "🆕 New Enquiry: {{customer_name}} - {{product_type}} ({{enquiry_id}})",
+      "include_link": true,
+      "mentions": ["@sales-team"]
+    },
+    {
+      "id": "slack_quote_ready",
+      "type": "slack",
+      "channel": "#sales",
+      "trigger": "quote.generated",
+      "priority": "high",
+      "message_template": "✅ Quote Ready: {{customer_name}} - £{{quote_total}} ({{quote_number}})",
+      "include_link": true,
+      "mentions": ["@account-manager"]
+    },
+    {
+      "id": "slack_credit_risk",
+      "type": "slack",
+      "channel": "#finance-alerts",
+      "trigger": "credit.risk.high",
+      "priority": "critical",
+      "message_template": "⚠️ HIGH CREDIT RISK: {{customer_name}} - {{risk_level}} ({{enquiry_id}})",
+      "include_link": true,
+      "mentions": ["@finance-director"]
+    },
+    {
+      "id": "slack_regulatory_compliance",
+      "type": "slack",
+      "channel": "#technical",
+      "trigger": "regulatory.analysis.completed",
+      "priority": "high",
+      "message_template": "📋 Regulatory Requirements: {{customer_name}} - {{approval_pathway}} ({{enquiry_id}})",
+      "include_link": true,
+      "mentions": ["@technical-team"]
+    },
+    {
+      "id": "teams_system_error",
+      "type": "teams",
+      "channel": "SFG IT Alerts",
+      "trigger": "system.error",
+      "priority": "critical",
+      "message_template": "🚨 SYSTEM ERROR: {{error_type}} in {{component}} - {{error_message}}",
+      "include_link": true,
+      "mentions": ["IT Support Team"]
+    },
+    {
+      "id": "email_processing_delay",
+      "type": "email",
+      "recipients": ["operations@sfg-innovations.com"],
+      "trigger": "processing.delay",
+      "priority": "high",
+      "subject": "Enquiry processing delay alert",
+      "message_template": "Enquiry {{enquiry_id}} has exceeded normal processing time. Current status: {{status}}. Action required."
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "id": "enquiry_metrics",
+      "name": "Enquiry Processing Metrics",
+      "type": "metric_cards",
+      "description": "Real-time metrics for enquiry processing performance",
+      "metrics": [
+        {
+          "name": "Enquiries Today",
+          "key": "enquiries_today",
+          "format": "number",
+          "icon": "inbox"
+        },
+        {
+          "name": "Processing Time (Avg)",
+          "key": "avg_processing_time",
+          "format": "duration_minutes",
+          "icon": "clock"
+        },
+        {
+          "name": "Quotes Generated",
+          "key": "quotes_generated_today",
+          "format": "number",
+          "icon": "file-text"
+        },
+        {
+          "name": "Conversion Rate",
+          "key": "conversion_rate",
+          "format": "percentage",
+          "icon": "trending-up"
+        }
+      ],
+      "refresh_interval_seconds": 60,
+      "data_endpoint": "/api/dashboard/enquiry-metrics"
+    },
+    {
+      "id": "enquiry_pipeline",
+      "name": "Enquiry Pipeline",
+      "type": "table",
+      "description": "Current enquiries in process with status indicators",
+      "columns": [
+        {"name": "Ref", "key": "enquiry_id", "sortable": true},
+        {"name": "Customer", "key": "customer_name", "sortable": true},
+        {"name": "Product", "key": "product_type", "sortable": false},
+        {"name": "Status", "key": "status", "sortable": true, "render": "badge"},
+        {"name": "Age", "key": "age_hours", "sortable": true, "render": "duration"},
+        {"name": "Actions", "key": "actions", "sortable": false, "render": "button_group"}
+      ],
+      "filters": ["status", "product_type", "date_range"],
+      "pagination": true,
+      "page_size": 25,
+      "refresh_interval_seconds": 30,
+      "data_endpoint": "/api/dashboard/enquiry-pipeline"
+    },
+    {
+      "id": "credit_check_status",
+      "name": "Credit Check Status",
+      "type": "chart",
+      "description": "Distribution of credit ratings for recent enquiries",
+      "chart_type": "donut",
+      "data_keys": ["credit_rating_a", "credit_rating_b", "credit_rating_c", "credit_rating_risk"],
+      "colors": ["#10b981", "#3b82f6", "#f59e0b", "#ef4444"],
+      "refresh_interval_seconds": 300,
+      "data_endpoint": "/api/dashboard/credit-distribution"
+    },
+    {
+      "id": "regulatory_compliance",
+      "name": "Regulatory Compliance Alerts",
+      "type": "alert_list",
+      "description": "Active regulatory compliance requirements requiring attention",
+      "alert_types": [
+        {"type": "fire_safety", "severity": "high", "icon": "flame"},
+        {"type": "energy_efficiency", "severity": "medium", "icon": "zap"},
+        {"type": "building_approval", "severity": "high", "icon": "shield"}
+      ],
+      "max_alerts": 10,
+      "refresh_interval_seconds": 120,
+      "data_endpoint": "/api/dashboard/regulatory-alerts"
+    },
+    {
+      "id": "processing_timeline",
+      "name": "Processing Timeline (7 Days)",
+      "type": "chart",
+      "description": "Enquiry volume and processing time trends over the past 7 days",
+      "chart_type": "line",
+      "data_series": [
+        {"name": "Enquiries Received", "key": "enquiries", "color": "#3b82f6"},
+        {"name": "Quotes Generated", "key": "quotes", "color": "#10b981"},
+        {"name": "Avg Processing Time (min)", "key": "processing_time", "color": "#f59e0b", "yAxis": "right"}
+      ],
+      "time_range": "7_days",
+      "refresh_interval_seconds": 600,
+      "data_endpoint": "/api/dashboard/processing-timeline"
+    },
+    {
+      "id": "xero_sync_status",
+      "name": "Xero Integration Status",
+      "type": "status_indicator",
+      "description": "Real-time status of Xero accounting integration",
+      "status_types": [
+        {"status": "connected", "label": "Connected", "color": "green"},
+        {"status": "syncing", "label": "Syncing...", "color": "blue"},
+        {"status": "error", "label": "Error", "color": "red"},
+        {"status": "disconnected", "label": "Disconnected", "color": "gray"}
+      ],
+      "show_last_sync_time": true,
+      "show_error_details": true,
+      "refresh_interval_seconds": 60,
+      "data_endpoint": "/api/dashboard/xero-status"
+    },
+    {
+      "id": "top_customers",
+      "name": "Top Customers (This Month)",
+      "type": "table",
+      "description": "Customers with highest enquiry and quotation activity",
+      "columns": [
+        {"name": "Customer", "key": "customer_name", "sortable": true},
+        {"name": "Enquiries", "key": "enquiry_count", "sortable": true},
+        {"name": "Quotes", "key": "quote_count", "sortable": true},
+        {"name": "Total Value", "key": "total_value", "sortable": true, "render": "currency"}
+      ],
+      "max_rows": 10,
+      "refresh_interval_seconds": 3600,
+      "data_endpoint": "/api/dashboard/top-customers"
+    }
+  ],
+  "notification_preferences": {
+    "default_channels": ["email", "slack"],
+    "escalation_rules": [
+      {
+        "condition": "processing_time > 4_hours",
+        "action": "notify_manager",
+        "channels": ["email", "teams"]
+      },
+      {
+        "condition": "credit_risk == 'high'",
+        "action": "notify_finance_director",
+        "channels": ["email", "slack", "teams"]
+      },
+      {
+        "condition": "system_error",
+        "action": "notify_it_team",
+        "channels": ["slack", "teams"],
+        "urgency": "critical"
+      }
+    ],
+    "quiet_hours": {
+      "enabled": true,
+      "start": "18:00",
+      "end": "08:00",
+      "timezone": "Europe/London",
+      "exceptions": ["critical", "system_error"]
+    }
+  },
+  "audit_logging": {
+    "enabled": true,
+    "log_email_sends": true,
+    "log_notification_sends": true,
+    "log_webhook_events": true,
+    "retention_days": 90,
+    "audit_endpoint": "/api/audit/communications"
+  }
+}
