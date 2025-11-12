@@ -1,0 +1,264 @@
+
+{
+  "app_name": "sfg-deepagent",
+  "full_name": "SFG Aluminium AI Assistant (DeepAgent)",
+  "version": "1.0",
+  "registration_date": "2025-11-05T04:54:00Z",
+  "category": "sfg-aluminium-app",
+  "status": "production",
+  "deployment_model": "on-demand-conversational",
+  
+  "deployment": {
+    "type": "conversational_ai",
+    "platform": "Abacus.AI DeepAgent",
+    "access_method": "Abacus.AI platform interface",
+    "environment": "production",
+    "notes": "Currently operates on-demand through conversational interface. Webhook service deployment planned for full orchestration."
+  },
+  
+  "endpoints": {
+    "webhook_url": "https://sfg-deepagent-webhooks.abacusai.app/api/webhooks/nexus",
+    "message_handler_url": "https://sfg-deepagent-webhooks.abacusai.app/api/messages/handle",
+    "health_check_url": "https://sfg-deepagent-webhooks.abacusai.app/api/health",
+    "status": "planned",
+    "notes": "Endpoint architecture documented. Deployment pending for full NEXUS orchestration integration."
+  },
+  
+  "webhook_configuration": {
+    "webhook_secret": "sfg-deepagent-webhook-secret-2025",
+    "signature_header": "x-nexus-signature",
+    "signature_algorithm": "HMAC-SHA256",
+    "supported_events": [
+      "enquiry.needs_analysis",
+      "quote.needs_review",
+      "document.needs_processing",
+      "research.requested",
+      "data.needs_analysis",
+      "application.build_requested",
+      "workflow.automation_needed",
+      "test.event"
+    ],
+    "status": "planned",
+    "implementation_notes": "FastAPI/Node.js service layer required. Architecture documented in README.md."
+  },
+  
+  "message_handler_configuration": {
+    "supported_message_types": [
+      "query.analyze_enquiry",
+      "query.research_company",
+      "query.check_compliance",
+      "query.analyze_document",
+      "query.market_research",
+      "action.generate_report",
+      "action.create_application",
+      "action.automate_workflow",
+      "action.analyze_data",
+      "test.ping"
+    ],
+    "response_format": "json",
+    "timeout_seconds": 300,
+    "status": "planned",
+    "implementation_notes": "Message handler service layer required for orchestration. Can currently handle these via conversational interface."
+  },
+  
+  "capabilities": [
+    "Customer enquiry processing and intelligent analysis",
+    "Quote generation assistance with margin verification (15% minimum)",
+    "Document processing and analysis (PDFs, contracts, specifications)",
+    "Data analysis and reporting with visualization",
+    "Market research and competitive intelligence",
+    "Company research via Companies House API",
+    "Building regulations compliance checking (Part L, K, B4, M)",
+    "Workflow automation and integration orchestration",
+    "Web application development for SFG-specific needs",
+    "Natural language understanding and intent recognition",
+    "Real-time information gathering via web search",
+    "Code generation and technical implementation",
+    "Report generation and business intelligence",
+    "Integration with MCP servers",
+    "GitHub repository access and code management",
+    "Multi-system data synchronization"
+  ],
+  
+  "integration_points": [
+    {
+      "name": "Abacus.AI Platform",
+      "type": "ai_platform",
+      "status": "active",
+      "capabilities": ["LLM inference", "Data processing", "Model deployment"]
+    },
+    {
+      "name": "MCP-SALES",
+      "type": "mcp_server",
+      "status": "available",
+      "capabilities": ["Customer management", "Sales pipeline", "CRM"]
+    },
+    {
+      "name": "MCP-FINANCE",
+      "type": "mcp_server",
+      "status": "available",
+      "capabilities": ["Credit checks", "Financial analysis", "Xero integration"]
+    },
+    {
+      "name": "MCP-OPERATIONS",
+      "type": "mcp_server",
+      "status": "available",
+      "capabilities": ["Production scheduling", "Resource management", "Project tracking"]
+    },
+    {
+      "name": "MCP-COMMUNICATIONS",
+      "type": "mcp_server",
+      "status": "available",
+      "capabilities": ["Email", "SMS", "Notifications"]
+    },
+    {
+      "name": "MCP-DATA",
+      "type": "mcp_server",
+      "status": "available",
+      "capabilities": ["Data queries", "Analytics", "Reporting"]
+    },
+    {
+      "name": "GitHub",
+      "type": "version_control",
+      "status": "active",
+      "capabilities": ["Repository access", "Code management", "Pull requests"]
+    },
+    {
+      "name": "Companies House",
+      "type": "data_api",
+      "status": "available",
+      "capabilities": ["Company lookup", "Director information", "Financial data"]
+    },
+    {
+      "name": "Web Search",
+      "type": "research_tool",
+      "status": "active",
+      "capabilities": ["Information gathering", "Market research", "Competitive analysis"]
+    },
+    {
+      "name": "NEXUS",
+      "type": "orchestration",
+      "status": "planned",
+      "capabilities": ["Event handling", "Workflow orchestration", "Task distribution"]
+    }
+  ],
+  
+  "business_rules": {
+    "minimum_margin": 0.15,
+    "minimum_margin_percentage": "15%",
+    "target_margin": 0.25,
+    "target_margin_percentage": "25%",
+    "credit_check_threshold": 10000,
+    "credit_check_validity_days": 90,
+    "approval_tiers": [
+      { "tier": "T1", "role": "Director", "limit": 1000000 },
+      { "tier": "T2", "role": "Senior Manager", "limit": 100000 },
+      { "tier": "T3", "role": "Manager", "limit": 25000 },
+      { "tier": "T4", "role": "Supervisor", "limit": 10000 },
+      { "tier": "T5", "role": "Staff", "limit": 1000 }
+    ],
+    "customer_tiers": [
+      { "tier": "Platinum", "color": "Purple" },
+      { "tier": "Sapphire", "color": "Blue" },
+      { "tier": "Steel", "color": "Gray" },
+      { "tier": "Green", "color": "Green" },
+      { "tier": "Crimson", "color": "Red" }
+    ],
+    "document_stages": ["ENQ", "QUO", "SENT", "ACC", "ORD", "FAB", "INS", "INV", "PAID"],
+    "building_regulations": ["Part L", "Part K", "Part B4", "Part M"]
+  },
+  
+  "ai_features": [
+    {
+      "feature": "Natural Language Understanding",
+      "status": "active",
+      "model": "Abacus.AI LLM"
+    },
+    {
+      "feature": "Document Intelligence",
+      "status": "active",
+      "model": "Abacus.AI LLM + parsers"
+    },
+    {
+      "feature": "Research & Analysis",
+      "status": "active",
+      "model": "Abacus.AI LLM + web search"
+    },
+    {
+      "feature": "Code Generation",
+      "status": "active",
+      "model": "Abacus.AI LLM"
+    },
+    {
+      "feature": "Predictive Analytics",
+      "status": "planned",
+      "model": "Abacus.AI ML models"
+    }
+  ],
+  
+  "security": {
+    "authentication": "Abacus.AI platform authentication",
+    "authorization": "Role-based access control",
+    "webhook_verification": "HMAC-SHA256 signatures (planned)",
+    "https_only": true,
+    "data_protection": "GDPR compliant",
+    "audit_logging": "All actions logged",
+    "sensitive_data_handling": "No persistent storage of sensitive data"
+  },
+  
+  "performance_targets": {
+    "simple_query": "< 5 seconds",
+    "document_analysis": "< 60 seconds",
+    "market_research": "< 120 seconds",
+    "report_generation": "< 180 seconds",
+    "app_development": "< 8 hours",
+    "concurrent_conversations": "Multiple",
+    "availability": "99.9%"
+  },
+  
+  "monitoring": {
+    "platform_monitoring": "Abacus.AI platform metrics",
+    "error_tracking": "Application logs",
+    "performance_tracking": "Response time metrics",
+    "usage_analytics": "Conversation and task metrics"
+  },
+  
+  "contact": {
+    "maintainer": "Abacus.AI / SFG Innovations",
+    "email": "warren@sfg-innovations.com",
+    "organization": "SFG Aluminium Limited",
+    "support": "Available via Abacus.AI platform"
+  },
+  
+  "repository": {
+    "type": "registered_in_portfolio",
+    "portfolio_repo": "sfgaluminium1-spec/sfg-app-portfolio",
+    "registration_path": "/apps/sfg-deepagent",
+    "registration_issue": "pending_creation"
+  },
+  
+  "orchestration_readiness": {
+    "conversational_interface": "ready",
+    "webhook_integration": "architecture_documented",
+    "message_handler": "architecture_documented",
+    "nexus_integration": "pending_deployment",
+    "current_status": "operational_on_demand",
+    "next_steps": [
+      "Deploy webhook service layer (FastAPI/Node.js)",
+      "Implement task queue for async processing",
+      "Test NEXUS integration",
+      "Enable full orchestration capabilities"
+    ]
+  },
+  
+  "notes": [
+    "Currently operational as on-demand conversational AI via Abacus.AI platform",
+    "Comprehensive capabilities for enquiry analysis, research, document processing, and development",
+    "Webhook and message handler architecture documented for future NEXUS orchestration",
+    "Can be invoked conversationally for immediate tasks while webhook deployment is in progress",
+    "Full integration with MCP servers available",
+    "GitHub access configured for code management",
+    "Web search and research capabilities active",
+    "Ready for both conversational and orchestrated operation modes"
+  ]
+}
