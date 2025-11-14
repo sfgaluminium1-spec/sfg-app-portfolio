@@ -1,0 +1,116 @@
+
+{
+  "email_templates": [
+    {
+      "name": "Technical Drawings Ready",
+      "subject": "SPW600e Technical Drawings - {{request_id}} - Ready for Download",
+      "description": "Sent when technical drawings have been generated and are ready for download. Includes links to all drawing files and expiry information."
+    },
+    {
+      "name": "Specification Document Ready",
+      "subject": "SPW600e Technical Specification - {{spec_id}} - {{project_name}}",
+      "description": "Sent when a technical specification document has been generated. Includes thermal performance data, material specifications, and compliance information."
+    },
+    {
+      "name": "Quote Technical Package Ready",
+      "subject": "Quote {{quote_id}} - Technical Package Ready for Pricing",
+      "description": "Sent to sales team when technical data for a quote is ready. Includes bill of materials, drawings, and estimated weights for pricing."
+    },
+    {
+      "name": "Validation Error Notification",
+      "subject": "SPW600e Specification Validation Failed - {{request_id}}",
+      "description": "Sent when door specifications fail validation. Lists all validation errors with suggested corrections."
+    },
+    {
+      "name": "Manufacturing Package Ready",
+      "subject": "Manufacturing Order {{order_id}} - Production Drawings Ready",
+      "description": "Sent to manufacturing team when production drawings and material specifications are ready for a confirmed order."
+    }
+  ],
+  "internal_notifications": [
+    {
+      "type": "slack",
+      "channel": "#sfg-technical-drawings",
+      "trigger": "When new drawing request is received or drawings are generated"
+    },
+    {
+      "type": "slack",
+      "channel": "#sfg-sales",
+      "trigger": "When quote technical package is ready for pricing"
+    },
+    {
+      "type": "slack",
+      "channel": "#sfg-manufacturing",
+      "trigger": "When manufacturing order drawings are generated"
+    },
+    {
+      "type": "email",
+      "channel": "technical@sfgaluminium.com",
+      "trigger": "When validation errors occur or system errors are encountered"
+    }
+  ],
+  "dashboard_widgets": [
+    {
+      "name": "Drawing Requests Today",
+      "type": "metric",
+      "description": "Count of technical drawing requests received today with status breakdown (pending, processing, completed, failed)"
+    },
+    {
+      "name": "Quote Technical Packages",
+      "type": "chart",
+      "description": "Weekly trend of quote technical packages generated, showing conversion from request to completed package"
+    },
+    {
+      "name": "Popular Door Configurations",
+      "type": "chart",
+      "description": "Pie chart showing distribution of door configurations requested (single inward, single outward, double inward, double outward)"
+    },
+    {
+      "name": "Thermal Performance Distribution",
+      "type": "chart",
+      "description": "Bar chart showing distribution of thermal performance requirements (U-values) across all requests"
+    },
+    {
+      "name": "Validation Error Rate",
+      "type": "metric",
+      "description": "Percentage of requests that fail validation with breakdown of common error types"
+    },
+    {
+      "name": "Average Processing Time",
+      "type": "metric",
+      "description": "Average time from request to completed drawing package, with target SLA indicator"
+    },
+    {
+      "name": "Recent Drawing Requests",
+      "type": "table",
+      "description": "Table showing last 10 drawing requests with status, configuration, and requester information"
+    },
+    {
+      "name": "Manufacturing Orders Pipeline",
+      "type": "table",
+      "description": "Table showing active manufacturing orders awaiting production drawings or in progress"
+    }
+  ],
+  "message_handlers": [
+    {
+      "event": "drawings.generated",
+      "handler": "handle_drawings_generated",
+      "description": "Processes completed drawing generation, sends notifications, and updates request status"
+    },
+    {
+      "event": "specification.generated",
+      "handler": "handle_specification_generated",
+      "description": "Processes completed specification generation and distributes to relevant stakeholders"
+    },
+    {
+      "event": "quote.technical_data_ready",
+      "handler": "handle_quote_technical_data_ready",
+      "description": "Notifies sales team and updates quote status when technical data is ready"
+    },
+    {
+      "event": "validation.failed",
+      "handler": "handle_validation_failed",
+      "description": "Logs validation errors, notifies requester, and provides correction guidance"
+    }
+  ]
+}

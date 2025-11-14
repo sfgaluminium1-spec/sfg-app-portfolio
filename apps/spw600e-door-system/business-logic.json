@@ -1,0 +1,98 @@
+
+{
+  "appName": "SPW600e Door System",
+  "version": "1.0.0",
+  "category": "sfg-aluminium-app",
+  "description": "Technical CAD drawing generator and specification management system for the SPW600e thermally broken polyamide door system. Provides automated generation of technical drawings, specifications, and documentation for single and double door configurations with enhanced thermal performance.",
+  "capabilities": [
+    "Generate technical CAD drawings for SPW600e door systems (single/double, inward/outward opening)",
+    "Produce detailed technical specifications and datasheets",
+    "Calculate thermal performance (U-values) for different glazing configurations",
+    "Generate section drawings with accurate dimensions and profiles",
+    "Create elevation and plan views at multiple scales (1:10, 1:5)",
+    "Export drawings in SVG and PDF formats for manufacturing and client presentations",
+    "Manage door system configurations (frame dimensions, glazing thickness, hardware options)",
+    "Provide compliance documentation (PAS24, SBD, BS6375-1 testing standards)"
+  ],
+  "workflows": [
+    {
+      "name": "Technical Drawing Generation",
+      "description": "Automated generation of technical CAD drawings for door system configurations",
+      "steps": [
+        "Receive door specification request (dimensions, configuration, glazing type)",
+        "Validate specifications against system constraints (max width 1000mm, max height 2400mm, max weight 75kg)",
+        "Generate elevation view with frame and leaf details",
+        "Generate plan view showing rebated meeting stile configuration",
+        "Generate section drawings at 1:5 scale showing profile details",
+        "Add dimensions, annotations, and title block",
+        "Export drawings in SVG and PDF formats",
+        "Send drawings to client or manufacturing team"
+      ]
+    },
+    {
+      "name": "Specification Management",
+      "description": "Manage and generate technical specifications for door systems",
+      "steps": [
+        "Receive specification request with project requirements",
+        "Select appropriate door configuration (single/double, opening direction)",
+        "Calculate thermal performance based on glazing selection",
+        "Generate material specifications (aluminium alloy, gasketry, fixings)",
+        "Include finish options (powder coating, anodised, mill finish)",
+        "Compile testing and compliance documentation",
+        "Generate complete technical datasheet",
+        "Deliver specification package to client"
+      ]
+    },
+    {
+      "name": "Quote Generation Support",
+      "description": "Provide technical data for pricing and quotation",
+      "steps": [
+        "Receive quote request with door specifications",
+        "Calculate material requirements based on dimensions",
+        "Determine hardware requirements (hinges, locks, handles)",
+        "Calculate glazing area and thickness requirements",
+        "Provide finish specifications and coating requirements",
+        "Generate bill of materials for pricing",
+        "Send technical data to sales team for quote preparation"
+      ]
+    }
+  ],
+  "integrations": [
+    "NEXUS",
+    "MCP-SALES",
+    "MCP-OPERATIONS",
+    "MCP-COMMUNICATIONS"
+  ],
+  "technical_specifications": {
+    "frame_width_range": "600mm - 2000mm",
+    "frame_height_range": "1800mm - 2400mm",
+    "max_leaf_width": "1000mm",
+    "max_leaf_height": "2400mm",
+    "max_leaf_weight": "75kg",
+    "frame_depth": "75mm",
+    "glazing_thickness_range": "28mm - 56mm",
+    "threshold_height": "25mm",
+    "thermal_performance": {
+      "single_door_double_glazed": "1.4 W/m²K",
+      "single_door_triple_glazed": "1.0 W/m²K",
+      "double_door_double_glazed": "1.3 W/m²K",
+      "double_door_triple_glazed": "0.95 W/m²K"
+    },
+    "testing_standards": [
+      "PAS24",
+      "SBD (Secured by Design)",
+      "BS6375-1"
+    ],
+    "materials": {
+      "aluminium_alloy": "6060.T6/T66, 6063.T6/T66, 6082.T6 to BS EN 755-9 and EN 12020-2",
+      "gasketry": "BS ISO 3302-1",
+      "fixings": "A2 Stainless Steel screws"
+    },
+    "finish_options": [
+      "Polyester Powder Coating (BS EN 12206-1, minimum 40 microns)",
+      "Anodised (BS3897, minimum 25 microns AA25, satin or polished)",
+      "Mill Finish"
+    ]
+  },
+  "extracted_at": "2025-11-07T00:00:00Z"
+}

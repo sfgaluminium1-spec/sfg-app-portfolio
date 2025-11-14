@@ -1,0 +1,163 @@
+
+{
+  "incoming_webhooks": [
+    {
+      "event": "quote.requested",
+      "description": "Triggered when a customer or sales team requests a quote for SPW600e door system. Generates technical drawings and specifications for the quote package.",
+      "payload_example": {
+        "quote_id": "Q-2025-001",
+        "customer_name": "ABC Construction Ltd",
+        "project_name": "Riverside Office Development",
+        "door_configuration": "double",
+        "opening_direction": "outward",
+        "frame_width": 1870,
+        "frame_height": 2235,
+        "glazing_type": "triple",
+        "finish": "powder_coating",
+        "color": "RAL 7016",
+        "quantity": 5,
+        "requested_by": "sales@sfgaluminium.com",
+        "timestamp": "2025-11-07T10:30:00Z"
+      }
+    },
+    {
+      "event": "drawing.requested",
+      "description": "Triggered when technical drawings are requested for a specific door configuration. Generates CAD drawings at specified scales.",
+      "payload_example": {
+        "request_id": "DR-2025-045",
+        "door_type": "single",
+        "opening_direction": "inward",
+        "leaf_width": 860,
+        "leaf_height": 2100,
+        "glazing_thickness": 28,
+        "drawing_types": ["elevation", "plan", "section"],
+        "scale": "1:10",
+        "format": "pdf",
+        "requested_by": "design@sfgaluminium.com",
+        "timestamp": "2025-11-07T14:15:00Z"
+      }
+    },
+    {
+      "event": "specification.requested",
+      "description": "Triggered when a technical specification document is requested for a door system configuration.",
+      "payload_example": {
+        "spec_id": "SPEC-2025-089",
+        "project_reference": "PRJ-2025-034",
+        "door_configuration": "double_rebated",
+        "thermal_requirement": "0.95",
+        "security_requirement": "PAS24",
+        "finish_requirement": "anodised_satin",
+        "requested_by": "technical@sfgaluminium.com",
+        "timestamp": "2025-11-07T09:00:00Z"
+      }
+    },
+    {
+      "event": "manufacturing.order_created",
+      "description": "Triggered when a manufacturing order is created. Generates production drawings and material specifications.",
+      "payload_example": {
+        "order_id": "MO-2025-156",
+        "quote_reference": "Q-2025-001",
+        "door_specifications": {
+          "configuration": "double",
+          "frame_width": 1870,
+          "frame_height": 2235,
+          "glazing_thickness": 44,
+          "finish": "powder_coating",
+          "color": "RAL 7016"
+        },
+        "quantity": 5,
+        "delivery_date": "2025-12-15",
+        "timestamp": "2025-11-07T11:45:00Z"
+      }
+    }
+  ],
+  "outgoing_webhooks": [
+    {
+      "event": "drawings.generated",
+      "description": "Sent when technical drawings have been successfully generated and are ready for download.",
+      "payload_example": {
+        "request_id": "DR-2025-045",
+        "drawing_package_id": "PKG-2025-045",
+        "drawings": [
+          {
+            "type": "elevation",
+            "scale": "1:10",
+            "format": "pdf",
+            "url": "https://sfg-storage.s3.amazonaws.com/drawings/DR-2025-045-elevation.pdf",
+            "file_size": "245KB"
+          },
+          {
+            "type": "plan",
+            "scale": "1:10",
+            "format": "pdf",
+            "url": "https://sfg-storage.s3.amazonaws.com/drawings/DR-2025-045-plan.pdf",
+            "file_size": "198KB"
+          },
+          {
+            "type": "section",
+            "scale": "1:5",
+            "format": "pdf",
+            "url": "https://sfg-storage.s3.amazonaws.com/drawings/DR-2025-045-section.pdf",
+            "file_size": "312KB"
+          }
+        ],
+        "generated_at": "2025-11-07T14:20:00Z",
+        "expires_at": "2025-12-07T14:20:00Z"
+      }
+    },
+    {
+      "event": "specification.generated",
+      "description": "Sent when a technical specification document has been generated.",
+      "payload_example": {
+        "spec_id": "SPEC-2025-089",
+        "document_url": "https://sfg-storage.s3.amazonaws.com/specs/SPEC-2025-089.pdf",
+        "thermal_performance": "0.95 W/m²K",
+        "security_rating": "PAS24 Compliant",
+        "material_specifications": {
+          "aluminium_alloy": "6063.T6",
+          "glazing": "Triple glazed 44mm",
+          "finish": "Anodised satin AA25"
+        },
+        "generated_at": "2025-11-07T09:05:00Z"
+      }
+    },
+    {
+      "event": "quote.technical_data_ready",
+      "description": "Sent when technical data for a quote has been compiled and is ready for pricing.",
+      "payload_example": {
+        "quote_id": "Q-2025-001",
+        "technical_package_url": "https://sfg-storage.s3.amazonaws.com/quotes/Q-2025-001-technical.pdf",
+        "bill_of_materials": {
+          "frame_profiles": "SPW600e-FRAME-75mm x 15.2m",
+          "leaf_profiles": "SPW600e-LEAF-75mm x 18.4m",
+          "glazing_area": "7.8 sqm",
+          "hardware": "Heavy duty hinges x 12, Multi-point lock x 2"
+        },
+        "estimated_weight": "285kg",
+        "generated_at": "2025-11-07T10:35:00Z"
+      }
+    },
+    {
+      "event": "validation.failed",
+      "description": "Sent when door specifications fail validation checks.",
+      "payload_example": {
+        "request_id": "DR-2025-046",
+        "validation_errors": [
+          {
+            "field": "leaf_width",
+            "value": 1200,
+            "error": "Exceeds maximum leaf width of 1000mm"
+          },
+          {
+            "field": "leaf_weight",
+            "estimated_value": 85,
+            "error": "Estimated weight exceeds maximum of 75kg"
+          }
+        ],
+        "timestamp": "2025-11-07T15:30:00Z"
+      }
+    }
+  ],
+  "webhook_endpoint": "https://spw600e-door-system.abacusai.app/api/webhooks/nexus",
+  "security": "HMAC-SHA256 signature verification"
+}
